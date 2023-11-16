@@ -93,10 +93,10 @@ android {
 
     defaultConfig {
         applicationId = "com.usmonie.word"
-        minSdk = 28 //config.versions.android.minSdk.get().toInt()
+        minSdk = 25 //config.versions.android.minSdk.get().toInt()
         targetSdk = 34
 
-        versionCode = 2
+        versionCode = 3
         versionName = "1.0"
     }
     buildFeatures {

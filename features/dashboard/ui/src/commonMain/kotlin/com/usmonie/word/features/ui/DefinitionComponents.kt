@@ -84,10 +84,11 @@ fun Definitions(definitions: List<DefinitionUi>, expandedByDefault: Boolean = fa
     Column(Modifier.animateContentSize()) {
         DefinitionsTitle()
         Spacer(Modifier.height(4.dp))
+
         repeat(size) {
             if (it > 0) Spacer(Modifier.padding(vertical = 8.dp))
 
-            val definition = definitions[it]
+            val definition = definitions.getOrNull(it) ?: return@repeat
             key(definition.text) {
                 Definition(
                     definition,
