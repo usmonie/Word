@@ -1,0 +1,87 @@
+[versions]
+agp = "8.1.3"
+compose_activity = "1.8.0"
+compose_base = "1.5.4"
+compose_plugin = "1.5.10"
+appcompat = "1.6.1"
+coreKtx = "1.12.0"
+kotlin = "1.9.20"
+kotlinx-datetime = "0.4.0"
+kotlinx-serialization = "1.6.0"
+kmlogging = "1.3.0"
+coroutines = "1.7.3"
+junit = "4.13.2"
+androidx-test-ext-junit = "1.1.5"
+espresso-core = "3.5.1"
+material = "1.10.0"
+voyager = "1.0.0-rc05"
+detekt = "1.23.1"
+sqldelight = "2.0.0"
+uiTooling = "1.5.4"
+uiautomator = "2.2.0"
+benchmarkMacroJunit4 = "1.2.0"
+androidx-baselineprofile = "1.2.0"
+profileinstaller = "1.3.1"
+kvault = "1.12.0"
+
+[libraries]
+
+kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinx-datetime" }
+
+compose-animation = { group = "androidx.compose.animation", name = "animation", version.ref = "compose_base" }
+compose-foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "compose_base" }
+compose-runtime = { group = "androidx.compose.runtime", name = "runtime", version.ref = "compose_base" }
+compose-ui = { module = "androidx.compose.ui:ui", version.ref = "compose_base" }
+compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose_base" }
+compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose_base" }
+compose-material3 = { group = "androidx.compose.material3", name = "material3", version = "1.1.2" }
+compose-activity = { group = "androidx.activity", name = "activity-compose", version.ref = "compose_activity" }
+
+appCompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+coreKtx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-annotation = { group = "androidx.annotation", name = "annotation", version = "1.7.0" }
+
+kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test", version.ref = "kotlin" }
+coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }
+coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
+
+kotlinx-atomicfu = { group = "org.jetbrains.kotlinx", name = "atomicfu", version = "0.21.0" }
+kmlogging = { group = "org.lighthousegames", name = "logging", version.ref = "kmlogging" }
+kvault = { group = "com.liftric", name = "kvault", version.ref = "kvault" }
+
+android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
+kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+kotlinx-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
+compose-gradlePlugin = { group = "org.jetbrains.compose", name = "compose-gradle-plugin", version.ref = "compose_plugin" }
+detekt-gradlePlugin = { group = "io.gitlab.arturbosch.detekt", name = "detekt-gradle-plugin", version.ref = "detekt" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
+espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+voyager-navigator = { group = "cafe.adriel.voyager", name = "voyager-navigator", version.ref = "voyager" }
+sqldelight-runtime = { group = "app.cash.sqldelight", name = "runtime", version.ref = "sqldelight" }
+sqldelight-driver-android = { group = "app.cash.sqldelight", name = "android-driver", version.ref = "sqldelight" }
+sqldelight-driver-native = { group = "app.cash.sqldelight", name = "native-driver", version.ref = "sqldelight" }
+androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "uiTooling" }
+androidx-uiautomator = { group = "androidx.test.uiautomator", name = "uiautomator", version.ref = "uiautomator" }
+androidx-benchmark-macro-junit4 = { group = "androidx.benchmark", name = "benchmark-macro-junit4", version.ref = "benchmarkMacroJunit4" }
+androidx-profileinstaller = { group = "androidx.profileinstaller", name = "profileinstaller", version.ref = "profileinstaller" }
+
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+android-library = { id = "com.android.library", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin-cocoapods = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlin" }
+kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+compose = { id = "org.jetbrains.compose", version.ref = "compose_plugin" }
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
+sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
+
+speech-multiplatform-core = { id = "wtf.speech.multiplatform.core" }
+speech-multiplatform-ui = { id = "wtf.speech.multiplatform.ui" }
+speech-multiplatform-domain = { id = "wtf.speech.multiplatform.domain" }
+speech-githooks = { id = "githooks.gradle.kts" }
+androidTest = { id = "com.android.test", version.ref = "agp" }
+androidx-baselineprofile = { id = "androidx.baselineprofile", version.ref = "androidx-baselineprofile" }

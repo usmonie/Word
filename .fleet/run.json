@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "xcode-app",
+            "name": "iosApp",
+            "buildTarget": {
+                "project": "[W]ord",
+                "target": "[W]ord",
+            },
+            "configuration": "Debug",
+            "destination": "",
+        },
+    ]
+}

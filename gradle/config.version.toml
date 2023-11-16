@@ -1,0 +1,10 @@
+[versions]
+android-id = "com.usmonie.word.android"
+android-compileSdk = "34"
+android-targetSdk = "34"
+android-minSdk = "24"
+android-versionCode = "1"
+android-versionName = "0.0.1"
+
+ios-versionName = "0.0.1"
+ios-deploymentTarget = "17.0"

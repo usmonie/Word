@@ -1,0 +1,184 @@
+-- dictionary.sq
+-- Table for all unique words
+CREATE TABLE Word (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    word TEXT NOT NULL,
+    pos TEXT NOT NULL,
+    UNIQUE(word) -- Ensures that each word is unique in this table
+);
+CREATE INDEX idx_word ON Word(word); -- Index for fast lookups on 'word'
+
+-- Table for definitions
+CREATE TABLE Definition (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    word_id INTEGER NOT NULL,
+    definition TEXT NOT NULL,
+    FOREIGN KEY(word_id) REFERENCES Word(id)
+);
+
+-- Table for all unique synonyms
+CREATE TABLE Synonym (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    synonym TEXT NOT NULL,
+    UNIQUE(synonym) -- Ensures that each synonym is unique in this table
+);
+CREATE INDEX idx_synonym ON Synonym(synonym); -- Index for fast lookups on 'synonym'
+
+-- Junction table for many-to-many relationship between words and synonyms
+CREATE TABLE WordSynonym (
+    word_id INTEGER NOT NULL,
+    synonym_id INTEGER NOT NULL,
+    PRIMARY KEY(word_id, synonym_id),
+    FOREIGN KEY(word_id) REFERENCES Word(id),
+    FOREIGN KEY(synonym_id) REFERENCES Synonym(id)
+);
+
+-- Table for search history
+CREATE TABLE SearchHistory (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    query TEXT NOT NULL,
+    searched_at INTEGER NOT NULL DEFAULT (strftime('%s', 'now')),
+    word_id INTEGER NOT NULL,
+    FOREIGN KEY(word_id) REFERENCES Word(id),
+    UNIQUE(word_id)
+);
+CREATE INDEX idx_searched_at ON SearchHistory(searched_at); -- Index for fast lookups on 'searched_at'
+
+-- Table for word of the day
+CREATE TABLE WordOfTheDay (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    word_id INTEGER NOT NULL,
+    date TEXT NOT NULL,
+    FOREIGN KEY(word_id) REFERENCES Word(id),
+    UNIQUE(date)
+);
+CREATE INDEX idx_date ON WordOfTheDay(date); -- Index for fast lookups on 'date'
+
+-- Table for favorites
+CREATE TABLE Favorites (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    word_id INTEGER NOT NULL,
+    favorited_at INTEGER NOT NULL DEFAULT (strftime('%s', 'now')),
+    FOREIGN KEY(word_id) REFERENCES Word(id),
+    UNIQUE(word_id)
+);
+CREATE INDEX idx_favorited_at ON Favorites(favorited_at); -- Index for fast lookups on 'favorited_at'
+
+-- Insert statements
+lastInsertRowId:
+SELECT last_insert_rowid();
+
+insertWord:
+INSERT OR IGNORE INTO Word(word, pos)
+VALUES (?, ?);
+
+insertDefinition:
+INSERT OR IGNORE INTO Definition(word_id, definition)
+VALUES (?, ?);
+
+insertSynonym:
+INSERT OR IGNORE INTO Synonym(synonym)
+VALUES (?);
+
+linkWordToSynonym:
+INSERT OR IGNORE INTO WordSynonym(word_id, synonym_id)
+VALUES (?, ?);
+
+insertSearchQuery:
+INSERT OR REPLACE INTO SearchHistory(query, word_id)
+VALUES (?, ?);
+
+setWordOfTheDay:
+INSERT OR REPLACE INTO WordOfTheDay(word_id, date)
+VALUES (?, ?);
+
+addFavoriteWord:
+INSERT OR REPLACE INTO Favorites(word_id)
+VALUES (?);
+
+removeFavoriteWord:
+DELETE FROM Favorites
+WHERE word_id = ?;
+
+-- Select statements
+filterByChar:
+SELECT * FROM Word
+WHERE word LIKE ? || '%'
+LIMIT ? OFFSET ?;
+
+searchWord:
+SELECT * FROM Word
+WHERE word LIKE ? || '%'
+ORDER BY INSTR(Word.word, ?) ASC, Word.word ASC
+LIMIT ? OFFSET ?;
+
+searchInsideWord:
+SELECT * FROM Word
+WHERE word LIKE '%' || ? || '%'
+ORDER BY INSTR(Word.word, ?) ASC, Word.word ASC
+LIMIT ? OFFSET ?;
+
+searchInDescription:
+SELECT Word.* FROM Word
+JOIN Definition ON Word.id = Definition.word_id
+WHERE Definition.definition LIKE '%' || ? || '%'
+LIMIT ? OFFSET ?;
+
+searchBySynonym:
+SELECT Word.* FROM Word
+JOIN WordSynonym ON Word.id = WordSynonym.word_id
+JOIN Synonym ON WordSynonym.synonym_id = Synonym.id
+WHERE Synonym.synonym = ?
+LIMIT ? OFFSET ?;
+
+searchExactWord:
+SELECT * FROM Word
+WHERE word = ?
+LIMIT ? OFFSET ?;
+
+getWord:
+SELECT * FROM Word
+WHERE Word.id = ?;
+
+getDefinitionsForWord:
+SELECT d.definition FROM Definition AS d
+WHERE d.word_id = ?;
+
+getSynonymsForWord:
+SELECT Synonym.synonym FROM Synonym
+JOIN WordSynonym ON Synonym.id = WordSynonym.synonym_id
+JOIN Word ON Word.id = WordSynonym.word_id
+WHERE Word.word = ?;
+
+getSearchHistory:
+SELECT * FROM SearchHistory
+ORDER BY searched_at DESC
+LIMIT ? OFFSET ?;
+
+getWordOfTheDay:
+SELECT w.* FROM Word AS w
+JOIN WordOfTheDay AS wod ON wod.word_id = w.id
+WHERE wod.date = ?;
+
+getRandomWordOfTheDay:
+SELECT w.* FROM Word AS w
+ORDER BY RANDOM()
+LIMIT 1;
+
+getAllFavorites:
+SELECT w.* FROM Word AS w
+JOIN Favorites AS f ON f.word_id = w.id
+ORDER BY f.favorited_at DESC
+LIMIT ? OFFSET ?;
+
+isWordFavorite:
+SELECT EXISTS(
+    SELECT 1 FROM Favorites
+    WHERE word_id = ?
+);
+
+countOfRows:
+SELECT count(*) FROM Word;
+
+clearSearchHistory:
+DELETE FROM SearchHistory;

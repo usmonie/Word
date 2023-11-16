@@ -1,4 +1,4 @@
-	*.iml
+*.iml
 .gradle
 /local.properties
 .idea
@@ -9,6 +9,8 @@
 .externalNativeBuild
 .cxx
 local.properties
+/[W]ord/[W]ord/GoogleService-Info.plist
+
 
 # Compiled class file
 *.class
@@ -66,4 +68,3 @@ node_modules
 /graphql-compiler-plugin/gradle
 /graphql/.idea
 docs/.vuepress/dist
-/[W]ord/[W]ord/GoogleService-Info.plist
