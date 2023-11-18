@@ -35,8 +35,8 @@ sealed class FavouritesState : ScreenState {
 }
 
 sealed class FavouritesAction : ScreenAction {
-    data class OpenWord(val wordUi: WordUi) : FavouritesAction()
-    data class UpdateFavouriteWord(val wordUi: WordUi) : FavouritesAction()
+    data class OpenWord(val word: WordUi) : FavouritesAction()
+    data class UpdateFavouriteWord(val word: WordUi) : FavouritesAction()
     data object Initial : FavouritesAction()
 
     data object OnBack : FavouritesAction()

@@ -49,7 +49,7 @@ fun Definition(definitionUi: DefinitionUi, modifier: Modifier = Modifier, maxLin
         definitionUi.text,
         textAlign = TextAlign.Justify,
         style = MaterialTheme.typography.bodyMedium,
-        color = MaterialTheme.colorScheme.onSurface,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
         modifier = modifier,
         maxLines = maxLines,
         overflow = TextOverflow.Ellipsis
@@ -61,7 +61,7 @@ private fun DefinitionNumber(position: Int) {
     Text(
         "${position + 1}.",
         style = MaterialTheme.typography.bodyMedium,
-        color = MaterialTheme.colorScheme.onSurface,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
         textAlign = TextAlign.Justify
     )
 }

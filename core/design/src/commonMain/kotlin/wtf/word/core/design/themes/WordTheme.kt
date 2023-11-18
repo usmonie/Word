@@ -10,19 +10,34 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import wtf.word.core.design.themes.colors.BritishRacingGreenColors
 import wtf.word.core.design.themes.colors.DeepIndigoColors
+import wtf.word.core.design.themes.colors.EmeraldEleganceColors
+import wtf.word.core.design.themes.colors.GentleBreezeColors
+import wtf.word.core.design.themes.colors.PastelSunsetColors
 import wtf.word.core.design.themes.colors.RichMaroonColors
+import wtf.word.core.design.themes.colors.TwilightAmethystColors
 import wtf.word.core.design.themes.typographies.font
 
 enum class WordColors(val colors: Colors) {
     RICH_MAROON(RichMaroonColors),
     BRITISH_RACING_GREEN(BritishRacingGreenColors),
-    DEEP_INDIGO(DeepIndigoColors);
+    DEEP_INDIGO(DeepIndigoColors),
 
-    fun next() = when(this) {
+    GENTLE_BREEZE(GentleBreezeColors),
+//    ROYAL_INDIGO(RoyalIndigoColors),
+    TWILIGHT_AMETHYST(TwilightAmethystColors),
+    PASTEL_SUNSET(PastelSunsetColors),
+    EMERALD_ELEGANCE(EmeraldEleganceColors);
+
+    fun next(subscribed: Boolean = true) = if (subscribed) when (this) {
         RICH_MAROON -> BRITISH_RACING_GREEN
         BRITISH_RACING_GREEN -> DEEP_INDIGO
-        DEEP_INDIGO -> RICH_MAROON
-    }
+        DEEP_INDIGO -> GENTLE_BREEZE
+        GENTLE_BREEZE -> EMERALD_ELEGANCE
+        EMERALD_ELEGANCE -> TWILIGHT_AMETHYST
+        TWILIGHT_AMETHYST -> PASTEL_SUNSET
+        PASTEL_SUNSET -> RICH_MAROON
+//        ROYAL_INDIGO -> RICH_MAROON
+    } else BRITISH_RACING_GREEN
 }
 
 sealed class WordTypography(val name: String) {
@@ -55,12 +70,13 @@ sealed class WordTypography(val name: String) {
             }
         }
 
-        fun WordTypography.next() = when(this) {
+        fun WordTypography.next() = when (this) {
             Friendly -> ModernChic
             ModernChic -> TimelessElegant
             TimelessElegant -> Friendly
         }
     }
+
     data object TimelessElegant : WordTypography("TimelessElegant") {
 
         override val displayLarge = FontFamilyData(
@@ -396,7 +412,7 @@ sealed class WordTypography(val name: String) {
 
 @Composable
 fun WordTheme(
-    wordColors: WordColors = WordColors.RICH_MAROON,
+    wordColors: WordColors = WordColors.BRITISH_RACING_GREEN,
     typography: WordTypography = WordTypography.TimelessElegant,
     useDarkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit,
@@ -405,6 +421,8 @@ fun WordTheme(
 //        useDarkTheme -> wordColors.colors.darkColorScheme()
 //        else -> wordColors.colors.lightColorScheme()
 //    }
+
+    println("THEME: $wordColors")
 
     MaterialTheme(
         wordColors.colors.lightColorScheme(),

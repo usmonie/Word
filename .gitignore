@@ -9,7 +9,7 @@
 .externalNativeBuild
 .cxx
 local.properties
-/[W]ord/[W]ord/GoogleService-Info.plist
+/iosApp/iosApp/GoogleService-Info.plist
 
 
 # Compiled class file
@@ -68,3 +68,9 @@ node_modules
 /graphql-compiler-plugin/gradle
 /graphql/.idea
 docs/.vuepress/dist
+/Users/usmanakhmedov/StudioProjects/Word-2/composeApp/src/androidMain/res/values/string-key.xml/Users/usmanakhmedov/StudioProjects/Word-2/core/ui/src/commonMain/kotlin/wtf/speech/core/ui/AdKeys.kt
+/iosApp/iosApp.xcworkspace/xcuserdata/usmanakhmedov.xcuserdatad/xcschemes/[Fleet] [W]ord.xcscheme
+/iosApp/iosApp.xcodeproj/project.xcworkspace/xcuserdata/usmanakhmedov.xcuserdatad/UserInterfaceState.xcuserstate
+/iosApp/iosApp.xcworkspace/xcuserdata/usmanakhmedov.xcuserdatad/UserInterfaceState.xcuserstate
+/iosApp/iosApp.xcodeproj/xcuserdata/usmanakhmedov.xcuserdatad/xcschemes/xcschememanagement.plist
+/iosApp/iosApp.xcworkspace/xcuserdata/usmanakhmedov.xcuserdatad/xcschemes/xcschememanagement.plist

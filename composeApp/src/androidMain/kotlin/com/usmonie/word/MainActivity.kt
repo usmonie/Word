@@ -1,6 +1,7 @@
 package com.usmonie.word
 
 import App
+import DefaultLogger
 import android.app.Activity
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -15,13 +16,23 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.view.WindowCompat
+import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.RequestConfiguration
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.ktx.Firebase
 import com.liftric.kvault.KVault
 import com.usmonie.word.features.dashboard.data.db.DriverFactory
 import com.usmonie.word.features.dashboard.data.repository.UserRepositoryImpl
+import com.usmonie.word.features.ui.AdMob
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        MobileAds.initialize(this) {}
+        MobileAds.setRequestConfiguration(
+            RequestConfiguration.Builder().build()
+        )
 
         val driverFactory = DriverFactory(this)
 
@@ -40,7 +51,12 @@ class MainActivity : ComponentActivity() {
                 insets.isAppearanceLightStatusBars = isDark
                 insets.isAppearanceLightNavigationBars = isDark
             }
-            App(driverFactory, UserRepositoryImpl(KVault(this@MainActivity)))
+            App(
+                driverFactory,
+                UserRepositoryImpl(KVault(this@MainActivity)),
+                AdMob,
+                DefaultLogger(Firebase.analytics)
+            )
         }
     }
 }
@@ -48,5 +64,10 @@ class MainActivity : ComponentActivity() {
 @Preview
 @Composable
 fun AppAndroidPreview() {
-    App(DriverFactory(LocalContext.current), UserRepositoryImpl(KVault(LocalContext.current)))
+    App(
+        DriverFactory(LocalContext.current),
+        UserRepositoryImpl(KVault(LocalContext.current)),
+        AdMob,
+        DefaultLogger(Firebase.analytics)
+    )
 }

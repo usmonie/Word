@@ -1,5 +1,7 @@
 package com.usmonie.word.features.dashboard.ui
 
+import androidx.compose.ui.text.input.TextFieldValue
+import com.usmonie.word.features.analytics.DashboardAnalyticsEvents
 import com.usmonie.word.features.dashboard.domain.models.Theme
 import com.usmonie.word.features.dashboard.domain.usecase.ChangeThemeUseCase
 import com.usmonie.word.features.dashboard.domain.usecase.ClearRecentUseCase
@@ -25,6 +27,7 @@ import wtf.speech.core.ui.ContentState
 import wtf.word.core.design.themes.WordColors
 import wtf.word.core.design.themes.WordTypography
 import wtf.word.core.design.themes.WordTypography.Companion.next
+import wtf.word.core.domain.Analytics
 
 class DashboardViewModel(
     private val parseDictionaryUseCase: ParseDictionaryUseCase,
@@ -34,7 +37,8 @@ class DashboardViewModel(
     private val updateFavouriteUseCase: UpdateFavouriteUseCase,
     private val getCurrentThemeUseCase: CurrentThemeUseCase,
     private val changeThemeUseCase: ChangeThemeUseCase,
-    private val clearRecentUseCase: ClearRecentUseCase
+    private val clearRecentUseCase: ClearRecentUseCase,
+    private val analytics: Analytics
 ) : BaseViewModel<DashboardState, DashboardAction, DashboardEvent, DashboardEffect>(DashboardState()) {
 
     private var searchJob: Job? = null
@@ -46,12 +50,14 @@ class DashboardViewModel(
     fun onOpenWord(wordUi: WordUi) = handleAction(DashboardAction.OpenWord(wordUi))
     fun onShareWord(wordUi: WordUi) {}
     fun onSynonymClicked(synonym: SynonymUi) =
-        handleAction(DashboardAction.InputQuery(synonym.word))
+        handleAction(DashboardAction.InputQuery(TextFieldValue(synonym.word)))
 
     fun onUpdateFavouritesPressed(wordUi: WordUi) =
         handleAction(DashboardAction.UpdateFavourite(wordUi))
 
-    fun onQueryChanged(query: String) = handleAction(DashboardAction.InputQuery(query))
+    fun onUpdateRandomCard() = handleAction(DashboardAction.Update)
+
+    fun onQueryChanged(query: TextFieldValue) = handleAction(DashboardAction.InputQuery(query))
     fun onWordOfTheDayItemClicked() = handleAction(DashboardAction.OnMenuItemClick.WordOfTheDay)
     fun onFavouritesItemClicked() = handleAction(DashboardAction.OnMenuItemClick.Favourites)
     fun onSettingsItemClicked() = handleAction(DashboardAction.OnMenuItemClick.Settings)
@@ -62,7 +68,7 @@ class DashboardViewModel(
     fun onBackClick() = handleAction(DashboardAction.BackToMain)
 
     override fun DashboardState.reduce(event: DashboardEvent) = when (event) {
-        is DashboardEvent.Loading -> this
+        is DashboardEvent.RandomWordLoading -> this.copy(wordOfTheDay = ContentState.Loading())
         is DashboardEvent.UpdatedFavourites -> this.updateFavourite(event.word)
         is DashboardEvent.FoundWords -> this.copy(
             query = event.query,
@@ -91,7 +97,7 @@ class DashboardViewModel(
         DashboardEvent.UpdateMenuItemState.Settings -> this.openSettings()
         DashboardEvent.UpdateMenuItemState.WordOfTheDay -> this.openWordOfTheDay()
         is DashboardEvent.ChangeTheme -> this
-        DashboardEvent.BackToMain -> this.copy(query = "")
+        DashboardEvent.BackToMain -> this.copy(query = TextFieldValue())
     }
 
     override suspend fun processAction(action: DashboardAction) = when (action) {
@@ -103,16 +109,31 @@ class DashboardViewModel(
         DashboardAction.NextItems.RecentSearch ->
             DashboardEvent.NextItemsLoaded.RecentSearch(listOf())
 
-        DashboardAction.OnMenuItemClick.Favourites -> DashboardEvent.UpdateMenuItemState.Favourites
-        DashboardAction.OnMenuItemClick.Settings -> DashboardEvent.UpdateMenuItemState.Settings
+        DashboardAction.OnMenuItemClick.Favourites -> {
+            analytics.log(DashboardAnalyticsEvents.OpenFavourites)
+            DashboardEvent.UpdateMenuItemState.Favourites
+        }
+        DashboardAction.OnMenuItemClick.Settings -> {
+            analytics.log(DashboardAnalyticsEvents.OpenSettings)
+
+            DashboardEvent.UpdateMenuItemState.Settings
+        }
         DashboardAction.OnMenuItemClick.WordOfTheDay -> DashboardEvent.UpdateMenuItemState.WordOfTheDay
-        is DashboardAction.OpenWord -> DashboardEvent.OpenWord(action.word)
+        is DashboardAction.OpenWord -> {
+            analytics.log(DashboardAnalyticsEvents.OpenWord(action.word))
+
+            DashboardEvent.OpenWord(action.word)
+        }
         is DashboardAction.UpdateFavourite -> updateFavourite(action)
         DashboardAction.Initial -> initialData()
         DashboardAction.ChangeColors -> changeColors()
         DashboardAction.ChangeFonts -> changeFonts()
         DashboardAction.ClearRecentHistory -> clearRecentHistory()
         DashboardAction.BackToMain -> DashboardEvent.BackToMain
+        DashboardAction.Update -> {
+            updateData()
+            DashboardEvent.RandomWordLoading
+        }
     }
 
     override suspend fun handleEvent(event: DashboardEvent) = when (event) {
@@ -129,19 +150,22 @@ class DashboardViewModel(
     private suspend fun clearRecentHistory(): DashboardEvent {
         clearRecentUseCase(Unit)
         updateData()
-        return DashboardEvent.Loading
+        return DashboardEvent.RandomWordLoading
     }
 
-    private suspend fun search(query: String, offset: Long = 0): DashboardEvent {
+    private suspend fun search(query: TextFieldValue, offset: Long = 0): DashboardEvent {
         searchJob?.cancel()
-        if (query.isBlank()) return DashboardEvent.InputQuery(query)
+        if (query.text.isBlank()) {
+            updateData()
+            return DashboardEvent.InputQuery(query)
+        }
 
         launchSearch(query, offset)
         return DashboardEvent.InputQuery(query)
     }
 
     private suspend fun launchSearch(
-        query: String,
+        query: TextFieldValue,
         offset: Long,
         limit: Long = DEFAULT_LIMIT,
         exactly: Boolean = false
@@ -150,7 +174,7 @@ class DashboardViewModel(
             ensureActive()
 
             val found = searchWordsUseCase(
-                SearchWordsUseCase.Param(query, offset, limit, exactly)
+                SearchWordsUseCase.Param(query.text, offset, limit, exactly)
             ).map {
                 ensureActive()
                 it.to()
@@ -158,6 +182,7 @@ class DashboardViewModel(
 
             delay(200L)
             withContext(Dispatchers.Main) {
+                analytics.log(DashboardAnalyticsEvents.Search(query.text))
                 ensureActive()
                 handleState(DashboardEvent.FoundWords(query, found))
             }
@@ -175,15 +200,15 @@ class DashboardViewModel(
     }
 
     private suspend fun initialData(): DashboardEvent {
+        parseDictionaryUseCase(Unit)
         loadData(0)
-        return DashboardEvent.Loading
+        return DashboardEvent.RandomWordLoading
     }
 
     private suspend fun updateData() = loadData(0, true)
 
     private suspend fun loadData(offset: Long, update: Boolean = false): Job {
         return viewModelScope.launch(Dispatchers.IO) {
-            parseDictionaryUseCase(Unit)
             val recentSearch = getSearchHistoryUseCase(
                 GetSearchHistoryUseCase.Param(
                     offset,
@@ -213,6 +238,8 @@ class DashboardViewModel(
         val currentTheme = loadTheme()
         val changed = Pair(currentTheme.first.next(), currentTheme.second)
         changeTheme(changed.first, changed.second)
+        analytics.log(DashboardAnalyticsEvents.ChangeTheme(changed.first, changed.second))
+
         return DashboardEvent.ChangeTheme(changed.first, changed.second)
     }
 
@@ -220,6 +247,7 @@ class DashboardViewModel(
         val currentTheme = loadTheme()
         val changed = Pair(currentTheme.first, currentTheme.second.next())
         changeTheme(changed.first, changed.second)
+        analytics.log(DashboardAnalyticsEvents.ChangeTheme(changed.first, changed.second))
         return DashboardEvent.ChangeTheme(changed.first, changed.second)
     }
 

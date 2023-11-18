@@ -12,6 +12,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.compose)
     alias(libs.plugins.androidx.baselineprofile)
+    alias(libs.plugins.google.services)
 }
 
 kotlin {
@@ -69,6 +70,7 @@ kotlin {
                 implementation(libs.compose.ui)
                 implementation(libs.compose.ui.tooling.preview)
                 implementation(libs.compose.activity)
+                implementation(libs.firebase.analytics)
             }
         }
     }
@@ -96,8 +98,15 @@ android {
         minSdk = 25 //config.versions.android.minSdk.get().toInt()
         targetSdk = 34
 
-        versionCode = 3
+        versionCode = 5
         versionName = "1.0"
+
+//
+//        val admobAppId: String =
+//            gradleLocalProperties(rootDir).getProperty("admob-app-id")
+//
+//        resValue("String", "APP_AD_ID", admobAppId)
+
     }
     buildFeatures {
         compose = true
@@ -112,7 +121,13 @@ android {
     }
     buildTypes {
         getByName("release") {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            signingConfig = signingConfigs.getByName("debug")
+        }
+
+        getByName("debug") {
+            applicationIdSuffix = ".debug"
+            isMinifyEnabled = true
         }
     }
     compileOptions {
@@ -121,13 +136,15 @@ android {
     }
     dependencies {
         debugImplementation(libs.compose.ui.tooling)
+
+        implementation(libs.androidx.profileinstaller)
+        implementation(libs.google.admob)
+
+        "baselineProfile"(project(":baselineprofile"))
     }
 }
+
 copyNativeResources("commonMain")
-dependencies {
-    implementation(libs.androidx.profileinstaller)
-    "baselineProfile"(project(":baselineprofile"))
-}
 
 fun copyNativeResources(sourceSet: String) {
     if (sourceSet.isEmpty()) throw IllegalStateException("Valid sourceSet required")

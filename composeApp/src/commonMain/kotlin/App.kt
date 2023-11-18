@@ -7,18 +7,27 @@ import com.usmonie.word.features.dashboard.data.repository.WordRepositoryImpl
 import com.usmonie.word.features.dashboard.domain.repository.UserRepository
 import com.usmonie.word.features.dashboard.domain.usecase.CurrentThemeUseCaseImpl
 import com.usmonie.word.features.getDashboardGraph
+import com.usmonie.word.features.ui.AdMob
 import wtf.speech.compass.core.NavigationHost
 import wtf.speech.compass.core.rememberRouteManager
 import wtf.word.core.design.themes.WordColors
 import wtf.word.core.design.themes.WordTheme
 import wtf.word.core.design.themes.WordTypography
+import wtf.word.core.domain.Analytics
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun App(driverFactory: DriverFactory, userRepository: UserRepository) {
+fun App(
+    driverFactory: DriverFactory,
+    userRepository: UserRepository,
+    adMob: AdMob,
+    analytics: Analytics
+) {
+
     val (currentColors, currentTypography) = remember {
         val theme = CurrentThemeUseCaseImpl(userRepository).invoke(Unit)
-        val colors = theme.colorsName?.let { WordColors.valueOf(it) } ?: WordColors.RICH_MAROON
+        val colors =
+            theme.colorsName?.let { WordColors.valueOf(it) } ?: WordColors.BRITISH_RACING_GREEN
         val typography = theme.fonts?.let { WordTypography.valueOf(it) } ?: WordTypography.Friendly
         Pair(colors, typography)
     }
@@ -30,7 +39,9 @@ fun App(driverFactory: DriverFactory, userRepository: UserRepository) {
         onCurrentColorsChanged,
         onCurrentFontsChanged,
         userRepository,
-        wordRepository
+        wordRepository,
+        adMob,
+        analytics
     )
 
     val routeManager = rememberRouteManager(initialGraph)

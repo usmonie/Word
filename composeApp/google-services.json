@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "52301218026",
+    "project_id": "word-99126",
+    "storage_bucket": "word-99126.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:52301218026:android:5a8b8d092661b30cc1d793",
+        "android_client_info": {
+          "package_name": "com.usmonie.word"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDMIBxuyZ6k6csXzu0xyTkk5xjQ52Mb87A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:52301218026:android:d755b4c580a29381c1d793",
+        "android_client_info": {
+          "package_name": "com.usmonie.word.debug"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDMIBxuyZ6k6csXzu0xyTkk5xjQ52Mb87A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -8,7 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.models.WordUi
-import com.usmonie.word.features.ui.MenuItemText
 import com.usmonie.word.features.ui.VerticalAnimatedVisibility
 import com.usmonie.word.features.ui.WordOfTheDayCard
 import wtf.speech.core.ui.ContentState
@@ -18,22 +17,19 @@ fun WordOfTheDayMenuItem(
     onWordClick: (WordUi) -> Unit,
     onAddFavouritePressed: (WordUi) -> Unit,
     onSharePressed: (WordUi) -> Unit,
+    onUpdatePressed: () -> Unit,
     showWordOfTheDay: Boolean,
-    word: ContentState<WordUi>,
-    modifier: Modifier = Modifier
+    word: ContentState<WordUi>
 ) {
-    Column {
-        MenuItemText("Random Word", modifier)
-
-        WordOfTheDay(
-            showWordOfTheDay,
-            onClick = onWordClick,
-            onAddFavouritePressed = onAddFavouritePressed,
-            onSharePressed = onSharePressed,
-            modifier = Modifier,
-            word = word
-        )
-    }
+    WordOfTheDay(
+        showWordOfTheDay,
+        onClick = onWordClick,
+        onAddFavouritePressed = onAddFavouritePressed,
+        onSharePressed = onSharePressed,
+        onUpdatePressed = onUpdatePressed,
+        modifier = Modifier,
+        word = word
+    )
 }
 
 @Composable
@@ -42,6 +38,7 @@ private fun WordOfTheDay(
     onClick: (WordUi) -> Unit,
     onAddFavouritePressed: (WordUi) -> Unit,
     onSharePressed: (WordUi) -> Unit,
+    onUpdatePressed: () -> Unit,
     word: ContentState<WordUi>,
     modifier: Modifier = Modifier
 ) {
@@ -52,6 +49,7 @@ private fun WordOfTheDay(
                 onClick,
                 onAddFavouritePressed,
                 onSharePressed,
+                onUpdatePressed,
                 word,
                 modifier = Modifier.padding(horizontal = 16.dp)
             )

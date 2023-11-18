@@ -1,5 +1,6 @@
 package com.usmonie.word.features.detail
 
+import com.usmonie.word.features.analytics.DashboardAnalyticsEvents
 import com.usmonie.word.features.dashboard.domain.usecase.GetSimilarWordsUseCase
 import com.usmonie.word.features.dashboard.domain.usecase.UpdateFavouriteUseCase
 import com.usmonie.word.features.models.SynonymUi
@@ -8,11 +9,13 @@ import com.usmonie.word.features.models.to
 import com.usmonie.word.features.models.toDomain
 import wtf.speech.core.ui.BaseViewModel
 import wtf.speech.core.ui.ContentState
+import wtf.word.core.domain.Analytics
 
 class WordViewModel(
     private val extra: WordScreen.Companion.WordExtra,
     private val updateFavouriteUseCase: UpdateFavouriteUseCase,
-    private val getSimilarWordsUseCase: GetSimilarWordsUseCase
+    private val getSimilarWordsUseCase: GetSimilarWordsUseCase,
+    private val analytics: Analytics
 ) : BaseViewModel<WordState, WordAction, WordEvent, WordEffect>(WordState(extra.word)) {
 
     fun onUpdateFavouritePressed(word: WordUi) = handleAction(WordAction.UpdateFavourite(word))
@@ -34,7 +37,10 @@ class WordViewModel(
     }
 
     override suspend fun processAction(action: WordAction): WordEvent = when (action) {
-        is WordAction.OpenWord -> WordEvent.OpenWord(action.word)
+        is WordAction.OpenWord -> {
+            analytics.log(DashboardAnalyticsEvents.OpenWord(action.word))
+            WordEvent.OpenWord(action.word)
+        }
         is WordAction.UpdateFavourite -> updateFavourite(action.word)
         is WordAction.Initial -> loadSimilar(action.word)
     }
@@ -60,8 +66,6 @@ class WordViewModel(
                     20
                 )
             ).map { it.to() }
-
-        println("searchSynonymsForWord ${found.size}")
 
         return WordEvent.SimilarWords(found)
     }

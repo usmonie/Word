@@ -3,6 +3,8 @@ package com.usmonie.word.features.ui
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -22,27 +24,39 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun WordLargeTitle(word: String, modifier: Modifier = Modifier) {
+fun WordLargeResizableTitle(word: String, modifier: Modifier = Modifier) {
     val defaultTextStyle = MaterialTheme.typography.displayMedium
     var readyToDraw by remember(word) { mutableStateOf(false) }
     var defaultTextSize by remember { mutableStateOf(defaultTextStyle.fontSize) }
+    var maxLines by remember(word) { mutableStateOf(1) }
 
     Text(
         word,
-        style = MaterialTheme.typography.displayMedium,
+        style = defaultTextStyle,
         textAlign = TextAlign.Center,
         fontSize = defaultTextSize,
-        color = MaterialTheme.colorScheme.onSurface,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
         modifier = modifier.drawWithContent { if (readyToDraw) drawContent() },
-        maxLines = 2,
+        maxLines = maxLines,
         overflow = TextOverflow.Ellipsis,
         onTextLayout = {
-            if (it.hasVisualOverflow) defaultTextSize *= 0.8f
-            else readyToDraw = true
+            when {
+                it.hasVisualOverflow && defaultTextSize > 20.sp -> {
+                    defaultTextSize *= 0.8f
+                }
+
+                it.hasVisualOverflow && defaultTextSize <= 20.sp -> {
+                    maxLines++
+                }
+                else -> {
+                    readyToDraw = true
+                }
+            }
         }
     )
 }
@@ -94,6 +108,22 @@ fun AddToFavouriteButton(
         Icon(
             painterResource("drawable/" + if (isFavourite) "ic_bookmark_filled.xml" else "ic_bookmark.xml"),
             contentDescription = "update favourite state. current state is in favourite: $isFavourite",
+            modifier = Modifier.size(24.dp),
+            tint = tint
+        )
+    }
+}
+
+@Composable
+fun UpdateButton(
+    onUpdate: () -> Unit,
+    tint: Color = MaterialTheme.colorScheme.secondary,
+    modifier: Modifier = Modifier
+) {
+    IconButton(onUpdate, modifier = modifier) {
+        Icon(
+            Icons.Default.Refresh,
+            contentDescription = "update word card",
             modifier = Modifier.size(24.dp),
             tint = tint
         )

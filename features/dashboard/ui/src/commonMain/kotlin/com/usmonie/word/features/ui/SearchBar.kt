@@ -26,6 +26,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.IntSize
 import kotlin.math.absoluteValue
@@ -76,9 +77,113 @@ fun SearchBar(
 }
 
 @Composable
+fun SearchBar(
+    onQueryChanged: (TextFieldValue) -> Unit,
+    onFocusChange: (Boolean) -> Unit,
+    placeholder: String,
+    query: TextFieldValue,
+    hasFocus: Boolean,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true
+) {
+    val focusRequester = remember { FocusRequester() }
+
+    val textFieldSize = remember { mutableStateOf(IntSize.Zero) }
+    val threshold: Float = remember { textFieldSize.value.width * 0.5f }
+
+    val placeholderAlphaAnimation by animateFloatAsState(if (hasFocus) .5f else 1f)
+    TextInputField(
+        query,
+        onQueryChanged,
+        enabled = enabled,
+        readOnly = !enabled,
+        modifier = modifier
+            .background(MaterialTheme.colorScheme.primary)
+            .focusRequester(focusRequester)
+            .onFocusChanged { onFocusChange(it.hasFocus) }
+            .onGloballyPositioned { coordinates -> textFieldSize.value = coordinates.size }
+            .pointerInput(Unit) {
+                detectHorizontalDragGestures { _, dragAmount ->
+                    if (dragAmount.absoluteValue > threshold) {
+                        onQueryChanged(TextFieldValue())
+                    }
+                }
+            },
+        textStyle = MaterialTheme.typography.displayLarge,
+        placeholder = {
+            Text(
+                placeholder,
+                style = MaterialTheme.typography.displayLarge,
+                color = MaterialTheme.colorScheme.onPrimary.copy(alpha = placeholderAlphaAnimation)
+            )
+        },
+        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+    )
+}
+
+@Composable
 fun TextInputField(
     value: String,
     onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    readOnly: Boolean = false,
+    textStyle: TextStyle = LocalTextStyle.current,
+    label: @Composable (() -> Unit)? = null,
+    placeholder: @Composable (() -> Unit)? = null,
+    leadingIcon: @Composable (() -> Unit)? = null,
+    trailingIcon: @Composable (() -> Unit)? = null,
+    prefix: @Composable (() -> Unit)? = null,
+    suffix: @Composable (() -> Unit)? = null,
+    supportingText: @Composable (() -> Unit)? = null,
+    isError: Boolean = false,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
+    singleLine: Boolean = false,
+    maxLines: Int = if (singleLine) 1 else 3,
+    minLines: Int = 1,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    shape: Shape = OutlinedTextFieldDefaults.shape,
+    colors: TextFieldColors = OutlinedTextFieldDefaults.colors(
+        unfocusedBorderColor = Color.Transparent,
+        focusedBorderColor = Color.Transparent,
+        disabledBorderColor = Color.Transparent,
+        errorBorderColor = Color.Transparent,
+        cursorColor = MaterialTheme.colorScheme.onPrimary,
+        focusedTextColor = MaterialTheme.colorScheme.onPrimary,
+        unfocusedTextColor = MaterialTheme.colorScheme.onPrimary,
+    )
+) {
+    OutlinedTextField(
+        value,
+        onValueChange,
+        modifier,
+        enabled,
+        readOnly,
+        textStyle,
+        label,
+        placeholder,
+        leadingIcon,
+        trailingIcon,
+        prefix,
+        suffix,
+        supportingText,
+        isError,
+        visualTransformation,
+        keyboardOptions,
+        keyboardActions,
+        singleLine,
+        maxLines,
+        minLines,
+        interactionSource,
+        shape,
+        colors
+    )
+}@Composable
+fun TextInputField(
+    value: TextFieldValue,
+    onValueChange: (TextFieldValue) -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     readOnly: Boolean = false,

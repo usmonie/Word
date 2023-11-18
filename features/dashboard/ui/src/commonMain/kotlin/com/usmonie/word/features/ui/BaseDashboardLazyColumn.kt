@@ -21,7 +21,8 @@ fun BaseDashboardLazyColumn(
     content: LazyListScope.() -> Unit
 ) {
     LazyColumn(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
             .imePadding()
             .testTag("DASHBOARD_LAZY_COLUMN"),
         verticalArrangement = verticalArrangement,

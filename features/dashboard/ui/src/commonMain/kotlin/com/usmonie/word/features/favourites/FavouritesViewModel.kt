@@ -1,5 +1,6 @@
 package com.usmonie.word.features.favourites
 
+import com.usmonie.word.features.analytics.DashboardAnalyticsEvents
 import com.usmonie.word.features.dashboard.domain.usecase.GetAllFavouritesUseCase
 import com.usmonie.word.features.dashboard.domain.usecase.UpdateFavouriteUseCase
 import com.usmonie.word.features.models.SynonymUi
@@ -13,10 +14,12 @@ import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import wtf.speech.core.ui.BaseViewModel
+import wtf.word.core.domain.Analytics
 
 class FavouritesViewModel(
     private val updateFavouriteUseCase: UpdateFavouriteUseCase,
     private val getAllFavouritesUseCase: GetAllFavouritesUseCase,
+    private val analytics: Analytics
 ) : BaseViewModel<FavouritesState, FavouritesAction, FavouritesEvent, FavouritesEffect>(
     FavouritesState.Loading(),
 ) {
@@ -50,8 +53,11 @@ class FavouritesViewModel(
     override suspend fun processAction(action: FavouritesAction) = when (action) {
         FavouritesAction.Initial -> loadData()
         FavouritesAction.OnBack -> FavouritesEvent.Back
-        is FavouritesAction.UpdateFavouriteWord -> updateFavourite(action.wordUi)
-        is FavouritesAction.OpenWord -> FavouritesEvent.OpenWord(action.wordUi)
+        is FavouritesAction.UpdateFavouriteWord -> updateFavourite(action.word)
+        is FavouritesAction.OpenWord -> {
+            analytics.log(DashboardAnalyticsEvents.OpenWord(action.word))
+            FavouritesEvent.OpenWord(action.word)
+        }
     }
 
     override suspend fun handleEvent(event: FavouritesEvent) = when (event) {

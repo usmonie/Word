@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -67,7 +69,7 @@ fun WordDetailsCard(
     Spacer(Modifier.height(32.dp))
     WordCard({}, enabled = true, elevation = 8.dp, modifier = modifier) {
         Spacer(Modifier.height(20.dp))
-        WordLargeTitle(word.word, Modifier.padding(horizontal = 20.dp))
+        WordLargeResizableTitle(word.word, Modifier.padding(horizontal = 20.dp))
         PartOfSpeech(word.partOfSpeech, Modifier.padding(horizontal = 20.dp))
         Spacer(Modifier.height(8.dp))
         Definitions(word.definitions, true)
@@ -117,6 +119,7 @@ fun WordOfTheDayCard(
     onClick: (WordUi) -> Unit,
     onAddToFavouritePressed: (WordUi) -> Unit,
     onSharePressed: (WordUi) -> Unit,
+    onUpdatePressed: () -> Unit,
     modifier: Modifier
 ) {
     WordCard({ onClick(word) }, elevation = 8.dp, modifier = modifier) {
@@ -127,7 +130,9 @@ fun WordOfTheDayCard(
         ) {
             Spacer(Modifier.height(20.dp))
 
-            WordLargeTitle(
+            Text("Random Word", style = MaterialTheme.typography.labelMedium)
+
+            WordLargeResizableTitle(
                 word.word,
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp)
             )
@@ -153,6 +158,8 @@ fun WordOfTheDayCard(
                     { onAddToFavouritePressed(word) },
                     word.isFavourite,
                 )
+
+                UpdateButton(onUpdatePressed)
             }
 
             Spacer(Modifier.height(20.dp))
@@ -178,6 +185,7 @@ fun WordOfTheDayCard(
     onClick: (WordUi) -> Unit,
     onAddFavouritePressed: (WordUi) -> Unit,
     onSharePressed: (WordUi) -> Unit,
+    onUpdatePressed: () -> Unit,
     word: ContentState<WordUi>,
     modifier: Modifier = Modifier
 ) {
@@ -189,6 +197,7 @@ fun WordOfTheDayCard(
             onClick,
             onAddFavouritePressed,
             onSharePressed,
+            onUpdatePressed,
             modifier,
         )
     }

@@ -1,3 +1,5 @@
+import com.android.build.api.variant.BuildConfigField
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 import extensions.androidDependencies
 import extensions.commonDependencies
 
@@ -19,6 +21,7 @@ commonDependencies {
 }
 androidDependencies {
     implementation(libs.compose.ui)
+    implementation(libs.google.admob)
 }
 
 kotlin {
@@ -63,5 +66,29 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
+    }
+
+    androidComponents {
+
+        val admobAppNativeBannerId: String =
+            gradleLocalProperties(rootDir).getProperty("admob-app-native-banner-id")
+        val admobAppStartupId: String =
+            gradleLocalProperties(rootDir).getProperty("admob-app-native-banner-id")
+
+        onVariants {
+            it.buildConfigFields.put(
+                "NATIVE_BANNER_ID",
+                BuildConfigField(
+                    "String", admobAppNativeBannerId, null
+                ),
+            )
+
+            it.buildConfigFields.put(
+                "STARTUP_AD_ID",
+                BuildConfigField(
+                    "String", admobAppStartupId, null
+                )
+            )
+        }
     }
 }

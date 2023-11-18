@@ -7,29 +7,35 @@ import com.usmonie.word.features.dashboard.domain.repository.WordRepository
 import com.usmonie.word.features.dashboard.ui.DashboardScreen
 import com.usmonie.word.features.detail.WordScreen
 import com.usmonie.word.features.favourites.FavouritesScreen
+import com.usmonie.word.features.ui.AdMob
 import wtf.speech.compass.core.NavigationGraph
 import wtf.speech.compass.core.Route
 import wtf.word.core.design.themes.WordColors
 import wtf.word.core.design.themes.WordTypography
+import wtf.word.core.domain.Analytics
 
 @Composable
 fun getDashboardGraph(
     onCurrentColorsChanged: (WordColors) -> Unit,
     onCurrentFontsChanged: (WordTypography) -> Unit,
     userRepository: UserRepository,
-    wordRepository: WordRepository
+    wordRepository: WordRepository,
+    adMob: AdMob,
+    analytics: Analytics
 ): NavigationGraph {
     val dashboardScreen = remember {
         DashboardScreen.Builder(
             onCurrentColorsChanged,
             onCurrentFontsChanged,
             userRepository,
-            wordRepository
+            wordRepository,
+            adMob,
+            analytics
         )
     }
 
     return NavigationGraph("DASHBOARD_GRAPH", dashboardScreen).apply {
-        register(Route(FavouritesScreen.ID, FavouritesScreen.Builder(wordRepository)))
-        register(Route(WordScreen.ID, WordScreen.Builder(wordRepository)))
+        register(Route(FavouritesScreen.ID, FavouritesScreen.Builder(wordRepository, adMob, analytics)))
+        register(Route(WordScreen.ID, WordScreen.Builder(wordRepository, analytics, adMob)))
     }
 }

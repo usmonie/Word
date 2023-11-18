@@ -1,9 +1,9 @@
 package com.usmonie.word.features.dashboard.ui
 
-import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -44,11 +44,12 @@ import com.usmonie.word.features.dashboard.domain.usecase.UpdateFavouriteUseCase
 import com.usmonie.word.features.detail.WordScreen
 import com.usmonie.word.features.favourites.FavouritesScreen
 import com.usmonie.word.features.models.WordUi
+import com.usmonie.word.features.ui.AdMob
 import com.usmonie.word.features.ui.BaseDashboardLazyColumn
 import com.usmonie.word.features.ui.MenuItem
 import com.usmonie.word.features.ui.MenuItemText
 import com.usmonie.word.features.ui.SearchBar
-import com.usmonie.word.features.ui.TobBackButtonBar
+import com.usmonie.word.features.ui.TopBackButtonBar
 import com.usmonie.word.features.ui.VerticalAnimatedVisibility
 import com.usmonie.word.features.ui.WordCard
 import com.usmonie.word.features.ui.WordRecentCard
@@ -57,14 +58,17 @@ import wtf.speech.compass.core.Extra
 import wtf.speech.compass.core.LocalRouteManager
 import wtf.speech.compass.core.Screen
 import wtf.speech.compass.core.ScreenBuilder
+import wtf.speech.core.ui.AdKeys
 import wtf.speech.core.ui.ContentState
 import wtf.word.core.design.themes.WordColors
 import wtf.word.core.design.themes.WordTypography
+import wtf.word.core.domain.Analytics
 
 class DashboardScreen(
     private val changeTheme: (WordColors) -> Unit,
     private val changeFont: (WordTypography) -> Unit,
-    private val dashboardViewModel: DashboardViewModel
+    private val dashboardViewModel: DashboardViewModel,
+    private val adMob: AdMob
 ) : Screen(dashboardViewModel) {
 
     override val id: String = ID
@@ -80,9 +84,9 @@ class DashboardScreen(
 
         Scaffold(
             topBar = {
-                TobBackButtonBar(
+                TopBackButtonBar(
                     dashboardViewModel::onBackClick,
-                    state.query.isNotBlank()
+                    state.query.text.isNotBlank()
                 )
             },
             modifier = Modifier.fillMaxSize()
@@ -92,6 +96,7 @@ class DashboardScreen(
                 listState,
                 insets,
                 state,
+                adMob,
                 localFocusManager
             )
         }
@@ -134,101 +139,117 @@ class DashboardScreen(
         listState: LazyListState,
         insets: PaddingValues,
         state: DashboardState,
+        adMob: AdMob,
         localFocusManager: FocusManager
     ) {
         val (hasFocus, onFocusChange) = remember { mutableStateOf(false) }
-        BaseDashboardLazyColumn(listState, insets) {
-            item {
-                SearchBar(
-                    dashboardViewModel::onQueryChanged,
-                    placeholder = "[S]earch",
-                    query = state.query,
-                    modifier = Modifier.fillMaxWidth().testTag("DASHBOARD_SEARCH_BAR"),
-                    hasFocus = hasFocus,
-                    enabled = state.wordOfTheDay is ContentState.Success,
-                    onFocusChange = onFocusChange,
-                )
-            }
+        Box {
 
-            item {
-                VerticalAnimatedVisibility(hasFocus && state.recentSearch.isNotEmpty()) {
-                    RecentCards(
-                        dashboardViewModel::onOpenWord,
-                        state.recentSearch,
-                    )
-                }
-            }
-
-            if (state.foundWords is ContentState.Loading && state.query.isNotBlank()) {
+            BaseDashboardLazyColumn(listState, insets) {
                 item {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        CircularProgressIndicator(color = MaterialTheme.colorScheme.secondary)
-                    }
-                }
-            }
-
-            if (state.query.isNotBlank()) {
-                items(state.foundWords.item ?: listOf(), key = { word -> word.id }) { word ->
-                    WordCard(
-                        word,
-                        dashboardViewModel::onOpenWord,
-                        dashboardViewModel::onUpdateFavouritesPressed,
-                        dashboardViewModel::onShareWord,
-                        dashboardViewModel::onSynonymClicked,
-                        Modifier.fillMaxWidth()
-                            .padding(horizontal = 16.dp, vertical = 8.dp)
-                            .animateItemPlacement()
-                            .pointerInput(Unit) {
-                                detectTapGestures(onTap = { localFocusManager.clearFocus() })
-                            },
+                    SearchBar(
+                        dashboardViewModel::onQueryChanged,
+                        placeholder = "[S]earch",
+                        query = state.query,
+                        modifier = Modifier.fillMaxWidth().testTag("DASHBOARD_SEARCH_BAR"),
+                        hasFocus = hasFocus,
+                        enabled = state.wordOfTheDay is ContentState.Success,
+                        onFocusChange = onFocusChange,
                     )
                 }
-            }
 
-            item {
-                VerticalAnimatedVisibility(state.query.isBlank()) {
-                    WordOfTheDayMenuItem(
-                        onWordClick = dashboardViewModel::onOpenWord,
-                        onAddFavouritePressed = dashboardViewModel::onUpdateFavouritesPressed,
-                        onSharePressed = dashboardViewModel::onShareWord,
-                        showWordOfTheDay = state.showWordOfTheDay,
-                        word = state.wordOfTheDay,
-                        modifier = Modifier.fillMaxWidth()
-                            .animateItemPlacement()
-                            .animateContentSize()
-                            .pointerInput(Unit) {
-                                detectTapGestures(onTap = { localFocusManager.clearFocus() })
-                            }
+                item {
+                    VerticalAnimatedVisibility(hasFocus && state.recentSearch.isNotEmpty()) {
+                        RecentCards(
+                            dashboardViewModel::onOpenWord,
+                            state.recentSearch,
+                        )
+                    }
+                }
+
+                if (state.foundWords is ContentState.Loading && state.query.text.isNotBlank()) {
+                    item {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            CircularProgressIndicator(color = MaterialTheme.colorScheme.secondary)
+                        }
+                    }
+                }
+
+                if (state.query.text.isNotBlank()) {
+                    items(state.foundWords.item ?: listOf(), key = { word -> word.id }) { word ->
+                        WordCard(
+                            word,
+                            dashboardViewModel::onOpenWord,
+                            dashboardViewModel::onUpdateFavouritesPressed,
+                            dashboardViewModel::onShareWord,
+                            dashboardViewModel::onSynonymClicked,
+                            Modifier.fillMaxWidth()
+                                .padding(horizontal = 16.dp, vertical = 8.dp)
+                                .animateItemPlacement()
+                                .pointerInput(Unit) {
+                                    detectTapGestures(onTap = { localFocusManager.clearFocus() })
+                                },
+                        )
+                    }
+                }
+
+                item {
+                    VerticalAnimatedVisibility(state.query.text.isBlank()) {
+                        WordOfTheDayMenuItem(
+                            onWordClick = dashboardViewModel::onOpenWord,
+                            onAddFavouritePressed = dashboardViewModel::onUpdateFavouritesPressed,
+                            onSharePressed = dashboardViewModel::onShareWord,
+                            onUpdatePressed = dashboardViewModel::onUpdateRandomCard,
+                            showWordOfTheDay = state.showWordOfTheDay,
+                            word = state.wordOfTheDay
+                        )
+                    }
+                }
+
+                item {
+                    FavouritesMenuItem(
+                        state.query.text.isBlank(),
+                        dashboardViewModel::onFavouritesItemClicked,
+                        Modifier.fillMaxWidth().pointerInput(Unit) {
+                            detectTapGestures(onTap = { localFocusManager.clearFocus() })
+                        }
                     )
                 }
+
+                item {
+                    Settings(
+                        dashboardViewModel::onSettingsItemClicked,
+                        dashboardViewModel::onChangeColors,
+                        dashboardViewModel::onChangeFonts,
+                        dashboardViewModel::onClearRecentHistory,
+                        state.query.text,
+                        state.showSettings,
+                        localFocusManager
+                    )
+                }
+
+//                item {
+//                    About(
+//                        dashboardViewModel::onSettingsItemClicked,
+//
+//                    )
+//                }
+
+                item { Spacer(Modifier.height(48.dp)) }
             }
 
-            item {
-                FavouritesMenuItem(
-                    state.query.isBlank(),
-                    dashboardViewModel::onFavouritesItemClicked,
-                    Modifier.fillMaxWidth().pointerInput(Unit) {
-                        detectTapGestures(onTap = { localFocusManager.clearFocus() })
-                    }
+            if (!state.subscribed) {
+                adMob.Banner(
+                    AdKeys.BANNER_ID,
+                    Modifier.fillMaxWidth()
+                        .align(Alignment.BottomCenter)
+                        .padding(insets)
                 )
             }
-
-            item {
-                Settings(
-                    dashboardViewModel::onSettingsItemClicked,
-                    dashboardViewModel::onChangeColors,
-                    dashboardViewModel::onChangeFonts,
-                    dashboardViewModel::onClearRecentHistory,
-                    state.query,
-                    state.showSettings,
-                    localFocusManager
-                )
-            }
-            item { Spacer(Modifier.height(16.dp)) }
         }
     }
 
@@ -237,14 +258,14 @@ class DashboardScreen(
     }
 
     class Builder(
-        private
-        val changeTheme: (WordColors) -> Unit,
+        private val changeTheme: (WordColors) -> Unit,
         private val changeFont: (WordTypography) -> Unit,
         private val userRepository: UserRepository,
-        private val wordRepository: WordRepository
+        private val wordRepository: WordRepository,
+        private val adMob: AdMob,
+        private val analytics: Analytics
     ) : ScreenBuilder {
-        override val id: String
-            get() = ID
+        override val id: String = ID
 
         override fun build(params: Map<String, String>?, extra: Extra?) = DashboardScreen(
             changeTheme,
@@ -257,8 +278,10 @@ class DashboardScreen(
                 UpdateFavouriteUseCaseImpl(wordRepository),
                 CurrentThemeUseCaseImpl(userRepository),
                 ChangeThemeUseCaseImpl(userRepository),
-                ClearRecentUseCaseImpl(wordRepository)
-            )
+                ClearRecentUseCaseImpl(wordRepository),
+                analytics
+            ),
+            adMob
         )
     }
 }
