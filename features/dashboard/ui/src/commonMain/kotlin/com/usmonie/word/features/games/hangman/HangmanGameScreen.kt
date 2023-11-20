@@ -103,9 +103,12 @@ private fun ColumnScope.PlayingBoard(
 
 @Composable
 fun WordDisplay(gameState: HangmanState, modifier: Modifier = Modifier) {
-    val displayWord =
+    val displayWord = if (gameState is HangmanState.Lost) {
+        gameState.word.toCharArray().joinToString(" ")
+    } else {
         gameState.word.map { if (it in gameState.guessedLetters) it else '_' }
             .joinToString(" ")
+    }
     Text(
         displayWord,
         modifier,

@@ -11,10 +11,6 @@ class HangmanGameViewModel(
     HangmanState.Playing(word)
 ) {
 
-    init {
-        println("WORD: $word")
-    }
-
     fun onLetterGuessed(letter: Char) = handleAction(HangmanAction.GuessLetter(letter))
 
     override fun HangmanState.reduce(event: HangmanEvent): HangmanState {
