@@ -17,7 +17,7 @@ class WordApplication : Application(), Application.ActivityLifecycleCallbacks {
     private lateinit var currentActivity: Activity
     override fun onCreate() {
         super.onCreate()
-        this.registerActivityLifecycleCallbacks(this);
+        this.registerActivityLifecycleCallbacks(this)
 
         if (false) MobileAds.initialize(this) { }
 
@@ -27,9 +27,9 @@ class WordApplication : Application(), Application.ActivityLifecycleCallbacks {
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) = Unit
     override fun onActivityStarted(activity: Activity) {
         if (!appOpenAdManager.isShowingAd) {
-            currentActivity = activity;
+            currentActivity = activity
 
-            appOpenAdManager.showAdIfAvailable(currentActivity);
+            appOpenAdManager.showAdIfAvailable(currentActivity)
         }
     }
 
@@ -38,32 +38,30 @@ class WordApplication : Application(), Application.ActivityLifecycleCallbacks {
     override fun onActivityStopped(activity: Activity) = Unit
     override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) = Unit
     override fun onActivityDestroyed(activity: Activity) = Unit
-
 }
-
 
 private class AppOpenAdManager {
     private var appOpenAd: AppOpenAd? = null
     private var isLoadingAd = false
     var isShowingAd = false
 
-    public fun showAdIfAvailable(activity: Activity) {
+    fun showAdIfAvailable(activity: Activity) {
         // If the app open ad is already showing, do not show the ad again.
         if (isShowingAd) {
-            Log.d(LOG_TAG, "The app open ad is already showing.");
-            return;
+            Log.d(LOG_TAG, "The app open ad is already showing.")
+            return
         }
 
         // If the app open ad is not available yet, invoke the callback then load the ad.
         if (!isAdAvailable) {
-            Log.d(LOG_TAG, "The app open ad is not ready yet.");
+            Log.d(LOG_TAG, "The app open ad is not ready yet.")
 //            onShowAdCompleteListener.onShowAdComplete();
-            loadAd(activity);
-            return;
+            loadAd(activity)
+            return
         }
 
-        isShowingAd = true;
-        appOpenAd?.show(activity);
+        isShowingAd = true
+        appOpenAd?.show(activity)
     }
 
     /** Request an ad.  */
@@ -98,7 +96,7 @@ private class AppOpenAdManager {
 
     private val isAdAvailable: Boolean
         /** Check if ad exists and can be shown.  */
-        private get() = appOpenAd != null
+        get() = appOpenAd != null
 
     companion object {
         private const val LOG_TAG = "AppOpenAdManager"
