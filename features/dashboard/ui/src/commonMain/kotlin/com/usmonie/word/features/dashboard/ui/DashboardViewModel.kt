@@ -9,6 +9,7 @@ import com.usmonie.word.features.dashboard.domain.usecase.CurrentThemeUseCase
 import com.usmonie.word.features.dashboard.domain.usecase.GetSearchHistoryUseCase
 import com.usmonie.word.features.dashboard.domain.usecase.GetWordOfTheDayUseCase
 import com.usmonie.word.features.dashboard.domain.usecase.ParseDictionaryUseCase
+import com.usmonie.word.features.dashboard.domain.usecase.RandomWordUseCase
 import com.usmonie.word.features.dashboard.domain.usecase.SearchWordsUseCase
 import com.usmonie.word.features.dashboard.domain.usecase.UpdateFavouriteUseCase
 import com.usmonie.word.features.models.SynonymUi
@@ -36,6 +37,7 @@ class DashboardViewModel(
     private val getWordOfTheDayUseCase: GetWordOfTheDayUseCase,
     private val updateFavouriteUseCase: UpdateFavouriteUseCase,
     private val getCurrentThemeUseCase: CurrentThemeUseCase,
+    private val getRandomWordUseCase: RandomWordUseCase,
     private val changeThemeUseCase: ChangeThemeUseCase,
     private val clearRecentUseCase: ClearRecentUseCase,
     private val analytics: Analytics
@@ -57,6 +59,8 @@ class DashboardViewModel(
 
     fun onUpdateRandomCard() = handleAction(DashboardAction.Update)
 
+    fun onGamesClicked() = handleAction(DashboardAction.OnMenuItemClick.Games)
+    fun onHangman() = handleAction(DashboardAction.OnGamesItemClick.Hangman)
     fun onQueryChanged(query: TextFieldValue) = handleAction(DashboardAction.InputQuery(query))
     fun onWordOfTheDayItemClicked() = handleAction(DashboardAction.OnMenuItemClick.WordOfTheDay)
     fun onFavouritesItemClicked() = handleAction(DashboardAction.OnMenuItemClick.Favourites)
@@ -93,11 +97,11 @@ class DashboardViewModel(
             recentSearch = event.recentSearch,
         )
 
-        DashboardEvent.UpdateMenuItemState.Favourites -> this
         DashboardEvent.UpdateMenuItemState.Settings -> this.openSettings()
         DashboardEvent.UpdateMenuItemState.WordOfTheDay -> this.openWordOfTheDay()
-        is DashboardEvent.ChangeTheme -> this
         DashboardEvent.BackToMain -> this.copy(query = TextFieldValue())
+        DashboardEvent.UpdateMenuItemState.Games -> this.openGames()
+        else -> this
     }
 
     override suspend fun processAction(action: DashboardAction) = when (action) {
@@ -134,6 +138,12 @@ class DashboardViewModel(
             updateData()
             DashboardEvent.RandomWordLoading
         }
+
+        DashboardAction.OnMenuItemClick.Games -> DashboardEvent.UpdateMenuItemState.Games
+        DashboardAction.OnGamesItemClick.Hangman -> {
+            val word = getRandomWordUseCase(RandomWordUseCase.Param(9))
+            DashboardEvent.OpenGame.Hangman(word.to())
+        }
     }
 
     override suspend fun handleEvent(event: DashboardEvent) = when (event) {
@@ -144,6 +154,7 @@ class DashboardViewModel(
         is DashboardEvent.UpdateMenuItemState.Favourites -> DashboardEffect.OpenFavourites()
 
         is DashboardEvent.OpenWord -> DashboardEffect.OpenWord(event.word)
+        is DashboardEvent.OpenGame.Hangman -> DashboardEffect.OpenHangman(event.word)
         else -> null
     }
 

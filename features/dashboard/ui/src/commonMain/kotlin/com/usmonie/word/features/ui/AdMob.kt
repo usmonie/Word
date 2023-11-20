@@ -9,7 +9,7 @@ expect class AdMob {
     fun Banner(adKey: String, modifier: Modifier = Modifier)
 
     @Composable
-    fun RewardedInterstitial(adKey: String, modifier: Modifier = Modifier)
+    fun RewardedInterstitial()
 
     @Composable
     fun Startup(adKey: String, modifier: Modifier = Modifier)

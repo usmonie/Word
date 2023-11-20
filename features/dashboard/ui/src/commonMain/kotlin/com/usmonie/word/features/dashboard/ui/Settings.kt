@@ -56,9 +56,10 @@ private fun SettingsItems(
         Column {
             ChangeThemeMenuItem(
                 onChangeColorsPressed,
-                Modifier.fillMaxWidth().pointerInput(Unit) {
-                    detectTapGestures(onTap = { localFocusManager.clearFocus() })
-                }
+                Modifier.fillMaxWidth()
+                    .pointerInput(Unit) {
+                        detectTapGestures(onTap = { localFocusManager.clearFocus() })
+                    }
             )
             ChangeFontMenuItem(
                 onChangeFontsPressed,

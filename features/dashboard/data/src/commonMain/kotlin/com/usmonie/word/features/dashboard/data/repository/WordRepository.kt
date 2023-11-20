@@ -67,7 +67,8 @@ class WordRepositoryImpl(driver: SqlDriver) : WordRepository {
         offset: Long,
         limit: Long
     ): List<WordDomain> {
-        return database.wordQueries.searchBySynonym(query.lowercase(), limit, offset).executeAsList()
+        return database.wordQueries.searchBySynonym(query.lowercase(), limit, offset)
+            .executeAsList()
             .map {
                 if (it.word.equals(query, true)) {
                     database.wordQueries.insertSearchQuery(query.lowercase(), it.id)
@@ -133,6 +134,13 @@ class WordRepositoryImpl(driver: SqlDriver) : WordRepository {
 
     override suspend fun getWordOfTheDay(): WordDomain {
         return mapWordDomain(database.wordQueries.getRandomWordOfTheDay().executeAsOne())
+    }
+
+    override suspend fun getRandomWord(symbolsCount: Int): WordDomain {
+        return mapWordDomain(
+            database.wordQueries.selectWordsInRange(4, symbolsCount.toLong())
+                .executeAsOne()
+        )
     }
 
     override suspend fun clearSearchHistory() {

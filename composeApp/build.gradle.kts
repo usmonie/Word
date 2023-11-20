@@ -145,6 +145,9 @@ android {
 }
 
 copyNativeResources("commonMain")
+dependencies {
+    debugImplementation(libs.compose.ui.tooling)
+}
 
 fun copyNativeResources(sourceSet: String) {
     if (sourceSet.isEmpty()) throw IllegalStateException("Valid sourceSet required")

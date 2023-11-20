@@ -39,10 +39,12 @@ import com.usmonie.word.features.dashboard.domain.usecase.CurrentThemeUseCaseImp
 import com.usmonie.word.features.dashboard.domain.usecase.GetSearchHistoryUseCaseImpl
 import com.usmonie.word.features.dashboard.domain.usecase.GetWordOfTheDayUseCaseImpl
 import com.usmonie.word.features.dashboard.domain.usecase.ParseDictionaryUseCase
+import com.usmonie.word.features.dashboard.domain.usecase.RandomWordUseCaseImpl
 import com.usmonie.word.features.dashboard.domain.usecase.SearchWordsUseCaseImpl
 import com.usmonie.word.features.dashboard.domain.usecase.UpdateFavouriteUseCaseImpl
 import com.usmonie.word.features.detail.WordScreen
 import com.usmonie.word.features.favourites.FavouritesScreen
+import com.usmonie.word.features.games.hangman.HangmanGameScreen
 import com.usmonie.word.features.models.WordUi
 import com.usmonie.word.features.ui.AdMob
 import com.usmonie.word.features.ui.BaseDashboardLazyColumn
@@ -126,6 +128,11 @@ class DashboardScreen(
                 is DashboardEffect.OpenWord -> routeManager.navigateTo(
                     WordScreen.ID,
                     extras = WordScreen.Companion.WordExtra(effect.word)
+                )
+
+                is DashboardEffect.OpenHangman -> routeManager.navigateTo(
+                    HangmanGameScreen.ID,
+                    extras = HangmanGameScreen.Extras(effect.word.word)
                 )
 
                 null -> Unit
@@ -232,6 +239,16 @@ class DashboardScreen(
                     )
                 }
 
+                item {
+                    Games(
+                        dashboardViewModel::onGamesClicked,
+                        dashboardViewModel::onHangman,
+                        state.query.text,
+                        state.showGames,
+                        localFocusManager
+                    )
+                }
+
 //                item {
 //                    About(
 //                        dashboardViewModel::onSettingsItemClicked,
@@ -277,6 +294,7 @@ class DashboardScreen(
                 GetWordOfTheDayUseCaseImpl(wordRepository),
                 UpdateFavouriteUseCaseImpl(wordRepository),
                 CurrentThemeUseCaseImpl(userRepository),
+                RandomWordUseCaseImpl(wordRepository),
                 ChangeThemeUseCaseImpl(userRepository),
                 ClearRecentUseCaseImpl(wordRepository),
                 analytics

@@ -18,6 +18,6 @@ interface WordRepository {
     suspend fun getAllFavourites(): List<WordDomain>
     suspend fun getSearchHistory(offset: Long, limit: Long): List<WordDomain>
     suspend fun getWordOfTheDay(): WordDomain
-
+    suspend fun getRandomWord(symbolsCount: Int): WordDomain
     suspend fun clearSearchHistory()
 }

@@ -21,6 +21,7 @@ data class DashboardState(
     val recentSearch: List<WordUi> = listOf(),
     val showWordOfTheDay: Boolean = true,
     val showSettings: Boolean = false,
+    val showGames: Boolean = false,
     val subscribed: Boolean = false
 ) : ScreenState {
 
@@ -63,12 +64,15 @@ data class DashboardState(
 
     fun openSettings() = this.copy(
         showSettings = !showSettings,
+        showGames = false
     )
 
     fun openWordOfTheDay() = this.copy(
         showWordOfTheDay = true,
         showSettings = false,
     )
+
+    fun openGames() = this.copy(showSettings = false, showGames = !showGames)
 
     private fun mapNewWord(
         mappedWord: WordUi,
@@ -100,11 +104,16 @@ sealed class DashboardAction : ScreenAction {
         data object WordOfTheDay : OnMenuItemClick()
         data object Favourites : OnMenuItemClick()
         data object Settings : OnMenuItemClick()
+        data object Games : OnMenuItemClick()
+    }
+
+    sealed class OnGamesItemClick : DashboardAction() {
+        data object Hangman : OnMenuItemClick()
     }
 }
 
 sealed class DashboardEvent : ScreenEvent {
-    data object BackToMain: DashboardEvent()
+    data object BackToMain : DashboardEvent()
     data object RandomWordLoading : DashboardEvent()
     data class InitialData(
         val recentSearch: List<WordUi>,
@@ -124,7 +133,9 @@ sealed class DashboardEvent : ScreenEvent {
     ) : DashboardEvent()
 
     data class InputQuery(val query: TextFieldValue) : DashboardEvent()
-    data class FoundWords(val query: TextFieldValue, val foundWords: List<WordUi>) : DashboardEvent()
+    data class FoundWords(val query: TextFieldValue, val foundWords: List<WordUi>) :
+        DashboardEvent()
+
     data class UpdatedFavourites(val word: WordUi) : DashboardEvent()
     data class OpenWord(val word: WordUi) : DashboardEvent()
 
@@ -137,6 +148,12 @@ sealed class DashboardEvent : ScreenEvent {
         data object WordOfTheDay : UpdateMenuItemState()
         data object Favourites : UpdateMenuItemState()
         data object Settings : UpdateMenuItemState()
+        data object Games : UpdateMenuItemState()
+    }
+
+    sealed class OpenGame : DashboardEvent() {
+        data class Hangman(val word: WordUi) : OpenGame()
+
     }
 }
 
@@ -146,5 +163,7 @@ sealed class DashboardEffect : ScreenEffect {
 
     class OpenFavourites : DashboardEffect()
 
-    data class OpenWord(val word: WordUi): DashboardEffect()
+    data class OpenHangman(val word: WordUi): DashboardEffect()
+
+    data class OpenWord(val word: WordUi) : DashboardEffect()
 }

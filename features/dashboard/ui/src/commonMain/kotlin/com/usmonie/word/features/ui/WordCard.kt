@@ -122,6 +122,7 @@ fun WordOfTheDayCard(
     onUpdatePressed: () -> Unit,
     modifier: Modifier
 ) {
+
     WordCard({ onClick(word) }, elevation = 8.dp, modifier = modifier) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,

@@ -7,6 +7,7 @@ import com.usmonie.word.features.dashboard.domain.repository.WordRepository
 import com.usmonie.word.features.dashboard.ui.DashboardScreen
 import com.usmonie.word.features.detail.WordScreen
 import com.usmonie.word.features.favourites.FavouritesScreen
+import com.usmonie.word.features.games.hangman.HangmanGameScreen
 import com.usmonie.word.features.ui.AdMob
 import wtf.speech.compass.core.NavigationGraph
 import wtf.speech.compass.core.Route
@@ -37,5 +38,6 @@ fun getDashboardGraph(
     return NavigationGraph("DASHBOARD_GRAPH", dashboardScreen).apply {
         register(Route(FavouritesScreen.ID, FavouritesScreen.Builder(wordRepository, adMob, analytics)))
         register(Route(WordScreen.ID, WordScreen.Builder(wordRepository, analytics, adMob)))
+        register(Route(HangmanGameScreen.ID, HangmanGameScreen.Builder(wordRepository, adMob)))
     }
 }

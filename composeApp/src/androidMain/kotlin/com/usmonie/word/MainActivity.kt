@@ -3,6 +3,8 @@ package com.usmonie.word
 import App
 import DefaultLogger
 import android.app.Activity
+import android.content.Context
+import android.content.ContextWrapper
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -16,23 +18,25 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.view.WindowCompat
-import com.google.android.gms.ads.MobileAds
-import com.google.android.gms.ads.RequestConfiguration
+import com.google.android.gms.ads.AdError
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.FullScreenContentCallback
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
 import com.liftric.kvault.KVault
 import com.usmonie.word.features.dashboard.data.db.DriverFactory
 import com.usmonie.word.features.dashboard.data.repository.UserRepositoryImpl
 import com.usmonie.word.features.ui.AdMob
+import wtf.speech.core.ui.AdKeys
 
 class MainActivity : ComponentActivity() {
+    private var mInterstitialAd: InterstitialAd? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        MobileAds.initialize(this) {}
-        MobileAds.setRequestConfiguration(
-            RequestConfiguration.Builder().build()
-        )
 
         val driverFactory = DriverFactory(this)
 
@@ -54,11 +58,66 @@ class MainActivity : ComponentActivity() {
             App(
                 driverFactory,
                 UserRepositoryImpl(KVault(this@MainActivity)),
-                AdMob,
+                AdMob(::showInterstitial),
                 DefaultLogger(Firebase.analytics)
             )
         }
+        loadInterstitial(this)
     }
+
+    override fun onDestroy() {
+        removeInterstitial()
+        super.onDestroy()
+    }
+
+    private fun loadInterstitial(context: Context) {
+        InterstitialAd.load(
+            context,
+            AdKeys.REWARDED_LIFE_ID, //Change this with your own AdUnitID!
+            AdRequest.Builder().build(),
+            object : InterstitialAdLoadCallback() {
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    mInterstitialAd = null
+                }
+
+                override fun onAdLoaded(interstitialAd: InterstitialAd) {
+                    mInterstitialAd = interstitialAd
+                }
+            }
+        )
+    }
+
+    private fun showInterstitial(context: Context, onAdDismissed: () -> Unit) {
+        val activity = context.findActivity()
+
+        if (mInterstitialAd != null && activity != null) {
+            mInterstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
+                override fun onAdFailedToShowFullScreenContent(e: AdError) {
+                    mInterstitialAd = null
+                }
+
+                override fun onAdDismissedFullScreenContent() {
+                    mInterstitialAd = null
+
+                    loadInterstitial(context)
+                    onAdDismissed()
+                }
+            }
+            mInterstitialAd?.show(activity)
+        }
+    }
+
+    private fun removeInterstitial() {
+        mInterstitialAd?.fullScreenContentCallback = null
+        mInterstitialAd = null
+    }
+
+    private fun Context.findActivity(): Activity? = when (this) {
+        is Activity -> this
+        is ContextWrapper -> baseContext.findActivity()
+        else -> null
+    }
+
 }
 
 @Preview
@@ -67,7 +126,7 @@ fun AppAndroidPreview() {
     App(
         DriverFactory(LocalContext.current),
         UserRepositoryImpl(KVault(LocalContext.current)),
-        AdMob,
+        AdMob { _, _ -> },
         DefaultLogger(Firebase.analytics)
     )
 }

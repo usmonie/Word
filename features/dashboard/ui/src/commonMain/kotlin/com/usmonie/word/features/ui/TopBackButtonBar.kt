@@ -23,7 +23,7 @@ fun TopBackButtonBar(onBackClickListener: () -> Unit, showItem: Boolean) {
                 .fillMaxWidth()
                 .background(MaterialTheme.colorScheme.primary)
         ) {
-            Spacer(Modifier.height(32.dp))
+            Spacer(Modifier.height(48.dp))
             IconButton(onBackClickListener) {
                 Icon(
                     Icons.Default.ArrowBack,
