@@ -27,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.input.pointer.PointerInputScope
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.testTag
@@ -82,6 +83,9 @@ class DashboardScreen(
         val localFocusManager = LocalFocusManager.current
         val listState = rememberLazyListState()
 
+        val onPointerInput: suspend PointerInputScope.() -> Unit = remember {
+            { detectTapGestures(onTap = { localFocusManager.clearFocus() }) }
+        }
         DashboardEffects(listState, localFocusManager, effect)
 
         Scaffold(
@@ -95,11 +99,11 @@ class DashboardScreen(
                 .pointerInput(Unit) { detectTapGestures(onTap = { localFocusManager.clearFocus() }) }
         ) { insets ->
             MainState(
+                onPointerInput,
                 listState,
                 insets,
                 state,
                 adMob,
-                localFocusManager
             )
         }
     }
@@ -143,15 +147,14 @@ class DashboardScreen(
     @OptIn(ExperimentalFoundationApi::class)
     @Composable
     private fun MainState(
+        onPointerInput: suspend PointerInputScope.() -> Unit,
         listState: LazyListState,
         insets: PaddingValues,
         state: DashboardState,
         adMob: AdMob,
-        localFocusManager: FocusManager
     ) {
         val (hasFocus, onFocusChange) = remember { mutableStateOf(false) }
         Box {
-
             BaseDashboardLazyColumn(listState, insets) {
                 item {
                     SearchBar(
@@ -176,13 +179,7 @@ class DashboardScreen(
 
                 if (state.foundWords is ContentState.Loading && state.query.text.isNotBlank()) {
                     item {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Center,
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            CircularProgressIndicator(color = MaterialTheme.colorScheme.secondary)
-                        }
+                        LoadingProgress()
                     }
                 }
 
@@ -197,9 +194,7 @@ class DashboardScreen(
                             Modifier.fillMaxWidth()
                                 .padding(horizontal = 16.dp, vertical = 8.dp)
                                 .animateItemPlacement()
-                                .pointerInput(Unit) {
-                                    detectTapGestures(onTap = { localFocusManager.clearFocus() })
-                                },
+                                .pointerInput(Unit, onPointerInput),
                         )
                     }
                 }
@@ -218,12 +213,20 @@ class DashboardScreen(
                 }
 
                 item {
+                    Games(
+                        dashboardViewModel::onGamesClicked,
+                        dashboardViewModel::onHangman,
+                        onPointerInput,
+                        state.query.text,
+                        state.showGames,
+                    )
+                }
+
+                item {
                     FavouritesMenuItem(
                         state.query.text.isBlank(),
                         dashboardViewModel::onFavouritesItemClicked,
-                        Modifier.fillMaxWidth().pointerInput(Unit) {
-                            detectTapGestures(onTap = { localFocusManager.clearFocus() })
-                        }
+                        Modifier.fillMaxWidth().pointerInput(Unit, onPointerInput)
                     )
                 }
 
@@ -233,28 +236,25 @@ class DashboardScreen(
                         dashboardViewModel::onChangeColors,
                         dashboardViewModel::onChangeFonts,
                         dashboardViewModel::onClearRecentHistory,
+                        onPointerInput,
                         state.query.text,
                         state.showSettings,
-                        localFocusManager
                     )
                 }
 
                 item {
-                    Games(
-                        dashboardViewModel::onGamesClicked,
-                        dashboardViewModel::onHangman,
+                    About(
+                        dashboardViewModel::onSettingsItemClicked,
+                        {},
+                        {
+
+                        },
+                        {},
+                        onPointerInput,
                         state.query.text,
-                        state.showGames,
-                        localFocusManager
+                        state.showAbout
                     )
                 }
-
-//                item {
-//                    About(
-//                        dashboardViewModel::onSettingsItemClicked,
-//
-//                    )
-//                }
 
                 item { Spacer(Modifier.height(48.dp)) }
             }
@@ -267,6 +267,17 @@ class DashboardScreen(
                         .padding(insets)
                 )
             }
+        }
+    }
+
+    @Composable
+    private fun LoadingProgress() {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            CircularProgressIndicator(color = MaterialTheme.colorScheme.secondary)
         }
     }
 

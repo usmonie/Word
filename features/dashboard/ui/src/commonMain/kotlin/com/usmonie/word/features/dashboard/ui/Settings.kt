@@ -1,6 +1,5 @@
 package com.usmonie.word.features.dashboard.ui
 
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -9,7 +8,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.input.pointer.PointerInputScope
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.ui.MenuItem
@@ -21,24 +20,22 @@ fun Settings(
     onChangeColorsPressed: () -> Unit,
     onChangeFontsPressed: () -> Unit,
     onClearRecentPressed: () -> Unit,
+    onPointerInput: suspend PointerInputScope.() -> Unit,
     query: String,
-    showSettings: Boolean,
-    localFocusManager: FocusManager
+    showSettings: Boolean
 ) {
     VerticalAnimatedVisibility(query.isBlank()) {
         Column {
             SettingsMenuItem(
                 onSettingsMenuItemPressed,
-                Modifier.fillMaxWidth().pointerInput(Unit) {
-                    detectTapGestures(onTap = { localFocusManager.clearFocus() })
-                }
+                Modifier.fillMaxWidth().pointerInput(Unit, onPointerInput)
             )
             SettingsItems(
-                showSettings,
                 onChangeColorsPressed,
-                localFocusManager,
                 onChangeFontsPressed,
-                onClearRecentPressed
+                onClearRecentPressed,
+                onPointerInput,
+                showSettings,
             )
         }
     }
@@ -46,32 +43,25 @@ fun Settings(
 
 @Composable
 private fun SettingsItems(
-    showSettings: Boolean,
     onChangeColorsPressed: () -> Unit,
-    localFocusManager: FocusManager,
     onChangeFontsPressed: () -> Unit,
-    onClearRecentPressed: () -> Unit
+    onClearRecentPressed: () -> Unit,
+    onPointerInput: suspend PointerInputScope.() -> Unit,
+    showSettings: Boolean,
 ) {
     VerticalAnimatedVisibility(showSettings) {
         Column {
             ChangeThemeMenuItem(
                 onChangeColorsPressed,
-                Modifier.fillMaxWidth()
-                    .pointerInput(Unit) {
-                        detectTapGestures(onTap = { localFocusManager.clearFocus() })
-                    }
+                Modifier.fillMaxWidth().pointerInput(Unit, onPointerInput)
             )
             ChangeFontMenuItem(
                 onChangeFontsPressed,
-                Modifier.fillMaxWidth().pointerInput(Unit) {
-                    detectTapGestures(onTap = { localFocusManager.clearFocus() })
-                }
+                Modifier.fillMaxWidth().pointerInput(Unit, onPointerInput)
             )
             ClearRecentHistoryMenuItem(
                 onClearRecentPressed,
-                Modifier.fillMaxWidth().pointerInput(Unit) {
-                    detectTapGestures(onTap = { localFocusManager.clearFocus() })
-                }
+                Modifier.fillMaxWidth().pointerInput(Unit, onPointerInput)
             )
         }
     }

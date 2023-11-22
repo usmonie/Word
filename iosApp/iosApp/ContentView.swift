@@ -11,13 +11,22 @@ import design
 import GoogleMobileAds
 
 struct ComposeView: UIViewControllerRepresentable {
-    func makeUIViewController(context: Context) -> UIViewController {
-        MainViewControllerKt.MainViewController(adMob: UiAdMob(bannerUiView: {
-            SwiftUIInUIView(
-                content: Banner(bannerID: "")
-            )
 
-        }), nativeAnalytics: NativeAnalytics())
+    func makeUIViewController(context: Context) -> UIViewController {
+        let viewController = InterstitalRewardedViewController()
+
+        MainViewControllerKt.MainViewController(
+            adMob: UiAdMob(
+                bannerUiView: {
+                    SwiftUIInUIView(content: Banner(bannerID: "ca-app-pub-2198867984469198/3121295852"))
+                },
+                rewardedInterstitialView: {
+                    print("LOG_ STARTED REWARDED AD")
+                    viewController.interAdTouched(sender: Any)
+                }
+            ),
+            nativeAnalytics: NativeAnalytics()
+        )
     }
 
     func updateUIViewController(_ uiViewController: UIViewController, context: Context) {

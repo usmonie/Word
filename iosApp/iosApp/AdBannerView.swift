@@ -28,7 +28,8 @@ private struct BannerVC: UIViewControllerRepresentable {
         return viewController
     }
 
-    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {}
+    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
+    }
 }
 
 struct Banner: View {
@@ -41,57 +42,57 @@ struct Banner: View {
 
     var body: some View {
         BannerVC(bannerID: bannerID)
-            .frame(width: size.width, height: size.height)
+                .frame(width: size.width, height: size.height)
     }
 }
 
-class ViewController : UIViewController {
-    
-    
+class ViewController: UIViewController {
+
+
     var bannerView: GADBannerView
 
-    
+
     init(bannerView: GADBannerView) {
         self.bannerView = bannerView
         super.init(nibName: nil, bundle: nil)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    
+
+
     override func viewDidLoad() {
-      super.viewDidLoad()
-      print("VIEWCONTROLLER STARTED")
-      // In this case, we instantiate the banner with desired ad size.
+        super.viewDidLoad()
+        print("VIEWCONTROLLER STARTED")
+        // In this case, we instantiate the banner with desired ad size.
 //        bannerView = GADBannerView(adSize: GADAdSizeBanner)
-        
+
         addBannerViewToView(bannerView)
-        
+
         bannerView.adUnitID = "ca-app-pub-3940256099942544/2934735716"
         bannerView.load(GADRequest())
     }
 
     func addBannerViewToView(_ bannerView: GADBannerView) {
-        
-      bannerView.translatesAutoresizingMaskIntoConstraints = false
-      view.addSubview(bannerView)
-      view.addConstraints(
-        [NSLayoutConstraint(item: bannerView,
-                            attribute: .bottom,
-                            relatedBy: .equal,
-                            toItem: view.safeAreaLayoutGuide,
-                            attribute: .bottom,
-                            multiplier: 1,
-                            constant: 0),
-         NSLayoutConstraint(item: bannerView,
-                            attribute: .centerX,
-                            relatedBy: .equal,
-                            toItem: view,
-                            attribute: .centerX,
-                            multiplier: 1,
-                            constant: 0)
-        ])
-     }
+
+        bannerView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(bannerView)
+        view.addConstraints(
+            [NSLayoutConstraint(item: bannerView,
+                attribute: .bottom,
+                relatedBy: .equal,
+                toItem: view.safeAreaLayoutGuide,
+                attribute: .bottom,
+                multiplier: 1,
+                constant: 0),
+                NSLayoutConstraint(item: bannerView,
+                    attribute: .centerX,
+                    relatedBy: .equal,
+                    toItem: view,
+                    attribute: .centerX,
+                    multiplier: 1,
+                    constant: 0)
+            ])
+    }
 }

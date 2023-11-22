@@ -1,6 +1,5 @@
 package com.usmonie.word.features.dashboard.ui
 
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -9,7 +8,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.input.pointer.PointerInputScope
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.ui.MenuItem
@@ -18,30 +17,37 @@ import com.usmonie.word.features.ui.VerticalAnimatedVisibility
 @Composable
 fun About(
     onAboutMenuItemPressed: () -> Unit,
+    onAboutDeveloperPressed: () -> Unit,
+    onTelegramPressed: () -> Unit,
+    onDonatePressed: () -> Unit,
+    onPointerInput: suspend PointerInputScope.() -> Unit,
     query: String,
     showAbout: Boolean,
-    localFocusManager: FocusManager
 ) {
     VerticalAnimatedVisibility(query.isBlank()) {
         Column {
             AboutMenuItem(
                 onAboutMenuItemPressed,
-                Modifier.fillMaxWidth().pointerInput(Unit) {
-                    detectTapGestures(onTap = { localFocusManager.clearFocus() })
-                }
+                Modifier.fillMaxWidth().pointerInput(Unit, onPointerInput)
             )
-            AboutItems(showAbout)
+            AboutItems(onAboutDeveloperPressed, onTelegramPressed, onDonatePressed, onPointerInput, showAbout)
         }
     }
 }
 
 @Composable
 private fun AboutItems(
+    onAboutDeveloperPressed: () -> Unit,
+    onTelegramPressed: () -> Unit,
+    onDonatePressed: () -> Unit,
+    onPointerInput: suspend PointerInputScope.() -> Unit,
     showSettings: Boolean,
 ) {
     VerticalAnimatedVisibility(showSettings) {
         Column {
-
+            if (false) AboutItem(onAboutDeveloperPressed, "About Me", Modifier.pointerInput(Unit, onPointerInput))
+            AboutItem(onTelegramPressed, "Telegram", Modifier.pointerInput(Unit, onPointerInput))
+            if (false) AboutItem(onDonatePressed, "Donate", Modifier.pointerInput(Unit, onPointerInput))
         }
     }
 }

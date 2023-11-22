@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		517F2A31113FCD23FC5BE549 /* AdInterstitialRewardedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517F2DFEF76A76E94C8B41AB /* AdInterstitialRewardedView.swift */; };
 		DA0E29A82B092B9500D67393 /* AdBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0E29A72B092B9500D67393 /* AdBannerView.swift */; };
 		DA48C4362B0366260010A63E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA48C4352B0366260010A63E /* AppDelegate.swift */; };
 		DA51F1642B04109500AA5869 /* dictionary.json in Resources */ = {isa = PBXBuildFile; fileRef = DA51F1632B04109500AA5869 /* dictionary.json */; };
@@ -55,6 +56,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		517F2DFEF76A76E94C8B41AB /* AdInterstitialRewardedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdInterstitialRewardedView.swift; sourceTree = "<group>"; };
 		DA0E29A72B092B9500D67393 /* AdBannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdBannerView.swift; sourceTree = "<group>"; };
 		DA0E29A92B093EF500D67393 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DA48C4352B0366260010A63E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -176,6 +178,7 @@
 				DA62BE432B021FBF0032198A /* Preview Content */,
 				DA756CF62B07D39A00294706 /* NativeAnalytics.swift */,
 				DA0E29A72B092B9500D67393 /* AdBannerView.swift */,
+				517F2DFEF76A76E94C8B41AB /* AdInterstitialRewardedView.swift */,
 			);
 			path = iosApp;
 			sourceTree = "<group>";
@@ -408,6 +411,7 @@
 				DA0E29A82B092B9500D67393 /* AdBannerView.swift in Sources */,
 				DA62BE3F2B021FBC0032198A /* Item.swift in Sources */,
 				DA62BE3B2B021FBC0032198A /* _W_ordApp.swift in Sources */,
+				517F2A31113FCD23FC5BE549 /* AdInterstitialRewardedView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

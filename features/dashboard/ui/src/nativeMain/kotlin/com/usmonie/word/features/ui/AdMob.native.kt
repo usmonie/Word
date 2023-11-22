@@ -9,7 +9,7 @@ import kotlinx.cinterop.ExperimentalForeignApi
 import platform.UIKit.UIView
 
 @OptIn(ExperimentalForeignApi::class)
-actual class AdMob(private val bannerUiView: () -> UIView) {
+actual class AdMob(private val bannerUiView: () -> UIView, private val rewardedInterstitialView: () -> Unit) {
     @Composable
     actual fun Banner(adKey: String, modifier: Modifier) {
         UIKitView(
@@ -20,10 +20,10 @@ actual class AdMob(private val bannerUiView: () -> UIView) {
 
     @Composable
     actual fun RewardedInterstitial(onAddDismissed: () -> Unit) {
+        rewardedInterstitialView()
     }
 
     @Composable
     actual fun Startup(adKey: String, modifier: Modifier) {
     }
-
 }

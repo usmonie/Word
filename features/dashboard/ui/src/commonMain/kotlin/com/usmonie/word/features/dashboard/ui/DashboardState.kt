@@ -22,6 +22,7 @@ data class DashboardState(
     val showWordOfTheDay: Boolean = true,
     val showSettings: Boolean = false,
     val showGames: Boolean = false,
+    val showAbout: Boolean = false,
     val subscribed: Boolean = false
 ) : ScreenState {
 
@@ -163,7 +164,7 @@ sealed class DashboardEffect : ScreenEffect {
 
     class OpenFavourites : DashboardEffect()
 
-    data class OpenHangman(val word: WordUi): DashboardEffect()
+    data class OpenHangman(val word: WordUi) : DashboardEffect()
 
     data class OpenWord(val word: WordUi) : DashboardEffect()
 }

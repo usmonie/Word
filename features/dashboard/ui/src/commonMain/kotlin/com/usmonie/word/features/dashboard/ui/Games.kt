@@ -1,6 +1,5 @@
 package com.usmonie.word.features.dashboard.ui
 
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -9,7 +8,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.input.pointer.PointerInputScope
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.ui.MenuItem
@@ -19,23 +18,17 @@ import com.usmonie.word.features.ui.VerticalAnimatedVisibility
 fun Games(
     onGamesMenuItemPressed: () -> Unit,
     onHangmanPressed: () -> Unit,
+    onPointerInput: suspend PointerInputScope.() -> Unit,
     query: String,
     showGames: Boolean,
-    localFocusManager: FocusManager
 ) {
     VerticalAnimatedVisibility(query.isBlank()) {
         Column {
             GamesMenuItem(
                 onGamesMenuItemPressed,
-                Modifier.fillMaxWidth().pointerInput(Unit) {
-                    detectTapGestures(onTap = { localFocusManager.clearFocus() })
-                }
+                Modifier.fillMaxWidth().pointerInput(Unit, onPointerInput)
             )
-            GamesItems(
-                showGames,
-                onHangmanPressed,
-                localFocusManager,
-            )
+            GamesItems(showGames, onHangmanPressed, onPointerInput)
         }
     }
 }
@@ -44,17 +37,11 @@ fun Games(
 private fun GamesItems(
     showGames: Boolean,
     onHangmanPressed: () -> Unit,
-    localFocusManager: FocusManager,
+    onPointerInput: suspend PointerInputScope.() -> Unit,
 ) {
     VerticalAnimatedVisibility(showGames) {
         Column {
-            HangmanMenuItem(
-                onHangmanPressed,
-                Modifier.fillMaxWidth()
-                    .pointerInput(Unit) {
-                        detectTapGestures(onTap = { localFocusManager.clearFocus() })
-                    }
-            )
+            HangmanMenuItem(onHangmanPressed, Modifier.fillMaxWidth().pointerInput(Unit, onPointerInput))
         }
     }
 }
