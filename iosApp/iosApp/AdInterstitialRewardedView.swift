@@ -1,9 +1,25 @@
 import UIKit
+import SwiftUI
 import GoogleMobileAds
+import FirebaseCore
+import FirebaseAnalytics
+
+struct InterstitalRewardedView: UIViewControllerRepresentable {
+
+    typealias UIViewControllerType = InterstitalRewardedViewController
+
+    let viewController = InterstitalRewardedViewController()
+
+    func makeUIViewController(context: UIViewControllerRepresentableContext<InterstitalRewardedView>) -> InterstitalRewardedViewController {
+        return viewController
+    }
+
+    func updateUIViewController(_ uiViewController: InterstitalRewardedViewController, context: UIViewControllerRepresentableContext<InterstitalRewardedView>) {
+        // update view controller here if needed
+    }
+}
 
 class InterstitalRewardedViewController: UIViewController, GADFullScreenContentDelegate {
-    @IBOutlet weak var btnRwdClick: UIButton!
-    @IBOutlet weak var btnInters: UIButton!
     //var rewadAd: GADRewardedAd?
     var rewardInterstitialAd: GADRewardedInterstitialAd?
     var interstitial: GADInterstitialAd?
@@ -11,6 +27,11 @@ class InterstitalRewardedViewController: UIViewController, GADFullScreenContentD
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        loadRewarded()
+        loadInterstitial()
+    }
+
+    func loadRewarded() {
         GADRewardedInterstitialAd.load(
             withAdUnitID: "ca-app-pub-3940256099942544/6978759866", request: GADRequest()
         ) { (ad, error) in
@@ -22,6 +43,9 @@ class InterstitalRewardedViewController: UIViewController, GADFullScreenContentD
             self.rewardInterstitialAd = ad
             self.rewardInterstitialAd?.fullScreenContentDelegate = self
         }
+    }
+
+    func loadInterstitial() {
         let request = GADRequest()
         GADInterstitialAd.load(withAdUnitID: "ca-app-pub-3940256099942544/4411468910",
             request: request,
@@ -32,58 +56,56 @@ class InterstitalRewardedViewController: UIViewController, GADFullScreenContentD
                 }
                 interstitial = ad
                 interstitial?.fullScreenContentDelegate = self
-
             }
         )
     }
 
-    @IBAction func rewadAdTouched(_ sender: Any) {
-        if let ad = rewardInterstitialAd {
+    @IBAction func rewardAdTouched() {
 
-            ad.present(fromRootViewController: self,
+        if let ad = rewardInterstitialAd {
+            ad.present(
+                fromRootViewController: self,
                 userDidEarnRewardHandler: {
                     let reward = ad.adReward
-                    // TODO: Reward the user.
-                    print("Reward received with currency \(reward.amount), amount \(reward.amount.doubleValue)")
+                    Analytics.logEvent(AnalyticsEventLevelEnd, parameters: [
+                        AnalyticsParameterItemID: "Reward received with currency \(reward.amount), amount \(reward.amount.doubleValue)",
+                    ])
                 }
             )
         } else {
             //Failed
-            print("reward didn't loaded")
+            Analytics.logEvent(AnalyticsEventLevelEnd, parameters: [
+                AnalyticsParameterItemID: "reward ad didn't loaded",
+            ])
+            interAdTouched()
         }
+        loadRewarded()
     }
 
-    @IBAction func interAdTouched(_ sender: Any) {
+    @IBAction func interAdTouched() {
         if interstitial != nil {
             interstitial!.present(fromRootViewController: self)
         } else {
-            print("Ad wasn't ready")
+            Analytics.logEvent(AnalyticsEventLevelEnd, parameters: [
+                AnalyticsParameterItemID: "intestitial ad didn't loaded",
+            ])
         }
+        loadInterstitial()
     }
 
-    func adDidPresentFullScreenContent(_ ad: GADFullScreenPresentingAd) {
-        print("Rewarded ad presented.")
-    }
+//    func adDidPresentFullScreenContent(_ ad: GADFullScreenPresentingAd) {
+//        print("Rewarded ad presented.")
+//    }
 
     func adDidDismissFullScreenContent(_ ad: GADFullScreenPresentingAd) {
-
         print("Ad dismiss full screen ad")
-
         if type(of: ad) == GADInterstitialAd.self {
-
             print("InterstitialAd")
-
-
         } else if type(of: ad) == GADRewardedAd.self {
-
             print("RewardedAd")
-
         } else if type(of: ad) == GADRewardedInterstitialAd.self {
-
             print("Rewarded InterstitialAd")
-
         }
-
     }
 
     func ad(
@@ -91,7 +113,5 @@ class InterstitalRewardedViewController: UIViewController, GADFullScreenContentD
         didFailToPresentFullScreenContentWithError error: Error
     ) {
         print("Rewarded ad failed to present with error: \(error.localizedDescription).")
-
     }
-
 }

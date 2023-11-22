@@ -11,22 +11,25 @@ import design
 import GoogleMobileAds
 
 struct ComposeView: UIViewControllerRepresentable {
+    let onShowAd: () -> Void
 
     func makeUIViewController(context: Context) -> UIViewController {
-        let viewController = InterstitalRewardedViewController()
+        var controller: UIViewController
 
-        MainViewControllerKt.MainViewController(
+        controller = MainViewControllerKt.MainViewController(
+            onViewDidLoad: {},
             adMob: UiAdMob(
                 bannerUiView: {
                     SwiftUIInUIView(content: Banner(bannerID: "ca-app-pub-2198867984469198/3121295852"))
                 },
                 rewardedInterstitialView: {
-                    print("LOG_ STARTED REWARDED AD")
-                    viewController.interAdTouched(sender: Any)
+                    onShowAd()
                 }
             ),
             nativeAnalytics: NativeAnalytics()
         )
+
+        return controller
     }
 
     func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
@@ -34,11 +37,23 @@ struct ComposeView: UIViewControllerRepresentable {
 }
 
 struct ContentView: View {
+    let interstitialAd = InterstitalRewardedView()
+    @State private var interstitialVC: InterstitalRewardedViewController?
+
     var body: some View {
-        ComposeView()
-                .ignoresSafeArea(.keyboard) // Compose has own keyboard handler
-                .edgesIgnoringSafeArea(.top)
-                .edgesIgnoringSafeArea(.bottom)
+        ZStack {
+            interstitialAd
+            ComposeView(
+                onShowAd: {
+                    interstitialVC?.rewardAdTouched()
+                }
+            )
+                    .ignoresSafeArea(.keyboard) // Compose has own keyboard handler
+                    .edgesIgnoringSafeArea(.top)
+                    .edgesIgnoringSafeArea(.bottom)
+
+        }
+                .onAppear { interstitialVC = interstitialAd.viewController }
     }
 }
 

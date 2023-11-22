@@ -26,4 +26,8 @@ actual class AdMob(private val bannerUiView: () -> UIView, private val rewardedI
     @Composable
     actual fun Startup(adKey: String, modifier: Modifier) {
     }
+
+    fun onInitiateRewarded() {
+
+    }
 }
