@@ -12,15 +12,16 @@ import GoogleMobileAds
 
 struct ComposeView: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> UIViewController {
-        return MainViewControllerKt.MainViewController(adMob: UiAdMob(bannerUiView: {
+        MainViewControllerKt.MainViewController(adMob: UiAdMob(bannerUiView: {
             SwiftUIInUIView(
-                content: Banner(bannerID: "ca-app-pub-3940256099942544/2934735716", width: 400)
+                content: Banner(bannerID: "")
             )
-            
-        }),nativeAnalytics: NativeAnalytics())
+
+        }), nativeAnalytics: NativeAnalytics())
     }
 
-    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {}
+    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
+    }
 }
 
 struct ContentView: View {
@@ -45,7 +46,7 @@ class SwiftUIInUIView<Content: View>: UIView {
             hostingController.view.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

@@ -11,17 +11,16 @@ import SwiftUI
 
 private struct BannerVC: UIViewControllerRepresentable {
     var bannerID: String
-    var width: CGFloat
 
     func makeUIViewController(context: Context) -> UIViewController {
         let view = GADBannerView(adSize: GADAdSizeLargeBanner)
 
         let viewController = UIViewController()
-        #if DEBUG
-        view.adUnitID = "ca-app-pub-3940256099942544/6300978111"
-        #else
+//        #if DEBUG
+//        view.adUnitID = "ca-app-pub-3940256099942544/6300978111"
+//        #else
         view.adUnitID = bannerID
-        #endif
+//        #endif
         view.rootViewController = viewController
         viewController.view.addSubview(view)
         view.load(GADRequest())
@@ -34,14 +33,14 @@ private struct BannerVC: UIViewControllerRepresentable {
 
 struct Banner: View {
     var bannerID: String
-    var width: CGFloat
+
 
     var size: CGSize {
-        return GADCurrentOrientationAnchoredAdaptiveBannerAdSizeWithWidth(width).size
+        return GADAdSizeLargeBanner.size
     }
 
     var body: some View {
-        BannerVC(bannerID: bannerID, width: width)
+        BannerVC(bannerID: bannerID)
             .frame(width: size.width, height: size.height)
     }
 }

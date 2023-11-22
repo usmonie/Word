@@ -27,8 +27,8 @@ actual class AdMob(private val showInterstitialAd: (context: Context, onAddDismi
     }
 
     @Composable
-    actual fun RewardedInterstitial() {
-        showInterstitialAd(LocalContext.current) {}
+    actual fun RewardedInterstitial(onAddDismissed: () -> Unit) {
+        showInterstitialAd(LocalContext.current, onAddDismissed)
     }
 
     @Composable

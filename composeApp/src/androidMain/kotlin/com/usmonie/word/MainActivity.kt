@@ -39,7 +39,10 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         val driverFactory = DriverFactory(this)
-
+        val userRepository = UserRepositoryImpl(KVault(this@MainActivity))
+        val adMob = AdMob(::showInterstitial)
+        val logger = DefaultLogger(Firebase.analytics)
+        loadInterstitial(this)
         enableEdgeToEdge()
         setContent {
             val view = LocalView.current
@@ -57,12 +60,11 @@ class MainActivity : ComponentActivity() {
             }
             App(
                 driverFactory,
-                UserRepositoryImpl(KVault(this@MainActivity)),
-                AdMob(::showInterstitial),
-                DefaultLogger(Firebase.analytics)
+                userRepository,
+                adMob,
+                logger
             )
         }
-        loadInterstitial(this)
     }
 
     override fun onDestroy() {
@@ -117,7 +119,6 @@ class MainActivity : ComponentActivity() {
         is ContextWrapper -> baseContext.findActivity()
         else -> null
     }
-
 }
 
 @Preview

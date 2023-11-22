@@ -1,8 +1,8 @@
 package com.usmonie.word.features.games.hangman
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,6 +24,7 @@ import com.usmonie.word.features.dashboard.domain.repository.WordRepository
 import com.usmonie.word.features.dashboard.domain.usecase.RandomWordUseCaseImpl
 import com.usmonie.word.features.games.GameBoard
 import com.usmonie.word.features.ui.AdMob
+import com.usmonie.word.features.ui.UpdateButton
 import wtf.speech.compass.core.Extra
 import wtf.speech.compass.core.LocalRouteManager
 import wtf.speech.compass.core.Screen
@@ -40,22 +41,32 @@ class HangmanGameScreen(
     override fun Content() {
         val routerManager = LocalRouteManager.current
         val state by hangmanGameViewModel.state.collectAsState()
-        GameBoard(routerManager::navigateBack) {
+        GameBoard(routerManager::navigateBack, {
+            AnimatedVisibility(state !is HangmanState.Playing) {
+                UpdateButton(
+                    hangmanGameViewModel::onUpdatePressed,
+                    tint = MaterialTheme.colorScheme.onPrimary
+                )
+            }
+        }) {
             Column(
                 modifier = Modifier.fillMaxSize().padding(it),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                PlayingBoard(state, hangmanGameViewModel)
+                HangmanImage(state.incorrectGuesses, Modifier.fillMaxWidth().fillMaxHeight(0.5f))
+                WordDisplay(state)
+                LetterButtons(
+                    hangmanGameViewModel::onLetterGuessed,
+                    state.guessedLetters,
+                    Modifier.fillMaxWidth().weight(1f)
+                )
 
                 if (state !is HangmanState.Playing) {
-                    adMob.RewardedInterstitial()
+                    adMob.RewardedInterstitial(onAddDismissed = {
+
+                    })
                 }
 
-//                when (state) {
-//                    is HangmanState.Lost -> PlayingBoard(state, hangmanGameViewModel)
-//                    is HangmanState.Playing -> PlayingBoard(state, hangmanGameViewModel)
-//                    is HangmanState.Won -> PlayingBoard(state, hangmanGameViewModel)
-//                }
                 adMob.Banner(
                     AdKeys.BANNER_ID,
                     Modifier.fillMaxWidth()
@@ -92,16 +103,6 @@ class HangmanGameScreen(
 }
 
 @Composable
-private fun ColumnScope.PlayingBoard(
-    state: HangmanState,
-    hangmanGameViewModel: HangmanGameViewModel
-) {
-    HangmanImage(state.incorrectGuesses, Modifier.fillMaxWidth().fillMaxHeight(0.5f))
-    WordDisplay(state)
-    LetterButtons(hangmanGameViewModel::onLetterGuessed, Modifier.fillMaxWidth().weight(1f))
-}
-
-@Composable
 fun WordDisplay(gameState: HangmanState, modifier: Modifier = Modifier) {
     val displayWord = if (gameState is HangmanState.Lost) {
         gameState.word.toCharArray().joinToString(" ")
@@ -124,7 +125,7 @@ fun WordDisplay(gameState: HangmanState, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun LetterButtons(onLetterClick: (Char) -> Unit, modifier: Modifier) {
+fun LetterButtons(onLetterClick: (Char) -> Unit, guessedLetters: Set<Char>, modifier: Modifier) {
     val alphabet = remember { ('A'..'Z').toList() }
     LazyVerticalGrid(
         GridCells.Fixed(7),
@@ -134,11 +135,12 @@ fun LetterButtons(onLetterClick: (Char) -> Unit, modifier: Modifier) {
         horizontalArrangement = Arrangement.Center
     ) {
         items(alphabet) { letter ->
-            TextButton(onClick = { onLetterClick(letter) }) {
+            val wasGuessed = letter in guessedLetters
+            TextButton(onClick = { onLetterClick(letter) }, enabled = !wasGuessed) {
                 Text(
                     letter.toString(),
                     style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.onPrimary
+                    color = if (wasGuessed) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onPrimary
                 )
             }
         }

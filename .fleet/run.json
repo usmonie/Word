@@ -1,0 +1,23 @@
+{
+    "configurations": [
+        {
+            "name": "iosApp",
+            "type": "xcode-app",
+            "workingDir": "$USER_HOME$/StudioProjects/Word-2/",
+            "buildTarget": {
+                "project": "iosApp",
+                "target": "iosApp"
+            },
+            "configuration": "Debug",
+            "destination": "iPhone 15 | iOS 17.0"
+        },
+        {
+            "name": "composeApp",
+            "type": "android-app",
+            "workingDir": "$USER_HOME$/StudioProjects/Word-2/",
+            "allowParallelRun": true,
+            "module": "Word-2/composeApp/androidMain",
+            "destination": "Pixel 4 API 34"
+        }
+    ]
+}

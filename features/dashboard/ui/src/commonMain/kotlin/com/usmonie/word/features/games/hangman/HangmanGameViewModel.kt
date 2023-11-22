@@ -12,6 +12,7 @@ class HangmanGameViewModel(
 ) {
 
     fun onLetterGuessed(letter: Char) = handleAction(HangmanAction.GuessLetter(letter))
+    fun onUpdatePressed() = handleAction(HangmanAction.UpdateWord)
 
     override fun HangmanState.reduce(event: HangmanEvent): HangmanState {
         return when (event) {
@@ -50,7 +51,7 @@ class HangmanGameViewModel(
                 0
             )
 
-            is HangmanEvent.UpdateWord -> HangmanState.Playing(word)
+            is HangmanEvent.UpdateWord -> HangmanState.Playing(event.word.word)
         }
     }
 

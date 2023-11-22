@@ -19,10 +19,11 @@ actual class AdMob(private val bannerUiView: () -> UIView) {
     }
 
     @Composable
-    actual fun RewardedInterstitial(adKey: String, modifier: Modifier) {
+    actual fun RewardedInterstitial(onAddDismissed: () -> Unit) {
     }
 
     @Composable
     actual fun Startup(adKey: String, modifier: Modifier) {
     }
+
 }
