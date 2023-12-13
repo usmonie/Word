@@ -13,8 +13,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 internal fun Project.configureKotlinJvm() {
     // Configure Kotlin source and target compatibility for JVM.
     extensions.configure<JavaPluginExtension> {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 }
 
@@ -25,6 +25,8 @@ internal fun Project.configureKotlin() {
     // Configure Kotlin options for all Kotlin compile tasks.
     tasks.withType<KotlinCompile>().configureEach {
         kotlinOptions {
+            jvmTarget = "17"
+
             // Add any additional compiler arguments if needed.
             freeCompilerArgs = freeCompilerArgs + listOf()
         }

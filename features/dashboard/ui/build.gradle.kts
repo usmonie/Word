@@ -16,6 +16,8 @@ commonDependencies {
     implementation(projects.features.dashboard.domain)
     implementation(projects.features.dashboard.data)
 
+    implementation(libs.compose.material3.jetbrains)
+//    implementation(libs.compose.material3)
     implementation(libs.kvault)
 
 }
@@ -64,8 +66,8 @@ android {
         minSdk = 24 //config.versions.android.minSdk.get().toInt()
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     androidComponents {

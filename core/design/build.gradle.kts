@@ -1,5 +1,4 @@
 import extensions.commonDependencies
-import org.jetbrains.kotlin.com.intellij.icons.AllIcons.Nodes.Word
 import org.jetbrains.kotlin.gradle.tasks.FatFrameworkTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinNativeLink
 import org.jetbrains.kotlin.konan.target.CompilerOutputKind
@@ -40,6 +39,7 @@ kotlin {
 android {
     sourceSets["main"].resources.srcDirs("src/commonMain/resources")
 }
+
 copyNativeResources("commonMain")
 fun copyNativeResources(sourceSet: String) {
     if (sourceSet.isEmpty()) throw IllegalStateException("Valid sourceSet required")

@@ -4,15 +4,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import com.usmonie.word.features.dashboard.domain.repository.UserRepository
 import com.usmonie.word.features.dashboard.domain.repository.WordRepository
-import com.usmonie.word.features.dashboard.ui.DashboardScreen
-import com.usmonie.word.features.detail.WordScreen
-import com.usmonie.word.features.favourites.FavouritesScreen
-import com.usmonie.word.features.games.hangman.HangmanGameScreen
+import com.usmonie.word.features.new.dashboard.DashboardScreen
+import com.usmonie.word.features.new.details.WordDetailsScreen
+import com.usmonie.word.features.new.favorites.FavoritesScreen
+import com.usmonie.word.features.new.games.hangman.HangmanGameScreen
 import com.usmonie.word.features.ui.AdMob
 import wtf.speech.compass.core.NavigationGraph
 import wtf.speech.compass.core.Route
 import wtf.word.core.design.themes.WordColors
-import wtf.word.core.design.themes.WordTypography
+import wtf.word.core.design.themes.typographies.WordTypography
 import wtf.word.core.domain.Analytics
 
 @Composable
@@ -36,8 +36,8 @@ fun getDashboardGraph(
     }
 
     return NavigationGraph("DASHBOARD_GRAPH", dashboardScreen).apply {
-        register(Route(FavouritesScreen.ID, FavouritesScreen.Builder(wordRepository, adMob, analytics)))
-        register(Route(WordScreen.ID, WordScreen.Builder(wordRepository, analytics, adMob)))
+        register(Route(FavoritesScreen.ID, FavoritesScreen.Builder(wordRepository, adMob, analytics)))
+        register(Route(WordDetailsScreen.ID, WordDetailsScreen.Builder(wordRepository, analytics, adMob)))
         register(Route(HangmanGameScreen.ID, HangmanGameScreen.Builder(wordRepository, adMob)))
     }
 }

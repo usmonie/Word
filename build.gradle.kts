@@ -11,5 +11,6 @@ plugins {
         alias(androidx.baselineprofile) apply false
         alias(android.application) apply false
         alias(detekt) apply false
+        alias(realm) apply false
     }
 }

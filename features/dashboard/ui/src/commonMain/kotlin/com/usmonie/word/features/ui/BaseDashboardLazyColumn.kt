@@ -18,10 +18,11 @@ fun BaseDashboardLazyColumn(
     listState: LazyListState = rememberLazyListState(),
     contentPadding: PaddingValues = PaddingValues(0.dp),
     verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(8.dp),
+    modifier: Modifier = Modifier,
     content: LazyListScope.() -> Unit
 ) {
     LazyColumn(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .imePadding()
             .testTag("DASHBOARD_LAZY_COLUMN"),

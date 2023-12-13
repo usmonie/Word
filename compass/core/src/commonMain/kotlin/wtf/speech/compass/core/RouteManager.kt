@@ -170,6 +170,7 @@ class RouteManagerImpl(initialGraph: NavigationGraph) : RouteManager {
 
     override fun handleDeepLink(deepLink: String): Boolean {
         val matchingScreenBuilder = graphs.values
+            .asSequence()
             .flatMap { it.routes.values }
             .map { it }
             .filterIsInstance<DeepLinkScreenBuilder>()

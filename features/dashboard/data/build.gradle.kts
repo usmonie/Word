@@ -4,7 +4,8 @@ import extensions.iOSDependencies
 
 plugins {
     id(libs.plugins.speech.multiplatform.domain.get().pluginId)
-    id("app.cash.sqldelight") version "2.0.0"
+    kotlin("plugin.serialization") version "1.9.0"
+    id(libs.plugins.realm.get().pluginId)
 }
 
 android.namespace = "com.usmonie.word.features.dashboard.data"
@@ -47,29 +48,22 @@ kotlin {
 
     commonDependencies {
         implementation(libs.kotlinx.datetime)
-        implementation(libs.sqldelight.runtime)
+        implementation(libs.kotlinx.serialization)
+        implementation(libs.ktor.client.core)
+        implementation(libs.ktor.client.content.negotiation)
+        implementation(libs.ktor.serialization.kotlinx.json)
+        implementation(libs.realm.base)
+        implementation(libs.realm.sync)
         api(libs.kvault)
         api(projects.core.domain)
         api(projects.features.dashboard.domain)
     }
 
     androidDependencies {
-        implementation(libs.sqldelight.driver.android)
+        implementation(libs.ktor.client.okhttp)
     }
 
     iOSDependencies {
-        implementation("co.touchlab:sqliter-driver:1.3.1")
-        implementation(libs.sqldelight.driver.native)
-    }
-}
-
-
-sqldelight {
-    databases {
-        create("Database") {
-            packageName.set("com.usmonie.word.features.dashboard.data.db")
-        }
-
-        linkSqlite = true
+        implementation(libs.ktor.client.darwin)
     }
 }

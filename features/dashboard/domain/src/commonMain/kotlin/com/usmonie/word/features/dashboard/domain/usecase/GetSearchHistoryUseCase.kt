@@ -1,6 +1,6 @@
 package com.usmonie.word.features.dashboard.domain.usecase
 
-import com.usmonie.word.features.dashboard.domain.models.WordDomain
+import com.usmonie.word.features.dashboard.domain.models.WordCombined
 import com.usmonie.word.features.dashboard.domain.repository.WordRepository
 import wtf.word.core.domain.usecases.CoroutineUseCase
 
@@ -8,7 +8,7 @@ import wtf.word.core.domain.usecases.CoroutineUseCase
  * Use case for retrieving search history.
  */
 interface GetSearchHistoryUseCase :
-    CoroutineUseCase<GetSearchHistoryUseCase.Param, List<WordDomain>> {
+    CoroutineUseCase<GetSearchHistoryUseCase.Param, List<WordCombined>> {
     /**
      * Data class representing the parameters required to retrieve search history.
      *
@@ -23,9 +23,9 @@ class GetSearchHistoryUseCaseImpl(private val wordRepository: WordRepository) : 
      * Invokes the use case to retrieve the search history from the repository based on pagination parameters.
      *
      * @param input The `Param` object containing the pagination parameters.
-     * @return A list of `WordDomain` objects that represent the search history.
+     * @return A list of `WordCombined` objects that represent the search history.
      */
-    override suspend fun invoke(input: GetSearchHistoryUseCase.Param): List<WordDomain> {
-        return wordRepository.getSearchHistory(input.offset, input.limit)
+    override suspend fun invoke(input: GetSearchHistoryUseCase.Param): List<WordCombined> {
+        return wordRepository.getSearchHistory()
     }
 }

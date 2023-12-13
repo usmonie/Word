@@ -26,8 +26,8 @@ internal fun Project.configureAndroid(extension: LibraryExtension) {
 
         // Configure Java source compatibility to version 11.
         compileOptions {
-            sourceCompatibility = JavaVersion.VERSION_11
-            targetCompatibility = JavaVersion.VERSION_11
+            sourceCompatibility = JavaVersion.VERSION_17
+            targetCompatibility = JavaVersion.VERSION_17
         }
 
         // Configure Compose options with a specific Kotlin compiler extension version.

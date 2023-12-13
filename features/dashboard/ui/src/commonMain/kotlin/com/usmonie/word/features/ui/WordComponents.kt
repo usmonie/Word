@@ -62,6 +62,39 @@ fun WordLargeResizableTitle(word: String, modifier: Modifier = Modifier) {
 }
 
 @Composable
+fun WordMediumResizableTitle(word: String, modifier: Modifier = Modifier) {
+    val defaultTextStyle = MaterialTheme.typography.headlineMedium
+    var readyToDraw by remember(word) { mutableStateOf(false) }
+    var defaultTextSize by remember { mutableStateOf(defaultTextStyle.fontSize) }
+    var maxLines by remember(word) { mutableStateOf(1) }
+
+    Text(
+        word,
+        style = defaultTextStyle,
+        textAlign = TextAlign.Start,
+        fontSize = defaultTextSize,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        modifier = modifier.drawWithContent { if (readyToDraw) drawContent() },
+        maxLines = maxLines,
+        overflow = TextOverflow.Ellipsis,
+        onTextLayout = {
+            when {
+                it.hasVisualOverflow && defaultTextSize > 20.sp -> {
+                    defaultTextSize *= 0.8f
+                }
+
+                it.hasVisualOverflow && defaultTextSize <= 20.sp -> {
+                    maxLines++
+                }
+                else -> {
+                    readyToDraw = true
+                }
+            }
+        }
+    )
+}
+
+@Composable
 fun WordMediumTitle(word: String, modifier: Modifier = Modifier) {
     val textStyle = MaterialTheme.typography.headlineMedium
 
@@ -71,9 +104,6 @@ fun WordMediumTitle(word: String, modifier: Modifier = Modifier) {
         textAlign = TextAlign.Start,
         modifier = modifier,
         overflow = TextOverflow.Ellipsis,
-        onTextLayout = {
-            if (it.didOverflowWidth) textStyle.copy(fontSize = textStyle.fontSize * 0.9f)
-        }
     )
 }
 
@@ -149,7 +179,7 @@ fun ShareButton(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun WordCard(
+fun BaseCard(
     onClick: () -> Unit,
     elevation: Dp,
     modifier: Modifier = Modifier,
@@ -159,7 +189,7 @@ fun WordCard(
     ElevatedCard(
         onClick,
         modifier = modifier,
-        colors = CardDefaults.cardColors(),
+        colors = CardDefaults.cardColors(disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant),
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.elevatedCardElevation(
             defaultElevation = elevation,

@@ -1,23 +1,12 @@
 {
     "configurations": [
         {
-            "type": "xcode-app",
-            "name": "iosApp",
-            "buildTarget": {
-                "project": "iosApp",
-                "target": "iosApp",
-            },
-            "configuration": "Debug",
-            "destination": "",
-        },
-
-        {
-            "name": "androidApp",
+            "name": "composeApp",
             "type": "android-app",
             "workingDir": "$PROJECT_DIR$",
             "allowParallelRun": true,
             "module": "Word.composeApp.main",
-            "destination": "Pixel 4 API 34"
+            "destination": "Small Phone API 34"
         }
     ]
 }

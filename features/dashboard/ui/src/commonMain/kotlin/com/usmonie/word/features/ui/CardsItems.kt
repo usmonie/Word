@@ -15,7 +15,7 @@ fun LazyListScope.words(
     cardModifier: Modifier = Modifier
 ) {
     items(words, key = { word -> word.id }) { word ->
-        WordCard(
+        BaseCard(
             word,
             onOpenWordPressed,
             onUpdateFavouriteWordPressed,
