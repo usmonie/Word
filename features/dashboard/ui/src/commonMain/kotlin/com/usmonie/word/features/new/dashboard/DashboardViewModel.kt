@@ -65,6 +65,8 @@ class DashboardViewModel(
     fun onWordOfTheDayItemClicked() = handleAction(DashboardAction.OnMenuItemClick.WordOfTheDay)
     fun onFavouritesItemClicked() = handleAction(DashboardAction.OnMenuItemClick.Favourites)
     fun onSettingsItemClicked() = handleAction(DashboardAction.OnMenuItemClick.Settings)
+    fun onAboutItemClicked() = handleAction(DashboardAction.OnMenuItemClick.About)
+    fun onTelegramItemClicked() = handleAction(DashboardAction.OnMenuItemClick.Telegram)
     fun onChangeColors() = handleAction(DashboardAction.ChangeColors)
     fun onChangeFonts() = handleAction(DashboardAction.ChangeFonts)
     fun onClearRecentHistory() = handleAction(DashboardAction.ClearRecentHistory)
@@ -98,6 +100,7 @@ class DashboardViewModel(
         )
 
         DashboardEvent.UpdateMenuItemState.Settings -> this.openSettings()
+        DashboardEvent.UpdateMenuItemState.About -> this.openAbout()
         DashboardEvent.UpdateMenuItemState.WordOfTheDay -> this.openWordOfTheDay()
         DashboardEvent.BackToMain -> this.copy(query = TextFieldValue())
         DashboardEvent.UpdateMenuItemState.Games -> this.openGames()
@@ -148,6 +151,9 @@ class DashboardViewModel(
             val word = getRandomWordUseCase(RandomWordUseCase.Param(9))
             DashboardEvent.OpenGame.Hangman(word.toUi())
         }
+
+        DashboardAction.OnMenuItemClick.About -> DashboardEvent.UpdateMenuItemState.About
+        DashboardAction.OnMenuItemClick.Telegram -> DashboardEvent.UpdateMenuItemState.Telegram
     }
 
     override suspend fun handleEvent(event: DashboardEvent) = when (event) {
@@ -160,6 +166,8 @@ class DashboardViewModel(
 
         is DashboardEvent.OpenWord -> DashboardEffect.OpenWord(event.word)
         is DashboardEvent.OpenGame.Hangman -> DashboardEffect.OpenHangman(event.word)
+        is DashboardEvent.UpdateMenuItemState.Telegram ->
+            DashboardEffect.OpenUrl("https://t.me/nieabout")
         else -> null
     }
 
@@ -170,7 +178,6 @@ class DashboardViewModel(
     }
 
     private suspend fun search(query: TextFieldValue, offset: Long = 0): DashboardEvent {
-        println("SEARCH $query")
         searchJob?.cancel()
         if (query.text.isBlank()) {
             updateData()

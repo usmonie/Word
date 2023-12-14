@@ -32,6 +32,8 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
+import com.usmonie.word.features.OpenBrowser
+import com.usmonie.word.features.Url
 import com.usmonie.word.features.dashboard.domain.repository.UserRepository
 import com.usmonie.word.features.dashboard.domain.repository.WordRepository
 import com.usmonie.word.features.dashboard.domain.usecase.ChangeThemeUseCaseImpl
@@ -120,6 +122,10 @@ class DashboardScreen(
             }
         }
 
+        if (effect is DashboardEffect.OpenUrl) {
+            OpenBrowser(Url(effect.url))
+        }
+
         LaunchedEffect(effect) {
             when (effect) {
                 is DashboardEffect.ChangeTheme -> {
@@ -138,7 +144,7 @@ class DashboardScreen(
                     extras = HangmanGameScreen.Extras(effect.word)
                 )
 
-                null -> Unit
+                else -> Unit
             }
         }
     }
@@ -247,9 +253,9 @@ class DashboardScreen(
 
                 item {
                     About(
-                        dashboardViewModel::onSettingsItemClicked,
+                        dashboardViewModel::onAboutItemClicked,
                         {},
-                        {},
+                        dashboardViewModel::onTelegramItemClicked,
                         {},
                         onPointerInput,
                         state.query.text,

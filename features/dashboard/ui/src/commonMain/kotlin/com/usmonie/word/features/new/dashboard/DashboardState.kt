@@ -71,15 +71,24 @@ data class DashboardState(
 
     fun openSettings() = this.copy(
         showSettings = !showSettings,
+        showAbout = false,
+        showGames = false
+    )
+
+    fun openAbout() = this.copy(
+        showSettings = false,
+        showAbout = !showAbout,
         showGames = false
     )
 
     fun openWordOfTheDay() = this.copy(
         showWordOfTheDay = true,
+        showAbout = false,
+        showGames = false,
         showSettings = false,
     )
 
-    fun openGames() = this.copy(showSettings = false, showGames = !showGames)
+    fun openGames() = this.copy(showSettings = false, showGames = !showGames, showAbout = false)
 
     private fun mapNewWord(
         mappedWord: WordCombinedUi,
@@ -112,6 +121,8 @@ sealed class DashboardAction : ScreenAction {
         data object WordOfTheDay : OnMenuItemClick()
         data object Favourites : OnMenuItemClick()
         data object Settings : OnMenuItemClick()
+        data object About : OnMenuItemClick()
+        data object Telegram : OnMenuItemClick()
         data object Games : OnMenuItemClick()
     }
 
@@ -155,6 +166,8 @@ sealed class DashboardEvent : ScreenEvent {
     sealed class UpdateMenuItemState : DashboardEvent() {
         data object WordOfTheDay : UpdateMenuItemState()
         data object Favourites : UpdateMenuItemState()
+        data object About : UpdateMenuItemState()
+        data object Telegram : UpdateMenuItemState()
         data object Settings : UpdateMenuItemState()
         data object Games : UpdateMenuItemState()
     }
@@ -174,4 +187,9 @@ sealed class DashboardEffect : ScreenEffect {
     data class OpenHangman(val word: WordCombinedUi) : DashboardEffect()
 
     data class OpenWord(val word: WordCombinedUi) : DashboardEffect()
+
+    @Immutable
+    class OpenUrl(val url: String): DashboardEffect() {
+
+    }
 }

@@ -83,6 +83,7 @@ class WordDetailsScreen(
                         stickyHeader {
                             ScrollableTabRow(
                                 selectedEtymologyTabIndex,
+                                modifier = Modifier.fillMaxWidth(),
                                 containerColor = MaterialTheme.colorScheme.primary,
                                 contentColor = MaterialTheme.colorScheme.onPrimary,
                             ) {
@@ -116,6 +117,7 @@ class WordDetailsScreen(
                         item {
                             ScrollableTabRow(
                                 selectedPosIndex,
+                                modifier = Modifier.fillMaxWidth(),
                                 containerColor = MaterialTheme.colorScheme.primary,
                                 contentColor = MaterialTheme.colorScheme.onPrimary
                             ) {

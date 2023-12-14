@@ -12,6 +12,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.new.models.SoundUi
 import com.usmonie.word.features.new.models.WordCombinedUi
@@ -45,6 +47,14 @@ fun SearchWordCard(
         )
         Spacer(Modifier.height(16.dp))
 
+        WordCardButtons(
+            { onLearnClick(wordCombined) },
+            { onBookmarkClick(wordCombined) },
+            false,
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(Modifier.height(16.dp))
+
         if (wordCombined.wordEtymology.size > 1) {
             Text(
                 "Etymologies",
@@ -54,6 +64,8 @@ fun SearchWordCard(
             Spacer(Modifier.height(8.dp))
             ScrollableTabRow(
                 selectedEtymologyTabIndex,
+                modifier = Modifier.fillMaxWidth(),
+
                 containerColor = MaterialTheme.colorScheme.surfaceVariant,
                 contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
             ) {
@@ -73,6 +85,18 @@ fun SearchWordCard(
             Spacer(Modifier.height(16.dp))
         }
 
+        if (!selectedEtymology.etymologyText.isNullOrEmpty()) {
+            Text(
+                selectedEtymology.etymologyText,
+                textAlign = TextAlign.Justify,
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(horizontal = 20.dp),
+                overflow = TextOverflow.Ellipsis
+            )
+            Spacer(Modifier.height(16.dp))
+        }
+
         val pronounce = selectedEtymology.sounds.asSequence()
             .map { it.ipa }
             .filterNotNull()
@@ -87,14 +111,6 @@ fun SearchWordCard(
             Spacer(Modifier.height(16.dp))
         }
 
-        WordCardButtons(
-            { onLearnClick(wordCombined) },
-            { onBookmarkClick(wordCombined) },
-            false,
-            modifier = Modifier.fillMaxWidth()
-        )
-        Spacer(Modifier.height(16.dp))
-
         if (selectedEtymology.words.size > 1) {
             Text(
                 "Part Of Speech",
@@ -104,6 +120,7 @@ fun SearchWordCard(
             Spacer(Modifier.height(8.dp))
             ScrollableTabRow(
                 selectedPosIndex,
+                modifier = Modifier.fillMaxWidth(),
                 containerColor = MaterialTheme.colorScheme.surfaceVariant,
                 contentColor = MaterialTheme.colorScheme.onSurfaceVariant
             ) {

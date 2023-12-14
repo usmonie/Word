@@ -46,7 +46,7 @@ private fun AboutItems(
     VerticalAnimatedVisibility(showSettings) {
         Column {
             if (false) AboutItem(onAboutDeveloperPressed, "About Me", Modifier.pointerInput(Unit, onPointerInput))
-            AboutItem(onTelegramPressed, "Telegram", Modifier.pointerInput(Unit, onPointerInput))
+            AboutItem(onTelegramPressed, "Telegram", Modifier.fillMaxWidth().pointerInput(Unit, onPointerInput))
             if (false) AboutItem(onDonatePressed, "Donate", Modifier.pointerInput(Unit, onPointerInput))
         }
     }

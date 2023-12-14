@@ -24,18 +24,20 @@ class WordsRepositoryImpl(private val realm: Realm, private val api: WordApi) : 
         try {
             if (!realm.isClosed()) {
                 found.fastForEach { wordDto ->
-
                     realm.write {
                         val wordDb = wordDto.toDatabase()
-                        val findLatestQuery = realm.query<WordDb>(
-                            "primaryKey == $0",
-                            wordDb.word
-                                    + wordDb.pos
-                                    + wordDb.lang
-                                    + wordDb.langCode
-                                    + wordDb.etymologyNumber
-                                    + wordDb.etymologyText
-                        ).find().firstOrNull()
+                        val findLatestQuery = realm
+                            .query<WordDb>(
+                                "primaryKey == $0",
+                                wordDb.word
+                                        + wordDb.pos
+                                        + wordDb.lang
+                                        + wordDb.langCode
+                                        + wordDb.etymologyNumber
+                                        + wordDb.etymologyText
+                            )
+                            .find()
+                            .firstOrNull()
 
                         if (findLatestQuery == null) {
                             copyToRealm(wordDb, UpdatePolicy.ALL)
