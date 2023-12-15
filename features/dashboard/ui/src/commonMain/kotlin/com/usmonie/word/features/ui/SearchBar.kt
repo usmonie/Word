@@ -66,12 +66,12 @@ fun SearchBar(
             },
         textStyle = MaterialTheme.typography.displayLarge,
         placeholder = {
-            Text(
+            LargeResizableTitle(
                 placeholder,
-                style = MaterialTheme.typography.displayLarge,
                 color = MaterialTheme.colorScheme.onPrimary.copy(alpha = placeholderAlphaAnimation)
             )
         },
+
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
     )
 }

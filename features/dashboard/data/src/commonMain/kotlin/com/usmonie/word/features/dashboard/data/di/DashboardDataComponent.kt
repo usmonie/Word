@@ -16,6 +16,7 @@ import com.usmonie.word.features.dashboard.data.db.models.TemplateDb
 import com.usmonie.word.features.dashboard.data.db.models.TranslationDb
 import com.usmonie.word.features.dashboard.data.db.models.WordDb
 import com.usmonie.word.features.dashboard.data.db.models.WordFavorite
+import com.usmonie.word.features.dashboard.data.db.models.WordSearchHistoryDb
 import com.usmonie.word.features.dashboard.data.repository.WordsRepositoryImpl
 import com.usmonie.word.features.dashboard.domain.repository.WordRepository
 import io.realm.kotlin.Realm
@@ -40,7 +41,8 @@ object DashboardDataComponent {
                 TemplateDb::class,
                 TranslationDb::class,
                 WordDb::class,
-                WordFavorite::class
+                WordFavorite::class,
+                WordSearchHistoryDb::class
             )
         )
         return WordsRepositoryImpl(Realm.open(realm), api)

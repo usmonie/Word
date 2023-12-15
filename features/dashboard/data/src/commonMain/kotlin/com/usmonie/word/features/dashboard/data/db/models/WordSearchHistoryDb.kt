@@ -5,7 +5,7 @@ import io.realm.kotlin.types.annotations.PrimaryKey
 import kotlinx.datetime.Clock
 
 
-class WordFavorite(): RealmObject {
+class WordSearchHistoryDb(): RealmObject {
 
     @PrimaryKey
     var word: String = ""

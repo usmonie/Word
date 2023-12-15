@@ -1,8 +1,6 @@
 package com.usmonie.word.features.new.dashboard
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -45,7 +43,6 @@ private fun WordOfTheDay(
 ) {
     VerticalAnimatedVisibility(showItem) {
         Column(modifier) {
-            Spacer(Modifier.height(6.dp))
             RandomWordCard(
                 onClick,
                 onAddFavouritePressed,
@@ -54,7 +51,6 @@ private fun WordOfTheDay(
                 word,
                 modifier = Modifier.padding(horizontal = 16.dp)
             )
-            Spacer(Modifier.height(14.dp))
         }
     }
 }

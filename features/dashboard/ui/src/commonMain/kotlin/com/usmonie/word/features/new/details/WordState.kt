@@ -1,5 +1,7 @@
 package com.usmonie.word.features.new.details
 
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.Stable
 import com.usmonie.word.features.new.models.WordCombinedUi
 import wtf.speech.core.ui.ContentState
 import wtf.speech.core.ui.ScreenAction
@@ -7,6 +9,8 @@ import wtf.speech.core.ui.ScreenEffect
 import wtf.speech.core.ui.ScreenEvent
 import wtf.speech.core.ui.ScreenState
 
+@Stable
+@Immutable
 data class WordState(
     val word: WordCombinedUi,
     val similarWords: ContentState<List<WordCombinedUi>> = ContentState.Loading()

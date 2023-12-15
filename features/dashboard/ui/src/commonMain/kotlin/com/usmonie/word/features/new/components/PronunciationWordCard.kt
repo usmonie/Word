@@ -23,6 +23,7 @@ fun DetailsWordCardLarge(
     onLearnClicked: (WordUi) -> Unit,
     onBookmarkedClicked: (WordUi) -> Unit,
     word: WordUi,
+    bookmarked: Boolean,
     modifier: Modifier = Modifier
 ) {
     BaseCard(
@@ -52,7 +53,7 @@ fun DetailsWordCardLarge(
         WordCardButtons(
             { onLearnClicked(word) },
             { onBookmarkedClicked(word) },
-            false,
+            bookmarked,
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(Modifier.height(24.dp))

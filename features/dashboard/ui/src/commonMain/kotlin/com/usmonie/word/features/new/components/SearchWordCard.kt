@@ -31,10 +31,10 @@ fun SearchWordCard(
     wordCombined: WordCombinedUi,
     modifier: Modifier = Modifier
 ) {
-    val (selectedEtymologyTabIndex, onSelectedTab) = remember(wordCombined) { mutableStateOf(0) }
+    val (selectedEtymologyTabIndex, onSelectedTab) = remember(wordCombined.word) { mutableStateOf(0) }
     val selectedEtymology = wordCombined.wordEtymology[selectedEtymologyTabIndex]
     val (selectedPosIndex, onSelectedPos) = remember(
-        wordCombined,
+        wordCombined.word,
         selectedEtymologyTabIndex
     ) { mutableStateOf(0) }
 
@@ -50,7 +50,7 @@ fun SearchWordCard(
         WordCardButtons(
             { onLearnClick(wordCombined) },
             { onBookmarkClick(wordCombined) },
-            false,
+            wordCombined.isFavorite,
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(Modifier.height(16.dp))

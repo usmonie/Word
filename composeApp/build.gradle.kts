@@ -33,7 +33,7 @@ kotlin {
         iosTarget.binaries.framework {
             baseName = "ComposeApp"
             isStatic = true
-            version = "1.0.0"
+            version = "0.2.0"
 
             dependencies {
                 implementation(projects.core.design)
@@ -59,7 +59,6 @@ kotlin {
                 implementation(compose.foundation)
                 implementation(compose.material)
 
-                implementation(libs.sqldelight.runtime)
                 @OptIn(ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
             }
@@ -98,8 +97,8 @@ android {
         minSdk = 25 //config.versions.android.minSdk.get().toInt()
         targetSdk = 34
 
-        versionCode = 5
-        versionName = "1.0"
+        versionCode = 7
+        versionName = "0.2"
 
 //
 //        val admobAppId: String =
@@ -135,6 +134,9 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
     dependencies {
+
+        implementation("org.slf4j:slf4j-api:1.7.30")
+        implementation("org.slf4j:slf4j-simple:1.7.30")
         debugImplementation(libs.compose.ui.tooling)
 
         implementation(libs.androidx.profileinstaller)
@@ -182,5 +184,24 @@ fun copyNativeResources(sourceSet: String) {
                 into(fatFramework)
             }
         )
+    }
+}
+
+subprojects {
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+        kotlinOptions {
+            if (project.findProperty("composeCompilerReports") == "true") {
+                freeCompilerArgs += listOf(
+                    "-P",
+                    "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=${project.path}/compose_compiler"
+                )
+            }
+            if (project.findProperty("composeCompilerMetrics") == "true") {
+                freeCompilerArgs += listOf(
+                    "-P",
+                    "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=${project.path}/compose_compiler"
+                )
+            }
+        }
     }
 }

@@ -19,7 +19,7 @@ class WordApplication : Application(), Application.ActivityLifecycleCallbacks {
         super.onCreate()
         this.registerActivityLifecycleCallbacks(this)
 
-        if (false) MobileAds.initialize(this) { }
+        if (true) MobileAds.initialize(this) { }
 
         appOpenAdManager = AppOpenAdManager()
     }

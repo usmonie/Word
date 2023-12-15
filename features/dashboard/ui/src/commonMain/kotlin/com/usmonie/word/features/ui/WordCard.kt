@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.models.SynonymUi
 import com.usmonie.word.features.models.WordUi
+import com.usmonie.word.features.new.components.TitleUiComponent
 import com.usmonie.word.features.new.models.WordCombinedUi
 import wtf.speech.core.ui.ContentState
 
@@ -170,10 +171,18 @@ fun WordOfTheDayCard(
 }
 
 @Composable
-fun WordRecentCard(word: WordCombinedUi, onClick: (WordCombinedUi) -> Unit, modifier: Modifier = Modifier) {
+fun WordRecentCard(
+    word: WordCombinedUi,
+    onClick: (WordCombinedUi) -> Unit,
+    modifier: Modifier = Modifier
+) {
     BaseCard({ onClick(word) }, elevation = 2.dp, modifier) {
         Spacer(Modifier.height(8.dp))
-        WordSmallTitle(word.word, Modifier.padding(horizontal = 20.dp))
+        TitleUiComponent(
+            word.word,
+            Modifier.padding(horizontal = 20.dp),
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
 //        Spacer(Modifier.height(4.dp))
         Spacer(Modifier.height(8.dp))
     }

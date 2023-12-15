@@ -52,7 +52,6 @@ import com.usmonie.word.features.new.models.WordCombinedUi
 import com.usmonie.word.features.ui.AdMob
 import com.usmonie.word.features.ui.BaseDashboardLazyColumn
 import com.usmonie.word.features.ui.MenuItem
-import com.usmonie.word.features.ui.MenuItemText
 import com.usmonie.word.features.ui.SearchBar
 import com.usmonie.word.features.ui.TopBackButtonBar
 import com.usmonie.word.features.ui.VerticalAnimatedVisibility
@@ -93,7 +92,7 @@ class DashboardScreen(
             topBar = {
                 TopBackButtonBar(
                     dashboardViewModel::onBackClick,
-                    state.query.text.isNotBlank()
+                    state.query.isNotBlank()
                 )
             },
             modifier = Modifier.fillMaxSize()
@@ -182,21 +181,22 @@ class DashboardScreen(
                     }
                 }
 
-                if (state.foundWords is ContentState.Loading && state.query.text.isNotBlank()) {
+                if (state.foundWords is ContentState.Loading && state.query.isNotBlank()) {
                     item {
                         LoadingProgress()
                     }
                 }
 
-                if (state.query.text.isNotBlank()) {
+                if (state.query.isNotBlank()) {
                     items(
                         state.foundWords.item ?: listOf(),
                         key = { word -> word.word }
                     ) { word ->
                         SearchWordCard(
                             dashboardViewModel::onOpenWord,
+                            {},
                             dashboardViewModel::onUpdateFavouritesPressed,
-                            dashboardViewModel::onShareWord,
+//                            dashboardViewModel::onShareWord,
                             {},
 //                            dashboardViewModel::onSynonymClicked,
                             word,
@@ -209,7 +209,7 @@ class DashboardScreen(
                 }
 
                 item {
-                    VerticalAnimatedVisibility(state.query.text.isBlank()) {
+                    VerticalAnimatedVisibility(state.query.isBlank()) {
                         WordOfTheDayMenuItem(
                             onWordClick = dashboardViewModel::onOpenWord,
                             onAddFavouritePressed = dashboardViewModel::onUpdateFavouritesPressed,
@@ -226,14 +226,14 @@ class DashboardScreen(
                         dashboardViewModel::onGamesClicked,
                         dashboardViewModel::onHangman,
                         onPointerInput,
-                        state.query.text,
+                        state.query,
                         state.showGames,
                     )
                 }
 
                 item {
                     FavouritesMenuItem(
-                        state.query.text.isBlank(),
+                        state.query.isBlank(),
                         dashboardViewModel::onFavouritesItemClicked,
                         Modifier.fillMaxWidth().pointerInput(Unit, onPointerInput)
                     )
@@ -246,7 +246,7 @@ class DashboardScreen(
                         dashboardViewModel::onChangeFonts,
                         dashboardViewModel::onClearRecentHistory,
                         onPointerInput,
-                        state.query.text,
+                        state.query,
                         state.showSettings,
                     )
                 }
@@ -258,7 +258,7 @@ class DashboardScreen(
                         dashboardViewModel::onTelegramItemClicked,
                         {},
                         onPointerInput,
-                        state.query.text,
+                        state.query,
                         state.showAbout
                     )
                 }
@@ -327,8 +327,7 @@ private fun RecentCards(
     words: List<WordCombinedUi>
 ) {
     Column {
-        MenuItemText("Recent")
-        Spacer(Modifier.height(8.dp))
+//        MenuItemText("Recent")
         WordsLazyRow(words) { wordUi ->
             WordRecentCard(
                 wordUi,

@@ -26,14 +26,14 @@ fun App(
 ) {
     val (currentColors, currentTypography) = remember {
         val theme = CurrentThemeUseCaseImpl(userRepository).invoke(Unit)
-        val colors =
-            theme.colorsName?.let { WordColors.valueOf(it) } ?: WordColors.BRITISH_RACING_GREEN
+        val colors = theme.colorsName?.let { WordColors.valueOf(it) } ?: WordColors.BRITISH_RACING_GREEN
         val typography = theme.fonts?.let { WordTypography.valueOf(it) } ?: Friendly
+
         Pair(colors, typography)
     }
     val (currentTheme, onCurrentColorsChanged) = remember { mutableStateOf(currentColors) }
     val (currentFonts, onCurrentFontsChanged) = remember { mutableStateOf(currentTypography) }
-    val wordRepository = remember { DashboardDataComponent.getWordsRepository(WordApi("http://13.48.70.234")) }
+    val wordRepository = remember { DashboardDataComponent.getWordsRepository(WordApi("http://16.170.6.0")) }
 
     val initialGraph = getDashboardGraph(
         onCurrentColorsChanged,

@@ -29,6 +29,39 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
+fun LargeResizableTitle(word: String, modifier: Modifier = Modifier, color: Color) {
+    val defaultTextStyle = MaterialTheme.typography.displayLarge
+    var readyToDraw by remember(word) { mutableStateOf(false) }
+    var defaultTextSize by remember { mutableStateOf(defaultTextStyle.fontSize) }
+    var maxLines by remember(word) { mutableStateOf(1) }
+
+    Text(
+        word,
+        style = defaultTextStyle,
+        textAlign = TextAlign.Center,
+        fontSize = defaultTextSize,
+        color = color,
+        modifier = modifier.drawWithContent { if (readyToDraw) drawContent() },
+        maxLines = maxLines,
+        overflow = TextOverflow.Ellipsis,
+        onTextLayout = {
+            when {
+                it.hasVisualOverflow && defaultTextSize > 20.sp -> {
+                    defaultTextSize *= 0.8f
+                }
+
+                it.hasVisualOverflow && defaultTextSize <= 20.sp -> {
+                    maxLines++
+                }
+                else -> {
+                    readyToDraw = true
+                }
+            }
+        }
+    )
+}
+
+@Composable
 fun WordLargeResizableTitle(word: String, modifier: Modifier = Modifier) {
     val defaultTextStyle = MaterialTheme.typography.displayMedium
     var readyToDraw by remember(word) { mutableStateOf(false) }

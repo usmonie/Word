@@ -21,6 +21,7 @@ sealed class FavoritesState : ScreenState {
 
         fun updateFavourite(updatedWord: WordCombinedUi): FavoritesState {
             val newWords = favourites.fastMap { mappedWord ->
+                println(mappedWord)
                 mapNewWord(mappedWord, updatedWord)
             }
             return copy(favourites = newWords)

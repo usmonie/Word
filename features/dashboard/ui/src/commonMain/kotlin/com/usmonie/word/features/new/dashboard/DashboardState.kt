@@ -2,7 +2,6 @@ package com.usmonie.word.features.new.dashboard
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
-import androidx.compose.ui.text.input.TextFieldValue
 import com.usmonie.word.features.new.models.WordCombinedUi
 import com.usmonie.word.features.new.models.WordUi
 import wtf.speech.core.ui.ContentState
@@ -17,7 +16,7 @@ import wtf.word.core.domain.tools.fastMap
 @Stable
 @Immutable
 data class DashboardState(
-    val query: TextFieldValue = TextFieldValue(),
+    val query: String = "",
     val wordOfTheDay: ContentState<Pair<WordUi, WordCombinedUi>> = ContentState.Loading(),
     val foundWords: ContentState<List<WordCombinedUi>> = ContentState.Loading(),
     val recentSearch: List<WordCombinedUi> = listOf(),
@@ -25,7 +24,7 @@ data class DashboardState(
     val showSettings: Boolean = false,
     val showGames: Boolean = false,
     val showAbout: Boolean = false,
-    val subscribed: Boolean = false
+    val subscribed: Boolean = true
 ) : ScreenState {
 
     fun updateFavourite(updatedWord: WordCombinedUi): DashboardState {
@@ -39,9 +38,19 @@ data class DashboardState(
             }
         }
 
-        val newFoundWords = foundWords.apply {
-            item?.fastMap { mappedWord ->
-                mapNewWord(mappedWord, updatedWord)
+        println("SEARCH $foundWords")
+        val newFoundWords: ContentState<List<WordCombinedUi>> = when (foundWords) {
+            is ContentState.Error<*, *> -> foundWords
+            is ContentState.Loading -> foundWords
+            is ContentState.Success -> {
+                println(updatedWord)
+                val found: ContentState<List<WordCombinedUi>> = ContentState.Success(
+                    foundWords.data.fastMap { mappedWord ->
+                        mapNewWord(mappedWord, updatedWord)
+                    }
+                )
+
+                found
             }
         }
 
@@ -93,11 +102,7 @@ data class DashboardState(
     private fun mapNewWord(
         mappedWord: WordCombinedUi,
         updatedWord: WordCombinedUi
-    ) = if (mappedWord.word == updatedWord.word) {
-        updatedWord
-    } else {
-        mappedWord
-    }
+    ) = if (mappedWord.word == updatedWord.word) updatedWord else mappedWord
 }
 
 sealed class DashboardAction : ScreenAction {
@@ -108,8 +113,9 @@ sealed class DashboardAction : ScreenAction {
     data object ClearRecentHistory : DashboardAction()
     data object UpdateRandomWord : DashboardAction()
     data object Update : DashboardAction()
+
     data class UpdateFavourite(val word: WordCombinedUi) : DashboardAction()
-    data class InputQuery(val query: TextFieldValue) : DashboardAction()
+    data class InputQuery(val query: String) : DashboardAction()
     data class OpenWord(val word: WordCombinedUi) : DashboardAction()
 
     sealed class NextItems : DashboardAction() {
@@ -134,6 +140,7 @@ sealed class DashboardAction : ScreenAction {
 sealed class DashboardEvent : ScreenEvent {
     data object BackToMain : DashboardEvent()
     data object RandomWordLoading : DashboardEvent()
+
     data class InitialData(
         val recentSearch: List<WordCombinedUi>,
         val wordOfTheDay: ContentState<Pair<WordUi, WordCombinedUi>>,
@@ -151,8 +158,8 @@ sealed class DashboardEvent : ScreenEvent {
         val typography: WordTypography
     ) : DashboardEvent()
 
-    data class InputQuery(val query: TextFieldValue) : DashboardEvent()
-    data class FoundWords(val query: TextFieldValue, val foundWords: List<WordCombinedUi>) :
+    data class InputQuery(val query: String) : DashboardEvent()
+    data class FoundWords(val query: String, val foundWords: List<WordCombinedUi>) :
         DashboardEvent()
 
     data class UpdatedFavourites(val word: WordCombinedUi) : DashboardEvent()
@@ -189,7 +196,7 @@ sealed class DashboardEffect : ScreenEffect {
     data class OpenWord(val word: WordCombinedUi) : DashboardEffect()
 
     @Immutable
-    class OpenUrl(val url: String): DashboardEffect() {
+    class OpenUrl(val url: String) : DashboardEffect() {
 
     }
 }

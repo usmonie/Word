@@ -45,7 +45,7 @@ fun RandomWordCard(
                     { onLearnClick(word.second) },
                     { onBookmarkClick(word.second) },
                     onUpdate,
-                    false,
+                    word.second.isFavorite,
                     modifier = Modifier.fillMaxWidth()
                 )
                 Spacer(Modifier.height(24.dp))

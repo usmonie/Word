@@ -107,9 +107,10 @@ class WordDetailsScreen(
                         DetailsWordCardLarge(
                             {},
                             {},
-                            {},
+                            { wordViewModel.onUpdateFavouritePressed(state.word) },
                             modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
                             word = selectedPos,
+                            bookmarked = state.word.isFavorite
                         )
                     }
 

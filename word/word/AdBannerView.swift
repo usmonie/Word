@@ -13,7 +13,7 @@ private struct BannerVC: UIViewControllerRepresentable {
     var bannerID: String
 
     func makeUIViewController(context: Context) -> UIViewController {
-        let view = GADBannerView(adSize: GADAdSizeLargeBanner)
+        let view = GADBannerView(adSize: GADAdSizeFullBanner)
 
         let viewController = UIViewController()
 //        #if DEBUG
