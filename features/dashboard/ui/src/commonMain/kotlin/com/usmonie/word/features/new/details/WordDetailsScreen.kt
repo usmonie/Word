@@ -150,6 +150,7 @@ class WordDetailsScreen(
                         Spacer(Modifier.height(80.dp))
                     }
                 }
+
                 adMob.Banner(
                     AdKeys.BANNER_ID,
                     Modifier.fillMaxWidth()

@@ -13,7 +13,6 @@
 		DA1D11822B29F2E200194749 /* AdBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1D117A2B29F2E200194749 /* AdBannerView.swift */; };
 		DA1D11832B29F2E200194749 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1D117B2B29F2E200194749 /* ContentView.swift */; };
 		DA1D11842B29F2E200194749 /* WordApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1D117C2B29F2E200194749 /* WordApp.swift */; };
-		DA1D11852B29F2E200194749 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1D117D2B29F2E200194749 /* Item.swift */; };
 		DA1D11862B29F2E200194749 /* AdInterstitialRewardedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1D117E2B29F2E200194749 /* AdInterstitialRewardedView.swift */; };
 		DA1D11C62B2A097F00194749 /* sourcesans_light_italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DA1D11A82B2A097F00194749 /* sourcesans_light_italic.ttf */; };
 		DA1D11C72B2A097F00194749 /* sourceserif_light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DA1D11A92B2A097F00194749 /* sourceserif_light.ttf */; };
@@ -62,7 +61,6 @@
 		DA1D117A2B29F2E200194749 /* AdBannerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdBannerView.swift; sourceTree = "<group>"; };
 		DA1D117B2B29F2E200194749 /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		DA1D117C2B29F2E200194749 /* WordApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WordApp.swift; sourceTree = "<group>"; };
-		DA1D117D2B29F2E200194749 /* Item.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		DA1D117E2B29F2E200194749 /* AdInterstitialRewardedView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AdInterstitialRewardedView.swift; sourceTree = "<group>"; };
 		DA1D11A82B2A097F00194749 /* sourcesans_light_italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = sourcesans_light_italic.ttf; sourceTree = "<group>"; };
 		DA1D11A92B2A097F00194749 /* sourceserif_light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = sourceserif_light.ttf; sourceTree = "<group>"; };
@@ -180,7 +178,6 @@
 				DA1D11782B29F2E200194749 /* AppDelegate.swift */,
 				DA1D117B2B29F2E200194749 /* ContentView.swift */,
 				DA1D11772B29F2E200194749 /* GoogleService-Info.plist */,
-				DA1D117D2B29F2E200194749 /* Item.swift */,
 				DA1D11792B29F2E200194749 /* NativeAnalytics.swift */,
 				DA1D117C2B29F2E200194749 /* WordApp.swift */,
 				DAD18C082B29E7C500E74100 /* Assets.xcassets */,
@@ -354,7 +351,6 @@
 				DA1D11832B29F2E200194749 /* ContentView.swift in Sources */,
 				DA1D11862B29F2E200194749 /* AdInterstitialRewardedView.swift in Sources */,
 				DA1D11802B29F2E200194749 /* AppDelegate.swift in Sources */,
-				DA1D11852B29F2E200194749 /* Item.swift in Sources */,
 				DA1D11822B29F2E200194749 /* AdBannerView.swift in Sources */,
 				DA1D11842B29F2E200194749 /* WordApp.swift in Sources */,
 			);
@@ -482,10 +478,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = word/word.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"word/Preview Content\"";
 				DEVELOPMENT_TEAM = GE26949KEK;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -509,11 +505,11 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 15;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 14.1;
-				MARKETING_VERSION = 1.0;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MARKETING_VERSION = 0.2;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-framework",
@@ -527,10 +523,11 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.usmonie.word;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -539,10 +536,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = word/word.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"word/Preview Content\"";
 				DEVELOPMENT_TEAM = GE26949KEK;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -566,11 +563,11 @@
 				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 15;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 14.1;
-				MARKETING_VERSION = 1.0;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MARKETING_VERSION = 0.2;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-framework",
@@ -584,10 +581,11 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.usmonie.word;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

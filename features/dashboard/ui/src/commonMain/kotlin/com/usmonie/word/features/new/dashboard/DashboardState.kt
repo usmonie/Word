@@ -24,7 +24,7 @@ data class DashboardState(
     val showSettings: Boolean = false,
     val showGames: Boolean = false,
     val showAbout: Boolean = false,
-    val subscribed: Boolean = true
+    val subscribed: Boolean = false
 ) : ScreenState {
 
     fun updateFavourite(updatedWord: WordCombinedUi): DashboardState {
@@ -38,7 +38,6 @@ data class DashboardState(
             }
         }
 
-        println("SEARCH $foundWords")
         val newFoundWords: ContentState<List<WordCombinedUi>> = when (foundWords) {
             is ContentState.Error<*, *> -> foundWords
             is ContentState.Loading -> foundWords
