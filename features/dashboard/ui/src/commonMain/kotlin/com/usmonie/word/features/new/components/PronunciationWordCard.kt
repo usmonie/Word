@@ -28,7 +28,7 @@ fun DetailsWordCardLarge(
 ) {
     BaseCard(
         {},
-        elevation = 8.dp,
+        elevation = 4.dp,
         modifier = modifier
     ) {
         Spacer(Modifier.height(32.dp))

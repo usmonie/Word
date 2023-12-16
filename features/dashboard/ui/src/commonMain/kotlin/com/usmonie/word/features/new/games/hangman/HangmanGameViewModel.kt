@@ -11,7 +11,6 @@ class HangmanGameViewModel(
 ) : BaseViewModel<HangmanState, HangmanAction, HangmanEvent, HangmanEffect>(
     HangmanState.Playing(word.word)
 ) {
-
     fun onLetterGuessed(letter: Char) = handleAction(HangmanAction.GuessLetter(letter))
     fun onUpdatePressed() = handleAction(HangmanAction.UpdateWord)
 
@@ -49,7 +48,6 @@ class HangmanGameViewModel(
             is HangmanEvent.Won -> HangmanState.Won(
                 word,
                 this.guessedLetters.toMutableSet().apply { add(event.letter) },
-                0
             )
 
             is HangmanEvent.UpdateWord -> HangmanState.Playing(event.word.word)

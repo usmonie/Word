@@ -26,8 +26,7 @@ sealed class HangmanState(
     data class Won(
         override val word: String,
         override val guessedLetters: Set<Char>,
-        override val incorrectGuesses: Int
-    ) : HangmanState(word, guessedLetters, incorrectGuesses)
+    ) : HangmanState(word, guessedLetters, 0)
 }
 
 sealed class HangmanAction : ScreenAction {

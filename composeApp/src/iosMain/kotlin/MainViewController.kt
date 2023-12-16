@@ -15,13 +15,8 @@ fun MainViewController(
         override fun viewDidLoad() = onViewDidLoad()
     }
 
-    return ComposeUIViewController(configure = {
-        delegate = composeDelegate
-    }) {
-        App(
-            UserRepositoryImpl(KVault()),
-            adMob,
-            DefaultLogger(nativeAnalytics)
-        )
-    }
+    return ComposeUIViewController(
+        configure = { delegate = composeDelegate },
+        content =  { App(UserRepositoryImpl(KVault()), adMob, DefaultLogger(nativeAnalytics)) }
+    )
 }

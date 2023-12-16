@@ -2,6 +2,7 @@ package com.usmonie.word.features.new.dashboard
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
+import androidx.compose.ui.text.input.TextFieldValue
 import com.usmonie.word.features.new.models.WordCombinedUi
 import com.usmonie.word.features.new.models.WordUi
 import wtf.speech.core.ui.ContentState
@@ -16,7 +17,7 @@ import wtf.word.core.domain.tools.fastMap
 @Stable
 @Immutable
 data class DashboardState(
-    val query: String = "",
+    val query: TextFieldValue = TextFieldValue(),
     val wordOfTheDay: ContentState<Pair<WordUi, WordCombinedUi>> = ContentState.Loading(),
     val foundWords: ContentState<List<WordCombinedUi>> = ContentState.Loading(),
     val recentSearch: List<WordCombinedUi> = listOf(),
@@ -26,7 +27,6 @@ data class DashboardState(
     val showAbout: Boolean = false,
     val subscribed: Boolean = false
 ) : ScreenState {
-
     fun updateFavourite(updatedWord: WordCombinedUi): DashboardState {
         val newWordOfTheDay: ContentState<Pair<WordUi, WordCombinedUi>> = when (wordOfTheDay) {
             is ContentState.Error<*, *> -> wordOfTheDay
@@ -114,7 +114,7 @@ sealed class DashboardAction : ScreenAction {
     data object Update : DashboardAction()
 
     data class UpdateFavourite(val word: WordCombinedUi) : DashboardAction()
-    data class InputQuery(val query: String) : DashboardAction()
+    data class InputQuery(val query: TextFieldValue) : DashboardAction()
     data class OpenWord(val word: WordCombinedUi) : DashboardAction()
 
     sealed class NextItems : DashboardAction() {
@@ -142,14 +142,7 @@ sealed class DashboardEvent : ScreenEvent {
 
     data class InitialData(
         val recentSearch: List<WordCombinedUi>,
-        val wordOfTheDay: ContentState<Pair<WordUi, WordCombinedUi>>,
-        val colors: WordColors,
-        val typography: WordTypography
-    ) : DashboardEvent()
-
-    data class UpdateData(
-        val recentSearch: List<WordCombinedUi>,
-        val wordOfTheDay: ContentState<Pair<WordUi, WordCombinedUi>>,
+        val wordOfTheDay: ContentState<Pair<WordUi, WordCombinedUi>>
     ) : DashboardEvent()
 
     data class ChangeTheme(
@@ -157,8 +150,8 @@ sealed class DashboardEvent : ScreenEvent {
         val typography: WordTypography
     ) : DashboardEvent()
 
-    data class InputQuery(val query: String) : DashboardEvent()
-    data class FoundWords(val query: String, val foundWords: List<WordCombinedUi>) :
+    data class InputQuery(val query: TextFieldValue) : DashboardEvent()
+    data class FoundWords(val query: TextFieldValue, val foundWords: List<WordCombinedUi>) :
         DashboardEvent()
 
     data class UpdatedFavourites(val word: WordCombinedUi) : DashboardEvent()

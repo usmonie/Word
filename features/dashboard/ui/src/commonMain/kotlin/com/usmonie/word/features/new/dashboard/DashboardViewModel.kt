@@ -1,5 +1,6 @@
 package com.usmonie.word.features.new.dashboard
 
+import androidx.compose.ui.text.input.TextFieldValue
 import com.usmonie.word.features.analytics.DashboardAnalyticsEvents
 import com.usmonie.word.features.dashboard.domain.models.Theme
 import com.usmonie.word.features.dashboard.domain.usecase.ChangeThemeUseCase
@@ -51,7 +52,7 @@ class DashboardViewModel(
     fun onOpenWord(word: WordCombinedUi) = handleAction(DashboardAction.OpenWord(word))
     fun onShareWord(word: WordCombinedUi) {}
     fun onSynonymClicked(synonym: SynonymUi) =
-        handleAction(DashboardAction.InputQuery(synonym.word))
+        handleAction(DashboardAction.InputQuery(TextFieldValue(synonym.word)))
 
     fun onUpdateFavouritesPressed(word: WordCombinedUi) =
         handleAction(DashboardAction.UpdateFavourite(word))
@@ -60,10 +61,9 @@ class DashboardViewModel(
     fun onGamesClicked() = handleAction(DashboardAction.OnMenuItemClick.Games)
     fun onHangman() = handleAction(DashboardAction.OnGamesItemClick.Hangman)
     fun onQueryChanged(query: String) {
-        handleAction(DashboardAction.InputQuery(query))
+        handleAction(DashboardAction.InputQuery(TextFieldValue(query)))
     }
 
-    fun onWordOfTheDayItemClicked() = handleAction(DashboardAction.OnMenuItemClick.WordOfTheDay)
     fun onFavouritesItemClicked() = handleAction(DashboardAction.OnMenuItemClick.Favourites)
     fun onSettingsItemClicked() = handleAction(DashboardAction.OnMenuItemClick.Settings)
     fun onAboutItemClicked() = handleAction(DashboardAction.OnMenuItemClick.About)
@@ -81,10 +81,13 @@ class DashboardViewModel(
             foundWords = ContentState.Success(event.foundWords)
         )
 
-        is DashboardEvent.InputQuery -> this.copy(
-            query = event.query,
-            foundWords = ContentState.Loading()
-        )
+        is DashboardEvent.InputQuery -> {
+            if (event.query.text == this.query.text) this
+            else this.copy(
+                query = event.query,
+                foundWords = ContentState.Loading()
+            )
+        }
 
         is DashboardEvent.NextItemsLoaded.FoundWord -> this.loadNextFoundWords(event.newWords)
         is DashboardEvent.NextItemsLoaded.RecentSearch -> this.loadNextRecent(event.newWords)
@@ -94,16 +97,11 @@ class DashboardViewModel(
             recentSearch = event.recentSearch,
         )
 
-        is DashboardEvent.UpdateData -> copy(
-            wordOfTheDay = event.wordOfTheDay,
-            recentSearch = event.recentSearch,
-        )
-
         DashboardEvent.UpdateMenuItemState.Settings -> this.openSettings()
         DashboardEvent.UpdateMenuItemState.About -> this.openAbout()
         DashboardEvent.UpdateMenuItemState.WordOfTheDay -> this.openWordOfTheDay()
-        DashboardEvent.BackToMain -> this.copy(query = "")
         DashboardEvent.UpdateMenuItemState.Games -> this.openGames()
+        DashboardEvent.BackToMain -> this.copy(query = TextFieldValue())
         else -> this
     }
 
@@ -179,9 +177,9 @@ class DashboardViewModel(
         return DashboardEvent.RandomWordLoading
     }
 
-    private suspend fun search(query: String, offset: Long = 0): DashboardEvent {
+    private suspend fun search(query: TextFieldValue, offset: Long = 0): DashboardEvent {
         searchJob?.cancel()
-        if (query.isBlank()) {
+        if (query.text.isBlank()) {
             updateData()
             return DashboardEvent.InputQuery(query)
         }
@@ -191,7 +189,7 @@ class DashboardViewModel(
     }
 
     private suspend fun launchSearch(
-        query: String,
+        query: TextFieldValue,
         offset: Long,
         limit: Long = DEFAULT_LIMIT,
         exactly: Boolean = false
@@ -200,7 +198,7 @@ class DashboardViewModel(
             ensureActive()
 
             val found = searchWordsUseCase(
-                SearchWordsUseCase.Param(query, offset, limit, exactly)
+                SearchWordsUseCase.Param(query.text, offset, limit, exactly)
             ).fastMap {
                 ensureActive()
                 it.toUi()
@@ -208,7 +206,7 @@ class DashboardViewModel(
 
             delay(200L)
             withContext(Dispatchers.Main) {
-                analytics.log(DashboardAnalyticsEvents.Search(query))
+                analytics.log(DashboardAnalyticsEvents.Search(query.text))
                 ensureActive()
                 handleState(DashboardEvent.FoundWords(query, found))
             }
@@ -248,19 +246,11 @@ class DashboardViewModel(
                 ContentState.Success(Pair(word.wordEtymology.random().words.random(), word))
             }
 
-            val theme = loadTheme()
-
             handleState(
-                if (update) DashboardEvent.UpdateData(
+                DashboardEvent.InitialData(
                     recentSearch = recentSearch,
-                    wordOfTheDay = wordOfTheDay
-                ) else
-                    DashboardEvent.InitialData(
-                        recentSearch = recentSearch,
-                        wordOfTheDay = wordOfTheDay,
-                        theme.first,
-                        theme.second
-                    )
+                    wordOfTheDay = wordOfTheDay,
+                )
             )
         }
     }

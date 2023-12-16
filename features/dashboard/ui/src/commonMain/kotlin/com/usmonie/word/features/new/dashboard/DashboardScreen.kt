@@ -21,6 +21,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -52,11 +53,10 @@ import com.usmonie.word.features.new.models.WordCombinedUi
 import com.usmonie.word.features.ui.AdMob
 import com.usmonie.word.features.ui.BaseDashboardLazyColumn
 import com.usmonie.word.features.ui.MenuItem
+import com.usmonie.word.features.ui.RecentsLazyRow
 import com.usmonie.word.features.ui.SearchBar
 import com.usmonie.word.features.ui.TopBackButtonBar
 import com.usmonie.word.features.ui.VerticalAnimatedVisibility
-import com.usmonie.word.features.ui.WordRecentCard
-import com.usmonie.word.features.ui.WordsLazyRow
 import wtf.speech.compass.core.Extra
 import wtf.speech.compass.core.LocalRouteManager
 import wtf.speech.compass.core.Screen
@@ -92,7 +92,7 @@ class DashboardScreen(
             topBar = {
                 TopBackButtonBar(
                     dashboardViewModel::onBackClick,
-                    state.query.isNotBlank()
+                    state.query.text.isNotBlank()
                 )
             },
             modifier = Modifier.fillMaxSize()
@@ -157,6 +157,7 @@ class DashboardScreen(
         state: DashboardState,
         adMob: AdMob,
     ) {
+        val showMenuItems by remember(state.query) { derivedStateOf { state.query.text.isBlank() } }
         val (hasFocus, onFocusChange) = remember { mutableStateOf(false) }
         Box {
             BaseDashboardLazyColumn(listState, insets) {
@@ -164,7 +165,7 @@ class DashboardScreen(
                     SearchBar(
                         dashboardViewModel::onQueryChanged,
                         placeholder = "[S]earch",
-                        query = state.query,
+                        query = state.query.text,
                         modifier = Modifier.fillMaxWidth().testTag("DASHBOARD_SEARCH_BAR"),
                         hasFocus = hasFocus,
                         enabled = state.wordOfTheDay is ContentState.Success,
@@ -181,13 +182,13 @@ class DashboardScreen(
                     }
                 }
 
-                if (state.foundWords is ContentState.Loading && state.query.isNotBlank()) {
+                if (state.foundWords is ContentState.Loading && !showMenuItems) {
                     item {
                         LoadingProgress()
                     }
                 }
 
-                if (state.query.isNotBlank()) {
+                if (!showMenuItems) {
                     items(
                         state.foundWords.item ?: listOf(),
                         key = { word -> word.word }
@@ -208,8 +209,8 @@ class DashboardScreen(
                     }
                 }
 
-                item {
-                    VerticalAnimatedVisibility(state.query.isBlank()) {
+                item(key = "MENU_WORD_OF_THE_DAY") {
+                    VerticalAnimatedVisibility(showMenuItems) {
                         WordOfTheDayMenuItem(
                             onWordClick = dashboardViewModel::onOpenWord,
                             onAddFavouritePressed = dashboardViewModel::onUpdateFavouritesPressed,
@@ -221,44 +222,44 @@ class DashboardScreen(
                     }
                 }
 
-                item {
+                item(key = "MENU_GAMES") {
                     Games(
                         dashboardViewModel::onGamesClicked,
                         dashboardViewModel::onHangman,
                         onPointerInput,
-                        state.query,
+                        showMenuItems,
                         state.showGames,
                     )
                 }
 
-                item {
+                item(key = "MENU_FAVORITES") {
                     FavouritesMenuItem(
-                        state.query.isBlank(),
+                        showMenuItems,
                         dashboardViewModel::onFavouritesItemClicked,
                         Modifier.fillMaxWidth().pointerInput(Unit, onPointerInput)
                     )
                 }
 
-                item {
+                item(key = "MENU_SETTINGS") {
                     Settings(
                         dashboardViewModel::onSettingsItemClicked,
                         dashboardViewModel::onChangeColors,
                         dashboardViewModel::onChangeFonts,
                         dashboardViewModel::onClearRecentHistory,
                         onPointerInput,
-                        state.query,
+                        showMenuItems,
                         state.showSettings,
                     )
                 }
 
-                item {
+                item(key = "MENU_ABOUT") {
                     About(
                         dashboardViewModel::onAboutItemClicked,
                         {},
                         dashboardViewModel::onTelegramItemClicked,
                         {},
                         onPointerInput,
-                        state.query,
+                        showMenuItems,
                         state.showAbout
                     )
                 }
@@ -327,14 +328,7 @@ private fun RecentCards(
     words: List<WordCombinedUi>
 ) {
     Column {
-//        MenuItemText("Recent")
-        WordsLazyRow(words) { wordUi ->
-            WordRecentCard(
-                wordUi,
-                { word -> onWordClick(word) },
-                modifier = Modifier.fillParentMaxWidth(0.75f)
-            )
-        }
+        RecentsLazyRow(words, onWordClick = onWordClick)
         Spacer(Modifier.height(8.dp))
     }
 }

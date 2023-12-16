@@ -36,8 +36,18 @@ fun getDashboardGraph(
     }
 
     return NavigationGraph("DASHBOARD_GRAPH", dashboardScreen).apply {
-        register(Route(FavoritesScreen.ID, FavoritesScreen.Builder(wordRepository, adMob, analytics)))
-        register(Route(WordDetailsScreen.ID, WordDetailsScreen.Builder(wordRepository, analytics, adMob)))
+        register(
+            Route(
+                FavoritesScreen.ID,
+                FavoritesScreen.Builder(wordRepository, adMob, analytics)
+            )
+        )
+        register(
+            Route(
+                WordDetailsScreen.ID,
+                WordDetailsScreen.Builder(wordRepository, analytics, adMob)
+            )
+        )
         register(Route(HangmanGameScreen.ID, HangmanGameScreen.Builder(wordRepository, adMob)))
     }
 }

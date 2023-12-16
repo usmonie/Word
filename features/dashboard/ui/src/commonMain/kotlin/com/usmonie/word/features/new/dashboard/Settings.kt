@@ -21,10 +21,10 @@ fun Settings(
     onChangeFontsPressed: () -> Unit,
     onClearRecentPressed: () -> Unit,
     onPointerInput: suspend PointerInputScope.() -> Unit,
-    query: String,
+    showItem: Boolean,
     showSettings: Boolean
 ) {
-    VerticalAnimatedVisibility(query.isBlank()) {
+    VerticalAnimatedVisibility(showItem) {
         Column {
             SettingsMenuItem(
                 onSettingsMenuItemPressed,

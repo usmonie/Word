@@ -21,10 +21,10 @@ fun About(
     onTelegramPressed: () -> Unit,
     onDonatePressed: () -> Unit,
     onPointerInput: suspend PointerInputScope.() -> Unit,
-    query: String,
+    showItem: Boolean,
     showAbout: Boolean,
 ) {
-    VerticalAnimatedVisibility(query.isBlank()) {
+    VerticalAnimatedVisibility(showItem) {
         Column {
             AboutMenuItem(
                 onAboutMenuItemPressed,

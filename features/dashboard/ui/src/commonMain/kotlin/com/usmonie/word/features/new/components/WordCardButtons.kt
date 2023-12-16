@@ -34,7 +34,6 @@ fun WordCardButtons(
     learningEnabled: Boolean = false,
     modifier: Modifier = Modifier
 ) {
-    // TODO: FIX PADDINGS FOR BookmarkButton
     Row(
         modifier,
         verticalAlignment = Alignment.CenterVertically,

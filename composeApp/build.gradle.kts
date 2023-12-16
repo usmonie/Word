@@ -90,7 +90,7 @@ android {
     compileSdk = 34 // config.versions.android.compileSdk.get().toInt()
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     sourceSets["main"].res.srcDirs("src/androidMain/res")
-    sourceSets["main"].resources.srcDirs("src/commonMain/resources")
+//    sourceSets["main"].resources.srcDirs("src/commonMain/resources")
 
     defaultConfig {
         applicationId = "com.usmonie.word"
@@ -99,13 +99,6 @@ android {
 
         versionCode = 7
         versionName = "0.2"
-
-//
-//        val admobAppId: String =
-//            gradleLocalProperties(rootDir).getProperty("admob-app-id")
-//
-//        resValue("String", "APP_AD_ID", admobAppId)
-
     }
     buildFeatures {
         compose = true

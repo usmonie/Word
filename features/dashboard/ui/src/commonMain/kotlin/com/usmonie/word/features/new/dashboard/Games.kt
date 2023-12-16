@@ -19,10 +19,10 @@ fun Games(
     onGamesMenuItemPressed: () -> Unit,
     onHangmanPressed: () -> Unit,
     onPointerInput: suspend PointerInputScope.() -> Unit,
-    query: String,
+    showItem: Boolean,
     showGames: Boolean,
 ) {
-    VerticalAnimatedVisibility(query.isBlank()) {
+    VerticalAnimatedVisibility(showItem) {
         Column {
             GamesMenuItem(
                 onGamesMenuItemPressed,
