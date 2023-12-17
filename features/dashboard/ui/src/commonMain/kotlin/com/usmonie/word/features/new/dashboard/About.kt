@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.ui.MenuItem
 import com.usmonie.word.features.ui.VerticalAnimatedVisibility
 
+@Suppress("NonSkippableComposable")
 @Composable
 fun About(
     onAboutMenuItemPressed: () -> Unit,
@@ -35,6 +36,7 @@ fun About(
     }
 }
 
+@Suppress("NonSkippableComposable")
 @Composable
 private fun AboutItems(
     onAboutDeveloperPressed: () -> Unit,

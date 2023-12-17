@@ -32,98 +32,15 @@ import wtf.speech.core.ui.AdKeys
 import wtf.word.core.domain.Analytics
 
 class FavoritesScreen(
-    private val favouritesViewModel: FavouritesViewModel,
+    private val favoritesViewModel: FavouritesViewModel,
     private val adMob: AdMob,
-) : Screen(favouritesViewModel) {
+) : Screen(favoritesViewModel) {
     override val id: String = ID
 
     @Composable
     override fun Content() {
-        val routeManager = LocalRouteManager.current
-        val state by favouritesViewModel.state.collectAsState()
-        val effect by favouritesViewModel.effect.collectAsState(null)
-
-        FavouritesEffect(effect, routeManager)
-
-        Scaffold(
-            topBar = { TopBackButtonBar(routeManager::navigateBack, true) },
-        ) { insets ->
-            Box {
-                BaseDashboardLazyColumn(rememberLazyListState(), insets) {
-                    item {
-                        SearchBar(
-                            {},
-                            {},
-                            "[F]avorites",
-                            "",
-                            hasFocus = false,
-                            enabled = false,
-                            modifier = Modifier.fillMaxWidth().testTag("FAVOURITES_SEARCH_BAR"),
-                        )
-                    }
-
-                    when (val s = state) {
-                        is FavoritesState.Empty -> item {
-                            EmptyItem(
-                                "Favorites are empty",
-                                "You can add favorite words from the search screen"
-                            )
-                        }
-
-                        is FavoritesState.Items -> wordsCardsList(
-                            favouritesViewModel::onOpenWord,
-                            favouritesViewModel::onUpdateFavourite,
-                            favouritesViewModel::onShareWord,
-//                            favouritesViewModel::onSynonym,
-                            s.favourites,
-                            Modifier.fillMaxWidth()
-                                .padding(horizontal = 16.dp),
-                        )
-
-                        is FavoritesState.Loading -> item {
-//                        Row(
-//                            modifier = Modifier.fillParentMaxWidth(),
-//                            horizontalArrangement = Arrangement.Center,
-//                            verticalAlignment = Alignment.CenterVertically
-//                        ) {
-//                            CircularProgressIndicator(
-//                                color = MaterialTheme.colorScheme.secondary,
-//                                trackColor = MaterialTheme.colorScheme.surface
-//                            )
-//                        }
-                        }
-                    }
-
-                    item { Spacer(Modifier.height(80.dp)) }
-                }
-                adMob.Banner(
-                    AdKeys.BANNER_ID,
-                    Modifier.fillMaxWidth()
-                        .align(Alignment.BottomCenter)
-                        .padding(insets)
-                )
-            }
-        }
+        FavoritesContent(favoritesViewModel, adMob)
     }
-
-    @Composable
-    private fun FavouritesEffect(
-        effect: FavoritesEffect?,
-        routeManager: RouteManager
-    ) {
-        LaunchedEffect(effect) {
-            when (effect) {
-                is FavoritesEffect.OnBack -> routeManager.navigateBack()
-                is FavoritesEffect.OpenWord -> {} /*routeManager.navigateTo(
-                    WordDetailsScreen.ID,
-                    extras = WordDetailsScreen.Companion.WordExtra(effect.wordUi)
-                )*/
-
-                null -> Unit
-            }
-        }
-    }
-
     companion object {
         const val ID = "FAVOURITES_SCREEN"
     }
@@ -144,6 +61,94 @@ class FavoritesScreen(
                 ),
                 adMob
             )
+        }
+    }
+}
+
+@Composable
+private fun FavoritesContent(favoritesViewModel: FavouritesViewModel, adMob: AdMob) {
+    val routeManager = LocalRouteManager.current
+    val state by favoritesViewModel.state.collectAsState()
+    val effect by favoritesViewModel.effect.collectAsState(null)
+
+    FavouritesEffect(effect, routeManager)
+
+    Scaffold(
+        topBar = { TopBackButtonBar(routeManager::navigateBack, true) },
+    ) { insets ->
+        Box {
+            BaseDashboardLazyColumn(rememberLazyListState(), insets) {
+                item {
+                    SearchBar(
+                        {},
+                        {},
+                        "[F]avorites",
+                        "",
+                        hasFocus = false,
+                        enabled = false,
+                        modifier = Modifier.fillMaxWidth().testTag("FAVOURITES_SEARCH_BAR"),
+                    )
+                }
+
+                when (val s = state) {
+                    is FavoritesState.Empty -> item {
+                        EmptyItem(
+                            "Favorites are empty",
+                            "You can add favorite words from the search screen"
+                        )
+                    }
+
+                    is FavoritesState.Items -> wordsCardsList(
+                        favoritesViewModel::onOpenWord,
+                        favoritesViewModel::onUpdateFavourite,
+                        favoritesViewModel::onShareWord,
+                        //                            favouritesViewModel::onSynonym,
+                        s.favourites,
+                        Modifier.fillMaxWidth()
+                            .padding(horizontal = 16.dp),
+                    )
+
+                    is FavoritesState.Loading -> item {
+                        //                        Row(
+                        //                            modifier = Modifier.fillParentMaxWidth(),
+                        //                            horizontalArrangement = Arrangement.Center,
+                        //                            verticalAlignment = Alignment.CenterVertically
+                        //                        ) {
+                        //                            CircularProgressIndicator(
+                        //                                color = MaterialTheme.colorScheme.secondary,
+                        //                                trackColor = MaterialTheme.colorScheme.surface
+                        //                            )
+                        //                        }
+                    }
+                }
+
+                item { Spacer(Modifier.height(80.dp)) }
+            }
+            adMob.Banner(
+                AdKeys.BANNER_ID,
+                Modifier.fillMaxWidth()
+                    .align(Alignment.BottomCenter)
+                    .padding(insets)
+            )
+        }
+    }
+}
+
+@Suppress("NonSkippableComposable")
+@Composable
+private fun FavouritesEffect(
+    effect: FavoritesEffect?,
+    routeManager: RouteManager
+) {
+    LaunchedEffect(effect) {
+        when (effect) {
+            is FavoritesEffect.OnBack -> routeManager.navigateBack()
+            is FavoritesEffect.OpenWord -> {} /*routeManager.navigateTo(
+                    WordDetailsScreen.ID,
+                    extras = WordDetailsScreen.Companion.WordExtra(effect.wordUi)
+                )*/
+
+            null -> Unit
         }
     }
 }

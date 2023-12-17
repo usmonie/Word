@@ -1,10 +1,12 @@
 package com.usmonie.word.features.new.games.hangman
 
+import androidx.compose.runtime.Stable
 import com.usmonie.word.features.dashboard.domain.usecase.RandomWordUseCase
 import com.usmonie.word.features.new.models.WordCombinedUi
 import com.usmonie.word.features.new.models.toUi
 import wtf.speech.core.ui.BaseViewModel
 
+@Stable
 class HangmanGameViewModel(
     private val word: WordCombinedUi,
     private val randomWordUseCase: RandomWordUseCase

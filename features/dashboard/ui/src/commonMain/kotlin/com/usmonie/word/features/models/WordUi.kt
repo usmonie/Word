@@ -1,10 +1,8 @@
 package com.usmonie.word.features.models
 
-import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 
 @Stable
-@Immutable
 data class WordUi(
     val id: Long,
     val word: String,

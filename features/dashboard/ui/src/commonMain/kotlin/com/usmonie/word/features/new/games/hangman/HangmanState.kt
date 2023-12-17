@@ -1,11 +1,14 @@
 package com.usmonie.word.features.new.games.hangman
 
+import androidx.compose.runtime.Stable
 import com.usmonie.word.features.new.models.WordCombinedUi
 import wtf.speech.core.ui.ScreenAction
 import wtf.speech.core.ui.ScreenEffect
 import wtf.speech.core.ui.ScreenEvent
 import wtf.speech.core.ui.ScreenState
 
+
+@Stable
 sealed class HangmanState(
     open val word: String,
     open val guessedLetters: Set<Char>,
@@ -42,6 +45,7 @@ sealed class HangmanEvent : ScreenEvent {
     data class Won(val letter: Char) : HangmanEvent()
 }
 
+@Stable
 sealed class HangmanEffect : ScreenEffect {
     class Won : HangmanEffect()
 

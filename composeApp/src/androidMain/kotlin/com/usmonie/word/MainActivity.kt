@@ -34,7 +34,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-//        val driverFactory = DriverFactory(this)
         val userRepository = UserRepositoryImpl(KVault(this@MainActivity))
         val adMob = AdMob(::showInterstitial)
         val logger = DefaultLogger(Firebase.analytics)

@@ -17,6 +17,7 @@ import wtf.word.core.design.themes.typographies.Friendly
 import wtf.word.core.design.themes.typographies.WordTypography
 import wtf.word.core.domain.Analytics
 
+@Suppress("NonSkippableComposable")
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun App(

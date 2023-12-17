@@ -1,6 +1,7 @@
 package wtf.speech.compass.core
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.mutableStateOf
@@ -29,6 +30,7 @@ sealed class NavigationEvent {
 /**
  * Interface defining the core functionalities of the navigation system.
  */
+@Immutable
 interface RouteManager {
 
     /**

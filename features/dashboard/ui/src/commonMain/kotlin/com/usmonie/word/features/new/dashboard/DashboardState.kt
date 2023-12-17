@@ -15,7 +15,6 @@ import wtf.word.core.design.themes.typographies.WordTypography
 import wtf.word.core.domain.tools.fastMap
 
 @Stable
-@Immutable
 data class DashboardState(
     val query: TextFieldValue = TextFieldValue(),
     val wordOfTheDay: ContentState<Pair<WordUi, WordCombinedUi>> = ContentState.Loading(),

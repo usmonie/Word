@@ -1,5 +1,6 @@
 package com.usmonie.word.features.new.favorites
 
+import androidx.compose.runtime.Immutable
 import com.usmonie.word.features.analytics.DashboardAnalyticsEvents
 import com.usmonie.word.features.dashboard.domain.usecase.GetAllFavouritesUseCase
 import com.usmonie.word.features.dashboard.domain.usecase.UpdateFavouriteUseCase
@@ -17,6 +18,7 @@ import wtf.speech.core.ui.BaseViewModel
 import wtf.word.core.domain.Analytics
 import wtf.word.core.domain.tools.fastMap
 
+@Immutable
 class FavouritesViewModel(
     private val updateFavouriteUseCase: UpdateFavouriteUseCase,
     private val getAllFavouritesUseCase: GetAllFavouritesUseCase,

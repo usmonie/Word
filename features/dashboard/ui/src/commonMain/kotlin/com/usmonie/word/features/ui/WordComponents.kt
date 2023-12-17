@@ -1,13 +1,7 @@
 package com.usmonie.word.features.ui
 
 import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
@@ -31,8 +25,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.usmonie.word.features.models.SynonymUi
-import com.usmonie.word.features.models.WordUi
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 
@@ -239,40 +231,4 @@ fun BaseCard(
         enabled = enabled,
         content = content
     )
-}
-
-
-@Composable
-fun BaseCard(
-    word: WordUi,
-    onClick: (WordUi) -> Unit,
-    onAddToFavouritePressed: (WordUi) -> Unit,
-    onSharePressed: (WordUi) -> Unit,
-    findSynonym: (SynonymUi) -> Unit,
-    modifier: Modifier,
-    maxDefinitionsCount: Int = Int.MAX_VALUE
-) {
-    BaseCard({ onClick(word) }, elevation = 2.dp, modifier = modifier) {
-        Spacer(Modifier.height(20.dp))
-        WordMediumTitle(word.word, Modifier.padding(horizontal = 20.dp))
-        PartOfSpeech(word.partOfSpeech, Modifier.padding(horizontal = 20.dp))
-        Spacer(Modifier.height(8.dp))
-        Definitions(word.definitions.take(maxDefinitionsCount))
-        if (word.synonyms.isNotEmpty()) {
-            Spacer(Modifier.height(8.dp))
-            Synonyms(findSynonym, word.synonyms)
-        }
-        Spacer(Modifier.height(8.dp))
-
-        Row(Modifier.fillMaxWidth()) {
-            Spacer(Modifier.width(4.dp))
-//            ShareButton({ onSharePressed(word) })
-
-            AddToFavouriteButton(
-                { onAddToFavouritePressed(word) },
-                word.isFavourite,
-            )
-        }
-        Spacer(Modifier.height(20.dp))
-    }
 }

@@ -13,6 +13,7 @@ plugins {
     alias(libs.plugins.compose)
     alias(libs.plugins.androidx.baselineprofile)
     alias(libs.plugins.google.services)
+
 }
 
 kotlin {

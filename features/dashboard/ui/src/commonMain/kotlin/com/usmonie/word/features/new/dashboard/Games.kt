@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.ui.MenuItem
 import com.usmonie.word.features.ui.VerticalAnimatedVisibility
 
+@Suppress("NonSkippableComposable")
 @Composable
 fun Games(
     onGamesMenuItemPressed: () -> Unit,
@@ -33,6 +34,7 @@ fun Games(
     }
 }
 
+@Suppress("NonSkippableComposable")
 @Composable
 private fun GamesItems(
     showGames: Boolean,

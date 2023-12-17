@@ -1,7 +1,9 @@
 package com.usmonie.word.features.new.models
 
+import androidx.compose.runtime.Stable
 import com.usmonie.word.features.dashboard.domain.models.Sound
 
+@Stable
 data class SoundUi(
     val id: String,
     val audio: String?,

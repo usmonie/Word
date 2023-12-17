@@ -41,6 +41,7 @@ fun Settings(
     }
 }
 
+@Suppress("NonSkippableComposable")
 @Composable
 private fun SettingsItems(
     onChangeColorsPressed: () -> Unit,

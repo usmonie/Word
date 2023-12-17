@@ -20,6 +20,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -67,6 +68,7 @@ import wtf.word.core.design.themes.WordColors
 import wtf.word.core.design.themes.typographies.WordTypography
 import wtf.word.core.domain.Analytics
 
+@Stable
 class DashboardScreen(
     private val changeTheme: (WordColors) -> Unit,
     private val changeFont: (WordTypography) -> Unit,
@@ -86,7 +88,7 @@ class DashboardScreen(
         val onPointerInput: suspend PointerInputScope.() -> Unit = remember {
             { detectTapGestures(onTap = { localFocusManager.clearFocus() }) }
         }
-        DashboardEffects(listState, localFocusManager, effect)
+        DashboardEffects(changeFont, changeTheme, listState, localFocusManager, effect)
 
         Scaffold(
             topBar = {
@@ -100,192 +102,12 @@ class DashboardScreen(
         ) { insets ->
             MainState(
                 onPointerInput,
+                dashboardViewModel,
                 listState,
                 insets,
                 state,
                 adMob,
             )
-        }
-    }
-
-    @Composable
-    private fun DashboardEffects(
-        listState: LazyListState,
-        localFocusManager: FocusManager,
-        effect: DashboardEffect?
-    ) {
-        val routeManager = LocalRouteManager.current
-        LaunchedEffect(listState.firstVisibleItemScrollOffset) {
-            if (listState.firstVisibleItemScrollOffset > 100) {
-                localFocusManager.clearFocus()
-            }
-        }
-
-        if (effect is DashboardEffect.OpenUrl) {
-            OpenBrowser(Url(effect.url))
-        }
-
-        LaunchedEffect(effect) {
-            when (effect) {
-                is DashboardEffect.ChangeTheme -> {
-                    changeFont(effect.wordTypography)
-                    changeTheme(effect.wordColors)
-                }
-
-                is DashboardEffect.OpenFavourites -> routeManager.navigateTo(FavoritesScreen.ID)
-                is DashboardEffect.OpenWord -> routeManager.navigateTo(
-                    WordDetailsScreen.ID,
-                    extras = WordDetailsScreen.Companion.WordExtra(effect.word)
-                )
-
-                is DashboardEffect.OpenHangman -> routeManager.navigateTo(
-                    HangmanGameScreen.ID,
-                    extras = HangmanGameScreen.Extras(effect.word)
-                )
-
-                else -> Unit
-            }
-        }
-    }
-
-    @OptIn(ExperimentalFoundationApi::class)
-    @Composable
-    private fun MainState(
-        onPointerInput: suspend PointerInputScope.() -> Unit,
-        listState: LazyListState,
-        insets: PaddingValues,
-        state: DashboardState,
-        adMob: AdMob,
-    ) {
-        val showMenuItems by remember(state.query) { derivedStateOf { state.query.text.isBlank() } }
-        val (hasFocus, onFocusChange) = remember { mutableStateOf(false) }
-        Box {
-            BaseDashboardLazyColumn(listState, insets) {
-                item {
-                    SearchBar(
-                        dashboardViewModel::onQueryChanged,
-                        placeholder = "[S]earch",
-                        query = state.query.text,
-                        modifier = Modifier.fillMaxWidth().testTag("DASHBOARD_SEARCH_BAR"),
-                        hasFocus = hasFocus,
-                        enabled = state.wordOfTheDay is ContentState.Success,
-                        onFocusChange = onFocusChange,
-                    )
-                }
-
-                item {
-                    VerticalAnimatedVisibility(hasFocus && state.recentSearch.isNotEmpty()) {
-                        RecentCards(
-                            dashboardViewModel::onOpenWord,
-                            state.recentSearch,
-                        )
-                    }
-                }
-
-                if (state.foundWords is ContentState.Loading && !showMenuItems) {
-                    item {
-                        LoadingProgress()
-                    }
-                }
-
-                if (!showMenuItems) {
-                    items(
-                        state.foundWords.item ?: listOf(),
-                        key = { word -> word.word }
-                    ) { word ->
-                        SearchWordCard(
-                            dashboardViewModel::onOpenWord,
-                            {},
-                            dashboardViewModel::onUpdateFavouritesPressed,
-//                            dashboardViewModel::onShareWord,
-                            {},
-//                            dashboardViewModel::onSynonymClicked,
-                            word,
-                            Modifier.fillMaxWidth()
-                                .padding(horizontal = 16.dp, vertical = 8.dp)
-                                .animateItemPlacement()
-                                .pointerInput(Unit, onPointerInput),
-                        )
-                    }
-                }
-
-                item(key = "MENU_WORD_OF_THE_DAY") {
-                    VerticalAnimatedVisibility(showMenuItems) {
-                        WordOfTheDayMenuItem(
-                            onWordClick = dashboardViewModel::onOpenWord,
-                            onAddFavouritePressed = dashboardViewModel::onUpdateFavouritesPressed,
-                            onSharePressed = dashboardViewModel::onShareWord,
-                            onUpdatePressed = dashboardViewModel::onUpdateRandomCard,
-                            showWordOfTheDay = state.showWordOfTheDay,
-                            word = state.wordOfTheDay
-                        )
-                    }
-                }
-
-                item(key = "MENU_GAMES") {
-                    Games(
-                        dashboardViewModel::onGamesClicked,
-                        dashboardViewModel::onHangman,
-                        onPointerInput,
-                        showMenuItems,
-                        state.showGames,
-                    )
-                }
-
-                item(key = "MENU_FAVORITES") {
-                    FavouritesMenuItem(
-                        showMenuItems,
-                        dashboardViewModel::onFavouritesItemClicked,
-                        Modifier.fillMaxWidth().pointerInput(Unit, onPointerInput)
-                    )
-                }
-
-                item(key = "MENU_SETTINGS") {
-                    Settings(
-                        dashboardViewModel::onSettingsItemClicked,
-                        dashboardViewModel::onChangeColors,
-                        dashboardViewModel::onChangeFonts,
-                        dashboardViewModel::onClearRecentHistory,
-                        onPointerInput,
-                        showMenuItems,
-                        state.showSettings,
-                    )
-                }
-
-                item(key = "MENU_ABOUT") {
-                    About(
-                        dashboardViewModel::onAboutItemClicked,
-                        {},
-                        dashboardViewModel::onTelegramItemClicked,
-                        {},
-                        onPointerInput,
-                        showMenuItems,
-                        state.showAbout
-                    )
-                }
-
-                item { Spacer(Modifier.height(80.dp)) }
-            }
-
-            if (!state.subscribed) {
-                adMob.Banner(
-                    AdKeys.BANNER_ID,
-                    Modifier.fillMaxWidth()
-                        .align(Alignment.BottomCenter)
-                        .padding(insets)
-                )
-            }
-        }
-    }
-
-    @Composable
-    private fun LoadingProgress() {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            CircularProgressIndicator(color = MaterialTheme.colorScheme.secondary)
         }
     }
 
@@ -322,6 +144,194 @@ class DashboardScreen(
     }
 }
 
+
+
+@Composable
+private fun DashboardEffects(
+    changeFont: (WordTypography) -> Unit,
+    changeTheme: (WordColors) -> Unit,
+    listState: LazyListState,
+    localFocusManager: FocusManager,
+    effect: DashboardEffect?
+) {
+    val routeManager = LocalRouteManager.current
+    LaunchedEffect(listState.firstVisibleItemScrollOffset) {
+        if (listState.firstVisibleItemScrollOffset > 100) {
+            localFocusManager.clearFocus()
+        }
+    }
+
+    if (effect is DashboardEffect.OpenUrl) {
+        OpenBrowser(Url(effect.url))
+    }
+
+    LaunchedEffect(effect) {
+        when (effect) {
+            is DashboardEffect.ChangeTheme -> {
+                changeFont(effect.wordTypography)
+                changeTheme(effect.wordColors)
+            }
+
+            is DashboardEffect.OpenFavourites -> routeManager.navigateTo(FavoritesScreen.ID)
+            is DashboardEffect.OpenWord -> routeManager.navigateTo(
+                WordDetailsScreen.ID,
+                extras = WordDetailsScreen.Companion.WordExtra(effect.word)
+            )
+
+            is DashboardEffect.OpenHangman -> routeManager.navigateTo(
+                HangmanGameScreen.ID,
+                extras = HangmanGameScreen.Extras(effect.word)
+            )
+
+            else -> Unit
+        }
+    }
+}
+
+@Suppress("NonSkippableComposable")
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+private fun MainState(
+    onPointerInput: suspend PointerInputScope.() -> Unit,
+    dashboardViewModel: DashboardViewModel,
+    listState: LazyListState,
+    insets: PaddingValues,
+    state: DashboardState,
+    adMob: AdMob,
+) {
+    val showMenuItems by remember(state.query) { derivedStateOf { state.query.text.isBlank() } }
+    val (hasFocus, onFocusChange) = remember { mutableStateOf(false) }
+    Box {
+        BaseDashboardLazyColumn(listState, insets) {
+            item {
+                SearchBar(
+                    dashboardViewModel::onQueryChanged,
+                    placeholder = "[S]earch",
+                    query = state.query,
+                    modifier = Modifier.fillMaxWidth().testTag("DASHBOARD_SEARCH_BAR"),
+                    hasFocus = hasFocus,
+                    enabled = state.wordOfTheDay is ContentState.Success,
+                    onFocusChange = onFocusChange,
+                )
+            }
+
+            item {
+                VerticalAnimatedVisibility(hasFocus && state.recentSearch.isNotEmpty()) {
+                    RecentCards(
+                        dashboardViewModel::onOpenWord,
+                        state.recentSearch,
+                    )
+                }
+            }
+
+            if (state.foundWords is ContentState.Loading && !showMenuItems) {
+                item {
+                    LoadingProgress()
+                }
+            }
+
+            if (!showMenuItems) {
+                items(
+                    state.foundWords.item ?: listOf(),
+                    key = { word -> word.word }
+                ) { word ->
+                    SearchWordCard(
+                        dashboardViewModel::onOpenWord,
+                        {},
+                        dashboardViewModel::onUpdateFavouritesPressed,
+//                            dashboardViewModel::onShareWord,
+                        {},
+//                            dashboardViewModel::onSynonymClicked,
+                        word,
+                        Modifier.fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 8.dp)
+                            .animateItemPlacement()
+                            .pointerInput(Unit, onPointerInput),
+                    )
+                }
+            }
+
+            item(key = "MENU_WORD_OF_THE_DAY") {
+                VerticalAnimatedVisibility(showMenuItems) {
+                    WordOfTheDayMenuItem(
+                        onWordClick = dashboardViewModel::onOpenWord,
+                        onAddFavouritePressed = dashboardViewModel::onUpdateFavouritesPressed,
+                        onSharePressed = dashboardViewModel::onShareWord,
+                        onUpdatePressed = dashboardViewModel::onUpdateRandomCard,
+                        showWordOfTheDay = state.showWordOfTheDay,
+                        word = state.wordOfTheDay
+                    )
+                }
+            }
+
+            item(key = "MENU_GAMES") {
+                Games(
+                    dashboardViewModel::onGamesClicked,
+                    dashboardViewModel::onHangman,
+                    onPointerInput,
+                    showMenuItems,
+                    state.showGames,
+                )
+            }
+
+            item(key = "MENU_FAVORITES") {
+                FavouritesMenuItem(
+                    showMenuItems,
+                    dashboardViewModel::onFavouritesItemClicked,
+                    Modifier.fillMaxWidth().pointerInput(Unit, onPointerInput)
+                )
+            }
+
+            item(key = "MENU_SETTINGS") {
+                Settings(
+                    dashboardViewModel::onSettingsItemClicked,
+                    dashboardViewModel::onChangeColors,
+                    dashboardViewModel::onChangeFonts,
+                    dashboardViewModel::onClearRecentHistory,
+                    onPointerInput,
+                    showMenuItems,
+                    state.showSettings,
+                )
+            }
+
+            item(key = "MENU_ABOUT") {
+                About(
+                    dashboardViewModel::onAboutItemClicked,
+                    {},
+                    dashboardViewModel::onTelegramItemClicked,
+                    {},
+                    onPointerInput,
+                    showMenuItems,
+                    state.showAbout
+                )
+            }
+
+            item { Spacer(Modifier.height(80.dp)) }
+        }
+
+        if (!state.subscribed) {
+            adMob.Banner(
+                AdKeys.BANNER_ID,
+                Modifier.fillMaxWidth()
+                    .align(Alignment.BottomCenter)
+                    .padding(insets)
+            )
+        }
+    }
+}
+
+@Composable
+private fun LoadingProgress() {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        CircularProgressIndicator(color = MaterialTheme.colorScheme.secondary)
+    }
+}
+
+@Suppress("NonSkippableComposable")
 @Composable
 private fun RecentCards(
     onWordClick: (WordCombinedUi) -> Unit,

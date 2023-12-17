@@ -1,5 +1,6 @@
 package com.usmonie.word.features.new.dashboard
 
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.text.input.TextFieldValue
 import com.usmonie.word.features.analytics.DashboardAnalyticsEvents
 import com.usmonie.word.features.dashboard.domain.models.Theme
@@ -31,6 +32,7 @@ import wtf.word.core.design.themes.typographies.WordTypography.Companion.next
 import wtf.word.core.domain.Analytics
 import wtf.word.core.domain.tools.fastMap
 
+@Immutable
 class DashboardViewModel(
     private val searchWordsUseCase: SearchWordsUseCase,
     private val getSearchHistoryUseCase: GetSearchHistoryUseCase,
@@ -60,8 +62,8 @@ class DashboardViewModel(
     fun onUpdateRandomCard() = handleAction(DashboardAction.UpdateRandomWord)
     fun onGamesClicked() = handleAction(DashboardAction.OnMenuItemClick.Games)
     fun onHangman() = handleAction(DashboardAction.OnGamesItemClick.Hangman)
-    fun onQueryChanged(query: String) {
-        handleAction(DashboardAction.InputQuery(TextFieldValue(query)))
+    fun onQueryChanged(query: TextFieldValue) {
+        handleAction(DashboardAction.InputQuery(query))
     }
 
     fun onFavouritesItemClicked() = handleAction(DashboardAction.OnMenuItemClick.Favourites)

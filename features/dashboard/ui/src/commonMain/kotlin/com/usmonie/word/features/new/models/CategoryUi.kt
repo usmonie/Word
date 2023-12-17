@@ -1,7 +1,11 @@
 package com.usmonie.word.features.new.models
 
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.Stable
 import com.usmonie.word.features.dashboard.domain.models.Category
 
+@Stable
+@Immutable
 data class CategoryUi(
     val id: String,
     val kind: String?,

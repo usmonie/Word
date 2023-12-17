@@ -56,6 +56,7 @@ sealed class FavoritesEvent : ScreenEvent {
     data class Next(val favourites: List<WordCombinedUi>, val offset: Int) : FavoritesEvent()
 }
 
+@Stable
 sealed class FavoritesEffect : ScreenEffect {
     class OnBack : FavoritesEffect()
 

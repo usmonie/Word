@@ -1,7 +1,11 @@
 package com.usmonie.word.features.new.models
 
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.Stable
 import com.usmonie.word.features.dashboard.domain.models.Related
 
+@Stable
+@Immutable
 data class RelatedUi(
     val id: String,
     val alt: String?,

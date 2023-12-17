@@ -46,119 +46,9 @@ class WordDetailsScreen(
 ) : Screen(wordViewModel) {
     override val id: String = ID
 
-    @OptIn(ExperimentalFoundationApi::class)
     @Composable
     override fun Content() {
-        val routeManager = LocalRouteManager.current
-        val state by wordViewModel.state.collectAsState()
-        val effect by wordViewModel.effect.collectAsState(null)
-
-        val (selectedEtymologyTabIndex, onSelectedTab) = remember(state.word) { mutableStateOf(0) }
-        val selectedEtymology = state.word.wordEtymology[selectedEtymologyTabIndex]
-        val (selectedPosIndex, onSelectedPos) = remember(
-            state.word,
-            selectedEtymologyTabIndex
-        ) { mutableStateOf(0) }
-        val selectedPos = selectedEtymology.words[selectedPosIndex]
-
-        WordEffect(effect)
-
-        Scaffold(
-            topBar = { TopBackButtonBar(routeManager::navigateBack, true) },
-        ) {
-            Box {
-                BaseDashboardLazyColumn(contentPadding = it) {
-                    item {
-                        SearchBar(
-                            {},
-                            {},
-                            "[D]etails",
-                            "",
-                            false,
-                            enabled = false
-                        )
-                    }
-
-                    if (state.word.wordEtymology.size > 1) {
-                        stickyHeader {
-                            ScrollableTabRow(
-                                selectedEtymologyTabIndex,
-                                modifier = Modifier.fillMaxWidth(),
-                                containerColor = MaterialTheme.colorScheme.primary,
-                                contentColor = MaterialTheme.colorScheme.onPrimary,
-                            ) {
-                                state.word.wordEtymology.fastForEachIndexed { index, _ ->
-                                    Tab(
-                                        selected = selectedEtymologyTabIndex == index,
-                                        onClick = remember { { onSelectedTab(index) } },
-                                    ) {
-                                        Text(
-                                            "Root ${index + 1}",
-                                            style = MaterialTheme.typography.titleMedium,
-                                            modifier = Modifier.padding(top = 10.dp, bottom = 12.dp)
-                                        )
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    item {
-                        DetailsWordCardLarge(
-                            {},
-                            {},
-                            { wordViewModel.onUpdateFavouritePressed(state.word) },
-                            modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
-                            word = selectedPos,
-                            bookmarked = state.word.isFavorite
-                        )
-                    }
-
-                    if (selectedEtymology.words.size > 1) {
-                        item {
-                            ScrollableTabRow(
-                                selectedPosIndex,
-                                modifier = Modifier.fillMaxWidth(),
-                                containerColor = MaterialTheme.colorScheme.primary,
-                                contentColor = MaterialTheme.colorScheme.onPrimary
-                            ) {
-                                selectedEtymology.words.fastForEachIndexed { index, word ->
-                                    Tab(
-                                        selected = selectedPosIndex == index,
-                                        onClick = remember { { onSelectedPos(index) } },
-                                    ) {
-                                        Text(
-                                            word.pos,
-                                            style = MaterialTheme.typography.titleMedium,
-                                            modifier = Modifier.padding(top = 10.dp, bottom = 12.dp)
-                                        )
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    item {
-                        MenuItemText("Senses")
-                    }
-
-                    items(selectedPos.senses) {
-                        SenseCard(it, modifier = Modifier.padding(horizontal = 20.dp))
-                    }
-
-                    item {
-                        Spacer(Modifier.height(80.dp))
-                    }
-                }
-
-                adMob.Banner(
-                    AdKeys.BANNER_ID,
-                    Modifier.fillMaxWidth()
-                        .align(Alignment.BottomCenter)
-                        .padding(it)
-                )
-            }
-        }
+        WordDetailsContent(wordViewModel, adMob)
     }
 
     companion object {
@@ -188,6 +78,121 @@ class WordDetailsScreen(
                     analytics,
                 ),
                 adMob
+            )
+        }
+    }
+}
+
+@Composable
+@OptIn(ExperimentalFoundationApi::class)
+private fun WordDetailsContent(wordViewModel: WordViewModel, adMob: AdMob) {
+    val routeManager = LocalRouteManager.current
+    val state by wordViewModel.state.collectAsState()
+    val effect by wordViewModel.effect.collectAsState(null)
+
+    val (selectedEtymologyTabIndex, onSelectedTab) = remember(state.word) { mutableStateOf(0) }
+    val selectedEtymology = state.word.wordEtymology[selectedEtymologyTabIndex]
+    val (selectedPosIndex, onSelectedPos) = remember(
+        state.word,
+        selectedEtymologyTabIndex
+    ) { mutableStateOf(0) }
+    val selectedPos = selectedEtymology.words[selectedPosIndex]
+
+    WordEffect(effect)
+
+    Scaffold(
+        topBar = { TopBackButtonBar(routeManager::navigateBack, true) },
+    ) {
+        Box {
+            BaseDashboardLazyColumn(contentPadding = it) {
+                item {
+                    SearchBar(
+                        {},
+                        {},
+                        "[D]etails",
+                        "",
+                        false,
+                        enabled = false
+                    )
+                }
+
+                if (state.word.wordEtymology.size > 1) {
+                    stickyHeader {
+                        ScrollableTabRow(
+                            selectedEtymologyTabIndex,
+                            modifier = Modifier.fillMaxWidth(),
+                            containerColor = MaterialTheme.colorScheme.primary,
+                            contentColor = MaterialTheme.colorScheme.onPrimary,
+                        ) {
+                            state.word.wordEtymology.fastForEachIndexed { index, _ ->
+                                Tab(
+                                    selected = selectedEtymologyTabIndex == index,
+                                    onClick = remember { { onSelectedTab(index) } },
+                                ) {
+                                    Text(
+                                        "Root ${index + 1}",
+                                        style = MaterialTheme.typography.titleMedium,
+                                        modifier = Modifier.padding(top = 10.dp, bottom = 12.dp)
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+
+                item {
+                    DetailsWordCardLarge(
+                        {},
+                        {},
+                        { wordViewModel.onUpdateFavouritePressed(state.word) },
+                        modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
+                        word = selectedPos,
+                        bookmarked = state.word.isFavorite
+                    )
+                }
+
+                if (selectedEtymology.words.size > 1) {
+                    item {
+                        ScrollableTabRow(
+                            selectedPosIndex,
+                            modifier = Modifier.fillMaxWidth(),
+                            containerColor = MaterialTheme.colorScheme.primary,
+                            contentColor = MaterialTheme.colorScheme.onPrimary
+                        ) {
+                            selectedEtymology.words.fastForEachIndexed { index, word ->
+                                Tab(
+                                    selected = selectedPosIndex == index,
+                                    onClick = remember { { onSelectedPos(index) } },
+                                ) {
+                                    Text(
+                                        word.pos,
+                                        style = MaterialTheme.typography.titleMedium,
+                                        modifier = Modifier.padding(top = 10.dp, bottom = 12.dp)
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+
+                item {
+                    MenuItemText("Senses")
+                }
+
+                items(selectedPos.senses) {
+                    SenseCard(it, modifier = Modifier.padding(horizontal = 20.dp))
+                }
+
+                item {
+                    Spacer(Modifier.height(80.dp))
+                }
+            }
+
+            adMob.Banner(
+                AdKeys.BANNER_ID,
+                Modifier.fillMaxWidth()
+                    .align(Alignment.BottomCenter)
+                    .padding(it)
             )
         }
     }

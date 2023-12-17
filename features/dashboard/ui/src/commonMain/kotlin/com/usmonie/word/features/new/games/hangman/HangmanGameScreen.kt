@@ -40,38 +40,7 @@ class HangmanGameScreen(
 
     @Composable
     override fun Content() {
-        val routerManager = LocalRouteManager.current
-        val state by hangmanGameViewModel.state.collectAsState()
-        GameBoard(routerManager::navigateBack, {
-            AnimatedVisibility(state !is HangmanState.Playing) {
-                UpdateButton(
-                    hangmanGameViewModel::onUpdatePressed,
-                    tint = MaterialTheme.colorScheme.onPrimary
-                )
-            }
-        }) {
-            Column(
-                modifier = Modifier.fillMaxSize().padding(it),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                HangmanImage(state.incorrectGuesses, Modifier.fillMaxWidth().fillMaxHeight(0.4f))
-                WordDisplay(state)
-                LetterButtons(
-                    hangmanGameViewModel::onLetterGuessed,
-                    state.guessedLetters,
-                    Modifier.fillMaxWidth().weight(1f)
-                )
-
-                if (state !is HangmanState.Playing) {
-                    adMob.RewardedInterstitial(onAddDismissed = {})
-                }
-
-                adMob.Banner(
-                    AdKeys.BANNER_ID,
-                    Modifier.fillMaxWidth()
-                )
-            }
-        }
+        HangmanContent(hangmanGameViewModel, adMob)
     }
 
     companion object {
@@ -102,6 +71,42 @@ class HangmanGameScreen(
 }
 
 @Composable
+private fun HangmanContent(hangmanGameViewModel: HangmanGameViewModel, adMob: AdMob) {
+    val routerManager = LocalRouteManager.current
+    val state by hangmanGameViewModel.state.collectAsState()
+    GameBoard(routerManager::navigateBack, {
+        AnimatedVisibility(state !is HangmanState.Playing) {
+            UpdateButton(
+                hangmanGameViewModel::onUpdatePressed,
+                tint = MaterialTheme.colorScheme.onPrimary
+            )
+        }
+    }) {
+        Column(
+            modifier = Modifier.fillMaxSize().padding(it),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            HangmanImage(state.incorrectGuesses, Modifier.fillMaxWidth().fillMaxHeight(0.4f))
+            WordDisplay(state)
+            LetterButtons(
+                hangmanGameViewModel::onLetterGuessed,
+                state.guessedLetters,
+                Modifier.fillMaxWidth().weight(1f)
+            )
+
+            if (state !is HangmanState.Playing) {
+                adMob.RewardedInterstitial(onAddDismissed = {})
+            }
+
+            adMob.Banner(
+                AdKeys.BANNER_ID,
+                Modifier.fillMaxWidth()
+            )
+        }
+    }
+}
+
+@Composable
 fun WordDisplay(gameState: HangmanState, modifier: Modifier = Modifier) {
     val displayWord = if (gameState is HangmanState.Lost) {
         gameState.word.toCharArray().joinToString(" ")
@@ -124,6 +129,7 @@ fun WordDisplay(gameState: HangmanState, modifier: Modifier = Modifier) {
     )
 }
 
+@Suppress("NonSkippableComposable")
 @Composable
 fun LetterButtons(onLetterClick: (Char) -> Unit, guessedLetters: Set<Char>, modifier: Modifier) {
     val alphabet = remember { ('A'..'Z').toList() }

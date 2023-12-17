@@ -1,5 +1,6 @@
 package com.usmonie.word.features.new.details
 
+import androidx.compose.runtime.Immutable
 import com.usmonie.word.features.analytics.DashboardAnalyticsEvents
 import com.usmonie.word.features.dashboard.domain.usecase.GetSimilarWordsUseCase
 import com.usmonie.word.features.dashboard.domain.usecase.UpdateFavouriteUseCase
@@ -10,6 +11,7 @@ import wtf.speech.core.ui.BaseViewModel
 import wtf.speech.core.ui.ContentState
 import wtf.word.core.domain.Analytics
 
+@Immutable
 class WordViewModel(
     private val extra: WordDetailsScreen.Companion.WordExtra,
     private val updateFavouriteUseCase: UpdateFavouriteUseCase,
