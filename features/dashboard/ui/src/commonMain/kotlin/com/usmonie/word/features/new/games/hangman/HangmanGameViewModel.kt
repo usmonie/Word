@@ -16,44 +16,40 @@ class HangmanGameViewModel(
     fun onLetterGuessed(letter: Char) = handleAction(HangmanAction.GuessLetter(letter))
     fun onUpdatePressed() = handleAction(HangmanAction.UpdateWord)
 
-    override fun HangmanState.reduce(event: HangmanEvent): HangmanState {
-        return when (event) {
-            is HangmanEvent.RightLetterGuessed -> HangmanState.Playing(
-                this.word,
-                this.guessedLetters.toMutableSet().apply { add(event.letter) },
-                this.incorrectGuesses
-            )
+    override fun HangmanState.reduce(event: HangmanEvent) = when (event) {
+        is HangmanEvent.RightLetterGuessed -> HangmanState.Playing(
+            this.word,
+            this.guessedLetters.toMutableSet().apply { add(event.letter) },
+            this.incorrectGuesses
+        )
 
-            is HangmanEvent.WrongLetterGuessed -> {
-                val newIncorrectGuesses = incorrectGuesses + 1
-                if (newIncorrectGuesses == 6) {
-                    HangmanState.Lost(
-                        this.word,
-                        this.guessedLetters.toMutableSet().apply { add(event.letter) },
-                    )
-                } else {
-                    HangmanState.Playing(
-                        this.word,
-                        this.guessedLetters.toMutableSet().apply { add(event.letter) },
-                        newIncorrectGuesses
-                    )
-                }
-            }
-
-            is HangmanEvent.Lost -> {
+        is HangmanEvent.WrongLetterGuessed -> {
+            val newIncorrectGuesses = incorrectGuesses + 1
+            if (newIncorrectGuesses == 6) {
                 HangmanState.Lost(
                     this.word,
                     this.guessedLetters.toMutableSet().apply { add(event.letter) },
                 )
+            } else {
+                HangmanState.Playing(
+                    this.word,
+                    this.guessedLetters.toMutableSet().apply { add(event.letter) },
+                    newIncorrectGuesses
+                )
             }
-
-            is HangmanEvent.Won -> HangmanState.Won(
-                word,
-                this.guessedLetters.toMutableSet().apply { add(event.letter) },
-            )
-
-            is HangmanEvent.UpdateWord -> HangmanState.Playing(event.word.word)
         }
+
+        is HangmanEvent.Lost -> HangmanState.Lost(
+            this.word,
+            this.guessedLetters.toMutableSet().apply { add(event.letter) },
+        )
+
+        is HangmanEvent.Won -> HangmanState.Won(
+            word,
+            this.guessedLetters.toMutableSet().apply { add(event.letter) },
+        )
+
+        is HangmanEvent.UpdateWord -> HangmanState.Playing(event.word.word)
     }
 
     override suspend fun processAction(action: HangmanAction): HangmanEvent {

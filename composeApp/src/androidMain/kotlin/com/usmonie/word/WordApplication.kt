@@ -3,7 +3,6 @@ package com.usmonie.word
 import android.app.Activity
 import android.app.Application
 import android.content.Context
-import android.os.Bundle
 import android.util.Log
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
@@ -12,35 +11,15 @@ import com.google.android.gms.ads.appopen.AppOpenAd
 import com.google.android.gms.ads.appopen.AppOpenAd.AppOpenAdLoadCallback
 import wtf.speech.core.ui.AdKeys
 
-class WordApplication : Application(), Application.ActivityLifecycleCallbacks {
-    private lateinit var appOpenAdManager: AppOpenAdManager
-    private lateinit var currentActivity: Activity
+class WordApplication : Application() {
     override fun onCreate() {
         super.onCreate()
-        this.registerActivityLifecycleCallbacks(this)
 
-        if (true) MobileAds.initialize(this) { }
-
-        appOpenAdManager = AppOpenAdManager()
+        MobileAds.initialize(this) { }
     }
-
-    override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) = Unit
-    override fun onActivityStarted(activity: Activity) {
-        if (!appOpenAdManager.isShowingAd) {
-            currentActivity = activity
-
-            appOpenAdManager.showAdIfAvailable(currentActivity)
-        }
-    }
-
-    override fun onActivityResumed(activity: Activity) = Unit
-    override fun onActivityPaused(activity: Activity)= Unit
-    override fun onActivityStopped(activity: Activity) = Unit
-    override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) = Unit
-    override fun onActivityDestroyed(activity: Activity) = Unit
 }
 
-private class AppOpenAdManager {
+internal class AppOpenAdManager {
     private var appOpenAd: AppOpenAd? = null
     private var isLoadingAd = false
     var isShowingAd = false
@@ -75,7 +54,9 @@ private class AppOpenAdManager {
         isLoadingAd = true
         val request: AdRequest = AdRequest.Builder().build()
         AppOpenAd.load(
-            context, AD_UNIT_ID, request,
+            context,
+            AD_UNIT_ID,
+            request,
             object : AppOpenAdLoadCallback() {
                 override fun onAdLoaded(ad: AppOpenAd) {
                     // Called when an app open ad has loaded.

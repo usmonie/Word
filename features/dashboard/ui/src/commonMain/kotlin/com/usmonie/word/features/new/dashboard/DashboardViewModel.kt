@@ -3,7 +3,6 @@ package com.usmonie.word.features.new.dashboard
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.text.input.TextFieldValue
 import com.usmonie.word.features.analytics.DashboardAnalyticsEvents
-import com.usmonie.word.features.dashboard.domain.models.Theme
 import com.usmonie.word.features.dashboard.domain.usecase.ChangeThemeUseCase
 import com.usmonie.word.features.dashboard.domain.usecase.ClearRecentUseCase
 import com.usmonie.word.features.dashboard.domain.usecase.CurrentThemeUseCase
@@ -12,7 +11,6 @@ import com.usmonie.word.features.dashboard.domain.usecase.GetWordOfTheDayUseCase
 import com.usmonie.word.features.dashboard.domain.usecase.RandomWordUseCase
 import com.usmonie.word.features.dashboard.domain.usecase.SearchWordsUseCase
 import com.usmonie.word.features.dashboard.domain.usecase.UpdateFavouriteUseCase
-import com.usmonie.word.features.models.SynonymUi
 import com.usmonie.word.features.new.models.WordCombinedUi
 import com.usmonie.word.features.new.models.toDomain
 import com.usmonie.word.features.new.models.toUi
@@ -25,10 +23,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import wtf.speech.core.ui.BaseViewModel
 import wtf.speech.core.ui.ContentState
-import wtf.word.core.design.themes.WordColors
-import wtf.word.core.design.themes.typographies.Friendly
-import wtf.word.core.design.themes.typographies.WordTypography
-import wtf.word.core.design.themes.typographies.WordTypography.Companion.next
 import wtf.word.core.domain.Analytics
 import wtf.word.core.domain.tools.fastMap
 
@@ -42,7 +36,7 @@ class DashboardViewModel(
     private val getRandomWordUseCase: RandomWordUseCase,
     private val changeThemeUseCase: ChangeThemeUseCase,
     private val clearRecentUseCase: ClearRecentUseCase,
-    private val analytics: Analytics
+    private val analytics: Analytics,
 ) : BaseViewModel<DashboardState, DashboardAction, DashboardEvent, DashboardEffect>(DashboardState()) {
 
     private var searchJob: Job? = null
@@ -52,27 +46,17 @@ class DashboardViewModel(
     }
 
     fun onOpenWord(word: WordCombinedUi) = handleAction(DashboardAction.OpenWord(word))
-    fun onShareWord(word: WordCombinedUi) {}
-    fun onSynonymClicked(synonym: SynonymUi) =
-        handleAction(DashboardAction.InputQuery(TextFieldValue(synonym.word)))
-
     fun onUpdateFavouritesPressed(word: WordCombinedUi) =
         handleAction(DashboardAction.UpdateFavourite(word))
 
     fun onUpdateRandomCard() = handleAction(DashboardAction.UpdateRandomWord)
     fun onGamesClicked() = handleAction(DashboardAction.OnMenuItemClick.Games)
     fun onHangman() = handleAction(DashboardAction.OnGamesItemClick.Hangman)
-    fun onQueryChanged(query: TextFieldValue) {
-        handleAction(DashboardAction.InputQuery(query))
-    }
-
+    fun onQueryChanged(query: TextFieldValue) = handleAction(DashboardAction.InputQuery(query))
     fun onFavouritesItemClicked() = handleAction(DashboardAction.OnMenuItemClick.Favourites)
     fun onSettingsItemClicked() = handleAction(DashboardAction.OnMenuItemClick.Settings)
     fun onAboutItemClicked() = handleAction(DashboardAction.OnMenuItemClick.About)
     fun onTelegramItemClicked() = handleAction(DashboardAction.OnMenuItemClick.Telegram)
-    fun onChangeColors() = handleAction(DashboardAction.ChangeColors)
-    fun onChangeFonts() = handleAction(DashboardAction.ChangeFonts)
-    fun onClearRecentHistory() = handleAction(DashboardAction.ClearRecentHistory)
     fun onBackClick() = handleAction(DashboardAction.BackToMain)
 
     override fun DashboardState.reduce(event: DashboardEvent) = when (event) {
@@ -136,8 +120,6 @@ class DashboardViewModel(
 
         is DashboardAction.UpdateFavourite -> updateFavourite(action)
         DashboardAction.Initial -> initialData()
-        DashboardAction.ChangeColors -> changeColors()
-        DashboardAction.ChangeFonts -> changeFonts()
         DashboardAction.ClearRecentHistory -> clearRecentHistory()
         DashboardAction.BackToMain -> DashboardEvent.BackToMain
         DashboardAction.Update -> {
@@ -158,12 +140,8 @@ class DashboardViewModel(
     }
 
     override suspend fun handleEvent(event: DashboardEvent) = when (event) {
-        is DashboardEvent.ChangeTheme -> DashboardEffect.ChangeTheme(
-            event.colors,
-            event.typography
-        )
-
         is DashboardEvent.UpdateMenuItemState.Favourites -> DashboardEffect.OpenFavourites()
+        is DashboardEvent.UpdateMenuItemState.Settings -> DashboardEffect.OpenSettings()
 
         is DashboardEvent.OpenWord -> DashboardEffect.OpenWord(event.word)
         is DashboardEvent.OpenGame.Hangman -> DashboardEffect.OpenHangman(event.word)
@@ -255,35 +233,6 @@ class DashboardViewModel(
                 )
             )
         }
-    }
-
-    private suspend fun changeColors(): DashboardEvent {
-        val currentTheme = loadTheme()
-        val changed = Pair(currentTheme.first.next(), currentTheme.second)
-        changeTheme(changed.first, changed.second)
-        analytics.log(DashboardAnalyticsEvents.ChangeTheme(changed.first, changed.second))
-
-        return DashboardEvent.ChangeTheme(changed.first, changed.second)
-    }
-
-    private suspend fun changeFonts(): DashboardEvent {
-        val currentTheme = loadTheme()
-        val changed = Pair(currentTheme.first, currentTheme.second.next())
-        changeTheme(changed.first, changed.second)
-        analytics.log(DashboardAnalyticsEvents.ChangeTheme(changed.first, changed.second))
-        return DashboardEvent.ChangeTheme(changed.first, changed.second)
-    }
-
-    private suspend fun changeTheme(colors: WordColors, typography: WordTypography) {
-        changeThemeUseCase(Theme(colors.name, typography.name))
-    }
-
-    private fun loadTheme(): Pair<WordColors, WordTypography> {
-        val theme = getCurrentThemeUseCase(Unit)
-        return Pair(
-            theme.colorsName?.let { WordColors.valueOf(it) } ?: WordColors.RICH_MAROON,
-            theme.fonts?.let { WordTypography.valueOf(it) } ?: Friendly,
-        )
     }
 
     companion object {

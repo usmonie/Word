@@ -50,7 +50,7 @@ private fun GamesItems(
 
 @Composable
 fun HangmanMenuItem(onClick: () -> Unit, modifier: Modifier = Modifier) {
-    SettingsItem(onClick, "Hangman", modifier)
+    GamesItem(onClick, "Hangman", modifier)
 }
 
 @Composable

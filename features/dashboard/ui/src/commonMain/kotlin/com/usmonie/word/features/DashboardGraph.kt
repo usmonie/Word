@@ -8,6 +8,8 @@ import com.usmonie.word.features.new.dashboard.DashboardScreen
 import com.usmonie.word.features.new.details.WordDetailsScreen
 import com.usmonie.word.features.new.favorites.FavoritesScreen
 import com.usmonie.word.features.new.games.hangman.HangmanGameScreen
+import com.usmonie.word.features.new.settings.SettingsScreen
+import com.usmonie.word.features.subscription.domain.repository.SubscriptionRepository
 import com.usmonie.word.features.ui.AdMob
 import wtf.speech.compass.core.NavigationGraph
 import wtf.speech.compass.core.Route
@@ -19,6 +21,7 @@ import wtf.word.core.domain.Analytics
 fun getDashboardGraph(
     onCurrentColorsChanged: (WordColors) -> Unit,
     onCurrentFontsChanged: (WordTypography) -> Unit,
+    subscriptionRepository: SubscriptionRepository,
     userRepository: UserRepository,
     wordRepository: WordRepository,
     adMob: AdMob,
@@ -26,8 +29,6 @@ fun getDashboardGraph(
 ): NavigationGraph {
     val dashboardScreen = remember {
         DashboardScreen.Builder(
-            onCurrentColorsChanged,
-            onCurrentFontsChanged,
             userRepository,
             wordRepository,
             adMob,
@@ -49,5 +50,17 @@ fun getDashboardGraph(
             )
         )
         register(Route(HangmanGameScreen.ID, HangmanGameScreen.Builder(wordRepository, adMob)))
+        register(
+            Route(
+                SettingsScreen.ID,
+                SettingsScreen.Builder(
+                    onCurrentColorsChanged,
+                    onCurrentFontsChanged,
+                    subscriptionRepository,
+                    userRepository,
+                    wordRepository
+                )
+            )
+        )
     }
 }

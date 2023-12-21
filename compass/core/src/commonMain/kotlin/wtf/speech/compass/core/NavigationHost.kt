@@ -14,6 +14,7 @@ import androidx.compose.runtime.getValue
  *
  * @param routeManager The [RouteManagerImpl] responsible for managing navigation.
  */
+@Suppress("NonSkippableComposable")
 @ExperimentalAnimationApi
 @Composable
 fun NavigationHost(routeManager: RouteManager, vararg values: ProvidedValue<*>) {

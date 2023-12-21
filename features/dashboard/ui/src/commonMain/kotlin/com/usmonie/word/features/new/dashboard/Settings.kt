@@ -14,15 +14,12 @@ import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.ui.MenuItem
 import com.usmonie.word.features.ui.VerticalAnimatedVisibility
 
+@Suppress("NonSkippableComposable")
 @Composable
 fun Settings(
     onSettingsMenuItemPressed: () -> Unit,
-    onChangeColorsPressed: () -> Unit,
-    onChangeFontsPressed: () -> Unit,
-    onClearRecentPressed: () -> Unit,
     onPointerInput: suspend PointerInputScope.() -> Unit,
     showItem: Boolean,
-    showSettings: Boolean
 ) {
     VerticalAnimatedVisibility(showItem) {
         Column {
@@ -30,57 +27,8 @@ fun Settings(
                 onSettingsMenuItemPressed,
                 Modifier.fillMaxWidth().pointerInput(Unit, onPointerInput)
             )
-            SettingsItems(
-                onChangeColorsPressed,
-                onChangeFontsPressed,
-                onClearRecentPressed,
-                onPointerInput,
-                showSettings,
-            )
         }
     }
-}
-
-@Suppress("NonSkippableComposable")
-@Composable
-private fun SettingsItems(
-    onChangeColorsPressed: () -> Unit,
-    onChangeFontsPressed: () -> Unit,
-    onClearRecentPressed: () -> Unit,
-    onPointerInput: suspend PointerInputScope.() -> Unit,
-    showSettings: Boolean,
-) {
-    VerticalAnimatedVisibility(showSettings) {
-        Column {
-            ChangeThemeMenuItem(
-                onChangeColorsPressed,
-                Modifier.fillMaxWidth().pointerInput(Unit, onPointerInput)
-            )
-            ChangeFontMenuItem(
-                onChangeFontsPressed,
-                Modifier.fillMaxWidth().pointerInput(Unit, onPointerInput)
-            )
-            ClearRecentHistoryMenuItem(
-                onClearRecentPressed,
-                Modifier.fillMaxWidth().pointerInput(Unit, onPointerInput)
-            )
-        }
-    }
-}
-
-@Composable
-fun ChangeThemeMenuItem(onClick: () -> Unit, modifier: Modifier = Modifier) {
-    SettingsItem(onClick, "Change theme", modifier)
-}
-
-@Composable
-fun ChangeFontMenuItem(onClick: () -> Unit, modifier: Modifier = Modifier) {
-    SettingsItem(onClick, "Change font", modifier)
-}
-
-@Composable
-fun ClearRecentHistoryMenuItem(onClick: () -> Unit, modifier: Modifier = Modifier) {
-    SettingsItem(onClick, "Clear recent history", modifier)
 }
 
 @Composable

@@ -19,17 +19,16 @@ class WordViewModel(
     private val analytics: Analytics
 ) : BaseViewModel<WordState, WordAction, WordEvent, WordEffect>(WordState(extra.word)) {
 
+    init {
+        handleAction(WordAction.Initial(extra.word))
+    }
+
     fun onUpdateFavouritePressed(word: WordCombinedUi) =
         handleAction(WordAction.UpdateFavourite(word))
 
     fun onSharePressed(word: WordCombinedUi) = handleAction(WordAction.UpdateFavourite(word))
 
-    //    fun onFindSynonymPressed(synonym: SynonymUi) {}
     fun onWordPressed(word: WordCombinedUi) = handleAction(WordAction.OpenWord(word))
-
-    init {
-        handleAction(WordAction.Initial(extra.word))
-    }
 
     override fun WordState.reduce(event: WordEvent) = when (event) {
         is WordEvent.OpenWord -> this

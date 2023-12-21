@@ -13,7 +13,6 @@ plugins {
     alias(libs.plugins.compose)
     alias(libs.plugins.androidx.baselineprofile)
     alias(libs.plugins.google.services)
-
 }
 
 kotlin {
@@ -51,6 +50,9 @@ kotlin {
                 implementation(projects.features.dashboard.domain)
                 implementation(projects.features.dashboard.data)
 
+                implementation(projects.features.subscription.domain)
+                implementation(projects.features.subscription.data)
+
                 implementation(projects.compass.core)
                 implementation(projects.core.design)
                 implementation(projects.core.domain)
@@ -71,6 +73,7 @@ kotlin {
                 implementation(libs.compose.ui.tooling.preview)
                 implementation(libs.compose.activity)
                 implementation(libs.firebase.analytics)
+                implementation(libs.android.billing.ktx)
             }
         }
     }
@@ -91,15 +94,15 @@ android {
     compileSdk = 34 // config.versions.android.compileSdk.get().toInt()
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     sourceSets["main"].res.srcDirs("src/androidMain/res")
-//    sourceSets["main"].resources.srcDirs("src/commonMain/resources")
+    sourceSets["main"].resources.srcDirs("src/commonMain/resources")
 
     defaultConfig {
         applicationId = "com.usmonie.word"
         minSdk = 25 //config.versions.android.minSdk.get().toInt()
         targetSdk = 34
 
-        versionCode = 7
-        versionName = "0.2"
+        versionCode = 8
+        versionName = "0.3"
     }
     buildFeatures {
         compose = true
@@ -121,6 +124,7 @@ android {
         getByName("debug") {
             applicationIdSuffix = ".debug"
             isMinifyEnabled = false
+            versionNameSuffix = ".debug"
         }
     }
     compileOptions {
@@ -140,46 +144,46 @@ android {
     }
 }
 
-copyNativeResources("commonMain")
+//copyNativeResources("commonMain")
 dependencies {
     debugImplementation(libs.compose.ui.tooling)
 }
-
-fun copyNativeResources(sourceSet: String) {
-    if (sourceSet.isEmpty()) throw IllegalStateException("Valid sourceSet required")
-
-    val prefix = "copy${sourceSet.capitalize()}Resources"
-
-    tasks.withType<KotlinNativeLink> {
-        val firstIndex = name.indexOfFirst { it.isUpperCase() }
-        val taskName = "$prefix${name.substring(firstIndex)}"
-
-        dependsOn(
-            tasks.register<Copy>(taskName) {
-                from("../core/design/src/$sourceSet/resources")
-                when (outputKind) {
-                    CompilerOutputKind.FRAMEWORK -> into(outputFile.get())
-                    CompilerOutputKind.PROGRAM -> into(destinationDirectory.get())
-                    else -> throw IllegalStateException("Unhandled binary outputKind: $outputKind")
-                }
-            }
-        )
-    }
-
-    tasks.withType<FatFrameworkTask> {
-        if (destinationDir.path.contains("Temp")) return@withType
-
-        val firstIndex = name.indexOfFirst { it.isUpperCase() }
-        val taskName = "$prefix${name.substring(firstIndex)}"
-
-        dependsOn(
-            tasks.register<Copy>(taskName) {
-                from("../core/design/src/$sourceSet/resources")
-                into(fatFramework)
-            }
-        )
-    }
-}
+//
+//fun copyNativeResources(sourceSet: String) {
+//    if (sourceSet.isEmpty()) throw IllegalStateException("Valid sourceSet required")
+//
+//    val prefix = "copy${sourceSet.capitalize()}Resources"
+//
+//    tasks.withType<KotlinNativeLink> {
+//        val firstIndex = name.indexOfFirst { it.isUpperCase() }
+//        val taskName = "$prefix${name.substring(firstIndex)}"
+//
+//        dependsOn(
+//            tasks.register<Copy>(taskName) {
+//                from("../core/design/src/$sourceSet/resources")
+//                when (outputKind) {
+//                    CompilerOutputKind.FRAMEWORK -> into(outputFile.get())
+//                    CompilerOutputKind.PROGRAM -> into(destinationDirectory.get())
+//                    else -> throw IllegalStateException("Unhandled binary outputKind: $outputKind")
+//                }
+//            }
+//        )
+//    }
+//
+//    tasks.withType<FatFrameworkTask> {
+//        if (destinationDir.path.contains("Temp")) return@withType
+//
+//        val firstIndex = name.indexOfFirst { it.isUpperCase() }
+//        val taskName = "$prefix${name.substring(firstIndex)}"
+//
+//        dependsOn(
+//            tasks.register<Copy>(taskName) {
+//                from("../core/design/src/$sourceSet/resources")
+//                into(fatFramework)
+//            }
+//        )
+//    }
+//}
 
 subprojects {
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {

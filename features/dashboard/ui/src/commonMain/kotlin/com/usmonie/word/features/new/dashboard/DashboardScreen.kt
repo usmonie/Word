@@ -51,8 +51,9 @@ import com.usmonie.word.features.new.details.WordDetailsScreen
 import com.usmonie.word.features.new.favorites.FavoritesScreen
 import com.usmonie.word.features.new.games.hangman.HangmanGameScreen
 import com.usmonie.word.features.new.models.WordCombinedUi
+import com.usmonie.word.features.new.settings.SettingsScreen
 import com.usmonie.word.features.ui.AdMob
-import com.usmonie.word.features.ui.BaseDashboardLazyColumn
+import com.usmonie.word.features.ui.BaseLazyColumn
 import com.usmonie.word.features.ui.MenuItem
 import com.usmonie.word.features.ui.RecentsLazyRow
 import com.usmonie.word.features.ui.SearchBar
@@ -64,14 +65,10 @@ import wtf.speech.compass.core.Screen
 import wtf.speech.compass.core.ScreenBuilder
 import wtf.speech.core.ui.AdKeys
 import wtf.speech.core.ui.ContentState
-import wtf.word.core.design.themes.WordColors
-import wtf.word.core.design.themes.typographies.WordTypography
 import wtf.word.core.domain.Analytics
 
 @Stable
 class DashboardScreen(
-    private val changeTheme: (WordColors) -> Unit,
-    private val changeFont: (WordTypography) -> Unit,
     private val dashboardViewModel: DashboardViewModel,
     private val adMob: AdMob
 ) : Screen(dashboardViewModel) {
@@ -88,7 +85,7 @@ class DashboardScreen(
         val onPointerInput: suspend PointerInputScope.() -> Unit = remember {
             { detectTapGestures(onTap = { localFocusManager.clearFocus() }) }
         }
-        DashboardEffects(changeFont, changeTheme, listState, localFocusManager, effect)
+        DashboardEffects(listState, localFocusManager, effect)
 
         Scaffold(
             topBar = {
@@ -116,8 +113,6 @@ class DashboardScreen(
     }
 
     class Builder(
-        private val changeTheme: (WordColors) -> Unit,
-        private val changeFont: (WordTypography) -> Unit,
         private val userRepository: UserRepository,
         private val wordRepository: WordRepository,
         private val adMob: AdMob,
@@ -126,8 +121,6 @@ class DashboardScreen(
         override val id: String = ID
 
         override fun build(params: Map<String, String>?, extra: Extra?) = DashboardScreen(
-            changeTheme,
-            changeFont,
             DashboardViewModel(
                 SearchWordsUseCaseImpl(wordRepository),
                 GetSearchHistoryUseCaseImpl(wordRepository),
@@ -145,11 +138,8 @@ class DashboardScreen(
 }
 
 
-
 @Composable
 private fun DashboardEffects(
-    changeFont: (WordTypography) -> Unit,
-    changeTheme: (WordColors) -> Unit,
     listState: LazyListState,
     localFocusManager: FocusManager,
     effect: DashboardEffect?
@@ -167,11 +157,6 @@ private fun DashboardEffects(
 
     LaunchedEffect(effect) {
         when (effect) {
-            is DashboardEffect.ChangeTheme -> {
-                changeFont(effect.wordTypography)
-                changeTheme(effect.wordColors)
-            }
-
             is DashboardEffect.OpenFavourites -> routeManager.navigateTo(FavoritesScreen.ID)
             is DashboardEffect.OpenWord -> routeManager.navigateTo(
                 WordDetailsScreen.ID,
@@ -182,6 +167,7 @@ private fun DashboardEffects(
                 HangmanGameScreen.ID,
                 extras = HangmanGameScreen.Extras(effect.word)
             )
+            is DashboardEffect.OpenSettings -> routeManager.navigateTo(SettingsScreen.ID)
 
             else -> Unit
         }
@@ -202,7 +188,7 @@ private fun MainState(
     val showMenuItems by remember(state.query) { derivedStateOf { state.query.text.isBlank() } }
     val (hasFocus, onFocusChange) = remember { mutableStateOf(false) }
     Box {
-        BaseDashboardLazyColumn(listState, insets) {
+        BaseLazyColumn(listState, insets) {
             item {
                 SearchBar(
                     dashboardViewModel::onQueryChanged,
@@ -239,9 +225,7 @@ private fun MainState(
                         dashboardViewModel::onOpenWord,
                         {},
                         dashboardViewModel::onUpdateFavouritesPressed,
-//                            dashboardViewModel::onShareWord,
                         {},
-//                            dashboardViewModel::onSynonymClicked,
                         word,
                         Modifier.fillMaxWidth()
                             .padding(horizontal = 16.dp, vertical = 8.dp)
@@ -256,7 +240,7 @@ private fun MainState(
                     WordOfTheDayMenuItem(
                         onWordClick = dashboardViewModel::onOpenWord,
                         onAddFavouritePressed = dashboardViewModel::onUpdateFavouritesPressed,
-                        onSharePressed = dashboardViewModel::onShareWord,
+                        onSharePressed = {  },
                         onUpdatePressed = dashboardViewModel::onUpdateRandomCard,
                         showWordOfTheDay = state.showWordOfTheDay,
                         word = state.wordOfTheDay
@@ -285,12 +269,8 @@ private fun MainState(
             item(key = "MENU_SETTINGS") {
                 Settings(
                     dashboardViewModel::onSettingsItemClicked,
-                    dashboardViewModel::onChangeColors,
-                    dashboardViewModel::onChangeFonts,
-                    dashboardViewModel::onClearRecentHistory,
                     onPointerInput,
                     showMenuItems,
-                    state.showSettings,
                 )
             }
 
@@ -309,14 +289,12 @@ private fun MainState(
             item { Spacer(Modifier.height(80.dp)) }
         }
 
-        if (!state.subscribed) {
-            adMob.Banner(
-                AdKeys.BANNER_ID,
-                Modifier.fillMaxWidth()
-                    .align(Alignment.BottomCenter)
-                    .padding(insets)
-            )
-        }
+        adMob.Banner(
+            AdKeys.BANNER_ID,
+            Modifier.fillMaxWidth()
+                .align(Alignment.BottomCenter)
+                .padding(insets)
+        )
     }
 }
 

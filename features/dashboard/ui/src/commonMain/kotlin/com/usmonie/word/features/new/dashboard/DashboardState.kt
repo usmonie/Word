@@ -10,8 +10,6 @@ import wtf.speech.core.ui.ScreenAction
 import wtf.speech.core.ui.ScreenEffect
 import wtf.speech.core.ui.ScreenEvent
 import wtf.speech.core.ui.ScreenState
-import wtf.word.core.design.themes.WordColors
-import wtf.word.core.design.themes.typographies.WordTypography
 import wtf.word.core.domain.tools.fastMap
 
 @Stable
@@ -24,7 +22,6 @@ data class DashboardState(
     val showSettings: Boolean = false,
     val showGames: Boolean = false,
     val showAbout: Boolean = false,
-    val subscribed: Boolean = false
 ) : ScreenState {
     fun updateFavourite(updatedWord: WordCombinedUi): DashboardState {
         val newWordOfTheDay: ContentState<Pair<WordUi, WordCombinedUi>> = when (wordOfTheDay) {
@@ -106,8 +103,6 @@ data class DashboardState(
 sealed class DashboardAction : ScreenAction {
     data object BackToMain : DashboardAction()
     data object Initial : DashboardAction()
-    data object ChangeColors : DashboardAction()
-    data object ChangeFonts : DashboardAction()
     data object ClearRecentHistory : DashboardAction()
     data object UpdateRandomWord : DashboardAction()
     data object Update : DashboardAction()
@@ -144,11 +139,6 @@ sealed class DashboardEvent : ScreenEvent {
         val wordOfTheDay: ContentState<Pair<WordUi, WordCombinedUi>>
     ) : DashboardEvent()
 
-    data class ChangeTheme(
-        val colors: WordColors,
-        val typography: WordTypography
-    ) : DashboardEvent()
-
     data class InputQuery(val query: TextFieldValue) : DashboardEvent()
     data class FoundWords(val query: TextFieldValue, val foundWords: List<WordCombinedUi>) :
         DashboardEvent()
@@ -177,17 +167,13 @@ sealed class DashboardEvent : ScreenEvent {
 }
 
 sealed class DashboardEffect : ScreenEffect {
-    data class ChangeTheme(val wordColors: WordColors, val wordTypography: WordTypography) :
-        DashboardEffect()
-
     class OpenFavourites : DashboardEffect()
+    class OpenSettings : DashboardEffect()
 
     data class OpenHangman(val word: WordCombinedUi) : DashboardEffect()
 
     data class OpenWord(val word: WordCombinedUi) : DashboardEffect()
 
     @Immutable
-    class OpenUrl(val url: String) : DashboardEffect() {
-
-    }
+    class OpenUrl(val url: String) : DashboardEffect()
 }

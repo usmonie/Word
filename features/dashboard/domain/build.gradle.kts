@@ -40,7 +40,3 @@ kotlin {
         }
     }
 }
-
-android {
-    sourceSets["main"].resources.srcDirs("src/commonMain/resources")
-}

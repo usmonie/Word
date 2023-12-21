@@ -7,7 +7,6 @@
 
 import SwiftUI
 import ComposeApp
-import design
 import GoogleMobileAds
 
 struct ComposeView: UIViewControllerRepresentable {
@@ -18,14 +17,12 @@ struct ComposeView: UIViewControllerRepresentable {
 
         controller = MainViewControllerKt.MainViewController(
             onViewDidLoad: {},
-            adMob: UiAdMob(
-                bannerUiView: {
-                    SwiftUIInUIView(content: Banner(bannerID: "ca-app-pub-2198867984469198/3121295852"))
-                },
-                rewardedInterstitialView: {
-                    onShowAd()
-                }
-            ),
+            bannerUiView: {
+                SwiftUIInUIView(content: Banner(bannerID: "ca-app-pub-2198867984469198/3121295852"))
+            },
+            rewardedInterstitialView: {
+                onShowAd()
+            },
             nativeAnalytics: NativeAnalytics()
         )
 
@@ -50,6 +47,7 @@ struct ContentView: View {
             )
                     .ignoresSafeArea(.keyboard) // Compose has own keyboard handler
                     .edgesIgnoringSafeArea(.top)
+                    .edgesIgnoringSafeArea(.bottom)
 
         }
                 .onAppear { interstitialVC = interstitialAd.viewController }

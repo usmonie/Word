@@ -8,6 +8,7 @@ import com.usmonie.word.features.dashboard.data.di.DashboardDataComponent
 import com.usmonie.word.features.dashboard.domain.repository.UserRepository
 import com.usmonie.word.features.dashboard.domain.usecase.CurrentThemeUseCaseImpl
 import com.usmonie.word.features.getDashboardGraph
+import com.usmonie.word.features.subscription.domain.repository.SubscriptionRepository
 import com.usmonie.word.features.ui.AdMob
 import wtf.speech.compass.core.NavigationHost
 import wtf.speech.compass.core.rememberRouteManager
@@ -22,6 +23,7 @@ import wtf.word.core.domain.Analytics
 @Composable
 fun App(
     userRepository: UserRepository,
+    subscriptionRepository: SubscriptionRepository,
     adMob: AdMob,
     analytics: Analytics
 ) {
@@ -34,11 +36,12 @@ fun App(
     }
     val (currentTheme, onCurrentColorsChanged) = remember { mutableStateOf(currentColors) }
     val (currentFonts, onCurrentFontsChanged) = remember { mutableStateOf(currentTypography) }
-    val wordRepository = remember { DashboardDataComponent.getWordsRepository(WordApi("http://16.170.6.0")) }
+    val wordRepository = remember { DashboardDataComponent.getWordsRepository(WordApi("http://localhost:8000")) }
 
     val initialGraph = getDashboardGraph(
         onCurrentColorsChanged,
         onCurrentFontsChanged,
+        subscriptionRepository,
         userRepository,
         wordRepository,
         adMob,

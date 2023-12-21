@@ -18,8 +18,9 @@ import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.dashboard.domain.repository.WordRepository
 import com.usmonie.word.features.dashboard.domain.usecase.GetAllFavouritesUseCaseImpl
 import com.usmonie.word.features.dashboard.domain.usecase.UpdateFavouriteUseCaseImpl
+import com.usmonie.word.features.new.details.WordDetailsScreen
 import com.usmonie.word.features.ui.AdMob
-import com.usmonie.word.features.ui.BaseDashboardLazyColumn
+import com.usmonie.word.features.ui.BaseLazyColumn
 import com.usmonie.word.features.ui.EmptyItem
 import com.usmonie.word.features.ui.SearchBar
 import com.usmonie.word.features.ui.TopBackButtonBar
@@ -41,6 +42,7 @@ class FavoritesScreen(
     override fun Content() {
         FavoritesContent(favoritesViewModel, adMob)
     }
+
     companion object {
         const val ID = "FAVOURITES_SCREEN"
     }
@@ -77,7 +79,7 @@ private fun FavoritesContent(favoritesViewModel: FavouritesViewModel, adMob: AdM
         topBar = { TopBackButtonBar(routeManager::navigateBack, true) },
     ) { insets ->
         Box {
-            BaseDashboardLazyColumn(rememberLazyListState(), insets) {
+            BaseLazyColumn(rememberLazyListState(), insets) {
                 item {
                     SearchBar(
                         {},
@@ -134,7 +136,6 @@ private fun FavoritesContent(favoritesViewModel: FavouritesViewModel, adMob: AdM
     }
 }
 
-@Suppress("NonSkippableComposable")
 @Composable
 private fun FavouritesEffect(
     effect: FavoritesEffect?,
@@ -143,10 +144,10 @@ private fun FavouritesEffect(
     LaunchedEffect(effect) {
         when (effect) {
             is FavoritesEffect.OnBack -> routeManager.navigateBack()
-            is FavoritesEffect.OpenWord -> {} /*routeManager.navigateTo(
-                    WordDetailsScreen.ID,
-                    extras = WordDetailsScreen.Companion.WordExtra(effect.wordUi)
-                )*/
+            is FavoritesEffect.OpenWord -> routeManager.navigateTo(
+                WordDetailsScreen.ID,
+                extras = WordDetailsScreen.Companion.WordExtra(effect.wordUi)
+            )
 
             null -> Unit
         }

@@ -1,5 +1,4 @@
-import com.android.build.api.variant.BuildConfigField
-import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 import extensions.androidDependencies
 import extensions.commonDependencies
 
@@ -13,12 +12,16 @@ android.namespace = "com.usmonie.word.features.dashboard.ui"
 commonDependencies {
     implementation(projects.compass.core)
     implementation(projects.core.ui)
+
     implementation(projects.features.dashboard.domain)
     implementation(projects.features.dashboard.data)
 
+    implementation(projects.features.subscription.domain)
+
     implementation(libs.compose.material3.jetbrains)
-//    implementation(libs.compose.material3)
+    implementation(compose.dependencies.materialIconsExtended)
     implementation(libs.kvault)
+
 
 }
 androidDependencies {
@@ -56,10 +59,8 @@ kotlin {
 
 android {
     compileSdk = 34 // config.versions.android.compileSdk.get().toInt()
-    namespace = "wtf.speech.features.dashboard.ui"
+    namespace = "com.usmonie.word.features.dashboard.ui"
 
-//    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
-//    sourceSets["main"].res.srcDirs("src/androidMain/res")
     sourceSets["main"].resources.srcDirs("src/commonMain/resources")
 
     defaultConfig {
@@ -68,29 +69,5 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
-    }
-
-    androidComponents {
-
-        val admobAppNativeBannerId: String =
-            gradleLocalProperties(rootDir).getProperty("admob-app-native-banner-id")
-        val admobAppStartupId: String =
-            gradleLocalProperties(rootDir).getProperty("admob-app-native-banner-id")
-
-        onVariants {
-            it.buildConfigFields.put(
-                "NATIVE_BANNER_ID",
-                BuildConfigField(
-                    "String", admobAppNativeBannerId, null
-                ),
-            )
-
-            it.buildConfigFields.put(
-                "STARTUP_AD_ID",
-                BuildConfigField(
-                    "String", admobAppStartupId, null
-                )
-            )
-        }
     }
 }

@@ -28,7 +28,7 @@ import com.usmonie.word.features.new.components.DetailsWordCardLarge
 import com.usmonie.word.features.new.components.SenseCard
 import com.usmonie.word.features.new.models.WordCombinedUi
 import com.usmonie.word.features.ui.AdMob
-import com.usmonie.word.features.ui.BaseDashboardLazyColumn
+import com.usmonie.word.features.ui.BaseLazyColumn
 import com.usmonie.word.features.ui.MenuItemText
 import com.usmonie.word.features.ui.SearchBar
 import com.usmonie.word.features.ui.TopBackButtonBar
@@ -104,7 +104,7 @@ private fun WordDetailsContent(wordViewModel: WordViewModel, adMob: AdMob) {
         topBar = { TopBackButtonBar(routeManager::navigateBack, true) },
     ) {
         Box {
-            BaseDashboardLazyColumn(contentPadding = it) {
+            BaseLazyColumn(contentPadding = it) {
                 item {
                     SearchBar(
                         {},

@@ -1,7 +1,6 @@
+
+import extensions.androidDependencies
 import extensions.commonDependencies
-import org.jetbrains.kotlin.gradle.tasks.FatFrameworkTask
-import org.jetbrains.kotlin.gradle.tasks.KotlinNativeLink
-import org.jetbrains.kotlin.konan.target.CompilerOutputKind
 
 plugins {
     id(libs.plugins.speech.multiplatform.core.get().pluginId)
@@ -17,13 +16,7 @@ kotlin {
         iosX64(),
         iosArm64(),
         iosSimulatorArm64()
-    ).forEach { iosTarget ->
-        iosTarget.binaries.framework {
-            baseName = "design"
-            isStatic = true
-            version = "1.0.0"
-        }
-    }
+    )
 
     commonDependencies {
         api(compose.runtime)
@@ -34,44 +27,13 @@ kotlin {
         @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
         api(compose.components.resources)
     }
+
+    androidDependencies {
+        api(compose.uiTooling)
+        api(compose.preview)
+    }
 }
 
 android {
     sourceSets["main"].resources.srcDirs("src/commonMain/resources")
-}
-
-copyNativeResources("commonMain")
-fun copyNativeResources(sourceSet: String) {
-    if (sourceSet.isEmpty()) throw IllegalStateException("Valid sourceSet required")
-
-    val prefix = "copy${sourceSet.capitalize()}Resources"
-    tasks.withType<KotlinNativeLink> {
-        val firstIndex = name.indexOfFirst { it.isUpperCase() }
-        val taskName = "$prefix${name.substring(firstIndex)}"
-
-        dependsOn(
-            tasks.register<Copy>(taskName) {
-                from("src/$sourceSet/resources")
-                when (outputKind) {
-                    CompilerOutputKind.FRAMEWORK -> into(outputFile.get())
-                    CompilerOutputKind.PROGRAM -> into(destinationDirectory.get())
-                    else -> throw IllegalStateException("Unhandled binary outputKind: $outputKind")
-                }
-            }
-        )
-    }
-
-    tasks.withType<FatFrameworkTask> {
-        if (destinationDir.path.contains("Temp")) return@withType
-
-        val firstIndex = name.indexOfFirst { it.isUpperCase() }
-        val taskName = "$prefix${name.substring(firstIndex)}"
-
-        dependsOn(
-            tasks.register<Copy>(taskName) {
-                from("src/$sourceSet/resources")
-                into(fatFramework)
-            }
-        )
-    }
 }

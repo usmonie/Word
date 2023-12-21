@@ -4,7 +4,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 
-data object TimelessElegant : WordTypography("TimelessElegant") {
+data object TimelessElegant : WordTypography("Timeless Elegant") {
 
     private val notoSerifBlack = FontFamilyData.CustomFont(
         "Noto Serif Black",

@@ -18,7 +18,6 @@ import wtf.speech.compass.core.ViewModel
  * An abstract base ViewModel class following the MVI (Model-View-Intent) architecture pattern.
  *
  * @param S The type of the screen state.
- * @param  The type of the user action on the screen.
  * @param A The type of the user action on the screen.
  * @param V The type of the event on the screen.
  * @param F The type of the effect on the screen.

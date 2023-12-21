@@ -14,16 +14,16 @@ import wtf.word.core.design.themes.colors.TwilightAmethystColors
 import wtf.word.core.design.themes.typographies.Friendly
 import wtf.word.core.design.themes.typographies.WordTypography
 
-enum class WordColors(val colors: Colors) {
-    RICH_MAROON(RichMaroonColors),
-    BRITISH_RACING_GREEN(BritishRacingGreenColors),
-    DEEP_INDIGO(DeepIndigoColors),
+enum class WordColors(val colors: Colors, val title: String) {
+    RICH_MAROON(RichMaroonColors, "Rich Maroon"),
+    BRITISH_RACING_GREEN(BritishRacingGreenColors, "British Racing Green"),
+    DEEP_INDIGO(DeepIndigoColors, "Deep Indigo"),
 
-    GENTLE_BREEZE(GentleBreezeColors),
-    ROYAL_INDIGO(RoyalIndigoColors),
-    TWILIGHT_AMETHYST(TwilightAmethystColors),
-    PASTEL_SUNSET(PastelSunsetColors),
-    EMERALD_ELEGANCE(EmeraldEleganceColors);
+    GENTLE_BREEZE(GentleBreezeColors, "Gentle Breeze"),
+    ROYAL_INDIGO(RoyalIndigoColors, "Royal Indigo"),
+    TWILIGHT_AMETHYST(TwilightAmethystColors, "Twilight Amethyst"),
+    PASTEL_SUNSET(PastelSunsetColors, "Pastel Sunset"),
+    EMERALD_ELEGANCE(EmeraldEleganceColors, "Emerald Elegance");
 
     fun next(subscribed: Boolean = true) = if (subscribed) when (this) {
         RICH_MAROON -> BRITISH_RACING_GREEN
@@ -44,11 +44,6 @@ fun WordTheme(
     useDarkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit,
 ) {
-//    val colorScheme = when {
-//        useDarkTheme -> wordColors.colors.darkColorScheme()
-//        else -> wordColors.colors.lightColorScheme()
-//    }
-
     MaterialTheme(
         wordColors.colors.lightColorScheme(),
         typography = typography.typography(),

@@ -29,7 +29,7 @@ fun RandomWordCard(
             val word = wordState.data
             BaseCard(
                 { onCardClick(word.second) },
-                elevation = 8.dp,
+                elevation = 2.dp,
                 modifier = modifier
             ) {
                 Spacer(Modifier.height(32.dp))

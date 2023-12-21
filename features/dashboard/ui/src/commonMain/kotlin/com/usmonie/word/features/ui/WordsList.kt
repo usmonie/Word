@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.new.components.TitleUiComponent
 import com.usmonie.word.features.new.models.WordCombinedUi
 
+@Suppress("NonSkippableComposable")
 @Composable
 fun RecentsLazyRow(
     words: List<WordCombinedUi>,

@@ -5,6 +5,7 @@ import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 
+@Suppress("NonSkippableComposable")
 @Composable
 actual fun OpenBrowser(url: Url) {
     val context = LocalContext.current

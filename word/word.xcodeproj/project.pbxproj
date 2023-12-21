@@ -202,7 +202,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = DAD18C102B29E7C500E74100 /* Build configuration list for PBXNativeTarget "word" */;
 			buildPhases = (
-				DAD18C2F2B29E94C00E74100 /* ShellScript */,
 				DAD18C302B29E95D00E74100 /* ShellScript */,
 				DAD18BFD2B29E7C400E74100 /* Sources */,
 				DAD18BFE2B29E7C400E74100 /* Frameworks */,
@@ -306,23 +305,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		DAD18C2F2B29E94C00E74100 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n# Type a script or drag a script file from your workspace to insert its path.\nif [ \"YES\" = \"$OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED\" ]; then\n  echo \"Skipping Gradle build task invocation due to OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED environment variable set to \\\"YES\\\"\"\n  exit 0\nfi\ncd \"$SRCROOT/..\"\n./gradlew :core:design:embedAndSignAppleFrameworkForXcode\n";
-		};
 		DAD18C302B29E95D00E74100 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -514,9 +496,6 @@
 					"$(inherited)",
 					"-framework",
 					composeApp,
-					"$(inherited)",
-					"-framework",
-					design,
 					"-lz",
 					"-lsqlite3",
 				);
@@ -572,9 +551,6 @@
 					"$(inherited)",
 					"-framework",
 					composeApp,
-					"$(inherited)",
-					"-framework",
-					design,
 					"-lz",
 					"-lsqlite3",
 				);

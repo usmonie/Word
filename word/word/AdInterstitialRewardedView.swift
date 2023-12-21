@@ -20,7 +20,6 @@ struct InterstitalRewardedView: UIViewControllerRepresentable {
 }
 
 class InterstitalRewardedViewController: UIViewController, GADFullScreenContentDelegate {
-    //var rewadAd: GADRewardedAd?
     var rewardInterstitialAd: GADRewardedInterstitialAd?
     var interstitial: GADInterstitialAd?
 

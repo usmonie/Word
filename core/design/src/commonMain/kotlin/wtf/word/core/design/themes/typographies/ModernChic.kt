@@ -3,7 +3,7 @@ package wtf.word.core.design.themes.typographies
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 
-data object ModernChic : WordTypography("ModernChic") {
+data object ModernChic : WordTypography("Modern Chic") {
 
     private val ralewayBlack = FontFamilyData.CustomFont(
         "Raleway Black",

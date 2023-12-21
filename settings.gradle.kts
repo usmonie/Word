@@ -38,12 +38,11 @@ include(":features:dashboard:ui")
 include(":features:dashboard:domain")
 include(":features:dashboard:data")
 
-include(":features:detail:ui")
-include(":features:detail:domain")
-include(":features:detail:data")
+include(":features:admob:ui")
+include(":features:admob:domain")
+include(":features:admob:data")
 
-include(":features:favourites:ui")
-include(":features:favourites:domain")
-include(":features:favourites:data")
+include(":features:subscription:domain")
+include(":features:subscription:data")
 
 include(":features:word:ui")

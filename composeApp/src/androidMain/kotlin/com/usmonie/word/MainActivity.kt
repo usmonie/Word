@@ -10,11 +10,15 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
+import com.android.billingclient.api.BillingClient
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.FullScreenContentCallback
@@ -25,24 +29,43 @@ import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
 import com.liftric.kvault.KVault
 import com.usmonie.word.features.dashboard.data.repository.UserRepositoryImpl
+import com.usmonie.word.features.subscription.data.Billing
+import com.usmonie.word.features.subscription.data.getSubscriptionRepository
+import com.usmonie.word.features.subscription.domain.models.SubscriptionStatus
+import com.usmonie.word.features.subscription.domain.usecase.SubscriptionStatusUseCaseImpl
 import com.usmonie.word.features.ui.AdMob
 import wtf.speech.core.ui.AdKeys
 
 class MainActivity : ComponentActivity() {
     private var mInterstitialAd: InterstitialAd? = null
+    private val appOpenAdManager: AppOpenAdManager by lazy(LazyThreadSafetyMode.NONE) {
+        AppOpenAdManager()
+    }
 
+    private var isSubscribed = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val billing = BillingClient.newBuilder(this)
+        val subscriptionRepository = getSubscriptionRepository(Billing(billing))
+        val subscriptionStatusUseCase = SubscriptionStatusUseCaseImpl(subscriptionRepository)
         val userRepository = UserRepositoryImpl(KVault(this@MainActivity))
-        val adMob = AdMob(::showInterstitial)
+        val adMob = AdMob({ _, _ -> },
+            { showInterstitial(this, it) },
+            { _, _ -> },
+            subscriptionStatusUseCase
+        )
         val logger = DefaultLogger(Firebase.analytics)
         loadInterstitial(this)
         enableEdgeToEdge()
         setContent {
             val view = LocalView.current
             val isDark = isSystemInDarkTheme()
+            val subscriptionStatus by subscriptionStatusUseCase(Unit).collectAsState(initial = null)
 
+            LaunchedEffect(subscriptionStatus) {
+                isSubscribed = subscriptionStatus == SubscriptionStatus.PURCHASED
+            }
 
             SideEffect {
                 val window = (view.context as Activity).window
@@ -54,9 +77,17 @@ class MainActivity : ComponentActivity() {
             }
             App(
                 userRepository,
+                subscriptionRepository,
                 adMob,
                 logger
             )
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        if (!appOpenAdManager.isShowingAd && !isSubscribed) {
+            appOpenAdManager.showAdIfAvailable(this)
         }
     }
 
@@ -66,7 +97,7 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun loadInterstitial(context: Context) {
-        InterstitialAd.load(context, AdKeys.REWARDED_LIFE_ID, //Change this with your own AdUnitID!
+        InterstitialAd.load(context, AdKeys.REWARDED_LIFE_ID,
             AdRequest.Builder().build(), object : InterstitialAdLoadCallback() {
                 override fun onAdFailedToLoad(adError: LoadAdError) {
                     mInterstitialAd = null
