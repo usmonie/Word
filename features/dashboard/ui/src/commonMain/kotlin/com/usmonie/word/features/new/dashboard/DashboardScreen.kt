@@ -38,9 +38,7 @@ import com.usmonie.word.features.OpenBrowser
 import com.usmonie.word.features.Url
 import com.usmonie.word.features.dashboard.domain.repository.UserRepository
 import com.usmonie.word.features.dashboard.domain.repository.WordRepository
-import com.usmonie.word.features.dashboard.domain.usecase.ChangeThemeUseCaseImpl
 import com.usmonie.word.features.dashboard.domain.usecase.ClearRecentUseCaseImpl
-import com.usmonie.word.features.dashboard.domain.usecase.CurrentThemeUseCaseImpl
 import com.usmonie.word.features.dashboard.domain.usecase.GetSearchHistoryUseCaseImpl
 import com.usmonie.word.features.dashboard.domain.usecase.GetWordOfTheDayUseCaseImpl
 import com.usmonie.word.features.dashboard.domain.usecase.RandomWordUseCaseImpl
@@ -126,9 +124,7 @@ class DashboardScreen(
                 GetSearchHistoryUseCaseImpl(wordRepository),
                 GetWordOfTheDayUseCaseImpl(wordRepository),
                 UpdateFavouriteUseCaseImpl(wordRepository),
-                CurrentThemeUseCaseImpl(userRepository),
                 RandomWordUseCaseImpl(wordRepository),
-                ChangeThemeUseCaseImpl(userRepository),
                 ClearRecentUseCaseImpl(wordRepository),
                 analytics
             ),

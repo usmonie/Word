@@ -1,11 +1,14 @@
 package com.usmonie.word.features.new.games.hangman
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -14,20 +17,24 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.dashboard.domain.repository.WordRepository
 import com.usmonie.word.features.dashboard.domain.usecase.RandomWordUseCaseImpl
+import com.usmonie.word.features.new.details.WordDetailsScreen
 import com.usmonie.word.features.new.games.GameBoard
 import com.usmonie.word.features.new.models.WordCombinedUi
 import com.usmonie.word.features.ui.AdMob
 import com.usmonie.word.features.ui.UpdateButton
 import wtf.speech.compass.core.Extra
 import wtf.speech.compass.core.LocalRouteManager
+import wtf.speech.compass.core.RouteManager
 import wtf.speech.compass.core.Screen
 import wtf.speech.compass.core.ScreenBuilder
 import wtf.speech.core.ui.AdKeys
@@ -74,6 +81,9 @@ class HangmanGameScreen(
 private fun HangmanContent(hangmanGameViewModel: HangmanGameViewModel, adMob: AdMob) {
     val routerManager = LocalRouteManager.current
     val state by hangmanGameViewModel.state.collectAsState()
+    val effect by hangmanGameViewModel.effect.collectAsState(null)
+
+    HangmanEffect(effect, routerManager)
     GameBoard(routerManager::navigateBack, {
         AnimatedVisibility(state !is HangmanState.Playing) {
             UpdateButton(
@@ -88,14 +98,61 @@ private fun HangmanContent(hangmanGameViewModel: HangmanGameViewModel, adMob: Ad
         ) {
             HangmanImage(state.incorrectGuesses, Modifier.fillMaxWidth().fillMaxHeight(0.4f))
             WordDisplay(state)
-            LetterButtons(
-                hangmanGameViewModel::onLetterGuessed,
-                state.guessedLetters,
-                Modifier.fillMaxWidth().weight(1f)
-            )
 
-            if (state !is HangmanState.Playing) {
-                adMob.RewardedInterstitial(onAddDismissed = {})
+            Spacer(Modifier.height(8.dp))
+            when (state) {
+                is HangmanState.Playing.Information -> TextButton(
+                    hangmanGameViewModel::onShowHintPressed,
+                    Modifier.fillMaxWidth().padding(horizontal = 20.dp)
+                ) {
+                    Text(
+                        "Hide Hint",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
+                }
+
+                is HangmanState.Playing.Input -> TextButton(
+                    hangmanGameViewModel::onShowHintPressed,
+                    Modifier.fillMaxWidth().padding(horizontal = 20.dp)
+                ) {
+                    Text(
+                        "Show Hint",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
+                }
+
+                else -> TextButton(
+                    { hangmanGameViewModel.onOpenWordPressed(state.word) },
+                    Modifier.fillMaxWidth().padding(horizontal = 20.dp)
+                ) {
+                    Text(
+                        "Show Details",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
+                }
+            }
+            Spacer(Modifier.height(8.dp))
+
+            AnimatedContent(
+                state,
+                contentKey = { hangmanState -> hangmanState::class::simpleName }) { hangmanState ->
+                when (hangmanState) {
+                    is HangmanState.Playing.Information -> Text(
+                        modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
+                        text = hangmanState.word.wordEtymology.first().words.first().senses.first().glosses.first(),
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+
+                    else -> LetterButtons(
+                        hangmanGameViewModel::onLetterGuessed,
+                        hangmanState.guessedLetters,
+                        Modifier.fillMaxWidth().weight(1f)
+                    )
+                }
             }
 
             adMob.Banner(
@@ -103,15 +160,34 @@ private fun HangmanContent(hangmanGameViewModel: HangmanGameViewModel, adMob: Ad
                 Modifier.fillMaxWidth()
             )
         }
+
+        if (effect !is HangmanEffect.RestartGame) {
+            adMob.RewardedInterstitial(onAddDismissed = {})
+        }
+    }
+}
+
+@Composable
+private fun HangmanEffect(effect: HangmanEffect?, routerManager: RouteManager) {
+    LaunchedEffect(effect) {
+        when (effect) {
+            is HangmanEffect.OpenWord -> routerManager.navigateTo(
+                WordDetailsScreen.ID,
+                extras = WordDetailsScreen.Companion.WordExtra(effect.word)
+            )
+
+            else -> Unit
+        }
     }
 }
 
 @Composable
 fun WordDisplay(gameState: HangmanState, modifier: Modifier = Modifier) {
     val displayWord = if (gameState is HangmanState.Lost) {
-        gameState.word.toCharArray().joinToString(" ")
+        gameState.word.word.toCharArray().joinToString(" ")
     } else {
         gameState.word
+            .word
             .asSequence()
             .map { if (it in gameState.guessedLetters) it else '_' }
             .joinToString(" ")

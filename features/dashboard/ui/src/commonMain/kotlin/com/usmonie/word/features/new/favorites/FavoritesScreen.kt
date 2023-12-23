@@ -110,18 +110,7 @@ private fun FavoritesContent(favoritesViewModel: FavouritesViewModel, adMob: AdM
                             .padding(horizontal = 16.dp),
                     )
 
-                    is FavoritesState.Loading -> item {
-                        //                        Row(
-                        //                            modifier = Modifier.fillParentMaxWidth(),
-                        //                            horizontalArrangement = Arrangement.Center,
-                        //                            verticalAlignment = Alignment.CenterVertically
-                        //                        ) {
-                        //                            CircularProgressIndicator(
-                        //                                color = MaterialTheme.colorScheme.secondary,
-                        //                                trackColor = MaterialTheme.colorScheme.surface
-                        //                            )
-                        //                        }
-                    }
+                    is FavoritesState.Loading -> Unit
                 }
 
                 item { Spacer(Modifier.height(80.dp)) }

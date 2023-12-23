@@ -36,7 +36,7 @@ fun App(
     }
     val (currentTheme, onCurrentColorsChanged) = remember { mutableStateOf(currentColors) }
     val (currentFonts, onCurrentFontsChanged) = remember { mutableStateOf(currentTypography) }
-    val wordRepository = remember { DashboardDataComponent.getWordsRepository(WordApi("http://localhost:8000")) }
+    val wordRepository = remember { DashboardDataComponent.getWordsRepository(WordApi("http://16.170.6.0")) }
 
     val initialGraph = getDashboardGraph(
         onCurrentColorsChanged,

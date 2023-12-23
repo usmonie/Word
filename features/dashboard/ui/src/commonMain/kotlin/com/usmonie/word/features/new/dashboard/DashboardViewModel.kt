@@ -3,9 +3,7 @@ package com.usmonie.word.features.new.dashboard
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.text.input.TextFieldValue
 import com.usmonie.word.features.analytics.DashboardAnalyticsEvents
-import com.usmonie.word.features.dashboard.domain.usecase.ChangeThemeUseCase
 import com.usmonie.word.features.dashboard.domain.usecase.ClearRecentUseCase
-import com.usmonie.word.features.dashboard.domain.usecase.CurrentThemeUseCase
 import com.usmonie.word.features.dashboard.domain.usecase.GetSearchHistoryUseCase
 import com.usmonie.word.features.dashboard.domain.usecase.GetWordOfTheDayUseCase
 import com.usmonie.word.features.dashboard.domain.usecase.RandomWordUseCase
@@ -32,9 +30,7 @@ class DashboardViewModel(
     private val getSearchHistoryUseCase: GetSearchHistoryUseCase,
     private val getWordOfTheDayUseCase: GetWordOfTheDayUseCase,
     private val updateFavouriteUseCase: UpdateFavouriteUseCase,
-    private val getCurrentThemeUseCase: CurrentThemeUseCase,
     private val getRandomWordUseCase: RandomWordUseCase,
-    private val changeThemeUseCase: ChangeThemeUseCase,
     private val clearRecentUseCase: ClearRecentUseCase,
     private val analytics: Analytics,
 ) : BaseViewModel<DashboardState, DashboardAction, DashboardEvent, DashboardEffect>(DashboardState()) {
@@ -178,7 +174,7 @@ class DashboardViewModel(
             ensureActive()
 
             val found = searchWordsUseCase(
-                SearchWordsUseCase.Param(query.text, offset, limit, exactly)
+                SearchWordsUseCase.Param(query.text.trim(), offset, limit, exactly)
             ).fastMap {
                 ensureActive()
                 it.toUi()

@@ -8,16 +8,18 @@ import wtf.speech.core.ui.BaseViewModel
 
 @Stable
 class HangmanGameViewModel(
-    private val word: WordCombinedUi,
+    word: WordCombinedUi,
     private val randomWordUseCase: RandomWordUseCase
 ) : BaseViewModel<HangmanState, HangmanAction, HangmanEvent, HangmanEffect>(
-    HangmanState.Playing(word.word)
+    HangmanState.Playing.Input(word)
 ) {
     fun onLetterGuessed(letter: Char) = handleAction(HangmanAction.GuessLetter(letter))
     fun onUpdatePressed() = handleAction(HangmanAction.UpdateWord)
+    fun onShowHintPressed() = handleAction(HangmanAction.ShowHint)
+    fun onOpenWordPressed(word: WordCombinedUi) = handleAction(HangmanAction.OpenWord(word))
 
     override fun HangmanState.reduce(event: HangmanEvent) = when (event) {
-        is HangmanEvent.RightLetterGuessed -> HangmanState.Playing(
+        is HangmanEvent.RightLetterGuessed -> HangmanState.Playing.Input(
             this.word,
             this.guessedLetters.toMutableSet().apply { add(event.letter) },
             this.incorrectGuesses
@@ -31,7 +33,7 @@ class HangmanGameViewModel(
                     this.guessedLetters.toMutableSet().apply { add(event.letter) },
                 )
             } else {
-                HangmanState.Playing(
+                HangmanState.Playing.Input(
                     this.word,
                     this.guessedLetters.toMutableSet().apply { add(event.letter) },
                     newIncorrectGuesses
@@ -49,34 +51,47 @@ class HangmanGameViewModel(
             this.guessedLetters.toMutableSet().apply { add(event.letter) },
         )
 
-        is HangmanEvent.UpdateWord -> HangmanState.Playing(event.word.word)
+        is HangmanEvent.UpdateWord -> HangmanState.Playing.Input(event.word)
+        HangmanEvent.UpdateHint -> when (this) {
+            is HangmanState.Playing.Information -> HangmanState.Playing.Input(word, guessedLetters, incorrectGuesses)
+            is HangmanState.Playing.Input -> HangmanState.Playing.Information(word, guessedLetters, incorrectGuesses)
+            else -> this
+        }
+        else -> this
     }
 
     override suspend fun processAction(action: HangmanAction): HangmanEvent {
+        val word = state.value.word
         return when (action) {
             is HangmanAction.GuessLetter -> {
+                val wordLowercase = action.letter.lowercaseChar()
                 if (state.value.incorrectGuesses > 5) {
-                    return HangmanEvent.Lost(action.letter.lowercaseChar())
+                    return HangmanEvent.Lost(wordLowercase)
                 }
                 if (word.word.all { it in state.value.guessedLetters }) {
-                    return HangmanEvent.Won(action.letter.lowercaseChar())
+                    return HangmanEvent.Won(wordLowercase)
                 }
 
                 if (action.letter.lowercase() !in word.word) {
-                    return HangmanEvent.WrongLetterGuessed(letter = action.letter.lowercaseChar())
+                    return HangmanEvent.WrongLetterGuessed(letter = wordLowercase)
                 }
-                HangmanEvent.RightLetterGuessed(action.letter.lowercaseChar())
+                HangmanEvent.RightLetterGuessed(wordLowercase)
             }
+            is HangmanAction.OpenWord -> HangmanEvent.OpenWord(action.word)
 
             HangmanAction.UpdateWord -> HangmanEvent.UpdateWord(
                 randomWordUseCase(RandomWordUseCase.Param(9)).toUi()
             )
+
+            HangmanAction.ShowHint -> HangmanEvent.UpdateHint
         }
     }
 
     override suspend fun handleEvent(event: HangmanEvent) = when (event) {
         is HangmanEvent.Won -> HangmanEffect.Won()
         is HangmanEvent.Lost -> HangmanEffect.Lost()
+        is HangmanEvent.UpdateWord -> HangmanEffect.RestartGame()
+        is HangmanEvent.OpenWord -> HangmanEffect.OpenWord(event.word)
         else -> null
     }
 }
