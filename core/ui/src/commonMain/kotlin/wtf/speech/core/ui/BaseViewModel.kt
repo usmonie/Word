@@ -48,7 +48,9 @@ abstract class BaseViewModel<S : ScreenState, A : ScreenAction, V : ScreenEvent,
             try {
                 val event = processAction(action)
                 handleState(event)
-                handleEvent(event)?.let { _effect.emit(it) }
+                handleEvent(event)?.let {
+                    _effect.emit(it)
+                }
             } catch (e: Exception) {
                 onReduceError(e)
             }

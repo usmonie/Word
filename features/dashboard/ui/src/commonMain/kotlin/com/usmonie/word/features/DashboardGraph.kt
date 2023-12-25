@@ -29,7 +29,6 @@ fun getDashboardGraph(
 ): NavigationGraph {
     val dashboardScreen = remember {
         DashboardScreen.Builder(
-            userRepository,
             wordRepository,
             adMob,
             analytics

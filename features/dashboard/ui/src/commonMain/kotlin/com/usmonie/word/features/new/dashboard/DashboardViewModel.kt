@@ -143,7 +143,6 @@ class DashboardViewModel(
         is DashboardEvent.OpenGame.Hangman -> DashboardEffect.OpenHangman(event.word)
         is DashboardEvent.UpdateMenuItemState.Telegram ->
             DashboardEffect.OpenUrl("https://t.me/nieabout")
-
         else -> null
     }
 

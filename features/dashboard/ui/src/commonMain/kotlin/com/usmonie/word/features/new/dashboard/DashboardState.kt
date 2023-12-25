@@ -1,6 +1,5 @@
 package com.usmonie.word.features.new.dashboard
 
-import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.text.input.TextFieldValue
 import com.usmonie.word.features.new.models.WordCombinedUi
@@ -174,6 +173,5 @@ sealed class DashboardEffect : ScreenEffect {
 
     data class OpenWord(val word: WordCombinedUi) : DashboardEffect()
 
-    @Immutable
     class OpenUrl(val url: String) : DashboardEffect()
 }

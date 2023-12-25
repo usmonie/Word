@@ -37,7 +37,6 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.OpenBrowser
 import com.usmonie.word.features.Url
-import com.usmonie.word.features.dashboard.domain.repository.UserRepository
 import com.usmonie.word.features.dashboard.domain.repository.WordRepository
 import com.usmonie.word.features.dashboard.domain.usecase.ClearRecentUseCaseImpl
 import com.usmonie.word.features.dashboard.domain.usecase.GetSearchHistoryUseCaseImpl
@@ -84,26 +83,21 @@ class DashboardScreen(
         val onPointerInput: suspend PointerInputScope.() -> Unit = remember {
             { detectTapGestures(onTap = { localFocusManager.clearFocus() }) }
         }
+
+        if (effect is DashboardEffect.OpenUrl) {
+            OpenBrowser(Url((effect as DashboardEffect.OpenUrl).url))
+        }
+
         DashboardEffects(listState, localFocusManager, effect)
 
         Scaffold(
             topBar = {
-                TopBackButtonBar(
-                    dashboardViewModel::onBackClick,
-                    state.query.text.isNotBlank()
-                )
+                TopBackButtonBar(dashboardViewModel::onBackClick, state.query.text.isNotBlank())
             },
             modifier = Modifier.fillMaxSize()
                 .pointerInput(Unit) { detectTapGestures(onTap = { localFocusManager.clearFocus() }) }
         ) { insets ->
-            MainState(
-                onPointerInput,
-                dashboardViewModel,
-                listState,
-                insets,
-                state,
-                adMob,
-            )
+            MainState(onPointerInput, dashboardViewModel, listState, insets, state, adMob)
         }
     }
 
@@ -112,7 +106,6 @@ class DashboardScreen(
     }
 
     class Builder(
-        private val userRepository: UserRepository,
         private val wordRepository: WordRepository,
         private val adMob: AdMob,
         private val analytics: Analytics
@@ -146,10 +139,6 @@ private fun DashboardEffects(
         if (listState.firstVisibleItemScrollOffset > 100) {
             localFocusManager.clearFocus()
         }
-    }
-
-    if (effect is DashboardEffect.OpenUrl) {
-        OpenBrowser(Url(effect.url))
     }
 
     LaunchedEffect(effect) {
@@ -199,10 +188,7 @@ private fun MainState(
 
             item {
                 VerticalAnimatedVisibility(hasFocus && state.recentSearch.isNotEmpty()) {
-                    RecentCards(
-                        dashboardViewModel::onOpenWord,
-                        state.recentSearch,
-                    )
+                    RecentCards(dashboardViewModel::onOpenWord, state.recentSearch)
                 }
             }
 
