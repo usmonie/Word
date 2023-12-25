@@ -1,5 +1,6 @@
 package wtf.speech.compass.core
 
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 
@@ -20,6 +21,7 @@ internal data class NavigationEntry(
  * @property initialScreenBuilder The initial screen for this graph.
  * @property parameters Optional parameters associated with the graph.
  */
+@Immutable
 data class NavigationGraph(
     val id: String,
     val initialScreenBuilder: ScreenBuilder,

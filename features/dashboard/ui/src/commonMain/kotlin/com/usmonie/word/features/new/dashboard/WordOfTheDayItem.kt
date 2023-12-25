@@ -1,5 +1,6 @@
 package com.usmonie.word.features.new.dashboard
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -26,7 +27,7 @@ fun WordOfTheDayMenuItem(
         onAddFavouritePressed = onAddFavouritePressed,
         onSharePressed = onSharePressed,
         onUpdatePressed = onUpdatePressed,
-        modifier = Modifier,
+        modifier = Modifier.animateContentSize(),
         word = word
     )
 }

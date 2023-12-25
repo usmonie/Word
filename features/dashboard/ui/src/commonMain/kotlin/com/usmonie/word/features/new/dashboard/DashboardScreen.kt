@@ -174,8 +174,8 @@ private fun MainState(
 ) {
     val showMenuItems by remember(state.query) { derivedStateOf { state.query.text.isBlank() } }
     val (hasFocus, onFocusChange) = remember { mutableStateOf(false) }
-    Box {
-        BaseLazyColumn(listState, insets) {
+    Box(Modifier.padding(insets)) {
+        BaseLazyColumn(listState) {
             item {
                 TopBar(
                     state.query,
@@ -218,15 +218,18 @@ private fun MainState(
             }
 
             item(key = "MENU_WORD_OF_THE_DAY") {
-                VerticalAnimatedVisibility(showMenuItems) {
-                    WordOfTheDayMenuItem(
-                        onWordClick = dashboardViewModel::onOpenWord,
-                        onAddFavouritePressed = dashboardViewModel::onUpdateFavouritesPressed,
-                        onSharePressed = { },
-                        onUpdatePressed = dashboardViewModel::onUpdateRandomCard,
-                        showWordOfTheDay = state.showWordOfTheDay,
-                        word = state.wordOfTheDay
-                    )
+                Column {
+                    VerticalAnimatedVisibility(showMenuItems) {
+                        WordOfTheDayMenuItem(
+                            onWordClick = dashboardViewModel::onOpenWord,
+                            onAddFavouritePressed = dashboardViewModel::onUpdateFavouritesPressed,
+                            onSharePressed = { },
+                            onUpdatePressed = dashboardViewModel::onUpdateRandomCard,
+                            showWordOfTheDay = state.showWordOfTheDay,
+                            word = state.wordOfTheDay
+                        )
+                    }
+                    Spacer(Modifier.height(8.dp))
                 }
             }
 

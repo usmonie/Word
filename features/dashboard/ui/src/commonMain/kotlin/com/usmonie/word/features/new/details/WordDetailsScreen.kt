@@ -1,6 +1,7 @@
 package com.usmonie.word.features.new.details
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -104,7 +105,7 @@ private fun WordDetailsContent(wordViewModel: WordViewModel, adMob: AdMob) {
         topBar = { TopBackButtonBar(routeManager::navigateBack, true) },
     ) {
         Box(Modifier.padding(it)) {
-            BaseLazyColumn() {
+            BaseLazyColumn(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 item {
                     SearchBar(
                         {},

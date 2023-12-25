@@ -1,6 +1,6 @@
 package com.usmonie.word.features.new.settings
 
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -70,8 +70,8 @@ internal fun SettingsScreenContent(
     Scaffold(
         topBar = { TopBackButtonBar(routeManager::navigateBack, true) },
     ) { insets ->
-        Column(Modifier.padding(insets)) {
-            BaseLazyColumn {
+        Box(Modifier.padding(insets)) {
+            BaseLazyColumn() {
                 item {
                     SearchBar(
                         {},
@@ -140,7 +140,7 @@ internal fun SettingsScreenContent(
 
             adMob.Banner(
                 AdKeys.BANNER_ID,
-                Modifier.fillMaxWidth()
+                Modifier.fillMaxWidth().align(Alignment.BottomCenter)
             )
         }
     }

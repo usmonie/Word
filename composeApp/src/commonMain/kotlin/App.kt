@@ -1,8 +1,9 @@
-
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import com.usmonie.word.features.dashboard.data.api.WordApi
 import com.usmonie.word.features.dashboard.data.di.DashboardDataComponent
 import com.usmonie.word.features.dashboard.domain.repository.UserRepository
@@ -36,7 +37,8 @@ fun App(
     }
     val (currentTheme, onCurrentColorsChanged) = remember { mutableStateOf(currentColors) }
     val (currentFonts, onCurrentFontsChanged) = remember { mutableStateOf(currentTypography) }
-    val wordRepository = remember { DashboardDataComponent.getWordsRepository(WordApi("http://16.170.6.0")) }
+    val wordRepository =
+        remember { DashboardDataComponent.getWordsRepository(WordApi("http://16.170.6.0")) }
 
     val initialGraph = getDashboardGraph(
         onCurrentColorsChanged,
@@ -50,7 +52,13 @@ fun App(
 
     val routeManager = rememberRouteManager(initialGraph)
 
+    BackHandler {
+        routeManager.navigateBack()
+    }
     WordTheme(currentTheme, currentFonts) {
-        NavigationHost(routeManager)
+        NavigationHost(routeManager, modifier = Modifier.fillMaxSize())
     }
 }
+
+@Composable
+expect fun BackHandler(onBack: () -> Unit)

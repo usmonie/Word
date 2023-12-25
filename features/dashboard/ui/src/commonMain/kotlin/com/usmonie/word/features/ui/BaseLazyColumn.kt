@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 fun BaseLazyColumn(
     listState: LazyListState = rememberLazyListState(),
     contentPadding: PaddingValues = PaddingValues(0.dp),
-    verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(8.dp),
+    verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(0.dp),
     modifier: Modifier = Modifier,
     content: LazyListScope.() -> Unit
 ) {

@@ -91,6 +91,7 @@ class MainActivity : ComponentActivity() {
                 insets.isAppearanceLightStatusBars = isDark
                 insets.isAppearanceLightNavigationBars = isDark
             }
+
             App(
                 userRepository,
                 subscriptionRepository,

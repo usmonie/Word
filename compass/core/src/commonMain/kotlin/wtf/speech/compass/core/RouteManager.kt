@@ -3,29 +3,14 @@ package wtf.speech.compass.core
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 
-sealed class NavigationEvent {
-    data class BackGesture(
-        val currentScreenOffsetX: Int,
-        val previousScreenOffsetX: Int,
-        val currentScreen: Screen,
-        val previousScreen: Screen
-    ) : NavigationEvent()
 
-    data class Back(
-        val currentScreen: Screen,
-        val previousScreen: Screen?
-    ) : NavigationEvent()
-
-    data class Next(
-        val currentScreen: Screen,
-        val nextScreen: Screen
-    ) : NavigationEvent()
-}
 
 /**
  * Interface defining the core functionalities of the navigation system.
@@ -36,8 +21,8 @@ interface RouteManager {
     /**
      * The currently active [NavigationGraph].
      */
-    val activeGraph: MutableState<NavigationGraph>
-    val events: MutableStateFlow<NavigationEvent?>
+    val activeGraph: State<NavigationGraph>
+    val events: Flow<NavigationEvent?>
 
     /**
      * The currently displayed screen.
@@ -196,7 +181,7 @@ class RouteManagerImpl(initialGraph: NavigationGraph) : RouteManager {
 
 @Composable
 fun rememberRouteManager(initialGraph: NavigationGraph): RouteManager {
-    return remember { RouteManagerImpl(initialGraph) }
+    return remember(initialGraph) { RouteManagerImpl(initialGraph) }
 }
 
 val LocalRouteManager = compositionLocalOf<RouteManager> {
