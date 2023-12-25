@@ -29,7 +29,7 @@ fun App(
 ) {
     val (currentColors, currentTypography) = remember {
         val theme = CurrentThemeUseCaseImpl(userRepository).invoke(Unit)
-        val colors = theme.colorsName?.let { WordColors.valueOf(it) } ?: WordColors.BRITISH_RACING_GREEN
+        val colors = theme.colorsName?.let { WordColors.valueOf(it) } ?: WordColors.RICH_MAROON
         val typography = theme.fonts?.let { WordTypography.valueOf(it) } ?: Friendly
 
         Pair(colors, typography)
