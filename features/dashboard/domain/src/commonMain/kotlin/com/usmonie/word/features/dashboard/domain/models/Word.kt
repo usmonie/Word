@@ -35,7 +35,7 @@ data class Word(
     val derived: List<Related>,
     val proverbs: List<Related>,
     val related: List<Related>,
-    val senses: List<Sense>,
+    val senses: List<SenseCombined>,
     val sounds: List<Sound>,
     val descendants: List<Descendant>,
 )

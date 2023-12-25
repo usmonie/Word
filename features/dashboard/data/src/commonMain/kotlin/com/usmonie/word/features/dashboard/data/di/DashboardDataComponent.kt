@@ -25,7 +25,7 @@ import io.realm.kotlin.RealmConfiguration
 object DashboardDataComponent {
 
     fun getWordsRepository(api: WordApi): WordRepository {
-        val realm = RealmConfiguration.create(
+        val realm = RealmConfiguration.Builder(
             setOf(
                 CategoryDb::class,
                 DescendantDb::class,
@@ -45,6 +45,9 @@ object DashboardDataComponent {
                 WordSearchHistoryDb::class
             )
         )
+            .deleteRealmIfMigrationNeeded()
+            .build()
+
         return WordsRepositoryImpl(Realm.open(realm), api)
     }
 }

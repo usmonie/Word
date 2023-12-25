@@ -103,8 +103,8 @@ private fun WordDetailsContent(wordViewModel: WordViewModel, adMob: AdMob) {
     Scaffold(
         topBar = { TopBackButtonBar(routeManager::navigateBack, true) },
     ) {
-        Box {
-            BaseLazyColumn(contentPadding = it) {
+        Box(Modifier.padding(it)) {
+            BaseLazyColumn() {
                 item {
                     SearchBar(
                         {},
@@ -192,7 +192,6 @@ private fun WordDetailsContent(wordViewModel: WordViewModel, adMob: AdMob) {
                 AdKeys.BANNER_ID,
                 Modifier.fillMaxWidth()
                     .align(Alignment.BottomCenter)
-                    .padding(it)
             )
         }
     }

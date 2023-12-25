@@ -142,7 +142,7 @@ fun SearchWordCard(
 
         selectedPos.senses.take(2).fastForEach { sense ->
             Spacer(Modifier.height(8.dp))
-            Sense(sense, Modifier.padding(horizontal = 20.dp))
+            Sense(sense.gloss, Modifier.padding(horizontal = 20.dp))
             Spacer(Modifier.height(8.dp))
         }
         Spacer(Modifier.height(24.dp))

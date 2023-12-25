@@ -1,5 +1,6 @@
 package com.usmonie.word.features.new.settings
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,11 +27,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.new.dashboard.SettingsItem
 import com.usmonie.word.features.subscription.domain.models.SubscriptionStatus
+import com.usmonie.word.features.ui.AdMob
 import com.usmonie.word.features.ui.BaseLazyColumn
 import com.usmonie.word.features.ui.MenuItemText
 import com.usmonie.word.features.ui.SearchBar
 import com.usmonie.word.features.ui.TopBackButtonBar
 import wtf.speech.compass.core.LocalRouteManager
+import wtf.speech.core.ui.AdKeys
 import wtf.word.core.design.themes.WordColors
 import wtf.word.core.design.themes.typographies.Friendly
 import wtf.word.core.design.themes.typographies.ModernChic
@@ -41,7 +44,8 @@ import wtf.word.core.design.themes.typographies.WordTypography
 internal fun SettingsScreenContent(
     changeTheme: (WordColors) -> Unit,
     changeFont: (WordTypography) -> Unit,
-    viewModel: SettingsViewModel
+    viewModel: SettingsViewModel,
+    adMob: AdMob
 ) {
     val state by viewModel.state.collectAsState()
     val effect by viewModel.effect.collectAsState(null)
@@ -66,71 +70,78 @@ internal fun SettingsScreenContent(
     Scaffold(
         topBar = { TopBackButtonBar(routeManager::navigateBack, true) },
     ) { insets ->
-        BaseLazyColumn(contentPadding = insets) {
-            item {
-                SearchBar(
-                    {},
-                    {},
-                    "[S]ettings",
-                    "",
-                    false,
-                    enabled = false
-                )
-            }
+        Column(Modifier.padding(insets)) {
+            BaseLazyColumn {
+                item {
+                    SearchBar(
+                        {},
+                        {},
+                        "[S]ettings",
+                        "",
+                        false,
+                        enabled = false
+                    )
+                }
 
-            item {
-                SettingsSubtitle("Theme", Modifier.fillParentMaxWidth())
-            }
+                item {
+                    SettingsSubtitle("Theme", Modifier.fillParentMaxWidth())
+                }
 
-            items(colors) { color ->
-                SettingsSubscriptionItem(
-                    onClick = { viewModel.handleAction(SettingsAction.OnThemeChanged(color)) },
-                    title = color.title,
-                    selected = color == state.currentTheme,
-                    isSubscribed = if (color == WordColors.RICH_MAROON) true else isSubscribed,
-                    modifier = Modifier.fillParentMaxWidth()
-                )
-            }
+                items(colors) { color ->
+                    SettingsSubscriptionItem(
+                        onClick = { viewModel.handleAction(SettingsAction.OnThemeChanged(color)) },
+                        title = color.title,
+                        selected = color == state.currentTheme,
+                        isSubscribed = if (color == WordColors.RICH_MAROON) true else isSubscribed,
+                        modifier = Modifier.fillParentMaxWidth()
+                    )
+                }
 
-            item {
-                SettingsSubtitle(
-                    "Typography",
-                    Modifier.fillParentMaxWidth()
-                )
-            }
+                item {
+                    SettingsSubtitle(
+                        "Typography",
+                        Modifier.fillParentMaxWidth()
+                    )
+                }
 
-            items(typographies) { typography ->
-                SettingsSubscriptionItem(
-                    onClick = {
-                        viewModel.handleAction(
-                            SettingsAction.OnTypographyChanged(
-                                typography
+                items(typographies) { typography ->
+                    SettingsSubscriptionItem(
+                        onClick = {
+                            viewModel.handleAction(
+                                SettingsAction.OnTypographyChanged(
+                                    typography
+                                )
                             )
-                        )
-                    },
-                    title = typography.name,
-                    selected = typography == state.currentTypography,
-                    isSubscribed = if (typography is Friendly) true else isSubscribed,
-                    modifier = Modifier.fillParentMaxWidth()
-                )
+                        },
+                        title = typography.name,
+                        selected = typography == state.currentTypography,
+                        isSubscribed = if (typography is Friendly) true else isSubscribed,
+                        modifier = Modifier.fillParentMaxWidth()
+                    )
+                }
+
+                item {
+                    SettingsSubtitle(
+                        "User Data",
+                        Modifier.fillParentMaxWidth()
+                    )
+                }
+
+                item {
+                    SettingsItem(
+                        onClick = viewModel::clearSearchHistory,
+                        title = "Clear search history",
+                        modifier = Modifier.fillParentMaxWidth()
+                    )
+                }
+
+                item { Spacer(Modifier.height(80.dp)) }
             }
 
-            item {
-                SettingsSubtitle(
-                    "User Data",
-                    Modifier.fillParentMaxWidth()
-                )
-            }
-
-            item {
-                SettingsItem(
-                    onClick = viewModel::clearSearchHistory,
-                    title = "Clear search history",
-                    modifier = Modifier.fillParentMaxWidth()
-                )
-            }
-
-            item { Spacer(Modifier.height(80.dp)) }
+            adMob.Banner(
+                AdKeys.BANNER_ID,
+                Modifier.fillMaxWidth()
+            )
         }
     }
 }

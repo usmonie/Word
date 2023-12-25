@@ -10,6 +10,7 @@ import com.usmonie.word.features.dashboard.domain.models.InflectionTemplate
 import com.usmonie.word.features.dashboard.domain.models.Instance
 import com.usmonie.word.features.dashboard.domain.models.Related
 import com.usmonie.word.features.dashboard.domain.models.Sense
+import com.usmonie.word.features.dashboard.domain.models.SenseCombined
 import com.usmonie.word.features.dashboard.domain.models.Sound
 import com.usmonie.word.features.dashboard.domain.models.Template
 import com.usmonie.word.features.dashboard.domain.models.Translation
@@ -47,7 +48,7 @@ internal fun WordDb.toDomain() = Word(
     meronyms = meronyms.toDomain(),
     proverbs = proverbs.toDomain(),
     related = related.toDomain(),
-    senses = senses.fastMap { it.toDomain() },
+    senses = combineSenses(senses.fastMap { it.toDomain() }),
     sounds = sounds.fastMap { it.toDomain() },
     synonyms = synonyms.toDomain(),
     topics = topics,
@@ -57,9 +58,33 @@ internal fun WordDb.toDomain() = Word(
     wikipedia = wikipedia
 )
 
+// A function that takes a list of Sense objects and returns a SenseCombined object
+fun combineSenses(senses: List<Sense>): List<SenseCombined> {
+    // A helper function that takes a list of Sense objects and a prefix list of glosses
+    // and returns a list of SenseCombined objects that match the prefix
+    fun groupByPrefix(senses: List<Sense>, prefix: List<String>): List<SenseCombined> {
+        // Filter the senses that have the same prefix
+        val filtered = senses.filter { it.glosses.take(prefix.size) == prefix }
+        // Group the filtered senses by their next gloss after the prefix
+        val grouped = filtered.groupBy { it.glosses.getOrNull(prefix.size) }
+        // Map each group to a SenseCombined object with the gloss and the id of the first sense in the group
+        // and recursively call the helper function with the extended prefix for the children
+        return grouped.map { (gloss, group) ->
+            gloss ?: return emptyList()
+
+            val root = group.asSequence()
+                .find { it.glosses.first() == gloss || it.glosses.last() == gloss } ?: return emptyList()
+
+            root.toCombinedDomain(gloss, groupByPrefix(group, prefix + listOfNotNull(gloss)))
+        }
+    }
+    // Call the helper function with an empty prefix and return the first element of the result
+    return groupByPrefix(senses, emptyList())
+}
+
 internal fun List<RelatedDb>.toDomain() = map { it.toDomain() }
 internal fun CategoryDb.toDomain() =
-    Category(_id.toHexString(),kind, langcode, name, orig, parents, source)
+    Category(_id.toHexString(), kind, langcode, name, orig, parents, source)
 
 internal fun DescendantDb.toDomain() =
     Descendant(_id.toHexString(), depth, tags, templates.fastMap { it.toDomain() }, text)
@@ -136,6 +161,38 @@ internal fun SenseDb.toDomain() = Sense(
     topics = topics,
     translations = translations.fastMap { it.toDomain() },
     troponyms = troponyms.toDomain(),
+    wikidata = wikidata,
+    wikipedia = wikipedia
+)
+
+internal fun Sense.toCombinedDomain(gloss: String, children: List<SenseCombined>) = SenseCombined(
+    id = id,
+    gloss = gloss,
+    children = children,
+    qualifier = qualifier,
+    taxonomic = taxonomic,
+    headNr = headNr,
+    altOf = altOf,
+    antonyms = antonyms,
+    categories = categories,
+    compoundOf = compoundOf,
+    coordinateTerms = coordinateTerms,
+    derived = derived,
+    examples = examples,
+    formOf = formOf,
+    holonyms = holonyms,
+    hypernyms = hypernyms,
+    hyponyms = hyponyms,
+    instances = instances,
+    links = links.toRealm(),
+    meronyms = meronyms,
+    rawGlosses = rawGlosses,
+    related = related,
+    synonyms = synonyms,
+    tags = tags,
+    topics = topics,
+    translations = translations,
+    troponyms = troponyms,
     wikidata = wikidata,
     wikipedia = wikipedia
 )

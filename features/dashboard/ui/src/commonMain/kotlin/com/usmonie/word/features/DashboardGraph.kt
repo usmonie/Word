@@ -58,7 +58,8 @@ fun getDashboardGraph(
                     onCurrentFontsChanged,
                     subscriptionRepository,
                     userRepository,
-                    wordRepository
+                    wordRepository,
+                    adMob
                 )
             )
         )

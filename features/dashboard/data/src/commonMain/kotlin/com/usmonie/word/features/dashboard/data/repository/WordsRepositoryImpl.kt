@@ -7,6 +7,8 @@ import com.usmonie.word.features.dashboard.data.db.models.WordFavorite
 import com.usmonie.word.features.dashboard.data.db.models.WordSearchHistoryDb
 import com.usmonie.word.features.dashboard.data.db.models.toDatabase
 import com.usmonie.word.features.dashboard.data.db.models.toDomain
+import com.usmonie.word.features.dashboard.domain.models.Sense
+import com.usmonie.word.features.dashboard.domain.models.SenseCombined
 import com.usmonie.word.features.dashboard.domain.models.WordCombined
 import com.usmonie.word.features.dashboard.domain.models.WordEtymology
 import com.usmonie.word.features.dashboard.domain.repository.WordRepository
@@ -47,7 +49,9 @@ class WordsRepositoryImpl(private val realm: Realm, private val api: WordApi) : 
                     }
                 }
             }
-        } catch (e: Exception) { e.printStackTrace() }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
 
         return realm.query<WordDb>(query = "word = $0", query)
             .limit(limit)
@@ -135,7 +139,7 @@ class WordsRepositoryImpl(private val realm: Realm, private val api: WordApi) : 
 
     override suspend fun getSearchHistory(): List<WordCombined> {
         val words = realm.query<WordSearchHistoryDb>()
-            .sort("date",Sort.DESCENDING)
+            .sort("date", Sort.DESCENDING)
             .find { wordsHistory ->
                 wordsHistory.flatMap { word ->
                     realm.query<WordDb>(query = "word = $0", word.word)
@@ -182,6 +186,35 @@ class WordsRepositoryImpl(private val realm: Realm, private val api: WordApi) : 
 
                 WordCombined(entry.value, isFavorite, entry.key)
             }
+
+    // группируем по первому gloss и удаляем этот gloss из списка glosses
+    // проверяем
+    // группируем по следующему gloss и удаляем их, до тех пор пока не останется последний gloss
+
+
+    private fun buildSenseCombined(
+        senses: List<Sense>,
+        parentGloss: String? = null
+    ): List<SenseCombined> {
+        val result = senses
+            .asSequence()
+            .filter { it.glosses.isNotEmpty() }
+            .groupBy(
+                { it.glosses.first() },
+                { sense ->
+                    val glosses = sense.glosses
+
+                    if (glosses.size > 1) {
+                        sense.copy(glosses = glosses.apply { toMutableList().removeAt(0) })
+                    } else {
+                        sense
+                    }
+                }
+            )
+//            .map { SenseCombined() }
+        return emptyList()
+    }
+
 
     private fun checkFavorite(word: String): Boolean {
         return realm.query<WordFavorite>(query = "word = $0", word)

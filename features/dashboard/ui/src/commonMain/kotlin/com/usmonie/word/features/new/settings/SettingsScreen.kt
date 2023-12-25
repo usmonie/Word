@@ -8,6 +8,7 @@ import com.usmonie.word.features.dashboard.domain.usecase.ClearRecentUseCaseImpl
 import com.usmonie.word.features.dashboard.domain.usecase.CurrentThemeUseCaseImpl
 import com.usmonie.word.features.subscription.domain.repository.SubscriptionRepository
 import com.usmonie.word.features.subscription.domain.usecase.SubscriptionStatusUseCaseImpl
+import com.usmonie.word.features.ui.AdMob
 import wtf.speech.compass.core.Extra
 import wtf.speech.compass.core.Screen
 import wtf.speech.compass.core.ScreenBuilder
@@ -17,13 +18,14 @@ import wtf.word.core.design.themes.typographies.WordTypography
 internal class SettingsScreen(
     private val changeTheme: (WordColors) -> Unit,
     private val changeFont: (WordTypography) -> Unit,
-    private val settingsViewModel: SettingsViewModel
+    private val settingsViewModel: SettingsViewModel,
+    private val adMob: AdMob
 ) : Screen(settingsViewModel) {
     override val id: String = ID
 
     @Composable
     override fun Content() {
-        SettingsScreenContent(changeTheme, changeFont, viewModel = settingsViewModel)
+        SettingsScreenContent(changeTheme, changeFont, viewModel = settingsViewModel, adMob)
     }
 
     class Builder(
@@ -32,6 +34,7 @@ internal class SettingsScreen(
         private val subscriptionRepository: SubscriptionRepository,
         private val userRepository: UserRepository,
         private val wordRepository: WordRepository,
+        private val adMob: AdMob
     ) : ScreenBuilder {
         override val id: String = ID
         override fun build(params: Map<String, String>?, extra: Extra?) = SettingsScreen(
@@ -44,7 +47,8 @@ internal class SettingsScreen(
                 CurrentThemeUseCaseImpl(userRepository),
                 ChangeThemeUseCaseImpl(userRepository),
                 ClearRecentUseCaseImpl(wordRepository)
-            )
+            ),
+            adMob
         )
     }
 

@@ -6,15 +6,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.unit.dp
 
 @Composable
 fun HangmanImage(incorrectGuesses: Int, modifier: Modifier = Modifier) {
     val hangmanColor = MaterialTheme.colorScheme.onPrimary
     
     Canvas(modifier = modifier) {
-        val headRadius = size.width * 0.08f
-        val strokeWidth = 8.dp.toPx()
+        val headRadius = size.height * 0.08f
+        val strokeWidth = size.height * 0.01f
         val horizontalCenter = size.width * 0.5f
         val gallowsStartedPoint = size.height * 0.01f
         val gallowsLowestPoint = size.height * 0.05f + gallowsStartedPoint

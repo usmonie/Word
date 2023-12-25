@@ -36,7 +36,7 @@ data class WordUi(
     val meronyms: List<RelatedUi> = listOf(),
     val proverbs: List<RelatedUi> = listOf(),
     val related: List<RelatedUi> = listOf(),
-    val senses: List<SenseUi> = listOf(),
+    val senses: List<SenseCombinedUi> = listOf(),
     val sounds: List<SoundUi> = listOf(),
     val synonyms: List<RelatedUi> = listOf(),
     val topics: List<String> = listOf(),

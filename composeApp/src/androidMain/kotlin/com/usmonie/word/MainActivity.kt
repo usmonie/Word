@@ -17,10 +17,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.WindowCompat
 import com.android.billingclient.api.BillingClient
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdSize
+import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
@@ -50,7 +53,20 @@ class MainActivity : ComponentActivity() {
         val subscriptionRepository = getSubscriptionRepository(Billing(billing))
         val subscriptionStatusUseCase = SubscriptionStatusUseCaseImpl(subscriptionRepository)
         val userRepository = UserRepositoryImpl(KVault(this@MainActivity))
-        val adMob = AdMob({ _, _ -> },
+        val adMob = AdMob(
+            { adKey, modifier ->
+                AndroidView(
+                    modifier = modifier,
+                    factory = { context ->
+                        AdView(context).apply {
+                            adUnitId = adKey
+                            setAdSize(AdSize.FULL_BANNER)
+                            loadAd(AdRequest.Builder().build())
+                        }
+                    },
+                )
+
+            },
             { showInterstitial(this, it) },
             { _, _ -> },
             subscriptionStatusUseCase

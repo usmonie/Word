@@ -31,9 +31,13 @@ fun WordOfTheDayCard(
                 modifier = modifier
             ) {
                 Spacer(Modifier.height(32.dp))
-                WordLargeResizableTitle(wordState.data.first.word, Modifier.fillMaxWidth().padding(horizontal = 20.dp))
+                WordLargeResizableTitle(
+                    wordState.data.first.word,
+                    Modifier.fillMaxWidth().padding(horizontal = 20.dp)
+                )
                 Spacer(Modifier.height(16.dp))
-                wordState.data.first.senses.getOrNull(0)?.let { text -> Sense(text, Modifier.padding(horizontal = 20.dp)) }
+                wordState.data.first.senses.getOrNull(0)
+                    ?.let { text -> Sense(text.gloss, Modifier.padding(horizontal = 20.dp)) }
                 Spacer(Modifier.height(16.dp))
                 WordCardButtons(
                     { onLearnClick(wordState.data.second) },

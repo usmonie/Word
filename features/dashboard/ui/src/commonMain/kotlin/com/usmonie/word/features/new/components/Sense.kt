@@ -26,14 +26,14 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.new.models.ExampleUi
-import com.usmonie.word.features.new.models.SenseUi
+import com.usmonie.word.features.new.models.SenseCombinedUi
 import com.usmonie.word.features.ui.BaseCard
 
 @Composable
-fun SenseCard(sense: SenseUi, modifier: Modifier = Modifier, elevation: Dp = 2.dp) {
+fun SenseCard(sense: SenseCombinedUi, modifier: Modifier = Modifier, elevation: Dp = 2.dp) {
     BaseCard({}, elevation, modifier) {
         Spacer(Modifier.height(20.dp))
-        Sense(sense, modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp))
+        Sense(sense.gloss, modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp))
         sense.examples.forEach { example ->
             Spacer(Modifier.height(8.dp))
             ExampleItem(example)
@@ -44,18 +44,18 @@ fun SenseCard(sense: SenseUi, modifier: Modifier = Modifier, elevation: Dp = 2.d
 
 @Composable
 fun Sense(
-    senseUi: SenseUi,
+    sense: String,
     modifier: Modifier = Modifier,
-    expanded: Boolean = false
+    expanded: Boolean = true
 ) {
     val maxLines by remember(expanded) { mutableStateOf(if (expanded) Int.MAX_VALUE else 6) }
-    Sense(senseUi, modifier = modifier, maxLines = maxLines)
+    Sense(sense, modifier = modifier, maxLines = maxLines)
 }
 
 @Composable
-fun Sense(senseUi: SenseUi, modifier: Modifier = Modifier, maxLines: Int) {
+fun Sense(gloss: String, modifier: Modifier = Modifier, maxLines: Int) {
     Text(
-        text = senseUi.glosses.first(),
+        text = gloss,
         textAlign = TextAlign.Justify,
         style = MaterialTheme.typography.bodyLarge,
         color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -77,6 +77,7 @@ private fun SenseNumber(position: Int) {
 
 @Composable
 fun ExampleItem(example: ExampleUi, modifier: Modifier = Modifier) {
+    example.text ?: return
     Column(modifier) {
         Row(
             Modifier.fillMaxWidth()
@@ -85,7 +86,7 @@ fun ExampleItem(example: ExampleUi, modifier: Modifier = Modifier) {
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
-                text = example.text ?: "",
+                text = example.text,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Justify,
@@ -97,8 +98,8 @@ fun ExampleItem(example: ExampleUi, modifier: Modifier = Modifier) {
             Divider(
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier
-                    .fillMaxHeight()  //fill the max height
-                    .width(1.dp)
+                    .fillMaxHeight()
+                    .width(2.dp)
                     .clip(RoundedCornerShape(20.dp))
             )
         }
@@ -106,7 +107,7 @@ fun ExampleItem(example: ExampleUi, modifier: Modifier = Modifier) {
         if (example.ref != null) {
             Spacer(Modifier.height(4.dp))
             Text(
-                text = example.text ?: "",
+                text = example.ref,
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.End,

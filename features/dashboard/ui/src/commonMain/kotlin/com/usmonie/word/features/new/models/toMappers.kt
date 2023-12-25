@@ -10,6 +10,7 @@ import com.usmonie.word.features.dashboard.domain.models.InflectionTemplate
 import com.usmonie.word.features.dashboard.domain.models.Instance
 import com.usmonie.word.features.dashboard.domain.models.Related
 import com.usmonie.word.features.dashboard.domain.models.Sense
+import com.usmonie.word.features.dashboard.domain.models.SenseCombined
 import com.usmonie.word.features.dashboard.domain.models.Sound
 import com.usmonie.word.features.dashboard.domain.models.Template
 import com.usmonie.word.features.dashboard.domain.models.Translation
@@ -144,6 +145,38 @@ internal fun Sense.toUi() = SenseUi(
     wikidata = wikidata,
     wikipedia = wikipedia,
     sense = this
+)
+internal fun SenseCombined.toUi() = SenseCombinedUi(
+    id = id,
+    gloss = gloss,
+    children = children,
+    qualifier = qualifier,
+    taxonomic = taxonomic,
+    headNr = headNr,
+    altOf = altOf.toUi(),
+    antonyms = antonyms.toUi(),
+    categories = categories.toUi(),
+    compoundOf = compoundOf.toUi(),
+    coordinateTerms = coordinateTerms.toUi(),
+    derived = derived.toUi(),
+    examples = examples.fastMap { it.toUi() },
+    formOf = formOf.toUi(),
+    holonyms = holonyms.toUi(),
+    hypernyms = hypernyms.toUi(),
+    hyponyms = hyponyms.toUi(),
+    instances = instances.fastMap { it.toUi() },
+    links = links,
+    meronyms = meronyms.toUi(),
+    rawGlosses = rawGlosses,
+    related = related.toUi(),
+    synonyms = synonyms.toUi(),
+    tags = tags,
+    topics = topics,
+    translations = translations.fastMap { it.toUi() },
+    troponyms = troponyms.toUi(),
+    wikidata = wikidata,
+    wikipedia = wikipedia,
+    senseCombined = this
 )
 
 internal fun EtymologyTemplate.toUi() = EtymologyTemplateUi(

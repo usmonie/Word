@@ -5,7 +5,6 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -96,7 +95,7 @@ private fun HangmanContent(hangmanGameViewModel: HangmanGameViewModel, adMob: Ad
             modifier = Modifier.fillMaxSize().padding(it),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            HangmanImage(state.incorrectGuesses, Modifier.fillMaxWidth().fillMaxHeight(0.4f))
+            HangmanImage(state.incorrectGuesses, Modifier.fillMaxWidth().weight(1f))
             WordDisplay(state)
 
             Spacer(Modifier.height(8.dp))
@@ -142,7 +141,7 @@ private fun HangmanContent(hangmanGameViewModel: HangmanGameViewModel, adMob: Ad
                 when (hangmanState) {
                     is HangmanState.Playing.Information -> Text(
                         modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
-                        text = hangmanState.word.wordEtymology.first().words.first().senses.first().glosses.first(),
+                        text = hangmanState.word.wordEtymology.first().words.first().senses.first().gloss,
                         textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.bodyLarge
                     )
@@ -161,7 +160,7 @@ private fun HangmanContent(hangmanGameViewModel: HangmanGameViewModel, adMob: Ad
             )
         }
 
-        if (effect !is HangmanEffect.RestartGame) {
+        if (effect is HangmanEffect.RestartGame) {
             adMob.RewardedInterstitial(onAddDismissed = {})
         }
     }
@@ -189,7 +188,7 @@ fun WordDisplay(gameState: HangmanState, modifier: Modifier = Modifier) {
         gameState.word
             .word
             .asSequence()
-            .map { if (it in gameState.guessedLetters) it else '_' }
+            .map { if (it.lowercaseChar() in gameState.guessedLetters) it else '_' }
             .joinToString(" ")
     }
     Text(

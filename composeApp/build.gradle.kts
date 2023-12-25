@@ -101,7 +101,7 @@ android {
         minSdk = 25 //config.versions.android.minSdk.get().toInt()
         targetSdk = 34
 
-        versionCode = 9
+        versionCode = 11
         versionName = "0.3"
     }
     buildFeatures {

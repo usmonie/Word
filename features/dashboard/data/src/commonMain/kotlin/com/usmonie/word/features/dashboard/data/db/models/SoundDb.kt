@@ -9,7 +9,6 @@ import org.mongodb.kbson.ObjectId
 
 internal class SoundDb() : RealmObject {
 
-    @PrimaryKey
     var _id: ObjectId = BsonObjectId()
     var audio: String? = null
     var audioIpa: String? = null
@@ -26,6 +25,11 @@ internal class SoundDb() : RealmObject {
     var text: String? = null
     var topics: RealmList<String> = realmListOf()
     var zhPron: String? = null
+
+    @PrimaryKey
+    var primaryKey: String = primary()
+
+
     constructor(
         audio: String?,
         audioIpa: String?,
@@ -58,5 +62,15 @@ internal class SoundDb() : RealmObject {
         this.text = text
         this.topics = topics
         this.zhPron = zhPron
+
+        primaryKey = primary()
+    }
+
+
+    fun primary(): String {
+        return audio + audioIpa + enpr +
+                form + homophone + ipa +
+                mp3Url + note + oggUrl + other +
+                rhymes + text + zhPron + tags.toString() + topics
     }
 }

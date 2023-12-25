@@ -53,10 +53,21 @@ class HangmanGameViewModel(
 
         is HangmanEvent.UpdateWord -> HangmanState.Playing.Input(event.word)
         HangmanEvent.UpdateHint -> when (this) {
-            is HangmanState.Playing.Information -> HangmanState.Playing.Input(word, guessedLetters, incorrectGuesses)
-            is HangmanState.Playing.Input -> HangmanState.Playing.Information(word, guessedLetters, incorrectGuesses)
+            is HangmanState.Playing.Information -> HangmanState.Playing.Input(
+                word,
+                guessedLetters,
+                incorrectGuesses
+            )
+
+            is HangmanState.Playing.Input -> HangmanState.Playing.Information(
+                word,
+                guessedLetters,
+                incorrectGuesses
+            )
+
             else -> this
         }
+
         else -> this
     }
 
@@ -64,19 +75,23 @@ class HangmanGameViewModel(
         val word = state.value.word
         return when (action) {
             is HangmanAction.GuessLetter -> {
-                val wordLowercase = action.letter.lowercaseChar()
+                val letter = action.letter.lowercaseChar()
+                val guessedLetter = state.value.guessedLetters + letter
                 if (state.value.incorrectGuesses > 5) {
-                    return HangmanEvent.Lost(wordLowercase)
+                    return HangmanEvent.Lost(letter)
                 }
-                if (word.word.all { it in state.value.guessedLetters }) {
-                    return HangmanEvent.Won(wordLowercase)
+                if (word.word.all { it in guessedLetter }) {
+                    return HangmanEvent.Won(letter)
                 }
 
-                if (action.letter.lowercase() !in word.word) {
-                    return HangmanEvent.WrongLetterGuessed(letter = wordLowercase)
+                if (action.letter.lowercase() !in word.word
+                    && action.letter.lowercase() != word.word.lowercase()
+                ) {
+                    return HangmanEvent.WrongLetterGuessed(letter = letter)
                 }
-                HangmanEvent.RightLetterGuessed(wordLowercase)
+                HangmanEvent.RightLetterGuessed(letter)
             }
+
             is HangmanAction.OpenWord -> HangmanEvent.OpenWord(action.word)
 
             HangmanAction.UpdateWord -> HangmanEvent.UpdateWord(
