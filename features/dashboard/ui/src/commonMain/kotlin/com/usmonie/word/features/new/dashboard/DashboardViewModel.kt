@@ -154,6 +154,10 @@ class DashboardViewModel(
     }
 
     private suspend fun search(query: TextFieldValue, offset: Long = 0): DashboardEvent {
+        if (query.text == state.value.query.text && query.text.isNotBlank()) {
+            return DashboardEvent.InputQuery(query)
+        }
+
         searchJob?.cancel()
         if (query.text.isBlank()) {
             updateData()

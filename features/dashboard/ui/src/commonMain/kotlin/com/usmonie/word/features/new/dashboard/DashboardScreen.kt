@@ -33,6 +33,7 @@ import androidx.compose.ui.input.pointer.PointerInputScope
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.OpenBrowser
 import com.usmonie.word.features.Url
@@ -163,6 +164,7 @@ private fun DashboardEffects(
                 HangmanGameScreen.ID,
                 extras = HangmanGameScreen.Extras(effect.word)
             )
+
             is DashboardEffect.OpenSettings -> routeManager.navigateTo(SettingsScreen.ID)
 
             else -> Unit
@@ -186,14 +188,12 @@ private fun MainState(
     Box {
         BaseLazyColumn(listState, insets) {
             item {
-                SearchBar(
+                TopBar(
+                    state.query,
                     dashboardViewModel::onQueryChanged,
-                    placeholder = "[S]earch",
-                    query = state.query,
-                    modifier = Modifier.fillMaxWidth().testTag("DASHBOARD_SEARCH_BAR"),
-                    hasFocus = hasFocus,
-                    enabled = state.wordOfTheDay is ContentState.Success,
-                    onFocusChange = onFocusChange,
+                    state.wordOfTheDay is ContentState.Success,
+                    hasFocus,
+                    onFocusChange
                 )
             }
 
@@ -236,7 +236,7 @@ private fun MainState(
                     WordOfTheDayMenuItem(
                         onWordClick = dashboardViewModel::onOpenWord,
                         onAddFavouritePressed = dashboardViewModel::onUpdateFavouritesPressed,
-                        onSharePressed = {  },
+                        onSharePressed = { },
                         onUpdatePressed = dashboardViewModel::onUpdateRandomCard,
                         showWordOfTheDay = state.showWordOfTheDay,
                         word = state.wordOfTheDay
@@ -292,6 +292,25 @@ private fun MainState(
                 .padding(insets)
         )
     }
+}
+
+@Composable
+private fun TopBar(
+    query: TextFieldValue,
+    onQueryChanged: (TextFieldValue) -> Unit,
+    enabled: Boolean,
+    hasFocus: Boolean,
+    onFocusChange: (Boolean) -> Unit
+) {
+    SearchBar(
+        onQueryChanged,
+        placeholder = "[S]earch",
+        query = query,
+        modifier = Modifier.fillMaxWidth().testTag("DASHBOARD_SEARCH_BAR"),
+        hasFocus = hasFocus,
+        enabled = enabled,
+        onFocusChange = onFocusChange,
+    )
 }
 
 @Composable

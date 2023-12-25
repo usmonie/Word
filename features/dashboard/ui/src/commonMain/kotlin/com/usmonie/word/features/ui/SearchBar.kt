@@ -180,7 +180,9 @@ fun TextInputField(
         shape,
         colors
     )
-}@Composable
+}
+
+@Composable
 fun TextInputField(
     value: TextFieldValue,
     onValueChange: (TextFieldValue) -> Unit,
