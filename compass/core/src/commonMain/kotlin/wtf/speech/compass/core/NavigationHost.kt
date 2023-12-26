@@ -57,14 +57,6 @@ fun NavigationHost(
                 }
             }
 
-//        DisposableEffect(true) {
-//            onDispose {
-//                visibleEntries.forEach { entry ->
-//                    composeNavigator.onTransitionComplete(entry)
-//                }
-//            }
-//        }
-
         val transition = updateTransition(currentScreen, label = "entry")
         transition.AnimatedContent(
             modifier,
@@ -72,42 +64,23 @@ fun NavigationHost(
                 // If the initialState of the AnimatedContent is not in visibleEntries, we are in
                 // a case where visible has cleared the old state for some reason, so instead of
                 // attempting to animate away from the initialState, we skip the animation.
-                    val initialZIndex = zIndices[initialState.id]
-                        ?: 0f.also { zIndices[initialState.id] = 0f }
-                    val targetZIndex = when {
-                        targetState.id == initialState.id -> initialZIndex
-                        else -> initialZIndex + 1f
-                    }.also { zIndices[targetState.id] = it }
+                val initialZIndex = zIndices[initialState.id]
+                    ?: 0f.also { zIndices[initialState.id] = 0f }
+                val targetZIndex = when {
+                    targetState.id == initialState.id -> initialZIndex
+                    else -> initialZIndex + 1f
+                }.also { zIndices[targetState.id] = it }
 
-                    ContentTransform(finalEnter(this), finalExit(this), targetZIndex)
-//                } else {
-//                    EnterTransition.None togetherWith ExitTransition.None
-//                }
+                ContentTransform(finalEnter(this), finalExit(this), targetZIndex)
             },
             Alignment.Center,
             contentKey = { it.id }
         ) {
-            // In some specific cases, such as clearing your back stack by changing your
-            // start destination, AnimatedContent can contain an entry that is no longer
-            // part of visible entries since it was cleared from the back stack and is not
-            // animating. In these cases the currentEntry will be null, and in those cases,
-            // AnimatedContent will just skip attempting to transition the old entry.
-            // See https://issuetracker.google.com/238686802
-//            val currentEntry = visibleEntries.lastOrNull { entry -> it == entry }
+            it.Content()
+        }
 
-            // while in the scope of the composable, we provide the navBackStackEntry as the
-            // ViewModelStoreOwner and LifecycleOwner
-//            currentEntry?.LocalOwnersProvider(saveableStateHolder) {
-//                (currentEntry.destination as ComposeNavigator.Destination)
-//                    .content(this, currentEntry)
-
-                it.Content()
-            }
         LaunchedEffect(transition.currentState, transition.targetState) {
             if (transition.currentState == transition.targetState) {
-//                visibleEntries.forEach { entry ->
-//                    composeNavigator.onTransitionComplete(entry)
-//                }
                 zIndices
                     .filter { it.key != transition.targetState.id }
                     .forEach { zIndices.remove(it.key) }

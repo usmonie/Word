@@ -16,7 +16,7 @@ import com.usmonie.word.features.new.models.WordCombinedUi
 
 @Suppress("NonSkippableComposable")
 @Composable
-fun RecentsLazyRow(
+fun RecentSearchLazyRow(
     words: List<WordCombinedUi>,
     modifier: Modifier = Modifier,
     onWordClick: (WordCombinedUi) -> Unit
@@ -26,9 +26,9 @@ fun RecentsLazyRow(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         contentPadding = PaddingValues(horizontal = 20.dp)
     ) {
-        items(words, key = { it.word }) {
+        items(words, key = { it.word }) { wordCombinedUi ->
             WordRecentCard(
-                it,
+                wordCombinedUi,
                 onWordClick,
                 modifier = Modifier.fillParentMaxWidth(0.75f)
             )
@@ -49,7 +49,6 @@ fun WordRecentCard(
             Modifier.padding(horizontal = 20.dp),
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
-//        Spacer(Modifier.height(4.dp))
         Spacer(Modifier.height(8.dp))
     }
 }

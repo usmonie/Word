@@ -53,7 +53,7 @@ import com.usmonie.word.features.new.settings.SettingsScreen
 import com.usmonie.word.features.ui.AdMob
 import com.usmonie.word.features.ui.BaseLazyColumn
 import com.usmonie.word.features.ui.MenuItem
-import com.usmonie.word.features.ui.RecentsLazyRow
+import com.usmonie.word.features.ui.RecentSearchLazyRow
 import com.usmonie.word.features.ui.SearchBar
 import com.usmonie.word.features.ui.TopBackButtonBar
 import com.usmonie.word.features.ui.VerticalAnimatedVisibility
@@ -199,10 +199,7 @@ private fun MainState(
             }
 
             if (!showMenuItems) {
-                items(
-                    state.foundWords.item ?: listOf(),
-                    key = { word -> word.word }
-                ) { word ->
+                items(state.foundWords.item ?: listOf(), key = { word -> word.word }) { word ->
                     SearchWordCard(
                         dashboardViewModel::onOpenWord,
                         {},
@@ -278,7 +275,6 @@ private fun MainState(
             AdKeys.BANNER_ID,
             Modifier.fillMaxWidth()
                 .align(Alignment.BottomCenter)
-                .padding(insets)
         )
     }
 }
@@ -320,7 +316,7 @@ private fun RecentCards(
     words: List<WordCombinedUi>
 ) {
     Column {
-        RecentsLazyRow(words, onWordClick = onWordClick)
+        RecentSearchLazyRow(words, onWordClick = onWordClick)
         Spacer(Modifier.height(8.dp))
     }
 }
