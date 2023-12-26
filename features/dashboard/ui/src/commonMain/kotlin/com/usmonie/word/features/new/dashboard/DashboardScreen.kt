@@ -174,8 +174,8 @@ private fun MainState(
 ) {
     val showMenuItems by remember(state.query) { derivedStateOf { state.query.text.isBlank() } }
     val (hasFocus, onFocusChange) = remember { mutableStateOf(false) }
-    Box(Modifier.padding(insets)) {
-        BaseLazyColumn(listState) {
+    Box {
+        BaseLazyColumn(listState, insets) {
             item {
                 TopBar(
                     state.query,

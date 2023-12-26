@@ -28,17 +28,53 @@ import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.new.models.ExampleUi
 import com.usmonie.word.features.new.models.SenseCombinedUi
 import com.usmonie.word.features.ui.BaseCard
+import wtf.word.core.domain.tools.fastForEachIndexed
 
 @Composable
 fun SenseCard(sense: SenseCombinedUi, modifier: Modifier = Modifier, elevation: Dp = 2.dp) {
     BaseCard({}, elevation, modifier) {
         Spacer(Modifier.height(20.dp))
-        Sense(sense.gloss, modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp))
-        sense.examples.forEach { example ->
-            Spacer(Modifier.height(8.dp))
-            ExampleItem(example)
-        }
+        SenseTreeItem(sense)
         Spacer(Modifier.height(20.dp))
+    }
+}
+
+@Composable
+fun SenseTreeCard(sense: SenseCombinedUi, modifier: Modifier = Modifier, elevation: Dp = 2.dp) {
+    BaseCard({}, elevation, modifier) {
+        Spacer(Modifier.height(20.dp))
+        SenseTreeItem(sense)
+        Spacer(Modifier.height(20.dp))
+    }
+}
+
+@Composable
+private fun SenseTreeItem(sense: SenseCombinedUi) {
+    Sense(sense.gloss, modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp))
+
+    sense.examples.forEach { example ->
+        Spacer(Modifier.height(8.dp))
+        ExampleItem(example)
+    }
+
+    if (sense.children.isNotEmpty()) {
+        Divider(
+            Modifier.fillMaxWidth(),
+            thickness = 4.dp,
+            color = MaterialTheme.colorScheme.onSurface
+        )
+
+        sense.children.fastForEachIndexed { index, senseCombined ->
+            if (index > 0) {
+                Divider(
+                    Modifier.fillMaxWidth(),
+                    thickness = 2.dp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+
+            SenseTreeItem(senseCombined)
+        }
     }
 }
 

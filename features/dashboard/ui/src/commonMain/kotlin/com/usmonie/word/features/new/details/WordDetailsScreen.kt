@@ -26,7 +26,7 @@ import com.usmonie.word.features.dashboard.domain.repository.WordRepository
 import com.usmonie.word.features.dashboard.domain.usecase.GetSimilarWordsUseCaseImpl
 import com.usmonie.word.features.dashboard.domain.usecase.UpdateFavouriteUseCaseImpl
 import com.usmonie.word.features.new.components.DetailsWordCardLarge
-import com.usmonie.word.features.new.components.SenseCard
+import com.usmonie.word.features.new.components.SenseTreeCard
 import com.usmonie.word.features.new.models.WordCombinedUi
 import com.usmonie.word.features.ui.AdMob
 import com.usmonie.word.features.ui.BaseLazyColumn
@@ -180,8 +180,8 @@ private fun WordDetailsContent(wordViewModel: WordViewModel, adMob: AdMob) {
                     MenuItemText("Senses")
                 }
 
-                items(selectedPos.senses) {
-                    SenseCard(it, modifier = Modifier.padding(horizontal = 20.dp))
+                items(selectedPos.senses) { sense ->
+                    SenseTreeCard(sense, modifier = Modifier.padding(horizontal = 20.dp))
                 }
 
                 item {

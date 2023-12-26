@@ -44,7 +44,7 @@ data class SenseUi(
 data class SenseCombinedUi(
     val id: String,
     val gloss: String,
-    val children: List<SenseCombined>,
+    val children: List<SenseCombinedUi>,
     val altOf: List<RelatedUi>,
     val antonyms: List<RelatedUi>,
     val categories: List<RelatedUi>,

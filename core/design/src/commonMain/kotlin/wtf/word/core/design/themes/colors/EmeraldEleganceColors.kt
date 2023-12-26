@@ -23,7 +23,7 @@ object EmeraldEleganceColors: Colors() {
     override val light_background: Color = Color(0xFF00695C)
     override val light_onBackground: Color = Color(0xFFFFFFFF)
     override val light_surface: Color = Color(0xFF00695C)
-    override val light_onSurface: Color = Color(0xFFFFFFFF)
+    override val light_onSurface = Color(0xFF191C1A)
     override val light_surfaceVariant = Color(0xFFECE1CF)
     override val light_onSurfaceVariant = Color(0xFF4D4639)
     override val light_outline: Color = Color(0xFFB2DFDB)

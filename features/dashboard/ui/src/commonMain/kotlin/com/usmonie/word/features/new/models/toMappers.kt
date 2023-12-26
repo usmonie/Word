@@ -146,10 +146,11 @@ internal fun Sense.toUi() = SenseUi(
     wikipedia = wikipedia,
     sense = this
 )
-internal fun SenseCombined.toUi() = SenseCombinedUi(
+
+internal fun SenseCombined.toUi(): SenseCombinedUi = SenseCombinedUi(
     id = id,
     gloss = gloss,
-    children = children,
+    children = children.fastMap { it.toUi() },
     qualifier = qualifier,
     taxonomic = taxonomic,
     headNr = headNr,

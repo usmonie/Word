@@ -23,7 +23,7 @@ internal class SettingsViewModel(
     SettingsState(
         WordColors.ROYAL_INDIGO,
         Friendly,
-        SubscriptionStatus.NONE
+        SubscriptionStatus.PURCHASED
     )
 ) {
 
