@@ -72,7 +72,7 @@ fun combineSenses(senses: List<Sense>): List<SenseCombined> {
         return grouped.map { (gloss, group) ->
             gloss ?: return emptyList()
 
-            val root = group.asSequence()
+            val root = group
                 .find { it.glosses.first() == gloss || it.glosses.last() == gloss } ?: return emptyList()
 
             root.toCombinedDomain(gloss, groupByPrefix(group, prefix + listOfNotNull(gloss)))

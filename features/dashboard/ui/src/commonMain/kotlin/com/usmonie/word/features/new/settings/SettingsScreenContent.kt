@@ -71,7 +71,7 @@ internal fun SettingsScreenContent(
         topBar = { TopBackButtonBar(routeManager::navigateBack, true) },
     ) { insets ->
         Box(Modifier.padding(insets)) {
-            BaseLazyColumn() {
+            BaseLazyColumn {
                 item {
                     SearchBar(
                         {},

@@ -8,7 +8,7 @@ actual class Billing {
 
     actual fun subscribeSubscriptionState(onSubscriptionChanged: (SubscriptionStatus) -> Unit) {
         subscribers.add(onSubscriptionChanged)
-        onSubscriptionChanged(SubscriptionStatus.PURCHASED)
+        onSubscriptionChanged(SubscriptionStatus.NONE)
     }
 
     actual fun unsubscribeSubscriptionState(onSubscriptionChanged: (SubscriptionStatus) -> Unit) {

@@ -66,6 +66,7 @@ fun DetailsWordCardMedium(
     onAudioPlayClicked: (String) -> Unit,
     onLearnClicked: (WordUi) -> Unit,
     onBookmarkedClicked: (WordUi) -> Unit,
+    bookmarked: Boolean,
     word: WordUi,
     modifier: Modifier = Modifier
 ) {
@@ -76,7 +77,16 @@ fun DetailsWordCardMedium(
     ) {
         Spacer(Modifier.height(20.dp))
         WordMediumResizableTitle(word.word, Modifier.fillMaxWidth().padding(horizontal = 20.dp))
-        Spacer(Modifier.height(4.dp))
+        Spacer(Modifier.height(16.dp))
+
+        WordCardButtons(
+            { onLearnClicked(word) },
+            { onBookmarkedClicked(word) },
+            bookmarked,
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(Modifier.height(16.dp))
         if (word.etymologyText != null) {
             EtymologyTitle()
             Spacer(Modifier.height(12.dp))
@@ -92,15 +102,6 @@ fun DetailsWordCardMedium(
         }
 
         Pronunciations(word, onAudioPlayClicked)
-
-        Spacer(Modifier.height(16.dp))
-
-        WordCardButtons(
-            { onLearnClicked(word) },
-            { onBookmarkedClicked(word) },
-            false,
-            modifier = Modifier.fillMaxWidth()
-        )
         Spacer(Modifier.height(20.dp))
     }
 }
@@ -118,7 +119,7 @@ private fun Pronunciations(
             if (phonetic.isNotBlank()) {
                 PronunciationItem(
                     { sound.audio?.let { onAudioPlayClicked(it) } },
-                    sound.tags.joinToString { it },
+                    sound.text.orEmpty(),
                     phonetic,
                     sound.audio
                 )
