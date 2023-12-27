@@ -215,19 +215,14 @@ private fun MainState(
             }
 
             item(key = "MENU_WORD_OF_THE_DAY") {
-                Column {
-                    VerticalAnimatedVisibility(showMenuItems) {
-                        WordOfTheDayMenuItem(
-                            onWordClick = dashboardViewModel::onOpenWord,
-                            onAddFavouritePressed = dashboardViewModel::onUpdateFavouritesPressed,
-                            onSharePressed = { },
-                            onUpdatePressed = dashboardViewModel::onUpdateRandomCard,
-                            showWordOfTheDay = state.showWordOfTheDay,
-                            word = state.wordOfTheDay
-                        )
-                    }
-                    Spacer(Modifier.height(8.dp))
-                }
+                WordOfTheDayMenuItem(
+                    onWordClick = dashboardViewModel::onOpenWord,
+                    onAddFavouritePressed = dashboardViewModel::onUpdateFavouritesPressed,
+                    onSharePressed = { },
+                    onUpdatePressed = dashboardViewModel::onUpdateRandomCard,
+                    showWordOfTheDay = showMenuItems && state.showWordOfTheDay,
+                    word = state.wordOfTheDay
+                )
             }
 
             item(key = "MENU_GAMES") {

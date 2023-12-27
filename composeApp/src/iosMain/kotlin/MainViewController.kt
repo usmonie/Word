@@ -36,7 +36,7 @@ fun MainViewController(
                 AdMob(
                     { _, modifier ->
                         UIKitView(
-                            modifier = modifier.height(64.dp),
+                            modifier = modifier.height(54.dp),
                             factory = bannerUiView
                         )
                     },

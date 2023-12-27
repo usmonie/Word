@@ -39,7 +39,7 @@ fun RandomWordCard(
                 )
                 Spacer(Modifier.height(16.dp))
                 word.first.senses.getOrNull(0)
-                    ?.let { sense -> Sense(sense.gloss, Modifier.padding(horizontal = 20.dp)) }
+                    ?.let { sense -> Sense(sense.gloss, Modifier.padding(horizontal = 20.dp), false) }
                 Spacer(Modifier.height(16.dp))
                 WordCardButtons(
                     { onLearnClick(word.second) },

@@ -12,15 +12,13 @@ import SwiftUI
 private struct BannerVC: UIViewControllerRepresentable {
     var bannerID: String
 
+    @Binding var viewWidth: CGFloat
     func makeUIViewController(context: Context) -> UIViewController {
-        let view = GADBannerView(adSize: GADAdSizeFullBanner)
+        
+        let view = GADBannerView(adSize: GADCurrentOrientationAnchoredAdaptiveBannerAdSizeWithWidth(viewWidth))
 
         let viewController = UIViewController()
-//        #if DEBUG
-//        view.adUnitID = "ca-app-pub-3940256099942544/6300978111"
-//        #else
         view.adUnitID = bannerID
-//        #endif
         view.rootViewController = viewController
         viewController.view.addSubview(view)
         view.load(GADRequest())
@@ -29,20 +27,32 @@ private struct BannerVC: UIViewControllerRepresentable {
     }
 
     func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
+        // Update the ad size and load a new ad request when the view width changes
+        uiViewController.view.subviews.first?.frame.size = GADCurrentOrientationAnchoredAdaptiveBannerAdSizeWithWidth(viewWidth).size
+        (uiViewController.view.subviews.first as? GADBannerView)?.load(GADRequest())
     }
 }
 
 struct Banner: View {
     var bannerID: String
-
+    @State var viewWidth: CGFloat = 0 // Add a state variable for the view width
 
     var size: CGSize {
-        return GADAdSizeLargeBanner.size
+        return GADCurrentOrientationAnchoredAdaptiveBannerAdSizeWithWidth(viewWidth).size // Use the adaptive banner size function
     }
 
+
     var body: some View {
-        BannerVC(bannerID: bannerID)
-                .frame(width: size.width, height: size.height)
+        BannerVC(bannerID: bannerID, viewWidth: $viewWidth)
+            .frame(width: size.width, height: size.height)
+            .onAppear {
+                // Get the initial view width
+                viewWidth = UIScreen.main.bounds.width
+            }
+            .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
+                // Update the view width when the device orientation changes
+                viewWidth = UIScreen.main.bounds.width
+            }
     }
 }
 

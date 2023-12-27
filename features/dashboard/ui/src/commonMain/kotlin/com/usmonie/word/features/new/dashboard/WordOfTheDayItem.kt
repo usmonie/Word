@@ -50,7 +50,7 @@ private fun WordOfTheDay(
                 onSharePressed,
                 onUpdatePressed,
                 word,
-                modifier = Modifier.padding(horizontal = 16.dp)
+                modifier = Modifier.padding(horizontal = 16.dp).padding(bottom = 16.dp)
             )
         }
     }

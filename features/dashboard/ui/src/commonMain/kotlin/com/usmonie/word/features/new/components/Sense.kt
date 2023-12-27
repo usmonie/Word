@@ -82,7 +82,15 @@ private fun SenseTreeItem(sense: SenseCombinedUi) {
 fun Sense(
     sense: String,
     modifier: Modifier = Modifier,
-    expanded: Boolean = true
+) {
+    Sense(sense, modifier = modifier, true)
+}
+
+@Composable
+fun Sense(
+    sense: String,
+    modifier: Modifier = Modifier,
+    expanded: Boolean
 ) {
     val maxLines by remember(expanded) { mutableStateOf(if (expanded) Int.MAX_VALUE else 6) }
     Sense(sense, modifier = modifier, maxLines = maxLines)
