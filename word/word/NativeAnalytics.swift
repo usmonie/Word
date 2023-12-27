@@ -14,7 +14,12 @@ class NativeAnalytics: DomainAnalytics {
         // Преобразование данных EventData в словарь для Firebase Analytics
         let parameters = convertEventDataToDictionary(key: analyticsEvent.key, data: analyticsEvent.data)
         // Использование Firebase Analytics для отправки события
-        Analytics.logEvent(analyticsEvent.key, parameters: parameters)
+        
+        #if DEBUG
+            Analytics.logEvent(analyticsEvent.key, parameters: parameters)
+        #else
+            print(parameters)
+        #endif
     }
 
     private func convertEventDataToDictionary(key: String, data: DomainAnalyticsEventEventData) -> [String: Any] {

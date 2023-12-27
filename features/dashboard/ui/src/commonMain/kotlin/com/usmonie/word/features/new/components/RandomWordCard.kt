@@ -1,10 +1,14 @@
 package com.usmonie.word.features.new.components
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.new.models.WordCombinedUi
@@ -24,7 +28,18 @@ fun RandomWordCard(
 ) {
     when (wordState) {
         is ContentState.Error<*, *> -> Unit
-        is ContentState.Loading -> Unit
+        is ContentState.Loading ->
+            BaseCard(
+                { },
+                elevation = 2.dp,
+                modifier = modifier
+            ) {
+                Box(Modifier.fillMaxWidth().padding(vertical = 20.dp), Alignment.Center) {
+                    CircularProgressIndicator(Modifier.size(32.dp))
+                }
+
+            }
+
         is ContentState.Success -> {
             val word = wordState.data
             BaseCard(
@@ -39,7 +54,13 @@ fun RandomWordCard(
                 )
                 Spacer(Modifier.height(16.dp))
                 word.first.senses.getOrNull(0)
-                    ?.let { sense -> Sense(sense.gloss, Modifier.padding(horizontal = 20.dp), false) }
+                    ?.let { sense ->
+                        Sense(
+                            sense.gloss,
+                            Modifier.padding(horizontal = 20.dp),
+                            false
+                        )
+                    }
                 Spacer(Modifier.height(16.dp))
                 WordCardButtons(
                     { onLearnClick(word.second) },
