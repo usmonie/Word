@@ -100,56 +100,39 @@ private fun HangmanContent(hangmanGameViewModel: HangmanGameViewModel, adMob: Ad
 
             Spacer(Modifier.height(8.dp))
             when (state) {
-                is HangmanState.Playing.Information -> TextButton(
+                is HangmanState.Playing.Information -> HintButton(
                     hangmanGameViewModel::onShowHintPressed,
-                    Modifier.fillMaxWidth().padding(horizontal = 20.dp)
-                ) {
-                    Text(
-                        "Hide Hint",
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.onPrimary
-                    )
-                }
+                    "Hide Hint"
+                )
 
-                is HangmanState.Playing.Input -> TextButton(
+                is HangmanState.Playing.Input -> HintButton(
                     hangmanGameViewModel::onShowHintPressed,
-                    Modifier.fillMaxWidth().padding(horizontal = 20.dp)
-                ) {
-                    Text(
-                        "Show Hint",
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.onPrimary
-                    )
-                }
+                    "Show Hint"
+                )
 
-                else -> TextButton(
+                else -> HintButton(
                     { hangmanGameViewModel.onOpenWordPressed(state.word) },
-                    Modifier.fillMaxWidth().padding(horizontal = 20.dp)
-                ) {
-                    Text(
-                        "Show Details",
-                        style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.onPrimary
-                    )
-                }
+                    "Show Details"
+                )
             }
             Spacer(Modifier.height(8.dp))
 
             AnimatedContent(
                 state,
-                contentKey = { hangmanState -> hangmanState::class::simpleName }) { hangmanState ->
-                when (hangmanState) {
-                    is HangmanState.Playing.Information -> Text(
+                contentKey = { hangmanState -> hangmanState::class::simpleName }
+            ) { hangmanState ->
+                if (hangmanState is HangmanState.Playing.Input) {
+                    LetterButtons(
+                        hangmanGameViewModel::onLetterGuessed,
+                        hangmanState.guessedLetters,
+                        Modifier.fillMaxWidth().weight(1f)
+                    )
+                } else {
+                    Text(
                         modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
                         text = hangmanState.word.wordEtymology.first().words.first().senses.first().gloss,
                         textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.bodyLarge
-                    )
-
-                    else -> LetterButtons(
-                        hangmanGameViewModel::onLetterGuessed,
-                        hangmanState.guessedLetters,
-                        Modifier.fillMaxWidth().weight(1f)
                     )
                 }
             }
@@ -163,6 +146,23 @@ private fun HangmanContent(hangmanGameViewModel: HangmanGameViewModel, adMob: Ad
         if (effect is HangmanEffect.RestartGame) {
             adMob.RewardedInterstitial(onAddDismissed = {})
         }
+    }
+}
+
+@Composable
+private fun HintButton(
+    onClick: () -> Unit,
+    title: String,
+) {
+    TextButton(
+        onClick,
+        Modifier.fillMaxWidth().padding(horizontal = 20.dp)
+    ) {
+        Text(
+            title,
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onPrimary
+        )
     }
 }
 
@@ -191,13 +191,14 @@ fun WordDisplay(gameState: HangmanState, modifier: Modifier = Modifier) {
             .map { if (it.lowercaseChar() in gameState.guessedLetters) it else '_' }
             .joinToString(" ")
     }
+
     Text(
         displayWord,
         modifier,
         color = when (gameState) {
             is HangmanState.Lost -> MaterialTheme.colorScheme.error
             is HangmanState.Playing -> MaterialTheme.colorScheme.onPrimary
-            is HangmanState.Won -> MaterialTheme.colorScheme.surfaceVariant
+            is HangmanState.Won -> MaterialTheme.colorScheme.onSurfaceVariant
         },
         style = MaterialTheme.typography.displaySmall,
         textAlign = TextAlign.Center

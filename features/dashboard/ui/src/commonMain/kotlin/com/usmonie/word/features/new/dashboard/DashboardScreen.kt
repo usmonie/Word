@@ -95,7 +95,9 @@ class DashboardScreen(
                 TopBackButtonBar(dashboardViewModel::onBackClick, state.query.text.isNotBlank())
             },
             modifier = Modifier.fillMaxSize()
-                .pointerInput(Unit) { detectTapGestures(onTap = { localFocusManager.clearFocus() }) }
+                .pointerInput(Unit) {
+                    detectTapGestures(onTap = { localFocusManager.clearFocus() })
+                }
         ) { insets ->
             MainState(onPointerInput, dashboardViewModel, listState, insets, state, adMob)
         }

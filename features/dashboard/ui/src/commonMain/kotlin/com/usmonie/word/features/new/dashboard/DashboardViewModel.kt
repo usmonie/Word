@@ -20,6 +20,7 @@ import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import wtf.speech.core.ui.BaseViewModel
+import wtf.speech.core.ui.ConnectionErrorState
 import wtf.speech.core.ui.ContentState
 import wtf.word.core.domain.Analytics
 import wtf.word.core.domain.tools.fastMap
@@ -221,8 +222,12 @@ class DashboardViewModel(
             val wordOfTheDay = if (update) {
                 state.value.wordOfTheDay
             } else {
-                val word = getWordOfTheDayUseCase(GetWordOfTheDayUseCase.Param).toUi()
-                ContentState.Success(Pair(word.wordEtymology.random().words.random(), word))
+                try {
+                    val word = getWordOfTheDayUseCase(GetWordOfTheDayUseCase.Param).toUi()
+                    ContentState.Success(Pair(word.wordEtymology.random().words.random(), word))
+                } catch (e: Exception) {
+                    ContentState.Error(ConnectionErrorState(e))
+                }
             }
 
             handleState(

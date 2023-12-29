@@ -1,7 +1,9 @@
 package com.usmonie.word.features.new.models
 
+import androidx.compose.runtime.Immutable
 import com.usmonie.word.features.dashboard.domain.models.Form
 
+@Immutable
 data class FormUi(
     val id: String,
     val formText: String?,

@@ -17,7 +17,7 @@ class AdMob(
 ) {
     @Composable
     fun Banner(adKey: String, modifier: Modifier = Modifier) {
-        val subscriptionState by subscriptionUseCase(Unit).collectAsState(SubscriptionStatus.NONE)
+        val subscriptionState by subscriptionUseCase(Unit).collectAsState(SubscriptionStatus.PURCHASED)
         if (subscriptionState != SubscriptionStatus.PURCHASED) {
             banner(adKey, modifier)
         }
@@ -25,7 +25,7 @@ class AdMob(
 
     @Composable
     fun RewardedInterstitial(onAddDismissed: () -> Unit) {
-        val subscriptionState by subscriptionUseCase(Unit).collectAsState(SubscriptionStatus.NONE)
+        val subscriptionState by subscriptionUseCase(Unit).collectAsState(SubscriptionStatus.PURCHASED)
         if (subscriptionState != SubscriptionStatus.PURCHASED) {
             rewardedInterstitial(onAddDismissed)
         }
@@ -33,7 +33,7 @@ class AdMob(
 
     @Composable
     fun Startup(adKey: String, modifier: Modifier = Modifier) {
-        val subscriptionState by subscriptionUseCase(Unit).collectAsState(SubscriptionStatus.NONE)
+        val subscriptionState by subscriptionUseCase(Unit).collectAsState(SubscriptionStatus.PURCHASED)
         if (subscriptionState != SubscriptionStatus.PURCHASED) {
             startup(adKey, modifier)
         }

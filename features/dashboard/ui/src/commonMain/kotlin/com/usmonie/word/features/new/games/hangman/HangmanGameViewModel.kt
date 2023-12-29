@@ -18,57 +18,60 @@ class HangmanGameViewModel(
     fun onShowHintPressed() = handleAction(HangmanAction.ShowHint)
     fun onOpenWordPressed(word: WordCombinedUi) = handleAction(HangmanAction.OpenWord(word))
 
-    override fun HangmanState.reduce(event: HangmanEvent) = when (event) {
-        is HangmanEvent.RightLetterGuessed -> HangmanState.Playing.Input(
-            this.word,
-            this.guessedLetters.toMutableSet().apply { add(event.letter) },
-            this.incorrectGuesses
-        )
+    override fun HangmanState.reduce(event: HangmanEvent): HangmanState {
+        val guessedLetter = this.guessedLetters.toMutableSet()
+        return when (event) {
+            is HangmanEvent.RightLetterGuessed -> HangmanState.Playing.Input(
+                this.word,
+                guessedLetter.apply { add(event.letter) },
+                this.incorrectGuesses
+            )
 
-        is HangmanEvent.WrongLetterGuessed -> {
-            val newIncorrectGuesses = incorrectGuesses + 1
-            if (newIncorrectGuesses == 6) {
-                HangmanState.Lost(
-                    this.word,
-                    this.guessedLetters.toMutableSet().apply { add(event.letter) },
-                )
-            } else {
-                HangmanState.Playing.Input(
-                    this.word,
-                    this.guessedLetters.toMutableSet().apply { add(event.letter) },
-                    newIncorrectGuesses
-                )
+            is HangmanEvent.WrongLetterGuessed -> {
+                val newIncorrectGuesses = incorrectGuesses + 1
+                if (newIncorrectGuesses == 6) {
+                    HangmanState.Lost(
+                        this.word,
+                        guessedLetter.apply { add(event.letter) },
+                    )
+                } else {
+                    HangmanState.Playing.Input(
+                        this.word,
+                        guessedLetter.apply { add(event.letter) },
+                        newIncorrectGuesses
+                    )
+                }
             }
-        }
 
-        is HangmanEvent.Lost -> HangmanState.Lost(
-            this.word,
-            this.guessedLetters.toMutableSet().apply { add(event.letter) },
-        )
-
-        is HangmanEvent.Won -> HangmanState.Won(
-            word,
-            this.guessedLetters.toMutableSet().apply { add(event.letter) },
-        )
-
-        is HangmanEvent.UpdateWord -> HangmanState.Playing.Input(event.word)
-        HangmanEvent.UpdateHint -> when (this) {
-            is HangmanState.Playing.Information -> HangmanState.Playing.Input(
-                word,
-                guessedLetters,
-                incorrectGuesses
+            is HangmanEvent.Lost -> HangmanState.Lost(
+                this.word,
+                guessedLetter.apply { add(event.letter) },
             )
 
-            is HangmanState.Playing.Input -> HangmanState.Playing.Information(
+            is HangmanEvent.Won -> HangmanState.Won(
                 word,
-                guessedLetters,
-                incorrectGuesses
+                guessedLetter.apply { add(event.letter) },
             )
+
+            is HangmanEvent.UpdateWord -> HangmanState.Playing.Input(event.word)
+            HangmanEvent.UpdateHint -> when (this) {
+                is HangmanState.Playing.Information -> HangmanState.Playing.Input(
+                    word,
+                    guessedLetters,
+                    incorrectGuesses
+                )
+
+                is HangmanState.Playing.Input -> HangmanState.Playing.Information(
+                    word,
+                    guessedLetters,
+                    incorrectGuesses
+                )
+
+                else -> this
+            }
 
             else -> this
         }
-
-        else -> this
     }
 
     override suspend fun processAction(action: HangmanAction): HangmanEvent {
@@ -84,9 +87,7 @@ class HangmanGameViewModel(
                     return HangmanEvent.Won(letter)
                 }
 
-                if (action.letter.lowercase() !in word.word
-                    && action.letter.lowercase() != word.word.lowercase()
-                ) {
+                if (letter !in word.word.lowercase()) {
                     return HangmanEvent.WrongLetterGuessed(letter = letter)
                 }
                 HangmanEvent.RightLetterGuessed(letter)

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -14,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.new.models.WordCombinedUi
 import com.usmonie.word.features.new.models.WordUi
 import com.usmonie.word.features.ui.BaseCard
-import com.usmonie.word.features.ui.WordLargeResizableTitle
+import com.usmonie.word.features.ui.WordMediumResizableTitle
 import wtf.speech.core.ui.ContentState
 
 @Composable
@@ -35,7 +36,10 @@ fun RandomWordCard(
                 modifier = modifier
             ) {
                 Box(Modifier.fillMaxWidth().padding(vertical = 20.dp), Alignment.Center) {
-                    CircularProgressIndicator(Modifier.size(32.dp))
+                    CircularProgressIndicator(
+                        Modifier.size(32.dp),
+                        MaterialTheme.colorScheme.onSurface
+                    )
                 }
 
             }
@@ -48,9 +52,10 @@ fun RandomWordCard(
                 modifier = modifier
             ) {
                 Spacer(Modifier.height(32.dp))
-                WordLargeResizableTitle(
+                WordMediumResizableTitle(
                     word.first.word,
-                    Modifier.fillMaxWidth().padding(horizontal = 20.dp)
+                    Modifier.fillMaxWidth().padding(horizontal = 20.dp),
+                    MaterialTheme.colorScheme.onSurface
                 )
                 Spacer(Modifier.height(16.dp))
                 word.first.senses.getOrNull(0)

@@ -60,14 +60,14 @@ class MainActivity : ComponentActivity() {
                     factory = { context ->
                         AdView(context).apply {
                             adUnitId = adKey
-                            setAdSize(AdSize.FULL_BANNER)
+                            setAdSize(AdSize.BANNER)
                             loadAd(AdRequest.Builder().build())
                         }
                     },
                 )
 
             },
-            { showInterstitial(this, it) },
+            { onAddDismissed -> showInterstitial(this, onAddDismissed) },
             { _, _ -> },
             subscriptionStatusUseCase
         )

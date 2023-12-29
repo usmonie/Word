@@ -31,6 +31,9 @@ abstract class ErrorState(error: Throwable) {
     val message = error.message ?: "Unknown error"
 }
 
+@Stable
+data class ConnectionErrorState(val error: Throwable): ErrorState(error)
+
 /**
  * A base class for representing the events that occur on a screen in MVI architecture
  */

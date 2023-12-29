@@ -1,6 +1,6 @@
 @file:Suppress("FunctionName")
 
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.ui.interop.UIKitView
 import androidx.compose.ui.uikit.ComposeUIViewControllerDelegate
 import androidx.compose.ui.unit.dp
@@ -36,7 +36,7 @@ fun MainViewController(
                 AdMob(
                     { _, modifier ->
                         UIKitView(
-                            modifier = modifier.height(54.dp),
+                            modifier = modifier.heightIn(max = 54.dp),
                             factory = bannerUiView
                         )
                     },
