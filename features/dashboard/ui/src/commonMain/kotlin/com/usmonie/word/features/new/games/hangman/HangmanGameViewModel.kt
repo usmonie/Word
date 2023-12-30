@@ -21,6 +21,7 @@ class HangmanGameViewModel(
     override fun HangmanState.reduce(event: HangmanEvent): HangmanState {
         val guessedLetter = this.guessedLetters.toMutableSet()
         return when (event) {
+            is HangmanEvent.Loading -> HangmanState.Loading()
             is HangmanEvent.RightLetterGuessed -> HangmanState.Playing.Input(
                 this.word,
                 guessedLetter.apply { add(event.letter) },
