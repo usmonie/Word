@@ -20,6 +20,7 @@ data class AppConfiguration(
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun App(appConfiguration: AppConfiguration) {
+
     val routeManager = appConfiguration.routeManager
     BackHandler {
         routeManager.navigateBack()

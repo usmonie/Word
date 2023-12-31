@@ -17,6 +17,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
@@ -56,7 +57,7 @@ class MainActivity : ComponentActivity() {
         AppOpenAdManager()
     }
 
-    private var isSubscribed = false
+    private var isSubscribed by mutableStateOf(false)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -88,7 +89,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             val view = LocalView.current
             val isDark = isSystemInDarkTheme()
-            val subscriptionStatus by subscriptionStatusUseCase(Unit).collectAsState(initial = null)
+            val subscriptionStatus by subscriptionStatusUseCase(Unit).collectAsState(initial = SubscriptionStatus.PURCHASED)
 
             LaunchedEffect(subscriptionStatus) {
                 isSubscribed = subscriptionStatus == SubscriptionStatus.PURCHASED
@@ -105,8 +106,10 @@ class MainActivity : ComponentActivity() {
 
             val (currentColors, currentTypography) = remember {
                 val theme = CurrentThemeUseCaseImpl(userRepository).invoke(Unit)
-                val colors = theme.colorsName?.let { WordColors.valueOf(it) } ?: WordColors.RICH_MAROON
-                val typography = theme.fonts?.let { WordTypography.valueOf(it) } ?: Friendly
+                val colors = if (isSubscribed) theme.colorsName?.let { WordColors.valueOf(it) }
+                    ?: WordColors.RICH_MAROON else WordColors.RICH_MAROON
+                val typography = if (isSubscribed) theme.fonts?.let { WordTypography.valueOf(it) }
+                    ?: Friendly else Friendly
 
                 Pair(colors, typography)
             }

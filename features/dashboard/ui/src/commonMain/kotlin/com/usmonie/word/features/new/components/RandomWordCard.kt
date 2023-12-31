@@ -29,7 +29,7 @@ fun RandomWordCard(
 ) {
     when (wordState) {
         is ContentState.Error<*, *> -> Unit
-        is ContentState.Loading ->
+        is ContentState.Loading -> {
             BaseCard(
                 { },
                 elevation = 2.dp,
@@ -37,12 +37,12 @@ fun RandomWordCard(
             ) {
                 Box(Modifier.fillMaxWidth().padding(vertical = 20.dp), Alignment.Center) {
                     CircularProgressIndicator(
-                        Modifier.size(32.dp),
+                        Modifier.size(64.dp),
                         MaterialTheme.colorScheme.onSurface
                     )
                 }
-
             }
+        }
 
         is ContentState.Success -> {
             val word = wordState.data

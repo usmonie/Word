@@ -2,9 +2,12 @@
 
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.interop.UIKitView
-import androidx.compose.ui.uikit.ComposeUIViewControllerDelegate
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.ComposeUIViewController
 import com.liftric.kvault.KVault
@@ -15,6 +18,7 @@ import com.usmonie.word.features.dashboard.domain.usecase.CurrentThemeUseCaseImp
 import com.usmonie.word.features.getDashboardGraph
 import com.usmonie.word.features.subscription.data.Billing
 import com.usmonie.word.features.subscription.data.getSubscriptionRepository
+import com.usmonie.word.features.subscription.domain.models.SubscriptionStatus
 import com.usmonie.word.features.subscription.domain.usecase.SubscriptionStatusUseCaseImpl
 import com.usmonie.word.features.ui.AdMob
 import kotlinx.cinterop.ExperimentalForeignApi
@@ -51,17 +55,14 @@ fun MainViewController(
     )
 
     val theme = CurrentThemeUseCaseImpl(userRepository).invoke(Unit)
-    val colors = theme.colorsName?.let { WordColors.valueOf(it) } ?: WordColors.RICH_MAROON
-    val typography = theme.fonts?.let { WordTypography.valueOf(it) } ?: Friendly
-
-    val (currentTheme, onCurrentColorsChanged) =  mutableStateOf(colors)
-    val (currentFonts, onCurrentFontsChanged) =  mutableStateOf(typography)
+    var currentTheme by mutableStateOf(theme.colorsName?.let { WordColors.valueOf(it) } ?: WordColors.RICH_MAROON)
+    var currentFonts by mutableStateOf(theme.fonts?.let { WordTypography.valueOf(it) } ?: Friendly)
     val wordRepository =
-         DashboardDataComponent.getWordsRepository(WordApi("http://16.170.6.0"))
+        DashboardDataComponent.getWordsRepository(WordApi("http://16.170.6.0"))
 
     val initialGraph = getDashboardGraph(
-        onCurrentColorsChanged,
-        onCurrentFontsChanged,
+        { currentTheme = it },
+        { currentFonts = it },
         subscriptionRepository,
         userRepository,
         wordRepository,
@@ -70,40 +71,25 @@ fun MainViewController(
     )
 
     val routeManager = getRouteManager(initialGraph)
-    val appConfiguration = AppConfiguration(routeManager, currentTheme, currentFonts)
     val content: @Composable () -> Unit = {
+        var isSubscribed by mutableStateOf(true)
+
+        val subscriptionStatus by subscriptionStatusUseCase(Unit).collectAsState(null)
+
+        LaunchedEffect(subscriptionStatus) {
+            isSubscribed = subscriptionStatus == SubscriptionStatus.PURCHASED
+        }
+
+        LaunchedEffect(isSubscribed) {
+            if (!isSubscribed) {
+                currentTheme = WordColors.RICH_MAROON
+                currentFonts = Friendly
+            }
+        }
+
+        val appConfiguration = AppConfiguration(routeManager, currentTheme, currentFonts)
         App(appConfiguration)
     }
 
-    return ComposeUIViewController(
-        configure = {
-            delegate = object : ComposeUIViewControllerDelegate {
-                override fun viewDidAppear(animated: Boolean) {
-                    super.viewDidAppear(animated)
-                    println("LIFECYCLE: viewDidAppear $this")
-                }
-
-                override fun viewDidDisappear(animated: Boolean) {
-                    super.viewDidDisappear(animated)
-                    println("LIFECYCLE: viewDidDisappear $this")
-                }
-
-                override fun viewDidLoad() {
-                    super.viewDidLoad()
-                    println("LIFECYCLE: viewDidLoad $this")
-                }
-
-                override fun viewWillAppear(animated: Boolean) {
-                    super.viewWillAppear(animated)
-                    println("LIFECYCLE: viewWillAppear $this")
-                }
-
-                override fun viewWillDisappear(animated: Boolean) {
-                    super.viewWillDisappear(animated)
-                    println("LIFECYCLE: viewWillDisappear $this")
-                }
-            }
-        },
-        content = content
-    )
+    return ComposeUIViewController(content = content)
 }

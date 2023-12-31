@@ -53,14 +53,10 @@ internal fun SettingsScreenContent(
     SettingsScreenEffect(effect, changeTheme, changeFont)
 
     val isSubscribed by remember(state) {
-        derivedStateOf {
-            state.subscriptionStatus == SubscriptionStatus.PURCHASED
-        }
+        derivedStateOf { state.subscriptionStatus == SubscriptionStatus.PURCHASED }
     }
 
-    val colors = remember {
-        WordColors.entries.toList()
-    }
+    val colors = remember { WordColors.entries.toList() }
 
     val typographies = remember {
         listOf(Friendly, ModernChic, TimelessElegant)
@@ -91,31 +87,24 @@ internal fun SettingsScreenContent(
                     SettingsSubscriptionItem(
                         onClick = { viewModel.handleAction(SettingsAction.OnThemeChanged(color)) },
                         title = color.title,
-                        selected = color == state.currentTheme,
-                        isSubscribed = if (color == WordColors.RICH_MAROON) true else isSubscribed,
+                        selected = if (isSubscribed) color == state.currentTheme else color == WordColors.RICH_MAROON,
+                        isSubscribed = color == WordColors.RICH_MAROON || isSubscribed,
                         modifier = Modifier.fillParentMaxWidth()
                     )
                 }
 
                 item {
-                    SettingsSubtitle(
-                        "Typography",
-                        Modifier.fillParentMaxWidth()
-                    )
+                    SettingsSubtitle("Typography", Modifier.fillParentMaxWidth())
                 }
 
                 items(typographies) { typography ->
                     SettingsSubscriptionItem(
                         onClick = {
-                            viewModel.handleAction(
-                                SettingsAction.OnTypographyChanged(
-                                    typography
-                                )
-                            )
+                            viewModel.handleAction(SettingsAction.OnTypographyChanged(typography))
                         },
                         title = typography.name,
-                        selected = typography == state.currentTypography,
-                        isSubscribed = if (typography is Friendly) true else isSubscribed,
+                        selected = if (isSubscribed) typography == state.currentTypography else typography is Friendly,
+                        isSubscribed = typography is Friendly || isSubscribed,
                         modifier = Modifier.fillParentMaxWidth()
                     )
                 }

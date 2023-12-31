@@ -24,17 +24,6 @@ enum class WordColors(val colors: Colors, val title: String) {
     TWILIGHT_AMETHYST(TwilightAmethystColors, "Twilight Amethyst"),
     PASTEL_SUNSET(PastelSunsetColors, "Pastel Sunset"),
     EMERALD_ELEGANCE(EmeraldEleganceColors, "Emerald Elegance");
-
-    fun next(subscribed: Boolean = true) = if (subscribed) when (this) {
-        RICH_MAROON -> BRITISH_RACING_GREEN
-        BRITISH_RACING_GREEN -> DEEP_INDIGO
-        DEEP_INDIGO -> GENTLE_BREEZE
-        GENTLE_BREEZE -> EMERALD_ELEGANCE
-        EMERALD_ELEGANCE -> TWILIGHT_AMETHYST
-        TWILIGHT_AMETHYST -> PASTEL_SUNSET
-        PASTEL_SUNSET -> ROYAL_INDIGO
-        ROYAL_INDIGO -> RICH_MAROON
-    } else BRITISH_RACING_GREEN
 }
 
 @Composable

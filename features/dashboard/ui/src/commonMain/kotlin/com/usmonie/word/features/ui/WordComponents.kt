@@ -221,7 +221,7 @@ fun ShareButton(
 @Composable
 fun BaseCard(
     onClick: () -> Unit,
-    elevation: Dp,
+    elevation: Dp = 2.dp,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     content: @Composable ColumnScope.() -> Unit
