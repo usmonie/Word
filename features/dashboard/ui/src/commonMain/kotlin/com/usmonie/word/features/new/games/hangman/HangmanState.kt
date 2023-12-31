@@ -56,6 +56,7 @@ sealed class HangmanState(
 }
 
 sealed class HangmanAction : ScreenAction {
+    data object StartGame: HangmanAction()
     data class GuessLetter(val letter: Char) : HangmanAction()
     data class OpenWord(val word: WordCombinedUi) : HangmanAction()
     data object UpdateWord : HangmanAction()
@@ -63,6 +64,7 @@ sealed class HangmanAction : ScreenAction {
 }
 
 sealed class HangmanEvent : ScreenEvent {
+    data class StartGame(val word: WordCombinedUi) : HangmanEvent()
     data object UpdateHint : HangmanEvent()
     data object Loading : HangmanEvent()
     data class OpenWord(val word: WordCombinedUi) : HangmanEvent()
@@ -78,5 +80,6 @@ sealed class HangmanEffect : ScreenEffect {
     class Won : HangmanEffect()
     class Lost : HangmanEffect()
     class RestartGame : HangmanEffect()
+    class StartGame: HangmanEffect()
     data class OpenWord(val word: WordCombinedUi) : HangmanEffect()
 }

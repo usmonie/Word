@@ -18,7 +18,7 @@ import wtf.word.core.design.themes.typographies.WordTypography
 import wtf.word.core.domain.Analytics
 
 @Composable
-fun getDashboardGraph(
+fun rememberDashboardGraph(
     onCurrentColorsChanged: (WordColors) -> Unit,
     onCurrentFontsChanged: (WordTypography) -> Unit,
     subscriptionRepository: SubscriptionRepository,
@@ -34,6 +34,55 @@ fun getDashboardGraph(
             analytics
         )
     }
+
+    return remember {
+        NavigationGraph("DASHBOARD_GRAPH", dashboardScreen).apply {
+            register(
+                Route(
+                    FavoritesScreen.ID,
+                    FavoritesScreen.Builder(wordRepository, adMob, analytics)
+                )
+            )
+            register(
+                Route(
+                    WordDetailsScreen.ID,
+                    WordDetailsScreen.Builder(wordRepository, analytics, adMob)
+                )
+            )
+            register(Route(HangmanGameScreen.ID, HangmanGameScreen.Builder(wordRepository, adMob)))
+            register(
+                Route(
+                    SettingsScreen.ID,
+                    SettingsScreen.Builder(
+                        onCurrentColorsChanged,
+                        onCurrentFontsChanged,
+                        subscriptionRepository,
+                        userRepository,
+                        wordRepository,
+                        adMob
+                    )
+                )
+            )
+        }
+    }
+}
+
+fun getDashboardGraph(
+    onCurrentColorsChanged: (WordColors) -> Unit,
+    onCurrentFontsChanged: (WordTypography) -> Unit,
+    subscriptionRepository: SubscriptionRepository,
+    userRepository: UserRepository,
+    wordRepository: WordRepository,
+    adMob: AdMob,
+    analytics: Analytics
+): NavigationGraph {
+    val dashboardScreen =
+        DashboardScreen.Builder(
+            wordRepository,
+            adMob,
+            analytics
+        )
+
 
     return NavigationGraph("DASHBOARD_GRAPH", dashboardScreen).apply {
         register(

@@ -6,8 +6,6 @@ import FirebaseAnalytics
 
 struct InterstitalRewardedView: UIViewControllerRepresentable {
 
-    typealias UIViewControllerType = InterstitalRewardedViewController
-
     let viewController = InterstitalRewardedViewController()
 
     func makeUIViewController(context: UIViewControllerRepresentableContext<InterstitalRewardedView>) -> InterstitalRewardedViewController {
@@ -60,7 +58,6 @@ class InterstitalRewardedViewController: UIViewController, GADFullScreenContentD
     }
 
     @IBAction func rewardAdTouched() {
-
         if let ad = rewardInterstitialAd {
             ad.present(
                 fromRootViewController: self,

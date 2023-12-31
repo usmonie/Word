@@ -44,6 +44,7 @@
 		DA1D11E12B2A097F00194749 /* notosans_light_italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DA1D11C32B2A097F00194749 /* notosans_light_italic.ttf */; };
 		DA1D11E22B2A097F00194749 /* sourceserif_black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DA1D11C42B2A097F00194749 /* sourceserif_black.ttf */; };
 		DA1D11E32B2A097F00194749 /* raleway_semibold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DA1D11C52B2A097F00194749 /* raleway_semibold.ttf */; };
+		DA838B932B40E99F00AA3C13 /* InterstitialAdsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA838B922B40E99F00AA3C13 /* InterstitialAdsManager.swift */; };
 		DAD18C092B29E7C500E74100 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DAD18C082B29E7C500E74100 /* Assets.xcassets */; };
 		DAD18C0D2B29E7C500E74100 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DAD18C0C2B29E7C500E74100 /* Preview Assets.xcassets */; };
 		DAD18C232B29E8AF00E74100 /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = DAD18C222B29E8AF00E74100 /* GoogleMobileAds */; };
@@ -92,6 +93,7 @@
 		DA1D11C32B2A097F00194749 /* notosans_light_italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = notosans_light_italic.ttf; sourceTree = "<group>"; };
 		DA1D11C42B2A097F00194749 /* sourceserif_black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = sourceserif_black.ttf; sourceTree = "<group>"; };
 		DA1D11C52B2A097F00194749 /* raleway_semibold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = raleway_semibold.ttf; sourceTree = "<group>"; };
+		DA838B922B40E99F00AA3C13 /* InterstitialAdsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterstitialAdsManager.swift; sourceTree = "<group>"; };
 		DAD18C012B29E7C400E74100 /* word.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = word.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAD18C082B29E7C500E74100 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DAD18C0A2B29E7C500E74100 /* word.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = word.entitlements; sourceTree = "<group>"; };
@@ -183,6 +185,7 @@
 				DAD18C082B29E7C500E74100 /* Assets.xcassets */,
 				DAD18C0A2B29E7C500E74100 /* word.entitlements */,
 				DAD18C0B2B29E7C500E74100 /* Preview Content */,
+				DA838B922B40E99F00AA3C13 /* InterstitialAdsManager.swift */,
 			);
 			path = word;
 			sourceTree = "<group>";
@@ -331,6 +334,7 @@
 			files = (
 				DA1D11812B29F2E200194749 /* NativeAnalytics.swift in Sources */,
 				DA1D11832B29F2E200194749 /* ContentView.swift in Sources */,
+				DA838B932B40E99F00AA3C13 /* InterstitialAdsManager.swift in Sources */,
 				DA1D11862B29F2E200194749 /* AdInterstitialRewardedView.swift in Sources */,
 				DA1D11802B29F2E200194749 /* AppDelegate.swift in Sources */,
 				DA1D11822B29F2E200194749 /* AdBannerView.swift in Sources */,

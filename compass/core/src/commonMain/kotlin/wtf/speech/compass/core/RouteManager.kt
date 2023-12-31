@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 
 
-
 /**
  * Interface defining the core functionalities of the navigation system.
  */
@@ -97,6 +96,10 @@ class RouteManagerImpl(initialGraph: NavigationGraph) : RouteManager {
     override val currentScreen: Screen
         get() = activeGraph.value.currentScreen.value.screen
 
+    init {
+        println("ROUTEMANAGER: new instance $this")
+    }
+
     override fun registerGraph(graph: NavigationGraph) {
         graphs[graph.id] = graph
     }
@@ -181,7 +184,11 @@ class RouteManagerImpl(initialGraph: NavigationGraph) : RouteManager {
 
 @Composable
 fun rememberRouteManager(initialGraph: NavigationGraph): RouteManager {
-    return remember(initialGraph) { RouteManagerImpl(initialGraph) }
+    return remember { getRouteManager(initialGraph) }
+}
+
+fun getRouteManager(initialGraph: NavigationGraph): RouteManager {
+    return RouteManagerImpl(initialGraph)
 }
 
 val LocalRouteManager = compositionLocalOf<RouteManager> {

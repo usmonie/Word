@@ -3,15 +3,19 @@ package com.usmonie.word.features.new.games.hangman
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -68,7 +72,6 @@ class HangmanGameScreen(
             require(extra is Extras)
             return HangmanGameScreen(
                 HangmanGameViewModel(
-                    extra.word,
                     RandomWordUseCaseImpl(wordRepository)
                 ), adMob
             )
@@ -90,62 +93,85 @@ private fun HangmanContent(hangmanGameViewModel: HangmanGameViewModel, adMob: Ad
                 tint = MaterialTheme.colorScheme.onPrimary
             )
         }
-    }) {
-        Column(
-            modifier = Modifier.fillMaxSize().padding(it),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            HangmanImage(state.incorrectGuesses, Modifier.fillMaxWidth().weight(1f))
-            WordDisplay(state)
-
-            Spacer(Modifier.height(8.dp))
-            when (state) {
-                is HangmanState.Playing.Information -> HintButton(
-                    hangmanGameViewModel::onShowHintPressed,
-                    "Hide Hint"
-                )
-
-                is HangmanState.Playing.Input -> HintButton(
-                    hangmanGameViewModel::onShowHintPressed,
-                    "Show Hint"
-                )
-
-                else -> HintButton(
-                    { hangmanGameViewModel.onOpenWordPressed(state.word) },
-                    "Show Details"
+    }) { insets ->
+        if (state is HangmanState.Loading) {
+            Box(Modifier.fillMaxSize().padding(insets), contentAlignment = Alignment.Center) {
+                CircularProgressIndicator(
+                    Modifier.size(32.dp),
+                    MaterialTheme.colorScheme.onPrimary
                 )
             }
-            Spacer(Modifier.height(8.dp))
-
-            AnimatedContent(
-                state,
-                contentKey = { hangmanState -> hangmanState::class::simpleName }
-            ) { hangmanState ->
-                if (hangmanState is HangmanState.Playing.Input) {
-                    LetterButtons(
-                        hangmanGameViewModel::onLetterGuessed,
-                        hangmanState.guessedLetters,
-                        Modifier.fillMaxWidth().weight(1f)
-                    )
-                } else {
-                    Text(
-                        modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
-                        text = hangmanState.word.wordEtymology.first().words.first().senses.first().gloss,
-                        textAlign = TextAlign.Center,
-                        style = MaterialTheme.typography.bodyLarge
-                    )
-                }
-            }
-
-            adMob.Banner(
-                AdKeys.BANNER_ID,
-                Modifier.fillMaxWidth()
-            )
+        } else {
+            PlayBoard(insets, state, hangmanGameViewModel, adMob)
         }
 
         if (effect is HangmanEffect.RestartGame) {
             adMob.RewardedInterstitial(onAddDismissed = {})
         }
+
+        if (effect is HangmanEffect.StartGame) {
+            adMob.Startup(AdKeys.STARTUP_ID)
+        }
+    }
+}
+
+@Composable
+private fun PlayBoard(
+    it: PaddingValues,
+    state: HangmanState,
+    hangmanGameViewModel: HangmanGameViewModel,
+    adMob: AdMob
+) {
+    Column(
+        modifier = Modifier.fillMaxSize().padding(it),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        HangmanImage(state.incorrectGuesses, Modifier.fillMaxWidth().weight(1f))
+        WordDisplay(state)
+
+        Spacer(Modifier.height(8.dp))
+        when (state) {
+            is HangmanState.Playing.Information -> HintButton(
+                hangmanGameViewModel::onShowHintPressed,
+                "Hide Hint"
+            )
+
+            is HangmanState.Playing.Input -> HintButton(
+                hangmanGameViewModel::onShowHintPressed,
+                "Show Hint"
+            )
+
+            else -> HintButton(
+                { hangmanGameViewModel.onOpenWordPressed(state.word) },
+                "Show Details"
+            )
+        }
+        Spacer(Modifier.height(8.dp))
+
+        AnimatedContent(
+            state,
+            contentKey = { hangmanState -> hangmanState::class::simpleName }
+        ) { hangmanState ->
+            if (hangmanState is HangmanState.Playing.Input) {
+                LetterButtons(
+                    hangmanGameViewModel::onLetterGuessed,
+                    hangmanState.guessedLetters,
+                    Modifier.fillMaxWidth().weight(1f)
+                )
+            } else {
+                Text(
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
+                    text = hangmanState.word.wordEtymology.first().words.first().senses.first().gloss,
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.bodyLarge
+                )
+            }
+        }
+
+        adMob.Banner(
+            AdKeys.BANNER_ID,
+            Modifier.fillMaxWidth()
+        )
     }
 }
 
@@ -199,6 +225,7 @@ fun WordDisplay(gameState: HangmanState, modifier: Modifier = Modifier) {
             is HangmanState.Lost -> MaterialTheme.colorScheme.error
             is HangmanState.Playing -> MaterialTheme.colorScheme.onPrimary
             is HangmanState.Won -> MaterialTheme.colorScheme.onSurfaceVariant
+            is HangmanState.Loading -> MaterialTheme.colorScheme.onPrimary
         },
         style = MaterialTheme.typography.displaySmall,
         textAlign = TextAlign.Center

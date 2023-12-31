@@ -25,9 +25,6 @@ class WordsRepositoryImpl(private val realm: Realm, private val api: WordApi) : 
         try {
             if (!realm.isClosed()) {
                 found.fastForEach { wordDto ->
-                    wordDto.sounds.forEach {
-                        println("SOUNDS: $it")
-                    }
                     realm.write {
                         val wordDb = wordDto.toDatabase()
                         val findLatestQuery = realm

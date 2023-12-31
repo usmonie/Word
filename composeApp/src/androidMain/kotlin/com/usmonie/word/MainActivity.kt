@@ -1,6 +1,7 @@
 package com.usmonie.word
 
 import App
+import AppConfiguration
 import DefaultLogger
 import android.app.Activity
 import android.content.Context
@@ -14,6 +15,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
@@ -31,13 +34,21 @@ import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
 import com.liftric.kvault.KVault
+import com.usmonie.word.features.dashboard.data.api.WordApi
+import com.usmonie.word.features.dashboard.data.di.DashboardDataComponent
 import com.usmonie.word.features.dashboard.data.repository.UserRepositoryImpl
+import com.usmonie.word.features.dashboard.domain.usecase.CurrentThemeUseCaseImpl
+import com.usmonie.word.features.getDashboardGraph
 import com.usmonie.word.features.subscription.data.Billing
 import com.usmonie.word.features.subscription.data.getSubscriptionRepository
 import com.usmonie.word.features.subscription.domain.models.SubscriptionStatus
 import com.usmonie.word.features.subscription.domain.usecase.SubscriptionStatusUseCaseImpl
 import com.usmonie.word.features.ui.AdMob
+import wtf.speech.compass.core.rememberRouteManager
 import wtf.speech.core.ui.AdKeys
+import wtf.word.core.design.themes.WordColors
+import wtf.word.core.design.themes.typographies.Friendly
+import wtf.word.core.design.themes.typographies.WordTypography
 
 class MainActivity : ComponentActivity() {
     private var mInterstitialAd: InterstitialAd? = null
@@ -92,12 +103,30 @@ class MainActivity : ComponentActivity() {
                 insets.isAppearanceLightNavigationBars = isDark
             }
 
-            App(
-                userRepository,
+            val (currentColors, currentTypography) = remember {
+                val theme = CurrentThemeUseCaseImpl(userRepository).invoke(Unit)
+                val colors = theme.colorsName?.let { WordColors.valueOf(it) } ?: WordColors.RICH_MAROON
+                val typography = theme.fonts?.let { WordTypography.valueOf(it) } ?: Friendly
+
+                Pair(colors, typography)
+            }
+            val (currentTheme, onCurrentColorsChanged) = remember { mutableStateOf(currentColors) }
+            val (currentFonts, onCurrentFontsChanged) = remember { mutableStateOf(currentTypography) }
+            val wordRepository =
+                remember { DashboardDataComponent.getWordsRepository(WordApi("http://16.170.6.0")) }
+
+            val initialGraph = getDashboardGraph(
+                onCurrentColorsChanged,
+                onCurrentFontsChanged,
                 subscriptionRepository,
+                userRepository,
+                wordRepository,
                 adMob,
                 logger
             )
+
+            val routeManager = rememberRouteManager(initialGraph)
+            App(AppConfiguration(routeManager, currentTheme, currentFonts))
         }
     }
 

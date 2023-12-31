@@ -37,7 +37,6 @@ data class DashboardState(
             is ContentState.Error<*, *> -> foundWords
             is ContentState.Loading -> foundWords
             is ContentState.Success -> {
-                println(updatedWord)
                 val found: ContentState<List<WordCombinedUi>> = ContentState.Success(
                     foundWords.data.fastMap { mappedWord ->
                         mapNewWord(mappedWord, updatedWord)

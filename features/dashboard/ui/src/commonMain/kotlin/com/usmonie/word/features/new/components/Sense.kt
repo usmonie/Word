@@ -152,8 +152,6 @@ fun ExampleItem(example: ExampleUi, forms: List<FormUi>, modifier: Modifier = Mo
             append(text)
         }
         forms.fastForEach {
-            println("EXAMPLE TEST" + it)
-
             it.formText?.let { form ->
                 val start = text.indexOf(form)
                 val end = start + form.length

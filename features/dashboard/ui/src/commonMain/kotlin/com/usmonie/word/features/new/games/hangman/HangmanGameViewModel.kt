@@ -8,11 +8,13 @@ import wtf.speech.core.ui.BaseViewModel
 
 @Stable
 class HangmanGameViewModel(
-    word: WordCombinedUi,
     private val randomWordUseCase: RandomWordUseCase
-) : BaseViewModel<HangmanState, HangmanAction, HangmanEvent, HangmanEffect>(
-    HangmanState.Playing.Input(word)
-) {
+) : BaseViewModel<HangmanState, HangmanAction, HangmanEvent, HangmanEffect>(HangmanState.Loading()) {
+
+    init {
+        handleAction(HangmanAction.StartGame)
+    }
+
     fun onLetterGuessed(letter: Char) = handleAction(HangmanAction.GuessLetter(letter))
     fun onUpdatePressed() = handleAction(HangmanAction.UpdateWord)
     fun onShowHintPressed() = handleAction(HangmanAction.ShowHint)
@@ -55,6 +57,7 @@ class HangmanGameViewModel(
             )
 
             is HangmanEvent.UpdateWord -> HangmanState.Playing.Input(event.word)
+            is HangmanEvent.StartGame -> HangmanState.Playing.Input(event.word)
             HangmanEvent.UpdateHint -> when (this) {
                 is HangmanState.Playing.Information -> HangmanState.Playing.Input(
                     word,
@@ -101,6 +104,9 @@ class HangmanGameViewModel(
             )
 
             HangmanAction.ShowHint -> HangmanEvent.UpdateHint
+            HangmanAction.StartGame -> HangmanEvent.StartGame(
+                randomWordUseCase(RandomWordUseCase.Param(9)).toUi()
+            )
         }
     }
 
@@ -109,6 +115,7 @@ class HangmanGameViewModel(
         is HangmanEvent.Lost -> HangmanEffect.Lost()
         is HangmanEvent.UpdateWord -> HangmanEffect.RestartGame()
         is HangmanEvent.OpenWord -> HangmanEffect.OpenWord(event.word)
+        is HangmanEvent.StartGame -> HangmanEffect.StartGame()
         else -> null
     }
 }
