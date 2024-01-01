@@ -12,7 +12,11 @@ import androidx.compose.ui.input.pointer.pointerInput
 import kotlinx.coroutines.launch
 
 @Composable
-fun BackGestureHandler(routeManager: RouteManager) {
+fun BackGestureHandler(
+    routeManager: RouteManager,
+    isGestureNavigationEnabled: Boolean,
+    content: @Composable () -> Unit
+) {
     // Создайте анимируемый объект для хранения текущего смещения
     val offset = remember { Animatable(0f) }
     // Используйте pointerInput для обнаружения горизонтальных жестов перетаскивания
@@ -25,13 +29,23 @@ fun BackGestureHandler(routeManager: RouteManager) {
                     change.consume()
                     coroutineScope.launch {
                         // Обновите смещение и ограничьте его в пределах размера экрана
-                        offset.snapTo((offset.value + dragAmount).coerceIn(0f, size.width.toFloat()))
+                        offset.snapTo(
+                            (offset.value + dragAmount).coerceIn(
+                                0f,
+                                size.width.toFloat()
+                            )
+                        )
                     }
                 }
             }
     ) {
-        if (offset.value > 150) {
+        if (offset.value > 150 && isGestureNavigationEnabled) {
             routeManager.navigateBack()
+            coroutineScope.launch {
+                offset.snapTo(0f)
+            }
         }
+
+        content()
     }
 }

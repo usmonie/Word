@@ -64,6 +64,8 @@ interface RouteManager {
      */
     fun navigateBack(): Boolean
 
+    fun gestureBack()
+
     /**
      * Closes the currently active navigation graph.
      *
@@ -143,6 +145,10 @@ class RouteManagerImpl(initialGraph: NavigationGraph) : RouteManager {
         if (!navigatedBack) return closeActiveGraph()
 
         return navigatedBack
+    }
+
+    override fun gestureBack() {
+        TODO("Not yet implemented")
     }
 
     override fun closeActiveGraph(): Boolean {

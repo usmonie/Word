@@ -1,4 +1,3 @@
-
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -27,7 +26,11 @@ fun App(appConfiguration: AppConfiguration) {
     }
 
     WordTheme(appConfiguration.currentTheme, appConfiguration.currentFonts) {
-        NavigationHost(routeManager, modifier = Modifier.fillMaxSize())
+        NavigationHost(
+            routeManager,
+            modifier = Modifier.fillMaxSize(),
+            isGestureNavigationEnabled = true
+        )
     }
 }
 
