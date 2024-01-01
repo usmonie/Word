@@ -6,6 +6,7 @@ import androidx.compose.animation.ContentTransform
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -13,8 +14,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import kotlinx.coroutines.launch
 
 /**
  * A composable that observes changes to the current screen in [RouteManagerImpl] and displays its content.
@@ -32,6 +35,8 @@ fun NavigationHost(
         val currentScreen: Screen = routeManager.currentScreen
         val event by routeManager.events.collectAsState(null)
         val zIndices = remember { mutableMapOf<String, Float>() }
+        val offset = remember { Animatable(0f) }
+        val coroutineScope = rememberCoroutineScope()
 
         val finalEnter: AnimatedContentTransitionScope<Screen>.() -> EnterTransition =
             remember(event) {
@@ -58,7 +63,12 @@ fun NavigationHost(
             }
         val transition = updateTransition(currentScreen, label = "entry")
 
-        BackGestureHandler(routeManager, isGestureNavigationEnabled) {
+        BackGestureHandler(
+            offset,
+            { coroutineScope.launch { offset.snapTo(it) } },
+            routeManager,
+            isGestureNavigationEnabled
+        ) {
             transition.AnimatedContent(
                 modifier,
                 transitionSpec = {

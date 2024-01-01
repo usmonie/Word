@@ -34,6 +34,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.OpenBrowser
 import com.usmonie.word.features.Url
@@ -176,8 +177,14 @@ private fun MainState(
 ) {
     val showMenuItems by remember(state.query) { derivedStateOf { state.query.text.isBlank() } }
     val (hasFocus, onFocusChange) = remember { mutableStateOf(false) }
-    Box(Modifier.padding(insets)) {
-        BaseLazyColumn(listState) {
+    Box(
+        Modifier.padding(
+            start = insets.calculateLeftPadding(LayoutDirection.Ltr),
+            end = insets.calculateRightPadding(LayoutDirection.Ltr),
+            top = insets.calculateTopPadding()
+        )
+    ) {
+        BaseLazyColumn(listState, contentPadding = PaddingValues(bottom = insets.calculateBottomPadding())) {
             item {
                 TopBar(
                     state.query,
@@ -272,6 +279,7 @@ private fun MainState(
             AdKeys.BANNER_ID,
             Modifier.fillMaxWidth()
                 .align(Alignment.BottomCenter)
+                .padding(insets)
         )
     }
 }

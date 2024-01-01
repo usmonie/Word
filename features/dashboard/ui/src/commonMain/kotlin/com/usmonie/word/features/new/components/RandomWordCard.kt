@@ -37,7 +37,7 @@ fun RandomWordCard(
             ) {
                 Box(Modifier.fillMaxWidth().padding(vertical = 20.dp), Alignment.Center) {
                     CircularProgressIndicator(
-                        Modifier.size(64.dp),
+                        Modifier.size(32.dp),
                         MaterialTheme.colorScheme.onSurface
                     )
                 }
