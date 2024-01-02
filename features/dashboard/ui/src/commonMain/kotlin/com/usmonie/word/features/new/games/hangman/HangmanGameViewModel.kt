@@ -12,6 +12,7 @@ class HangmanGameViewModel(
 ) : BaseViewModel<HangmanState, HangmanAction, HangmanEvent, HangmanEffect>(HangmanState.Loading()) {
 
     init {
+        println("INIT START")
         handleAction(HangmanAction.StartGame)
     }
 
@@ -56,8 +57,14 @@ class HangmanGameViewModel(
                 guessedLetter.apply { add(event.letter) },
             )
 
-            is HangmanEvent.UpdateWord -> HangmanState.Playing.Input(event.word)
-            is HangmanEvent.StartGame -> HangmanState.Playing.Input(event.word)
+            is HangmanEvent.UpdateWord -> {
+                println("CURRENT UPDATE WORD ${event.word}")
+                HangmanState.Playing.Input(event.word)
+            }
+            is HangmanEvent.StartGame -> {
+                println("CURRENT START WORD ${event.word}")
+                HangmanState.Playing.Input(event.word)
+            }
             HangmanEvent.UpdateHint -> when (this) {
                 is HangmanState.Playing.Information -> HangmanState.Playing.Input(
                     word,
@@ -84,10 +91,12 @@ class HangmanGameViewModel(
             is HangmanAction.GuessLetter -> {
                 val letter = action.letter.lowercaseChar()
                 val guessedLetter = state.value.guessedLetters + letter
+
                 if (state.value.incorrectGuesses > 5) {
                     return HangmanEvent.Lost(letter)
                 }
-                if (word.word.all { it in guessedLetter }) {
+
+                if (word.word.all { it.lowercaseChar() in guessedLetter }) {
                     return HangmanEvent.Won(letter)
                 }
 
@@ -104,9 +113,12 @@ class HangmanGameViewModel(
             )
 
             HangmanAction.ShowHint -> HangmanEvent.UpdateHint
-            HangmanAction.StartGame -> HangmanEvent.StartGame(
-                randomWordUseCase(RandomWordUseCase.Param(9)).toUi()
-            )
+            HangmanAction.StartGame -> {
+                println("START ACTION")
+                HangmanEvent.StartGame(
+                    randomWordUseCase(RandomWordUseCase.Param(9)).toUi()
+                )
+            }
         }
     }
 

@@ -32,7 +32,6 @@ import com.usmonie.word.features.dashboard.domain.repository.WordRepository
 import com.usmonie.word.features.dashboard.domain.usecase.RandomWordUseCaseImpl
 import com.usmonie.word.features.new.details.WordDetailsScreen
 import com.usmonie.word.features.new.games.GameBoard
-import com.usmonie.word.features.new.models.WordCombinedUi
 import com.usmonie.word.features.ui.AdMob
 import com.usmonie.word.features.ui.UpdateButton
 import wtf.speech.compass.core.Extra
@@ -58,10 +57,6 @@ class HangmanGameScreen(
         const val KEY = "HangmanGameScreenExtra"
     }
 
-    data class Extras(val word: WordCombinedUi) : Extra {
-        override val key: String = KEY
-    }
-
     class Builder(
         private val wordRepository: WordRepository,
         private val adMob: AdMob
@@ -69,7 +64,6 @@ class HangmanGameScreen(
         override val id: String = ID
 
         override fun build(params: Map<String, String>?, extra: Extra?): Screen {
-            require(extra is Extras)
             return HangmanGameScreen(
                 HangmanGameViewModel(
                     RandomWordUseCaseImpl(wordRepository)
@@ -214,7 +208,13 @@ fun WordDisplay(gameState: HangmanState, modifier: Modifier = Modifier) {
         gameState.word
             .word
             .asSequence()
-            .map { if (it.lowercaseChar() in gameState.guessedLetters) it else '_' }
+            .map { letter ->
+                if (letter.lowercaseChar() in gameState.guessedLetters || !letter.isLetterOrDigit()) {
+                    letter.uppercaseChar()
+                } else {
+                    '_'
+                }
+            }
             .joinToString(" ")
     }
 
@@ -222,9 +222,9 @@ fun WordDisplay(gameState: HangmanState, modifier: Modifier = Modifier) {
         displayWord,
         modifier,
         color = when (gameState) {
-            is HangmanState.Lost -> MaterialTheme.colorScheme.error
+            is HangmanState.Lost -> MaterialTheme.colorScheme.secondary
             is HangmanState.Playing -> MaterialTheme.colorScheme.onPrimary
-            is HangmanState.Won -> MaterialTheme.colorScheme.onSurfaceVariant
+            is HangmanState.Won -> MaterialTheme.colorScheme.tertiary
             is HangmanState.Loading -> MaterialTheme.colorScheme.onPrimary
         },
         style = MaterialTheme.typography.displaySmall,

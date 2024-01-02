@@ -89,6 +89,7 @@ fun NavigationHost(
                 content = { it.Content() }
             )
         }
+
         LaunchedEffect(transition.currentState, transition.targetState) {
             if (transition.currentState == transition.targetState) {
                 zIndices

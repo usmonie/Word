@@ -152,13 +152,8 @@ private fun DashboardEffects(
                 extras = WordDetailsScreen.Companion.WordExtra(effect.word)
             )
 
-            is DashboardEffect.OpenHangman -> routeManager.navigateTo(
-                HangmanGameScreen.ID,
-                extras = HangmanGameScreen.Extras(effect.word)
-            )
-
+            is DashboardEffect.OpenHangman -> routeManager.navigateTo(HangmanGameScreen.ID)
             is DashboardEffect.OpenSettings -> routeManager.navigateTo(SettingsScreen.ID)
-
             else -> Unit
         }
     }

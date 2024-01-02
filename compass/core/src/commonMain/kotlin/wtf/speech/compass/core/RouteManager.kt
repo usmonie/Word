@@ -127,7 +127,7 @@ class RouteManagerImpl(initialGraph: NavigationGraph) : RouteManager {
         val nextScreen = activeGraph.value.findScreen(screenId, params, extras)
         if (nextScreen != null) {
             events.tryEmit(NavigationEvent.Next(currentScreen, nextScreen))
-            return activeGraph.value.navigateTo(screenId, params, extras)
+            return activeGraph.value.navigateTo(nextScreen, params, extras)
         }
         return false
     }

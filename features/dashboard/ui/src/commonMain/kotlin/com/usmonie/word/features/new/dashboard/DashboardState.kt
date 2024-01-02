@@ -159,7 +159,7 @@ sealed class DashboardEvent : ScreenEvent {
     }
 
     sealed class OpenGame : DashboardEvent() {
-        data class Hangman(val word: WordCombinedUi) : OpenGame()
+        data object Hangman : OpenGame()
 
     }
 }
@@ -168,7 +168,7 @@ sealed class DashboardEffect : ScreenEffect {
     class OpenFavourites : DashboardEffect()
     class OpenSettings : DashboardEffect()
 
-    data class OpenHangman(val word: WordCombinedUi) : DashboardEffect()
+    class OpenHangman : DashboardEffect()
 
     data class OpenWord(val word: WordCombinedUi) : DashboardEffect()
 

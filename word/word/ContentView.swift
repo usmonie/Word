@@ -51,7 +51,7 @@ struct ContentView: View {
                     .edgesIgnoringSafeArea(.bottom)
 
         }
-                .onAppear { interstitialVC = interstitialAd.viewController }
+        .onAppear { interstitialVC = interstitialAd.viewController }
     }
 }
 

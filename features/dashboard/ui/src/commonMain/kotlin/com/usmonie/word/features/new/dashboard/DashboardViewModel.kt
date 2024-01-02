@@ -127,10 +127,8 @@ class DashboardViewModel(
         DashboardAction.UpdateRandomWord -> initialData()
 
         DashboardAction.OnMenuItemClick.Games -> DashboardEvent.UpdateMenuItemState.Games
-        DashboardAction.OnGamesItemClick.Hangman -> {
-            val word = getRandomWordUseCase(RandomWordUseCase.Param(10))
-            DashboardEvent.OpenGame.Hangman(word.toUi())
-        }
+        DashboardAction.OnGamesItemClick.Hangman -> DashboardEvent.OpenGame.Hangman
+
 
         DashboardAction.OnMenuItemClick.About -> DashboardEvent.UpdateMenuItemState.About
         DashboardAction.OnMenuItemClick.Telegram -> DashboardEvent.UpdateMenuItemState.Telegram
@@ -141,7 +139,7 @@ class DashboardViewModel(
         is DashboardEvent.UpdateMenuItemState.Settings -> DashboardEffect.OpenSettings()
 
         is DashboardEvent.OpenWord -> DashboardEffect.OpenWord(event.word)
-        is DashboardEvent.OpenGame.Hangman -> DashboardEffect.OpenHangman(event.word)
+        is DashboardEvent.OpenGame.Hangman -> DashboardEffect.OpenHangman()
         is DashboardEvent.UpdateMenuItemState.Telegram ->
             DashboardEffect.OpenUrl("https://t.me/nieabout")
         else -> null

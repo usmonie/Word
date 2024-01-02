@@ -83,6 +83,7 @@ class MainActivity : ComponentActivity() {
             { _, _ -> },
             subscriptionStatusUseCase
         )
+
         val logger = DefaultLogger(Firebase.analytics)
         loadInterstitial(this)
         enableEdgeToEdge()
