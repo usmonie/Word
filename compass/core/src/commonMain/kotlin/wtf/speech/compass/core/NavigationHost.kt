@@ -41,6 +41,8 @@ fun NavigationHost(
         val finalEnter: AnimatedContentTransitionScope<Screen>.() -> EnterTransition =
             remember(event) {
                 {
+                    println("animation enter: initial = ${initialState.id}, target = ${targetState.id}, $event")
+
                     when (event) {
                         is NavigationEvent.Back -> targetState.popEnterTransition(this)
                         is NavigationEvent.BackGesture -> targetState.popEnterTransition(this)
@@ -53,6 +55,8 @@ fun NavigationHost(
         val finalExit: AnimatedContentTransitionScope<Screen>.() -> ExitTransition =
             remember(event) {
                 {
+                    println("animation exit:initial = ${initialState.id}, target = ${targetState.id}, $event")
+
                     when (event) {
                         is NavigationEvent.Back -> initialState.popExitTransition(this)
                         is NavigationEvent.BackGesture -> initialState.popExitTransition(this)

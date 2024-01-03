@@ -21,14 +21,14 @@ fun EmptyItem(title: String, description: String) {
         Text(
             text = title,
             modifier = Modifier.padding(horizontal = 20.dp),
-            style = MaterialTheme.typography.titleLarge,
+            style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onPrimary
         )
 
         Text(
             text = description,
             modifier = Modifier.padding(vertical = 8.dp, horizontal = 20.dp),
-            style = MaterialTheme.typography.bodyMedium,
+            style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onPrimary
         )
     }

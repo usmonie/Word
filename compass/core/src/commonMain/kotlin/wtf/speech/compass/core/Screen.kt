@@ -10,16 +10,17 @@ abstract class Screen(private val viewModel: ViewModel) {
         slideIntoContainer(
             AnimatedContentTransitionScope.SlideDirection.Left,
             initialOffset = {
-                println("${id} enterTransition $it")
+                println("enterTransition $id")
                 400
             }
         )
     }
+
     open val exitTransition: (AnimatedContentTransitionScope<Screen>.() -> ExitTransition) = {
         slideOutOfContainer(
             AnimatedContentTransitionScope.SlideDirection.Right,
             targetOffset = {
-                println("${id} exitTransition $it")
+                println("exitTransition $id")
                 -100
             }
         )
@@ -29,7 +30,7 @@ abstract class Screen(private val viewModel: ViewModel) {
         slideIntoContainer(
             AnimatedContentTransitionScope.SlideDirection.Right,
             initialOffset = {
-                println("${id} popEnterTransition $it")
+                println("popEnterTransition $id")
                 -100
             }
         )
@@ -39,7 +40,7 @@ abstract class Screen(private val viewModel: ViewModel) {
         slideOutOfContainer(
             AnimatedContentTransitionScope.SlideDirection.Right,
             targetOffset = {
-                println("${id} popExitTransition $it")
+                println("popExitTransition $id")
                 400
             }
         )
@@ -49,6 +50,7 @@ abstract class Screen(private val viewModel: ViewModel) {
 
     @Composable
     abstract fun Content()
+
 
     internal fun onCleared() {
         viewModel.onCleared()

@@ -58,11 +58,9 @@ class HangmanGameViewModel(
             )
 
             is HangmanEvent.UpdateWord -> {
-                println("CURRENT UPDATE WORD ${event.word}")
                 HangmanState.Playing.Input(event.word)
             }
             is HangmanEvent.StartGame -> {
-                println("CURRENT START WORD ${event.word}")
                 HangmanState.Playing.Input(event.word)
             }
             HangmanEvent.UpdateHint -> when (this) {

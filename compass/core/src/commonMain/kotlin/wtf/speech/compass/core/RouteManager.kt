@@ -98,10 +98,6 @@ class RouteManagerImpl(initialGraph: NavigationGraph) : RouteManager {
     override val currentScreen: Screen
         get() = activeGraph.value.currentScreen.value.screen
 
-    init {
-        println("ROUTEMANAGER: new instance $this")
-    }
-
     override fun registerGraph(graph: NavigationGraph) {
         graphs[graph.id] = graph
     }
