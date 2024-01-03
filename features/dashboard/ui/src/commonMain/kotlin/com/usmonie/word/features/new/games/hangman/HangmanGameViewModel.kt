@@ -12,7 +12,6 @@ class HangmanGameViewModel(
 ) : BaseViewModel<HangmanState, HangmanAction, HangmanEvent, HangmanEffect>(HangmanState.Loading()) {
 
     init {
-        println("INIT START")
         handleAction(HangmanAction.StartGame)
     }
 
@@ -57,12 +56,10 @@ class HangmanGameViewModel(
                 guessedLetter.apply { add(event.letter) },
             )
 
-            is HangmanEvent.UpdateWord -> {
-                HangmanState.Playing.Input(event.word)
-            }
-            is HangmanEvent.StartGame -> {
-                HangmanState.Playing.Input(event.word)
-            }
+            is HangmanEvent.UpdateWord -> HangmanState.Playing.Input(event.word)
+
+            is HangmanEvent.StartGame -> HangmanState.Playing.Input(event.word)
+
             HangmanEvent.UpdateHint -> when (this) {
                 is HangmanState.Playing.Information -> HangmanState.Playing.Input(
                     word,
@@ -94,7 +91,10 @@ class HangmanGameViewModel(
                     return HangmanEvent.Lost(letter)
                 }
 
-                if (word.word.all { it.lowercaseChar() in guessedLetter }) {
+                if (
+                    word.word.filter { it.isLetterOrDigit() }
+                        .all { it.lowercaseChar() in guessedLetter }
+                ) {
                     return HangmanEvent.Won(letter)
                 }
 
@@ -112,7 +112,6 @@ class HangmanGameViewModel(
 
             HangmanAction.ShowHint -> HangmanEvent.UpdateHint
             HangmanAction.StartGame -> {
-                println("START ACTION")
                 HangmanEvent.StartGame(
                     randomWordUseCase(RandomWordUseCase.Param(9)).toUi()
                 )
