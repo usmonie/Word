@@ -60,7 +60,8 @@ class DashboardViewModel(
         is DashboardEvent.InitialData -> copy(
             wordOfTheDay = event.wordOfTheDay,
             recentSearch = event.recentSearch,
-            randomWord = event.randomWord
+            randomWord = event.randomWord,
+            showRandomWord = event.wordOfTheDay is ContentState.Error<*, *>
         )
 
         DashboardEvent.UpdateMenuItemState.About -> this.openAbout()
