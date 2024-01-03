@@ -153,12 +153,16 @@ private fun PlayBoard(
                     Modifier.fillMaxWidth().weight(1f)
                 )
             } else {
-                Text(
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
-                    text = hangmanState.word.wordEtymology.first().words.first().senses.first().gloss,
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.bodyLarge
-                )
+                Column(Modifier.fillMaxWidth()) {
+                    Spacer(Modifier.height(32.dp))
+                    Text(
+                        modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
+                        text = hangmanState.word.wordEtymology.first().words.first().senses.first().gloss,
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+                    Spacer(Modifier.height(32.dp))
+                }
             }
         }
 
@@ -222,7 +226,7 @@ fun WordDisplay(gameState: HangmanState, modifier: Modifier = Modifier) {
         displayWord,
         modifier,
         color = when (gameState) {
-            is HangmanState.Lost -> MaterialTheme.colorScheme.secondary
+            is HangmanState.Lost -> MaterialTheme.colorScheme.error
             is HangmanState.Playing -> MaterialTheme.colorScheme.onPrimary
             is HangmanState.Won -> MaterialTheme.colorScheme.tertiary
             is HangmanState.Loading -> MaterialTheme.colorScheme.onPrimary
