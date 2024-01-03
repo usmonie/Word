@@ -89,7 +89,7 @@ fun SearchWordCard(
             Text(
                 selectedEtymology.etymologyText,
                 textAlign = TextAlign.Justify,
-                style = MaterialTheme.typography.bodyLarge,
+                style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(horizontal = 20.dp),
                 overflow = TextOverflow.Ellipsis

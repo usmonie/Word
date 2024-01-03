@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -118,15 +119,17 @@ fun Sense(
 
 @Composable
 fun Sense(gloss: String, modifier: Modifier = Modifier, maxLines: Int) {
-    Text(
-        text = gloss,
-        textAlign = TextAlign.Justify,
-        style = MaterialTheme.typography.bodyLarge,
-        color = MaterialTheme.colorScheme.onSurfaceVariant,
-        modifier = modifier,
-        maxLines = maxLines,
-        overflow = TextOverflow.Ellipsis
-    )
+    SelectionContainer {
+        Text(
+            text = gloss,
+            textAlign = TextAlign.Justify,
+            style = MaterialTheme.typography.bodyLarge,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = modifier,
+            maxLines = maxLines,
+            overflow = TextOverflow.Ellipsis
+        )
+    }
 }
 
 @Composable

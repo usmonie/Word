@@ -15,7 +15,6 @@ import com.usmonie.word.features.new.models.toUi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -42,22 +41,8 @@ class DashboardViewModel(
         handleAction(DashboardAction.Initial)
     }
 
-    fun onOpenWord(word: WordCombinedUi) = handleAction(DashboardAction.OpenWord(word))
-    fun onUpdateFavouritesPressed(word: WordCombinedUi) =
-        handleAction(DashboardAction.UpdateFavourite(word))
-
-    fun onUpdateRandomCard() = handleAction(DashboardAction.UpdateRandomWord)
-    fun onGamesClicked() = handleAction(DashboardAction.OnMenuItemClick.Games)
-    fun onHangman() = handleAction(DashboardAction.OnGamesItemClick.Hangman)
-    fun onQueryChanged(query: TextFieldValue) = handleAction(DashboardAction.InputQuery(query))
-    fun onFavouritesItemClicked() = handleAction(DashboardAction.OnMenuItemClick.Favourites)
-    fun onSettingsItemClicked() = handleAction(DashboardAction.OnMenuItemClick.Settings)
-    fun onAboutItemClicked() = handleAction(DashboardAction.OnMenuItemClick.About)
-    fun onTelegramItemClicked() = handleAction(DashboardAction.OnMenuItemClick.Telegram)
-    fun onBackClick() = handleAction(DashboardAction.BackToMain)
-
     override fun DashboardState.reduce(event: DashboardEvent) = when (event) {
-        is DashboardEvent.RandomWordLoading -> this.copy(wordOfTheDay = ContentState.Loading())
+        is DashboardEvent.RandomWordLoading -> this.copy(randomWord = ContentState.Loading())
         is DashboardEvent.UpdatedFavourites -> this.updateFavourite(event.word)
         is DashboardEvent.FoundWords -> this.copy(
             query = event.query,
@@ -72,17 +57,14 @@ class DashboardViewModel(
             )
         }
 
-        is DashboardEvent.NextItemsLoaded.FoundWord -> this.loadNextFoundWords(event.newWords)
-        is DashboardEvent.NextItemsLoaded.RecentSearch -> this.loadNextRecent(event.newWords)
-        is DashboardEvent.OpenWord -> this
         is DashboardEvent.InitialData -> copy(
             wordOfTheDay = event.wordOfTheDay,
             recentSearch = event.recentSearch,
+            randomWord = event.randomWord
         )
 
-        DashboardEvent.UpdateMenuItemState.Settings -> this.openSettings()
         DashboardEvent.UpdateMenuItemState.About -> this.openAbout()
-        DashboardEvent.UpdateMenuItemState.WordOfTheDay -> this.openWordOfTheDay()
+        DashboardEvent.UpdateMenuItemState.RandomWord -> this.openRandomWord()
         DashboardEvent.UpdateMenuItemState.Games -> this.openGames()
         DashboardEvent.BackToMain -> this.copy(query = TextFieldValue())
         else -> this
@@ -91,11 +73,10 @@ class DashboardViewModel(
     override suspend fun processAction(action: DashboardAction) = when (action) {
         is DashboardAction.InputQuery -> search(action.query)
 
-        DashboardAction.NextItems.FoundWords ->
-            DashboardEvent.NextItemsLoaded.FoundWord(listOf())
-
-        DashboardAction.NextItems.RecentSearch ->
-            DashboardEvent.NextItemsLoaded.RecentSearch(listOf())
+        DashboardAction.OnMenuItemClick.RandomWord -> {
+            analytics.log(DashboardAnalyticsEvents.OpenFavourites)
+            DashboardEvent.UpdateMenuItemState.RandomWord
+        }
 
         DashboardAction.OnMenuItemClick.Favourites -> {
             analytics.log(DashboardAnalyticsEvents.OpenFavourites)
@@ -108,7 +89,6 @@ class DashboardViewModel(
             DashboardEvent.UpdateMenuItemState.Settings
         }
 
-        DashboardAction.OnMenuItemClick.WordOfTheDay -> DashboardEvent.UpdateMenuItemState.WordOfTheDay
         is DashboardAction.OpenWord -> {
             analytics.log(DashboardAnalyticsEvents.OpenWord(action.word))
 
@@ -119,17 +99,14 @@ class DashboardViewModel(
         DashboardAction.Initial -> initialData()
         DashboardAction.ClearRecentHistory -> clearRecentHistory()
         DashboardAction.BackToMain -> DashboardEvent.BackToMain
-        DashboardAction.Update -> {
+        DashboardAction.Refresh -> {
             updateData()
             DashboardEvent.RandomWordLoading
         }
 
         DashboardAction.UpdateRandomWord -> initialData()
-
-        DashboardAction.OnMenuItemClick.Games -> DashboardEvent.UpdateMenuItemState.Games
         DashboardAction.OnGamesItemClick.Hangman -> DashboardEvent.OpenGame.Hangman
-
-
+        DashboardAction.OnMenuItemClick.Games -> DashboardEvent.UpdateMenuItemState.Games
         DashboardAction.OnMenuItemClick.About -> DashboardEvent.UpdateMenuItemState.About
         DashboardAction.OnMenuItemClick.Telegram -> DashboardEvent.UpdateMenuItemState.Telegram
     }
@@ -137,11 +114,11 @@ class DashboardViewModel(
     override suspend fun handleEvent(event: DashboardEvent) = when (event) {
         is DashboardEvent.UpdateMenuItemState.Favourites -> DashboardEffect.OpenFavourites()
         is DashboardEvent.UpdateMenuItemState.Settings -> DashboardEffect.OpenSettings()
-
         is DashboardEvent.OpenWord -> DashboardEffect.OpenWord(event.word)
         is DashboardEvent.OpenGame.Hangman -> DashboardEffect.OpenHangman()
         is DashboardEvent.UpdateMenuItemState.Telegram ->
             DashboardEffect.OpenUrl("https://t.me/nieabout")
+
         else -> null
     }
 
@@ -182,7 +159,6 @@ class DashboardViewModel(
                 it.toUi()
             }
 
-            delay(200L)
             withContext(Dispatchers.Main) {
                 analytics.log(DashboardAnalyticsEvents.Search(query.text))
                 ensureActive()
@@ -224,18 +200,44 @@ class DashboardViewModel(
                     val word = getWordOfTheDayUseCase(GetWordOfTheDayUseCase.Param).toUi()
                     ContentState.Success(Pair(word.wordEtymology.random().words.random(), word))
                 } catch (e: Exception) {
+                    e.printStackTrace()
                     ContentState.Error(ConnectionErrorState(e))
                 }
+            }
+
+            val randomWord = try {
+                val word = getRandomWordUseCase(RandomWordUseCase.Param(30)).toUi()
+                ContentState.Success(Pair(word.wordEtymology.random().words.random(), word))
+            } catch (e: Exception) {
+                e.printStackTrace()
+                ContentState.Error(ConnectionErrorState(e))
             }
 
             handleState(
                 DashboardEvent.InitialData(
                     recentSearch = recentSearch,
                     wordOfTheDay = wordOfTheDay,
+                    randomWord = randomWord
                 )
             )
         }
     }
+
+    fun onRandomWordMenuClick() = handleAction(DashboardAction.OnMenuItemClick.RandomWord)
+    fun onOpenWord(word: WordCombinedUi) = handleAction(DashboardAction.OpenWord(word))
+    fun onUpdateFavouritesPressed(word: WordCombinedUi) =
+        handleAction(DashboardAction.UpdateFavourite(word))
+
+    fun onUpdateRandomCard() = handleAction(DashboardAction.UpdateRandomWord)
+    fun onGamesClicked() = handleAction(DashboardAction.OnMenuItemClick.Games)
+    fun onHangman() = handleAction(DashboardAction.OnGamesItemClick.Hangman)
+    fun onQueryChanged(query: TextFieldValue) = handleAction(DashboardAction.InputQuery(query))
+    fun onFavouritesItemClicked() = handleAction(DashboardAction.OnMenuItemClick.Favourites)
+    fun onSettingsItemClicked() = handleAction(DashboardAction.OnMenuItemClick.Settings)
+    fun onAboutItemClicked() = handleAction(DashboardAction.OnMenuItemClick.About)
+    fun onTelegramItemClicked() = handleAction(DashboardAction.OnMenuItemClick.Telegram)
+    fun onBackClick() = handleAction(DashboardAction.BackToMain)
+
 
     companion object {
         const val DEFAULT_LIMIT = 20L

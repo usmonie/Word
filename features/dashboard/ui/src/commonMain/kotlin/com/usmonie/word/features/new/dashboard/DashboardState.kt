@@ -15,9 +15,10 @@ import wtf.word.core.domain.tools.fastMap
 data class DashboardState(
     val query: TextFieldValue = TextFieldValue(),
     val wordOfTheDay: ContentState<Pair<WordUi, WordCombinedUi>> = ContentState.Loading(),
+    val randomWord: ContentState<Pair<WordUi, WordCombinedUi>> = ContentState.Loading(),
     val foundWords: ContentState<List<WordCombinedUi>> = ContentState.Loading(),
     val recentSearch: List<WordCombinedUi> = listOf(),
-    val showWordOfTheDay: Boolean = true,
+    val showRandomWord: Boolean = wordOfTheDay is ContentState.Error<*, *>,
     val showSettings: Boolean = false,
     val showGames: Boolean = false,
     val showAbout: Boolean = false,
@@ -58,39 +59,26 @@ data class DashboardState(
         )
     }
 
-    fun loadNextRecent(next: List<WordCombinedUi>) =
-        this.copy(recentSearch = ArrayList(recentSearch + next))
-
-    fun loadNextFoundWords(next: List<WordCombinedUi>) = this.copy(
-        foundWords = foundWords.let {
-            if (it is ContentState.Success) {
-                ContentState.Success(ArrayList(it.data + next))
-            } else {
-                foundWords
-            }
-        }
-    )
-
-    fun openSettings() = this.copy(
-        showSettings = !showSettings,
-        showAbout = false,
-        showGames = false
-    )
-
     fun openAbout() = this.copy(
+        showRandomWord = wordOfTheDay is ContentState.Error<*, *> && showAbout,
         showSettings = false,
         showAbout = !showAbout,
         showGames = false
     )
 
-    fun openWordOfTheDay() = this.copy(
-        showWordOfTheDay = true,
+    fun openRandomWord() = this.copy(
+        showRandomWord = true,
         showAbout = false,
         showGames = false,
         showSettings = false,
     )
 
-    fun openGames() = this.copy(showSettings = false, showGames = !showGames, showAbout = false)
+    fun openGames() = this.copy(
+        showRandomWord = wordOfTheDay is ContentState.Error<*, *> && showGames,
+        showSettings = false,
+        showGames = !showGames,
+        showAbout = false
+    )
 
     private fun mapNewWord(
         mappedWord: WordCombinedUi,
@@ -103,19 +91,13 @@ sealed class DashboardAction : ScreenAction {
     data object Initial : DashboardAction()
     data object ClearRecentHistory : DashboardAction()
     data object UpdateRandomWord : DashboardAction()
-    data object Update : DashboardAction()
-
+    data object Refresh : DashboardAction()
     data class UpdateFavourite(val word: WordCombinedUi) : DashboardAction()
     data class InputQuery(val query: TextFieldValue) : DashboardAction()
     data class OpenWord(val word: WordCombinedUi) : DashboardAction()
 
-    sealed class NextItems : DashboardAction() {
-        data object FoundWords : NextItems()
-        data object RecentSearch : NextItems()
-    }
-
     sealed class OnMenuItemClick : DashboardAction() {
-        data object WordOfTheDay : OnMenuItemClick()
+        data object RandomWord : OnMenuItemClick()
         data object Favourites : OnMenuItemClick()
         data object Settings : OnMenuItemClick()
         data object About : OnMenuItemClick()
@@ -134,7 +116,8 @@ sealed class DashboardEvent : ScreenEvent {
 
     data class InitialData(
         val recentSearch: List<WordCombinedUi>,
-        val wordOfTheDay: ContentState<Pair<WordUi, WordCombinedUi>>
+        val wordOfTheDay: ContentState<Pair<WordUi, WordCombinedUi>>,
+        val randomWord: ContentState<Pair<WordUi, WordCombinedUi>>
     ) : DashboardEvent()
 
     data class InputQuery(val query: TextFieldValue) : DashboardEvent()
@@ -144,13 +127,8 @@ sealed class DashboardEvent : ScreenEvent {
     data class UpdatedFavourites(val word: WordCombinedUi) : DashboardEvent()
     data class OpenWord(val word: WordCombinedUi) : DashboardEvent()
 
-    sealed class NextItemsLoaded : DashboardEvent() {
-        data class FoundWord(val newWords: List<WordCombinedUi>) : NextItemsLoaded()
-        data class RecentSearch(val newWords: List<WordCombinedUi>) : NextItemsLoaded()
-    }
-
     sealed class UpdateMenuItemState : DashboardEvent() {
-        data object WordOfTheDay : UpdateMenuItemState()
+        data object RandomWord : UpdateMenuItemState()
         data object Favourites : UpdateMenuItemState()
         data object About : UpdateMenuItemState()
         data object Telegram : UpdateMenuItemState()
@@ -160,7 +138,6 @@ sealed class DashboardEvent : ScreenEvent {
 
     sealed class OpenGame : DashboardEvent() {
         data object Hangman : OpenGame()
-
     }
 }
 

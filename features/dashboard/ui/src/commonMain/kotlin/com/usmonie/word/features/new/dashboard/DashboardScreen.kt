@@ -179,12 +179,15 @@ private fun MainState(
             top = insets.calculateTopPadding()
         )
     ) {
-        BaseLazyColumn(listState, contentPadding = PaddingValues(bottom = insets.calculateBottomPadding())) {
+        BaseLazyColumn(
+            listState,
+            contentPadding = PaddingValues(bottom = insets.calculateBottomPadding())
+        ) {
             item {
                 TopBar(
                     state.query,
                     dashboardViewModel::onQueryChanged,
-                    state.wordOfTheDay is ContentState.Success,
+                    state.wordOfTheDay !is ContentState.Loading,
                     hasFocus,
                     onFocusChange
                 )
@@ -196,7 +199,7 @@ private fun MainState(
                 }
             }
 
-            if (state.foundWords is ContentState.Loading && !showMenuItems) {
+            if ((state.foundWords is ContentState.Loading && !showMenuItems)) {
                 item {
                     LoadingProgress()
                 }
@@ -218,14 +221,26 @@ private fun MainState(
                 }
             }
 
-            item(key = "MENU_WORD_OF_THE_DAY") {
+            item {
                 WordOfTheDayMenuItem(
                     onWordClick = dashboardViewModel::onOpenWord,
                     onAddFavouritePressed = dashboardViewModel::onUpdateFavouritesPressed,
                     onSharePressed = { },
-                    onUpdatePressed = dashboardViewModel::onUpdateRandomCard,
-                    showWordOfTheDay = showMenuItems && state.showWordOfTheDay,
+                    showWordOfTheDay = showMenuItems,
                     word = state.wordOfTheDay
+                )
+            }
+
+            item(key = "MENU_RANDOM_WORD") {
+                RandomWordMenuItem(
+                    onMenuItemClick = dashboardViewModel::onRandomWordMenuClick,
+                    onWordClick = dashboardViewModel::onOpenWord,
+                    onAddFavouritePressed = dashboardViewModel::onUpdateFavouritesPressed,
+                    onSharePressed = { },
+                    onUpdatePressed = dashboardViewModel::onUpdateRandomCard,
+                    showItem = showMenuItems,
+                    showRandomWord = state.showRandomWord,
+                    word = state.randomWord
                 )
             }
 

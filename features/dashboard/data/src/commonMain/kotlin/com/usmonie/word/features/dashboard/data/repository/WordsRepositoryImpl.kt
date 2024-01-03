@@ -85,7 +85,7 @@ class WordsRepositoryImpl(private val realm: Realm, private val api: WordApi) : 
     }
 
     override suspend fun getWordOfTheDay(): WordCombined {
-        val result = api.randomWord(20).asSequence()
+        val result = api.getWordOfTheDay().asSequence()
 
         if (!realm.isClosed()) {
             realm.write {

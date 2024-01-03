@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -38,30 +39,30 @@ fun NavigationHost(
         val offset = remember { Animatable(0f) }
         val coroutineScope = rememberCoroutineScope()
 
-        val finalEnter: AnimatedContentTransitionScope<Screen>.() -> EnterTransition =
+        val finalEnter: AnimatedContentTransitionScope<Screen>.() -> EnterTransition by
             remember(event) {
-                {
-                    println("animation enter: initial = ${initialState.id}, target = ${targetState.id}, $event")
-
-                    when (event) {
-                        is NavigationEvent.Back -> targetState.popEnterTransition(this)
-                        is NavigationEvent.BackGesture -> targetState.popEnterTransition(this)
-                        is NavigationEvent.Next -> targetState.enterTransition(this)
-                        null -> targetState.enterTransition(this)
+                derivedStateOf {
+                    {
+                        when (event) {
+                            is NavigationEvent.Back -> targetState.popEnterTransition(this)
+                            is NavigationEvent.BackGesture -> targetState.popEnterTransition(this)
+                            is NavigationEvent.Next -> targetState.enterTransition(this)
+                            null -> targetState.enterTransition(this)
+                        }
                     }
                 }
             }
 
-        val finalExit: AnimatedContentTransitionScope<Screen>.() -> ExitTransition =
+        val finalExit: AnimatedContentTransitionScope<Screen>.() -> ExitTransition by
             remember(event) {
-                {
-                    println("animation exit:initial = ${initialState.id}, target = ${targetState.id}, $event")
-
-                    when (event) {
-                        is NavigationEvent.Back -> initialState.popExitTransition(this)
-                        is NavigationEvent.BackGesture -> initialState.popExitTransition(this)
-                        is NavigationEvent.Next -> initialState.exitTransition(this)
-                        null -> initialState.exitTransition(this)
+                derivedStateOf {
+                    {
+                        when (event) {
+                            is NavigationEvent.Back -> initialState.popExitTransition(this)
+                            is NavigationEvent.BackGesture -> initialState.popExitTransition(this)
+                            is NavigationEvent.Next -> initialState.exitTransition(this)
+                            null -> initialState.exitTransition(this)
+                        }
                     }
                 }
             }
@@ -69,7 +70,7 @@ fun NavigationHost(
 
         BackGestureHandler(
             offset,
-            { coroutineScope.launch { offset.snapTo(it) } },
+            { coroutineScope.launch { offset.animateTo(it) } },
             routeManager,
             isGestureNavigationEnabled
         ) {
@@ -90,7 +91,7 @@ fun NavigationHost(
                 },
                 Alignment.Center,
                 contentKey = { it.id },
-                content = { it.Content() }
+                content = { screen -> screen.Content() }
             )
         }
 

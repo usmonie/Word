@@ -29,18 +29,16 @@ fun RandomWordCard(
 ) {
     when (wordState) {
         is ContentState.Error<*, *> -> Unit
-        is ContentState.Loading -> {
-            BaseCard(
-                { },
-                elevation = 2.dp,
-                modifier = modifier
-            ) {
-                Box(Modifier.fillMaxWidth().padding(vertical = 20.dp), Alignment.Center) {
-                    CircularProgressIndicator(
-                        Modifier.size(32.dp),
-                        MaterialTheme.colorScheme.onSurface
-                    )
-                }
+        is ContentState.Loading -> BaseCard(
+            { },
+            elevation = 2.dp,
+            modifier = modifier
+        ) {
+            Box(Modifier.fillMaxWidth().padding(vertical = 20.dp), Alignment.Center) {
+                CircularProgressIndicator(
+                    Modifier.size(32.dp),
+                    MaterialTheme.colorScheme.onSurface
+                )
             }
         }
 
@@ -51,13 +49,13 @@ fun RandomWordCard(
                 elevation = 2.dp,
                 modifier = modifier
             ) {
-                Spacer(Modifier.height(32.dp))
+                Spacer(Modifier.height(20.dp))
                 WordMediumResizableTitle(
                     word.first.word,
                     Modifier.fillMaxWidth().padding(horizontal = 20.dp),
                     MaterialTheme.colorScheme.onSurface
                 )
-                Spacer(Modifier.height(16.dp))
+                Spacer(Modifier.height(8.dp))
                 word.first.senses.getOrNull(0)
                     ?.let { sense ->
                         Sense(
@@ -66,7 +64,7 @@ fun RandomWordCard(
                             false
                         )
                     }
-                Spacer(Modifier.height(16.dp))
+                Spacer(Modifier.height(8.dp))
                 WordCardButtons(
                     { onLearnClick(word.second) },
                     { onBookmarkClick(word.second) },
@@ -74,7 +72,7 @@ fun RandomWordCard(
                     word.second.isFavorite,
                     modifier = Modifier.fillMaxWidth()
                 )
-                Spacer(Modifier.height(24.dp))
+                Spacer(Modifier.height(20.dp))
             }
         }
     }

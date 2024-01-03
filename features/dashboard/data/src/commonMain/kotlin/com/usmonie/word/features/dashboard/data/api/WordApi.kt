@@ -50,4 +50,13 @@ class WordApi(private val baseUrl: String) {
             }
         }.body()
     }
+
+    internal suspend fun getWordOfTheDay(): List<WordDto> {
+        return client.get {
+            url {
+                takeFrom(baseUrl)
+                encodedPath = "/dictionary/word_of_the_day"
+            }
+        }.body()
+    }
 }

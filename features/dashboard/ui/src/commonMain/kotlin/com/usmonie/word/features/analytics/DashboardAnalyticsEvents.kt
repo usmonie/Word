@@ -18,7 +18,6 @@ sealed class DashboardAnalyticsEvents(key: String, data: EventData) : AnalyticsE
         DashboardAnalyticsEvents("OPEN_FAVOURITES", DashboardEventData.Favourites)
 
     data object OpenSettings : DashboardAnalyticsEvents("OPEN_SETTINGS", DashboardEventData.Settings)
-
 }
 
 sealed class DashboardEventData : AnalyticsEvent.EventData {

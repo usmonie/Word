@@ -1,6 +1,8 @@
 package com.usmonie.word.features.new.favorites
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -14,6 +16,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.dashboard.domain.repository.WordRepository
 import com.usmonie.word.features.dashboard.domain.usecase.GetAllFavouritesUseCaseImpl
@@ -78,8 +81,18 @@ private fun FavoritesContent(favoritesViewModel: FavouritesViewModel, adMob: AdM
     Scaffold(
         topBar = { TopBackButtonBar(routeManager::navigateBack, true) },
     ) { insets ->
-        Box {
-            BaseLazyColumn(rememberLazyListState(), insets) {
+        Box(
+            Modifier.padding(
+                start = insets.calculateLeftPadding(LayoutDirection.Ltr),
+                end = insets.calculateRightPadding(LayoutDirection.Ltr),
+                top = insets.calculateTopPadding()
+            )
+        ) {
+            BaseLazyColumn(
+                rememberLazyListState(),
+                contentPadding = PaddingValues(bottom = insets.calculateBottomPadding()),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
                 item {
                     SearchBar(
                         {},
