@@ -33,7 +33,7 @@ kotlin {
         iosTarget.binaries.framework {
             baseName = "ComposeApp"
             isStatic = true
-            version = "0.2.0"
+            version = "0.6.0"
 
             dependencies {
                 implementation(projects.core.design)
@@ -101,8 +101,8 @@ android {
         minSdk = 25 //config.versions.android.minSdk.get().toInt()
         targetSdk = 34
 
-        versionCode = 11
-        versionName = "0.3"
+        versionCode = 13
+        versionName = "0.6"
     }
     buildFeatures {
         compose = true

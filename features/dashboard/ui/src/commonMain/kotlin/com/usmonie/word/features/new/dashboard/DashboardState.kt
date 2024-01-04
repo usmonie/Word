@@ -34,6 +34,16 @@ data class DashboardState(
             }
         }
 
+        val newRandomWord: ContentState<Pair<WordUi, WordCombinedUi>> = when (randomWord) {
+            is ContentState.Error<*, *> -> randomWord
+            is ContentState.Loading -> randomWord
+            is ContentState.Success -> if (updatedWord.word == randomWord.data.first.word) {
+                ContentState.Success(Pair(randomWord.data.first, updatedWord))
+            } else {
+                randomWord
+            }
+        }
+
         val newFoundWords: ContentState<List<WordCombinedUi>> = when (foundWords) {
             is ContentState.Error<*, *> -> foundWords
             is ContentState.Loading -> foundWords
@@ -55,6 +65,7 @@ data class DashboardState(
         return copy(
             wordOfTheDay = newWordOfTheDay,
             foundWords = newFoundWords,
+            randomWord = newRandomWord,
             recentSearch = newRecentSearch,
         )
     }
