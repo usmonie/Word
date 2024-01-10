@@ -14,11 +14,11 @@ class AppDelegate: NSObject, UIApplicationDelegate {
                    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
       
       #if DEBUG
-        FirebaseApp.configure()
       #else
-          print(parameters)
+        FirebaseApp.configure()
       #endif
-      GADMobileAds.sharedInstance().requestConfiguration.testDeviceIdentifiers = [ 
+      
+      GADMobileAds.sharedInstance().requestConfiguration.testDeviceIdentifiers = [
         "2c3eab925250535fcf0c811081116df4"
       ]
       GADMobileAds.sharedInstance().start(completionHandler: nil)

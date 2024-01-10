@@ -9,7 +9,7 @@ import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.appopen.AppOpenAd
 import com.google.android.gms.ads.appopen.AppOpenAd.AppOpenAdLoadCallback
-import wtf.speech.core.ui.AdKeys
+import wtf.speech.core.ui.AppKeys
 
 class WordApplication : Application() {
     override fun onCreate() {
@@ -81,6 +81,6 @@ internal class AppOpenAdManager {
 
     companion object {
         private const val LOG_TAG = "AppOpenAdManager"
-        private const val AD_UNIT_ID = AdKeys.STARTUP_ID
+        private const val AD_UNIT_ID = AppKeys.STARTUP_ID
     }
 }

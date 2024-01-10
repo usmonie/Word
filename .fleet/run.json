@@ -1,12 +1,15 @@
 {
     "configurations": [
         {
-            "name": "composeApp",
-            "type": "android-app",
-            "workingDir": "$PROJECT_DIR$",
-            "allowParallelRun": true,
-            "module": "Word.composeApp.main",
-            "destination": "Small Phone API 34"
-        }
+            "type": "xcode-app",
+            "name": "iosApp",
+            "buildTarget": {
+                "project": "word",
+                "target": "word",
+            },
+            "configuration": "Debug",
+            "destination": "iPhone 15 Pro | iOS 17.2",
+        },
+
     ]
 }

@@ -3,6 +3,8 @@ import SwiftUI
 import GoogleMobileAds
 import FirebaseCore
 import FirebaseAnalytics
+import AppTrackingTransparency
+import AdSupport
 
 struct InterstitalRewardedView: UIViewControllerRepresentable {
 
@@ -23,9 +25,16 @@ class InterstitalRewardedViewController: UIViewController, GADFullScreenContentD
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
-        loadRewarded()
-        loadInterstitial()
+        requestIDFA()
+    }
+
+    func requestIDFA() {
+        print("requestIDFA")
+        ATTrackingManager.requestTrackingAuthorization(completionHandler: { [self] status in
+            // Tracking authorization completed. Start loading ads here.
+            self.loadInterstitial()
+            self.loadRewarded()
+        })
     }
 
     func loadRewarded() {

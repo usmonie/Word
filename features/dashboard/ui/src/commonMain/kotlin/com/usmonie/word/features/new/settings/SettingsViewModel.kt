@@ -21,7 +21,7 @@ internal class SettingsViewModel(
     private val clearRecentUseCase: ClearRecentUseCase
 ) : BaseViewModel<SettingsState, SettingsAction, SettingsEvent, SettingsEffect>(
     SettingsState(
-        WordColors.ROYAL_INDIGO,
+        WordColors.RICH_MAROON,
         Friendly,
         SubscriptionStatus.PURCHASED
     )
@@ -29,12 +29,6 @@ internal class SettingsViewModel(
 
     init {
         viewModelScope.launch {
-            currentThemeUseCase(Unit).run {
-                val color = colorsName?.let { WordColors.valueOf(it) } ?: WordColors.RICH_MAROON
-                val typography = fonts?.let { WordTypography.valueOf(it) } ?: Friendly
-                handleAction(SettingsAction.OnThemeChanged(color))
-                handleAction(SettingsAction.OnTypographyChanged(typography))
-            }
             subscriptionStatusUseCase(Unit).collect { status ->
                 handleAction(SettingsAction.OnSubscriptionChanged(status))
             }
@@ -60,6 +54,17 @@ internal class SettingsViewModel(
         }
 
         is SettingsAction.OnSubscriptionChanged -> {
+            currentThemeUseCase(Unit).run {
+                val userSelectedColor = colorsName?.let { WordColors.valueOf(it) }
+                    ?: WordColors.RICH_MAROON
+                val colors = when {
+                    action.newSubscriptionStatus != SubscriptionStatus.PURCHASED && userSelectedColor.paid -> WordColors.RICH_MAROON
+                    else -> userSelectedColor
+                }
+                val typography = fonts?.let { WordTypography.valueOf(it) } ?: Friendly
+                handleAction(SettingsAction.OnThemeChanged(colors))
+                handleAction(SettingsAction.OnTypographyChanged(typography))
+            }
             SettingsEvent.OnSubscriptionChanged(action.newSubscriptionStatus)
         }
 

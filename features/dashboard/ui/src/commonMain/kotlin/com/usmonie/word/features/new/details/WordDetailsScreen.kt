@@ -37,7 +37,7 @@ import wtf.speech.compass.core.Extra
 import wtf.speech.compass.core.LocalRouteManager
 import wtf.speech.compass.core.Screen
 import wtf.speech.compass.core.ScreenBuilder
-import wtf.speech.core.ui.AdKeys
+import wtf.speech.core.ui.AppKeys
 import wtf.word.core.domain.Analytics
 import wtf.word.core.domain.tools.fastForEachIndexed
 
@@ -194,7 +194,7 @@ private fun WordDetailsContent(wordViewModel: WordViewModel, adMob: AdMob) {
             }
 
             adMob.Banner(
-                AdKeys.BANNER_ID,
+                AppKeys.BANNER_ID,
                 Modifier.fillMaxWidth()
                     .align(Alignment.BottomCenter)
             )

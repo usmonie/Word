@@ -8,17 +8,25 @@
 import Foundation
 import ComposeApp
 import FirebaseAnalytics
+import AmplitudeSwift
 
 class NativeAnalytics: DomainAnalytics {
+    let amplitude: Amplitude
+    
+    init(amplitude: Amplitude) {
+        self.amplitude = amplitude
+    }
+    
     override func log(analyticsEvent: DomainAnalyticsEvent) {
         // Преобразование данных EventData в словарь для Firebase Analytics
         let parameters = convertEventDataToDictionary(key: analyticsEvent.key, data: analyticsEvent.data)
         // Использование Firebase Analytics для отправки события
         
         #if DEBUG
-            Analytics.logEvent(analyticsEvent.key, parameters: parameters)
-        #else
             print(parameters)
+        #else
+            amplitude.track(analyticsEvent.key, parameters)
+            Analytics.logEvent(analyticsEvent.key, parameters: parameters)
         #endif
     }
 

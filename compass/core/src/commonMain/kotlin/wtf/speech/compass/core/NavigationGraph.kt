@@ -42,7 +42,7 @@ data class NavigationGraph(
         private set
 
     internal var previousScreen: MutableState<NavigationEntry?> =
-        mutableStateOf(backStack.getOrNull(backStack.size - 2))
+        mutableStateOf(backStack.getOrNull(backStack.lastIndex - 1))
         private set
 
     fun register(route: Route) {
@@ -55,6 +55,7 @@ data class NavigationGraph(
     }
 
     fun navigateTo(screen: Screen, params: Map<String, String>?, extras: Extra?): Boolean {
+        previousScreen.value = backStack.lastOrNull()
         backStack.add(NavigationEntry(screen, params, extras))
         updateCurrentScreen()
         return true
@@ -63,6 +64,7 @@ data class NavigationGraph(
     fun navigateTo(screenId: String, params: Map<String, String>?, extras: Extra?): Boolean {
         val screen = findScreen(screenId, params, extras)
         if (screen != null) {
+            previousScreen.value = backStack.lastOrNull()
             backStack.add(NavigationEntry(screen, params, extras))
             updateCurrentScreen()
             return true
@@ -73,7 +75,7 @@ data class NavigationGraph(
     fun navigateBack(): Boolean {
         if (backStack.size > 1) {
             backStack.removeLast().onClear()
-
+            previousScreen.value = backStack.getOrNull(backStack.lastIndex - 1)
             updateCurrentScreen()
             return true
         }

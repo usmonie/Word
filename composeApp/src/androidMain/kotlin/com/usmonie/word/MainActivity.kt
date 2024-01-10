@@ -23,6 +23,9 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.WindowCompat
+import com.amplitude.android.Amplitude
+import com.amplitude.android.Configuration
+import com.amplitude.android.DefaultTrackingOptions
 import com.android.billingclient.api.BillingClient
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdRequest
@@ -46,7 +49,7 @@ import com.usmonie.word.features.subscription.domain.models.SubscriptionStatus
 import com.usmonie.word.features.subscription.domain.usecase.SubscriptionStatusUseCaseImpl
 import com.usmonie.word.features.ui.AdMob
 import wtf.speech.compass.core.rememberRouteManager
-import wtf.speech.core.ui.AdKeys
+import wtf.speech.core.ui.AppKeys
 import wtf.word.core.design.themes.WordColors
 import wtf.word.core.design.themes.typographies.Friendly
 import wtf.word.core.design.themes.typographies.WordTypography
@@ -72,19 +75,30 @@ class MainActivity : ComponentActivity() {
                     factory = { context ->
                         AdView(context).apply {
                             adUnitId = adKey
-                            setAdSize(AdSize.BANNER)
+                            setAdSize(AdSize.FULL_BANNER)
                             loadAd(AdRequest.Builder().build())
                         }
                     },
                 )
-
             },
             { onAddDismissed -> showInterstitial(this, onAddDismissed) },
             { _, _ -> },
             subscriptionStatusUseCase
         )
 
-        val logger = DefaultLogger(Firebase.analytics)
+        val amplitude = Amplitude(
+            Configuration(
+                apiKey = if (packageName.contains("debug")) {
+                    AppKeys.AMPLITUDE_DEBUG_KEY
+                } else {
+                    AppKeys.AMPLITUDE_KEY
+                },
+                context = applicationContext,
+                defaultTracking = DefaultTrackingOptions.ALL,
+            )
+        )
+
+        val logger = DefaultLogger(applicationContext, Firebase.analytics, amplitude)
         loadInterstitial(this)
         enableEdgeToEdge()
         setContent {
@@ -107,8 +121,12 @@ class MainActivity : ComponentActivity() {
 
             val (currentColors, currentTypography) = remember {
                 val theme = CurrentThemeUseCaseImpl(userRepository).invoke(Unit)
-                val colors = if (isSubscribed) theme.colorsName?.let { WordColors.valueOf(it) }
-                    ?: WordColors.RICH_MAROON else WordColors.RICH_MAROON
+                val userSelectedColor = theme.colorsName?.let { WordColors.valueOf(it) }
+                    ?: WordColors.RICH_MAROON
+                val colors = when {
+                    !isSubscribed && userSelectedColor.paid -> WordColors.RICH_MAROON
+                    else -> userSelectedColor
+                }
                 val typography = if (isSubscribed) theme.fonts?.let { WordTypography.valueOf(it) }
                     ?: Friendly else Friendly
 
@@ -147,7 +165,7 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun loadInterstitial(context: Context) {
-        InterstitialAd.load(context, AdKeys.REWARDED_LIFE_ID,
+        InterstitialAd.load(context, AppKeys.REWARDED_LIFE_ID,
             AdRequest.Builder().build(), object : InterstitialAdLoadCallback() {
                 override fun onAdFailedToLoad(adError: LoadAdError) {
                     mInterstitialAd = null

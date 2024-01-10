@@ -45,6 +45,7 @@
 		DA1D11E22B2A097F00194749 /* sourceserif_black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DA1D11C42B2A097F00194749 /* sourceserif_black.ttf */; };
 		DA1D11E32B2A097F00194749 /* raleway_semibold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DA1D11C52B2A097F00194749 /* raleway_semibold.ttf */; };
 		DA838B932B40E99F00AA3C13 /* InterstitialAdsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA838B922B40E99F00AA3C13 /* InterstitialAdsManager.swift */; };
+		DAC2CD482B4A53CA007C5D38 /* AmplitudeSwift in Frameworks */ = {isa = PBXBuildFile; productRef = DAC2CD472B4A53CA007C5D38 /* AmplitudeSwift */; };
 		DAD18C092B29E7C500E74100 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DAD18C082B29E7C500E74100 /* Assets.xcassets */; };
 		DAD18C0D2B29E7C500E74100 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DAD18C0C2B29E7C500E74100 /* Preview Assets.xcassets */; };
 		DAD18C232B29E8AF00E74100 /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = DAD18C222B29E8AF00E74100 /* GoogleMobileAds */; };
@@ -94,7 +95,8 @@
 		DA1D11C42B2A097F00194749 /* sourceserif_black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = sourceserif_black.ttf; sourceTree = "<group>"; };
 		DA1D11C52B2A097F00194749 /* raleway_semibold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = raleway_semibold.ttf; sourceTree = "<group>"; };
 		DA838B922B40E99F00AA3C13 /* InterstitialAdsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterstitialAdsManager.swift; sourceTree = "<group>"; };
-		DAD18C012B29E7C400E74100 /* word.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = word.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DABD2AF52B48D05900FDA09F /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DAD18C012B29E7C400E74100 /* Word Debug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Word Debug.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAD18C082B29E7C500E74100 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DAD18C0A2B29E7C500E74100 /* word.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = word.entitlements; sourceTree = "<group>"; };
 		DAD18C0C2B29E7C500E74100 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -110,6 +112,7 @@
 				DAD18C262B29E8E600E74100 /* FirebaseAnalytics in Frameworks */,
 				DAD18C282B29E8E600E74100 /* FirebaseAnalyticsOnDeviceConversion in Frameworks */,
 				DAD18C2E2B29E8E600E74100 /* FirebaseAppCheck in Frameworks */,
+				DAC2CD482B4A53CA007C5D38 /* AmplitudeSwift in Frameworks */,
 				DAD18C232B29E8AF00E74100 /* GoogleMobileAds in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -166,7 +169,7 @@
 		DAD18C022B29E7C400E74100 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				DAD18C012B29E7C400E74100 /* word.app */,
+				DAD18C012B29E7C400E74100 /* Word Debug.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -174,6 +177,7 @@
 		DAD18C032B29E7C400E74100 /* word */ = {
 			isa = PBXGroup;
 			children = (
+				DABD2AF52B48D05900FDA09F /* Info.plist */,
 				DA1D11A72B2A097F00194749 /* font */,
 				DA1D117A2B29F2E200194749 /* AdBannerView.swift */,
 				DA1D117E2B29F2E200194749 /* AdInterstitialRewardedView.swift */,
@@ -209,6 +213,7 @@
 				DAD18BFD2B29E7C400E74100 /* Sources */,
 				DAD18BFE2B29E7C400E74100 /* Frameworks */,
 				DAD18BFF2B29E7C400E74100 /* Resources */,
+				DAC2CD492B4BA2C6007C5D38 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -222,9 +227,10 @@
 				DAD18C292B29E8E600E74100 /* FirebaseAnalyticsSwift */,
 				DAD18C2B2B29E8E600E74100 /* FirebaseAnalyticsWithoutAdIdSupport */,
 				DAD18C2D2B29E8E600E74100 /* FirebaseAppCheck */,
+				DAC2CD472B4A53CA007C5D38 /* AmplitudeSwift */,
 			);
 			productName = word;
-			productReference = DAD18C012B29E7C400E74100 /* word.app */;
+			productReference = DAD18C012B29E7C400E74100 /* Word Debug.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -254,6 +260,7 @@
 			packageReferences = (
 				DAD18C212B29E8AF00E74100 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
 				DAD18C242B29E8E600E74100 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				DAC2CD462B4A53CA007C5D38 /* XCRemoteSwiftPackageReference "Amplitude-Swift" */,
 			);
 			productRefGroup = DAD18C022B29E7C400E74100 /* Products */;
 			projectDirPath = "";
@@ -308,6 +315,28 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		DAC2CD492B4BA2C6007C5D38 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}",
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Resources/DWARF/${PRODUCT_NAME}",
+				"${DWARF_DSYM_FOLDER_PATH}/${DWARF_DSYM_FILE_NAME}/Contents/Info.plist",
+				"$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/GoogleService-Info.plist",
+				"$(TARGET_BUILD_DIR)/$(EXECUTABLE_PATH)",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${BUILD_DIR%/Build/*}/SourcePackages/checkouts/firebase-ios-sdk/Crashlytics/run\"\n";
+		};
 		DAD18C302B29E95D00E74100 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -467,7 +496,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = word/word.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_ASSET_PATHS = "\"word/Preview Content\"";
 				DEVELOPMENT_TEAM = GE26949KEK;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -479,7 +508,7 @@
 				);
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = /Users/usmanakhmedov/StudioProjects/Word/word/word/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "[W]ord — Pro Lexicon Debug";
+				INFOPLIST_KEY_CFBundleDisplayName = "[W]ord — Debug";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
@@ -495,7 +524,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.0.2;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-framework",
@@ -503,8 +532,8 @@
 					"-lz",
 					"-lsqlite3",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.usmonie.word;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.usmonie.word.debug;
+				PRODUCT_NAME = "Word Debug";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -523,7 +552,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = word/word.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 9;
+				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_ASSET_PATHS = "\"word/Preview Content\"";
 				DEVELOPMENT_TEAM = GE26949KEK;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -535,7 +564,7 @@
 				);
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = /Users/usmanakhmedov/StudioProjects/Word/word/word/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "[W]ord — Pro Lexicon";
+				INFOPLIST_KEY_CFBundleDisplayName = "[W]ord";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
@@ -551,7 +580,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.0.2;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-framework",
@@ -560,7 +589,7 @@
 					"-lsqlite3",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.usmonie.word;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "[W]ord";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -595,6 +624,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		DAC2CD462B4A53CA007C5D38 /* XCRemoteSwiftPackageReference "Amplitude-Swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/amplitude/Amplitude-Swift";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		DAD18C212B29E8AF00E74100 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/googleads/swift-package-manager-google-mobile-ads.git";
@@ -614,6 +651,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		DAC2CD472B4A53CA007C5D38 /* AmplitudeSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DAC2CD462B4A53CA007C5D38 /* XCRemoteSwiftPackageReference "Amplitude-Swift" */;
+			productName = AmplitudeSwift;
+		};
 		DAD18C222B29E8AF00E74100 /* GoogleMobileAds */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = DAD18C212B29E8AF00E74100 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */;

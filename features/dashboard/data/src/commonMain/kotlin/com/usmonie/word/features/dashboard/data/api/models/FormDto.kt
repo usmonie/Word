@@ -20,5 +20,5 @@ internal data class FormDto(
     @SerialName("tags")
     val tags: List<String> = listOf(),
     @SerialName("topics")
-    val topics: List<String>
+    val topics: List<String> = listOf()
 )

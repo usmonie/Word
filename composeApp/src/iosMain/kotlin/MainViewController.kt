@@ -82,7 +82,9 @@ fun MainViewController(
 
         LaunchedEffect(isSubscribed) {
             if (!isSubscribed) {
-                currentTheme = WordColors.RICH_MAROON
+                if (currentTheme.paid) {
+                    currentTheme = WordColors.RICH_MAROON
+                }
                 currentFonts = Friendly
             }
         }

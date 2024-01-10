@@ -32,7 +32,7 @@ import wtf.speech.compass.core.LocalRouteManager
 import wtf.speech.compass.core.RouteManager
 import wtf.speech.compass.core.Screen
 import wtf.speech.compass.core.ScreenBuilder
-import wtf.speech.core.ui.AdKeys
+import wtf.speech.core.ui.AppKeys
 import wtf.word.core.domain.Analytics
 
 class FavoritesScreen(
@@ -129,7 +129,7 @@ private fun FavoritesContent(favoritesViewModel: FavouritesViewModel, adMob: AdM
                 item { Spacer(Modifier.height(80.dp)) }
             }
             adMob.Banner(
-                AdKeys.BANNER_ID,
+                AppKeys.BANNER_ID,
                 Modifier.fillMaxWidth()
                     .align(Alignment.BottomCenter)
                     .padding(insets)

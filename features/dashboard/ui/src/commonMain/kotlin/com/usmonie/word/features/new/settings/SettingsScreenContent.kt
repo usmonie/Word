@@ -33,7 +33,7 @@ import com.usmonie.word.features.ui.MenuItemText
 import com.usmonie.word.features.ui.SearchBar
 import com.usmonie.word.features.ui.TopBackButtonBar
 import wtf.speech.compass.core.LocalRouteManager
-import wtf.speech.core.ui.AdKeys
+import wtf.speech.core.ui.AppKeys
 import wtf.word.core.design.themes.WordColors
 import wtf.word.core.design.themes.typographies.Friendly
 import wtf.word.core.design.themes.typographies.ModernChic
@@ -87,8 +87,12 @@ internal fun SettingsScreenContent(
                     SettingsSubscriptionItem(
                         onClick = { viewModel.handleAction(SettingsAction.OnThemeChanged(color)) },
                         title = color.title,
-                        selected = if (isSubscribed) color == state.currentTheme else color == WordColors.RICH_MAROON,
-                        isSubscribed = color == WordColors.RICH_MAROON || isSubscribed,
+                        selected = if ((!isSubscribed && color.paid)) {
+                            color == WordColors.RICH_MAROON
+                        } else {
+                            color == state.currentTheme
+                        },
+                        isSubscribed = !color.paid || isSubscribed,
                         modifier = Modifier.fillParentMaxWidth()
                     )
                 }
@@ -128,7 +132,7 @@ internal fun SettingsScreenContent(
             }
 
             adMob.Banner(
-                AdKeys.BANNER_ID,
+                AppKeys.BANNER_ID,
                 Modifier.fillMaxWidth().align(Alignment.BottomCenter)
             )
         }

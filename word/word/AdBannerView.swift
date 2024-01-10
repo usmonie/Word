@@ -13,8 +13,9 @@ private struct BannerVC: UIViewControllerRepresentable {
     var bannerID: String
 
     @Binding var viewWidth: CGFloat
+
     func makeUIViewController(context: Context) -> UIViewController {
-        
+
         let view = GADBannerView(adSize: GADCurrentOrientationAnchoredAdaptiveBannerAdSizeWithWidth(viewWidth))
 
         let viewController = UIViewController()
@@ -44,15 +45,15 @@ struct Banner: View {
 
     var body: some View {
         BannerVC(bannerID: bannerID, viewWidth: $viewWidth)
-            .frame(width: size.width, height: size.height)
-            .onAppear {
-                // Get the initial view width
-                viewWidth = UIScreen.main.bounds.width
-            }
-            .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
-                // Update the view width when the device orientation changes
-                viewWidth = UIScreen.main.bounds.width
-            }
+                .frame(width: size.width, height: size.height)
+                .onAppear {
+                    // Get the initial view width
+                    viewWidth = UIScreen.main.bounds.width
+                }
+                .onReceive(NotificationCenter.default.publisher(for: UIDevice.orientationDidChangeNotification)) { _ in
+                    // Update the view width when the device orientation changes
+                    viewWidth = UIScreen.main.bounds.width
+                }
     }
 }
 
@@ -74,7 +75,6 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("VIEWCONTROLLER STARTED")
         // In this case, we instantiate the banner with desired ad size.
 //        bannerView = GADBannerView(adSize: GADAdSizeBanner)
 
@@ -85,7 +85,6 @@ class ViewController: UIViewController {
     }
 
     func addBannerViewToView(_ bannerView: GADBannerView) {
-
         bannerView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(bannerView)
         view.addConstraints(

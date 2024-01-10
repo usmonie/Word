@@ -9,7 +9,7 @@ internal data class TemplateDto(
     @SerialName("args")
     val args: Map<String, String> = mapOf(),
     @SerialName("expansion")
-    val expansion: String?,
+    val expansion: String? = null,
     @SerialName("name")
     val name: String?
 )

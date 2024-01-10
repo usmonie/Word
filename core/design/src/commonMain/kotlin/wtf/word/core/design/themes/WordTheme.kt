@@ -14,16 +14,16 @@ import wtf.word.core.design.themes.colors.TwilightAmethystColors
 import wtf.word.core.design.themes.typographies.Friendly
 import wtf.word.core.design.themes.typographies.WordTypography
 
-enum class WordColors(val colors: Colors, val title: String) {
-    RICH_MAROON(RichMaroonColors, "Rich Maroon"),
-    BRITISH_RACING_GREEN(BritishRacingGreenColors, "British Racing Green"),
-    DEEP_INDIGO(DeepIndigoColors, "Deep Indigo"),
+enum class WordColors(val colors: Colors, val title: String, val paid: Boolean) {
+    RICH_MAROON(RichMaroonColors, "Rich Maroon", false),
+    BRITISH_RACING_GREEN(BritishRacingGreenColors, "British Racing Green", false),
+    DEEP_INDIGO(DeepIndigoColors, "Deep Indigo", false),
 
-    GENTLE_BREEZE(GentleBreezeColors, "Gentle Breeze"),
-    ROYAL_INDIGO(RoyalIndigoColors, "Royal Indigo"),
-    TWILIGHT_AMETHYST(TwilightAmethystColors, "Twilight Amethyst"),
-    PASTEL_SUNSET(PastelSunsetColors, "Pastel Sunset"),
-    EMERALD_ELEGANCE(EmeraldEleganceColors, "Emerald Elegance");
+    GENTLE_BREEZE(GentleBreezeColors, "Gentle Breeze", true),
+    ROYAL_INDIGO(RoyalIndigoColors, "Royal Indigo", true),
+    TWILIGHT_AMETHYST(TwilightAmethystColors, "Twilight Amethyst", true),
+    PASTEL_SUNSET(PastelSunsetColors, "Pastel Sunset", true),
+    EMERALD_ELEGANCE(EmeraldEleganceColors, "Emerald Elegance", true);
 }
 
 @Composable

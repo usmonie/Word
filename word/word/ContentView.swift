@@ -8,13 +8,22 @@
 import SwiftUI
 import ComposeApp
 import GoogleMobileAds
-
+import AmplitudeSwift
 struct ComposeView: UIViewControllerRepresentable {
     let onShowAd: () -> Void
 
     func makeUIViewController(context: Context) -> UIViewController {
         var controller: UIViewController
-
+        let amplitude: Amplitude
+        #if DEBUG
+             amplitude = Amplitude(configuration: Configuration(
+                apiKey: "244f468ae1266bd4dbfb8fd739cdc87e"
+            ))
+        #else
+            amplitude = Amplitude(configuration: Configuration(
+                apiKey: "244f468ae1266bd4dbfb8fd739cdc87e"
+            ))
+        #endif
         controller = MainViewControllerKt.MainViewController(
             onViewDidLoad: {},
             bannerUiView: {
@@ -23,7 +32,7 @@ struct ComposeView: UIViewControllerRepresentable {
             rewardedInterstitialView: {
                 onShowAd()
             },
-            nativeAnalytics: NativeAnalytics()
+            nativeAnalytics: NativeAnalytics(amplitude: amplitude)
         )
 
         return controller
@@ -41,17 +50,15 @@ struct ContentView: View {
     var body: some View {
         ZStack {
             interstitialAd
-            ComposeView(
-                onShowAd: {
-                    interstitialVC?.rewardAdTouched()
-                }
-            )
+            ComposeView(onShowAd: { interstitialVC?.rewardAdTouched() })
                     .ignoresSafeArea(.keyboard) // Compose has own keyboard handler
                     .edgesIgnoringSafeArea(.top)
                     .edgesIgnoringSafeArea(.bottom)
 
         }
-        .onAppear { interstitialVC = interstitialAd.viewController }
+                .onAppear {
+                    interstitialVC = interstitialAd.viewController
+                }
     }
 }
 

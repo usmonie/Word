@@ -39,7 +39,7 @@ import wtf.speech.compass.core.LocalRouteManager
 import wtf.speech.compass.core.RouteManager
 import wtf.speech.compass.core.Screen
 import wtf.speech.compass.core.ScreenBuilder
-import wtf.speech.core.ui.AdKeys
+import wtf.speech.core.ui.AppKeys
 
 class HangmanGameScreen(
     private val hangmanGameViewModel: HangmanGameViewModel,
@@ -104,7 +104,7 @@ private fun HangmanContent(hangmanGameViewModel: HangmanGameViewModel, adMob: Ad
         }
 
         if (effect is HangmanEffect.StartGame) {
-            adMob.Startup(AdKeys.STARTUP_ID)
+            adMob.Startup(AppKeys.STARTUP_ID)
         }
     }
 }
@@ -167,7 +167,7 @@ private fun PlayBoard(
         }
 
         adMob.Banner(
-            AdKeys.BANNER_ID,
+            AppKeys.BANNER_ID,
             Modifier.fillMaxWidth()
         )
     }

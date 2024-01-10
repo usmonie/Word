@@ -12,6 +12,8 @@ internal data class WordDto(
     val lang: String,
     @SerialName("lang_code")
     val langCode: String,
+    @SerialName("pos")
+    val pos: String,
     @SerialName("etymology_number")
     val etymologyNumber: Int? = null,
     @SerialName("etymology_text")
@@ -56,8 +58,6 @@ internal data class WordDto(
     val meronyms: List<RelatedDto> = listOf(),
     @SerialName("original_title")
     val originalTitle: String? = null,
-    @SerialName("pos")
-    val pos: String,
     @SerialName("proverbs")
     val proverbs: List<RelatedDto> = listOf(),
     @SerialName("related")

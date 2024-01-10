@@ -13,6 +13,7 @@ plugins {
     alias(libs.plugins.compose)
     alias(libs.plugins.androidx.baselineprofile)
     alias(libs.plugins.google.services)
+    id("com.google.firebase.crashlytics")
 }
 
 kotlin {
@@ -74,6 +75,7 @@ kotlin {
                 implementation(libs.compose.activity)
                 implementation(libs.firebase.analytics)
                 implementation(libs.android.billing.ktx)
+                implementation("com.amplitude:analytics-android:1.+")
             }
         }
     }
@@ -101,8 +103,8 @@ android {
         minSdk = 25 //config.versions.android.minSdk.get().toInt()
         targetSdk = 34
 
-        versionCode = 13
-        versionName = "0.6"
+        versionCode = 14
+        versionName = "1.0.2"
     }
     buildFeatures {
         compose = true
