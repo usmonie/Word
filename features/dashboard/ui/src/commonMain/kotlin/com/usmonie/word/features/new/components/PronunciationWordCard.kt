@@ -1,5 +1,7 @@
 package com.usmonie.word.features.new.components
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -7,6 +9,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -70,6 +77,8 @@ fun DetailsWordCardMedium(
     word: WordUi,
     modifier: Modifier = Modifier
 ) {
+    var expanded by remember(word) { mutableStateOf(false) }
+    val maxLines by remember(expanded) { mutableStateOf(if (expanded) Int.MAX_VALUE else 3) }
     BaseCard(
         {},
         elevation = 8.dp,
@@ -88,17 +97,20 @@ fun DetailsWordCardMedium(
 
         Spacer(Modifier.height(16.dp))
         if (word.etymologyText != null) {
-            EtymologyTitle()
-            Spacer(Modifier.height(12.dp))
-            Text(
-                word.etymologyText,
-                textAlign = TextAlign.Justify,
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(horizontal = 20.dp),
-                overflow = TextOverflow.Ellipsis
-            )
-            Spacer(Modifier.height(16.dp))
+            Column(Modifier.fillMaxWidth().clickable { expanded = !expanded }) {
+                EtymologyTitle()
+                Spacer(Modifier.height(12.dp))
+                Text(
+                    word.etymologyText,
+                    maxLines = maxLines,
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(horizontal = 20.dp),
+                    overflow = TextOverflow.Ellipsis
+                )
+                Spacer(Modifier.height(16.dp))
+            }
+
         }
 
         Pronunciations(word, onAudioPlayClicked)
@@ -107,26 +119,38 @@ fun DetailsWordCardMedium(
 }
 
 @Composable
-private fun Pronunciations(
+fun Pronunciations(
     word: WordUi,
     onAudioPlayClicked: (String) -> Unit
 ) {
+    val sounds by remember(word) {
+        derivedStateOf {
+            word.sounds
+                .groupBy { sound -> sound.tags.joinToString { tag -> tag } }
+                .mapValues {
+                    it.value.asSequence()
+                        .map { pronunciation -> (pronunciation.ipa ?: pronunciation.enpr) }
+                        .filterNotNull()
+                        .filter { pronunciation -> pronunciation.isNotBlank() }
+                        .joinToString { pronunciation -> pronunciation }
+                }
+                .toList()
+                .filter { it.second.isNotBlank() }
+        }
+    }
     if (word.sounds.isNotEmpty()) {
         PronunciationTitle()
         Spacer(Modifier.height(8.dp))
-        word.sounds.fastForEachIndexed { i, sound ->
-            val phonetic = sound.ipa ?: sound.enpr ?: ""
-            if (phonetic.isNotBlank()) {
-                PronunciationItem(
-                    { sound.audio?.let { onAudioPlayClicked(it) } },
-                    sound.text.orEmpty(),
-                    phonetic,
-                    sound.audio
-                )
+        sounds.fastForEachIndexed { i, sound ->
+            PronunciationItem(
+                { },
+                sound.first,
+                sound.second,
+                null
+            )
 
-                if (i in 0 until word.sounds.size - 1) {
-                    Spacer(Modifier.height(8.dp))
-                }
+            if (i in 0 until word.sounds.size - 1) {
+                Spacer(Modifier.height(8.dp))
             }
         }
     }

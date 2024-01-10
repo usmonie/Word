@@ -10,7 +10,7 @@ import com.usmonie.word.features.subscription.domain.usecase.SubscriptionStatusU
 import kotlinx.coroutines.launch
 import wtf.speech.core.ui.BaseViewModel
 import wtf.word.core.design.themes.WordColors
-import wtf.word.core.design.themes.typographies.Friendly
+import wtf.word.core.design.themes.typographies.ModernChic
 import wtf.word.core.design.themes.typographies.WordTypography
 
 @Immutable
@@ -22,7 +22,7 @@ internal class SettingsViewModel(
 ) : BaseViewModel<SettingsState, SettingsAction, SettingsEvent, SettingsEffect>(
     SettingsState(
         WordColors.RICH_MAROON,
-        Friendly,
+        ModernChic,
         SubscriptionStatus.PURCHASED
     )
 ) {
@@ -61,7 +61,7 @@ internal class SettingsViewModel(
                     action.newSubscriptionStatus != SubscriptionStatus.PURCHASED && userSelectedColor.paid -> WordColors.RICH_MAROON
                     else -> userSelectedColor
                 }
-                val typography = fonts?.let { WordTypography.valueOf(it) } ?: Friendly
+                val typography = fonts?.let { WordTypography.valueOf(it) } ?: ModernChic
                 handleAction(SettingsAction.OnThemeChanged(colors))
                 handleAction(SettingsAction.OnTypographyChanged(typography))
             }

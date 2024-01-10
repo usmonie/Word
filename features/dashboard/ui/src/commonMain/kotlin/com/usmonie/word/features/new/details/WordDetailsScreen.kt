@@ -26,6 +26,8 @@ import com.usmonie.word.features.dashboard.domain.repository.WordRepository
 import com.usmonie.word.features.dashboard.domain.usecase.GetSimilarWordsUseCaseImpl
 import com.usmonie.word.features.dashboard.domain.usecase.UpdateFavouriteUseCaseImpl
 import com.usmonie.word.features.new.components.DetailsWordCardMedium
+import com.usmonie.word.features.new.components.FormsCard
+import com.usmonie.word.features.new.components.FormsCardState
 import com.usmonie.word.features.new.components.SenseTreeCard
 import com.usmonie.word.features.new.models.WordCombinedUi
 import com.usmonie.word.features.ui.AdMob
@@ -173,6 +175,12 @@ private fun WordDetailsContent(wordViewModel: WordViewModel, adMob: AdMob) {
                                 }
                             }
                         }
+                    }
+                }
+
+                if (selectedPos.forms.isNotEmpty()) {
+                    item {
+                        FormsCard(FormsCardState(selectedPos.forms))
                     }
                 }
 

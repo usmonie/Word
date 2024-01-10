@@ -59,7 +59,7 @@ internal fun SettingsScreenContent(
     val colors = remember { WordColors.entries.toList() }
 
     val typographies = remember {
-        listOf(Friendly, ModernChic, TimelessElegant)
+        listOf(ModernChic, Friendly, TimelessElegant)
     }
     val routeManager = LocalRouteManager.current
 
@@ -107,8 +107,8 @@ internal fun SettingsScreenContent(
                             viewModel.handleAction(SettingsAction.OnTypographyChanged(typography))
                         },
                         title = typography.name,
-                        selected = if (isSubscribed) typography == state.currentTypography else typography is Friendly,
-                        isSubscribed = typography is Friendly || isSubscribed,
+                        selected = if (isSubscribed) typography == state.currentTypography else typography is ModernChic,
+                        isSubscribed = typography is ModernChic || isSubscribed,
                         modifier = Modifier.fillParentMaxWidth()
                     )
                 }

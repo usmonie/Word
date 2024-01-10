@@ -159,6 +159,7 @@ fun ExampleItem(
     val bodyLarge = MaterialTheme.typography.bodyLarge
     val onSurfaceColor = MaterialTheme.colorScheme.onSurface
     val onSurfaceVariantColor = MaterialTheme.colorScheme.onSurfaceVariant
+    println("FORM: $forms")
 
     val exampleText = example.text ?: return
     val text = remember(example) {
@@ -173,7 +174,6 @@ fun ExampleItem(
 
             forms.fastForEach {
                 it.formText?.let { form ->
-                    println("FORM: $form")
                     setSpan(exampleText, form, bodyLargeSpan, onSurfaceColor)
                 }
             }
@@ -225,7 +225,7 @@ private fun AnnotatedString.Builder.setSpan(
     bodyMediumSpan: SpanStyle,
     onSurfaceColor: Color
 ) {
-    val start = exampleText.indexOf(word)
+    val start = exampleText.indexOf(word, ignoreCase = true)
     if (start > -1) {
         val end = start + word.length
         addStyle(bodyMediumSpan.copy(onSurfaceColor), start, end)

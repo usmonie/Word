@@ -26,7 +26,7 @@ import platform.UIKit.UIView
 import platform.UIKit.UIViewController
 import wtf.speech.compass.core.getRouteManager
 import wtf.word.core.design.themes.WordColors
-import wtf.word.core.design.themes.typographies.Friendly
+import wtf.word.core.design.themes.typographies.ModernChic
 import wtf.word.core.design.themes.typographies.WordTypography
 import wtf.word.core.domain.Analytics
 
@@ -56,7 +56,7 @@ fun MainViewController(
 
     val theme = CurrentThemeUseCaseImpl(userRepository).invoke(Unit)
     var currentTheme by mutableStateOf(theme.colorsName?.let { WordColors.valueOf(it) } ?: WordColors.RICH_MAROON)
-    var currentFonts by mutableStateOf(theme.fonts?.let { WordTypography.valueOf(it) } ?: Friendly)
+    var currentFonts by mutableStateOf(theme.fonts?.let { WordTypography.valueOf(it) } ?: ModernChic)
     val wordRepository =
         DashboardDataComponent.getWordsRepository(WordApi("http://16.170.6.0"))
 
@@ -85,7 +85,7 @@ fun MainViewController(
                 if (currentTheme.paid) {
                     currentTheme = WordColors.RICH_MAROON
                 }
-                currentFonts = Friendly
+                currentFonts = ModernChic
             }
         }
 

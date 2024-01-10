@@ -206,12 +206,16 @@ class DashboardViewModel(
                 }
             }
 
-            val randomWord = try {
-                val word = getRandomWordUseCase(RandomWordUseCase.Param(30)).toUi()
-                ContentState.Success(Pair(word.wordEtymology.random().words.random(), word))
-            } catch (e: Exception) {
-                e.printStackTrace()
-                ContentState.Error(ConnectionErrorState(e))
+            val randomWord = if (update) {
+                state.value.wordOfTheDay
+            } else {
+                try {
+                    val word = getRandomWordUseCase(RandomWordUseCase.Param(30)).toUi()
+                    ContentState.Success(Pair(word.wordEtymology.random().words.random(), word))
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    ContentState.Error(ConnectionErrorState(e))
+                }
             }
 
             handleState(

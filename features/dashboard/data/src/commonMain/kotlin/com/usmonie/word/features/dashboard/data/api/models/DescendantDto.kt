@@ -8,7 +8,7 @@ internal data class DescendantDto(
     @SerialName("depth")
     val depth: Int? = null,
     @SerialName("tags")
-    val tags: List<String>,
+    val tags: List<String> = listOf(),
     @SerialName("templates")
     val templates: List<TemplateDto> = listOf(),
     @SerialName("text")

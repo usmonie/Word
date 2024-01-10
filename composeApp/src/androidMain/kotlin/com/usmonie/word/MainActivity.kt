@@ -51,7 +51,7 @@ import com.usmonie.word.features.ui.AdMob
 import wtf.speech.compass.core.rememberRouteManager
 import wtf.speech.core.ui.AppKeys
 import wtf.word.core.design.themes.WordColors
-import wtf.word.core.design.themes.typographies.Friendly
+import wtf.word.core.design.themes.typographies.ModernChic
 import wtf.word.core.design.themes.typographies.WordTypography
 
 class MainActivity : ComponentActivity() {
@@ -128,7 +128,7 @@ class MainActivity : ComponentActivity() {
                     else -> userSelectedColor
                 }
                 val typography = if (isSubscribed) theme.fonts?.let { WordTypography.valueOf(it) }
-                    ?: Friendly else Friendly
+                    ?: ModernChic else ModernChic
 
                 Pair(colors, typography)
             }

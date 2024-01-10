@@ -47,12 +47,6 @@ sealed class WordTypography(val name: String) {
                 else -> TimelessElegant
             }
         }
-
-        fun WordTypography.next() = when (this) {
-            Friendly -> ModernChic
-            ModernChic -> TimelessElegant
-            TimelessElegant -> Friendly
-        }
     }
 
     @Composable
