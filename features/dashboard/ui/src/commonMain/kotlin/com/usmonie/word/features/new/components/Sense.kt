@@ -21,6 +21,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
@@ -39,13 +42,14 @@ import wtf.word.core.domain.tools.fastForEachIndexed
 @Composable
 fun SenseCard(
     sense: SenseCombinedUi,
+    word: String,
     forms: List<FormUi>,
     modifier: Modifier = Modifier,
     elevation: Dp = 2.dp
 ) {
     BaseCard({}, elevation, modifier) {
         Spacer(Modifier.height(20.dp))
-        SenseTreeItem(sense, forms)
+        SenseTreeItem(sense, word, forms)
         Spacer(Modifier.height(20.dp))
     }
 }
@@ -54,25 +58,26 @@ fun SenseCard(
 @Composable
 fun SenseTreeCard(
     sense: SenseCombinedUi,
+    word: String,
     forms: List<FormUi>,
     modifier: Modifier = Modifier,
     elevation: Dp = 2.dp
 ) {
     BaseCard({}, elevation, modifier) {
         Spacer(Modifier.height(20.dp))
-        SenseTreeItem(sense, forms)
+        SenseTreeItem(sense, word, forms)
         Spacer(Modifier.height(20.dp))
     }
 }
 
 @Suppress("NonSkippableComposable")
 @Composable
-private fun SenseTreeItem(sense: SenseCombinedUi, forms: List<FormUi>) {
+private fun SenseTreeItem(sense: SenseCombinedUi, word: String, forms: List<FormUi>) {
     Sense(sense.gloss, modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp))
 
     sense.examples.forEach { example ->
         Spacer(Modifier.height(8.dp))
-        ExampleItem(example, forms)
+        ExampleItem(example, word, forms)
     }
 
     if (sense.children.isNotEmpty()) {
@@ -94,7 +99,7 @@ private fun SenseTreeItem(sense: SenseCombinedUi, forms: List<FormUi>) {
                 Spacer(Modifier.height(8.dp))
             }
 
-            SenseTreeItem(senseCombined, forms)
+            SenseTreeItem(senseCombined, word, forms)
         }
     }
 }
@@ -144,21 +149,33 @@ private fun SenseNumber(position: Int) {
 
 @Suppress("NonSkippableComposable")
 @Composable
-fun ExampleItem(example: ExampleUi, forms: List<FormUi>, modifier: Modifier = Modifier) {
+fun ExampleItem(
+    example: ExampleUi,
+    word: String,
+    forms: List<FormUi>,
+    modifier: Modifier = Modifier
+) {
     val bodyMedium = MaterialTheme.typography.bodyMedium
+    val bodyLarge = MaterialTheme.typography.bodyLarge
     val onSurfaceColor = MaterialTheme.colorScheme.onSurface
     val onSurfaceVariantColor = MaterialTheme.colorScheme.onSurfaceVariant
-    val text = buildAnnotatedString {
-        val bodyMediumSpan = bodyMedium.toSpanStyle()
-        val text = example.text ?: return
-        withStyle(bodyMediumSpan.copy(onSurfaceVariantColor)) {
-            append(text)
-        }
-        forms.fastForEach {
-            it.formText?.let { form ->
-                val start = text.indexOf(form)
-                val end = start + form.length
-                addStyle(bodyMediumSpan.copy(onSurfaceColor), start, end)
+
+    val exampleText = example.text ?: return
+    val text = remember(example) {
+        buildAnnotatedString {
+            val bodyMediumSpan = bodyMedium.toSpanStyle()
+            val bodyLargeSpan = bodyLarge.toSpanStyle()
+            withStyle(bodyMediumSpan.copy(onSurfaceVariantColor)) {
+                append(exampleText)
+            }
+
+            setSpan(exampleText, word, bodyLargeSpan, onSurfaceColor)
+
+            forms.fastForEach {
+                it.formText?.let { form ->
+                    println("FORM: $form")
+                    setSpan(exampleText, form, bodyLargeSpan, onSurfaceColor)
+                }
             }
         }
     }
@@ -199,6 +216,19 @@ fun ExampleItem(example: ExampleUi, forms: List<FormUi>, modifier: Modifier = Mo
                 modifier = Modifier.fillMaxWidth().padding(start = 32.dp, end = 20.dp)
             )
         }
+    }
+}
+
+private fun AnnotatedString.Builder.setSpan(
+    exampleText: String,
+    word: String,
+    bodyMediumSpan: SpanStyle,
+    onSurfaceColor: Color
+) {
+    val start = exampleText.indexOf(word)
+    if (start > -1) {
+        val end = start + word.length
+        addStyle(bodyMediumSpan.copy(onSurfaceColor), start, end)
     }
 }
 

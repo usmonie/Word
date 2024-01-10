@@ -183,6 +183,7 @@ private fun WordDetailsContent(wordViewModel: WordViewModel, adMob: AdMob) {
                 items(selectedPos.senses) { sense ->
                     SenseTreeCard(
                         sense,
+                        state.word.word,
                         selectedPos.forms,
                         modifier = Modifier.padding(horizontal = 20.dp)
                     )
