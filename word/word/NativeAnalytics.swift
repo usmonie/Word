@@ -25,7 +25,7 @@ class NativeAnalytics: DomainAnalytics {
         #if DEBUG
             print(parameters)
         #else
-            amplitude.track(analyticsEvent.key, parameters)
+            amplitude.track(eventType: analyticsEvent.key, eventProperties: parameters)
             Analytics.logEvent(analyticsEvent.key, parameters: parameters)
         #endif
     }

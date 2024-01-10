@@ -508,7 +508,7 @@
 				);
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = /Users/usmanakhmedov/StudioProjects/Word/word/word/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "[W]ord — Debug";
+				INFOPLIST_KEY_CFBundleDisplayName = "Word — Debug";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
@@ -564,7 +564,7 @@
 				);
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = /Users/usmanakhmedov/StudioProjects/Word/word/word/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "[W]ord";
+				INFOPLIST_KEY_CFBundleDisplayName = Word;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
@@ -589,7 +589,7 @@
 					"-lsqlite3",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.usmonie.word;
-				PRODUCT_NAME = "[W]ord";
+				PRODUCT_NAME = Word;
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
