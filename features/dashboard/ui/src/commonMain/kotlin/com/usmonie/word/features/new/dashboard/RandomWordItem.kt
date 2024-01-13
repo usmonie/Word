@@ -25,7 +25,6 @@ fun RandomWordMenuItem(
     showItem: Boolean,
     word: ContentState<Pair<WordUi, WordCombinedUi>>
 ) {
-    VerticalAnimatedVisibility(showItem) {
         Column(Modifier.animateContentSize()) {
             MenuItem(
                 onMenuItemClick,
@@ -42,6 +41,6 @@ fun RandomWordMenuItem(
                     modifier = Modifier.padding(horizontal = 16.dp).padding(bottom = 16.dp)
                 )
             }
-        }
+
     }
 }

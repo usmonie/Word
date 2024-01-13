@@ -34,7 +34,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import com.theapache64.rebugger.Rebugger
 import com.usmonie.word.features.OpenBrowser
 import com.usmonie.word.features.Url
 import com.usmonie.word.features.dashboard.domain.repository.WordRepository
@@ -165,20 +164,6 @@ private fun MainState(
     val hasFocus = remember { mutableStateOf(false) }
     val query by remember(state) { derivedStateOf { state.query } }
     val searchEnabled by remember(state) { derivedStateOf { true } }
-    Rebugger(
-        trackMap = mapOf(
-            "onPointerInput" to onPointerInput,
-            "dashboardViewModel" to dashboardViewModel,
-            "listState" to listState,
-            "insets" to insets,
-//            "state" to state,
-            "adMob" to adMob,
-            "showMenuItems" to showMenuItems,
-            "query" to query,
-            "searchEnabled" to searchEnabled,
-        ),
-        composableName = "MainState"
-    )
     Box(
         Modifier.padding(
             start = insets.calculateLeftPadding(LayoutDirection.Ltr),

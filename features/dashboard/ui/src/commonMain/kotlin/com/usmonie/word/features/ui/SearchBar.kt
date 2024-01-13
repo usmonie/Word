@@ -29,7 +29,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.IntSize
-import com.theapache64.rebugger.Rebugger
 import kotlin.math.absoluteValue
 
 @Composable
@@ -93,21 +92,6 @@ fun SearchBar(
     val textFieldSize = remember { mutableStateOf(IntSize.Zero) }
     val threshold: Float = remember { textFieldSize.value.width * 0.5f }
 
-    Rebugger(
-        trackMap = mapOf(
-            "onQueryChanged" to onQueryChanged,
-            "onFocusChange" to onFocusChange,
-            "placeholder" to placeholder,
-            "query" to query,
-            "hasFocus" to hasFocus,
-            "modifier" to modifier,
-            "enabled" to enabled,
-            "focusRequester" to focusRequester,
-            "textFieldSize" to textFieldSize,
-            "threshold" to threshold,
-        ),
-        composableName = "SearchBar"
-    )
     TextInputField(
         query,
         onQueryChanged,
@@ -128,21 +112,6 @@ fun SearchBar(
         textStyle = MaterialTheme.typography.displayLarge,
         placeholder = {
             val placeholderAlphaAnimation by animateFloatAsState(if (hasFocus) .5f else 1f)
-            Rebugger(
-                trackMap = mapOf(
-                    "onQueryChanged" to onQueryChanged,
-                    "onFocusChange" to onFocusChange,
-                    "placeholder" to placeholder,
-                    "query" to query,
-                    "hasFocus" to hasFocus,
-                    "modifier" to modifier,
-                    "enabled" to enabled,
-                    "focusRequester" to focusRequester,
-                    "textFieldSize" to textFieldSize,
-                    "threshold" to threshold,
-                    "placeholderAlphaAnimation" to placeholderAlphaAnimation
-                ),
-            )
             Text(
                 placeholder,
                 style = MaterialTheme.typography.displayLarge,

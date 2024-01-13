@@ -156,7 +156,6 @@ fun ExampleItem(
     val bodyLarge = MaterialTheme.typography.bodyLarge
     val onSurfaceColor = MaterialTheme.colorScheme.onSurface
     val onSurfaceVariantColor = MaterialTheme.colorScheme.onSurfaceVariant
-    println("FORM: $forms")
 
     val exampleText = example.text ?: return
     val text = remember(example) {

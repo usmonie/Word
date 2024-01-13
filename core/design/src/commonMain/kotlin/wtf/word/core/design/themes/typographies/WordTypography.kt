@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 
 sealed class WordTypography(val name: String) {
     sealed class FontFamilyData {
@@ -89,7 +90,8 @@ sealed class WordTypography(val name: String) {
                 fontFamily = getFont(labelSmall)
             ),
             bodyLarge = MaterialTheme.typography.bodyLarge.copy(
-                fontFamily = getFont(bodyLarge)
+                fontFamily = getFont(bodyLarge),
+                fontSize = 16.sp
             ),
             bodyMedium = MaterialTheme.typography.bodyMedium.copy(
                 fontFamily = getFont(bodyMedium)

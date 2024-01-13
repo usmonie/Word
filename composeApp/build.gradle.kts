@@ -34,7 +34,7 @@ kotlin {
         iosTarget.binaries.framework {
             baseName = "ComposeApp"
             isStatic = true
-            version = "0.6.0"
+            version = "1.2.0"
 
             dependencies {
                 implementation(projects.core.design)
@@ -103,8 +103,8 @@ android {
         minSdk = 25 //config.versions.android.minSdk.get().toInt()
         targetSdk = 34
 
-        versionCode = 14
-        versionName = "1.0.2"
+        versionCode = 15
+        versionName = "1.2.0"
     }
     buildFeatures {
         compose = true
@@ -148,6 +148,8 @@ android {
 
 //copyNativeResources("commonMain")
 dependencies {
+    implementation("androidx.compose.runtime:runtime-tracing:1.0.0-beta01")
+
     debugImplementation(libs.compose.ui.tooling)
 }
 //

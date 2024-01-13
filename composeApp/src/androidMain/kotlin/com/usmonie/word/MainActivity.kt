@@ -38,7 +38,6 @@ import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
 import com.liftric.kvault.KVault
-import com.theapache64.rebugger.RebuggerConfig
 import com.usmonie.word.features.dashboard.data.api.WordApi
 import com.usmonie.word.features.dashboard.data.di.DashboardDataComponent
 import com.usmonie.word.features.dashboard.data.repository.UserRepositoryImpl
@@ -49,7 +48,6 @@ import com.usmonie.word.features.subscription.data.getSubscriptionRepository
 import com.usmonie.word.features.subscription.domain.models.SubscriptionStatus
 import com.usmonie.word.features.subscription.domain.usecase.SubscriptionStatusUseCaseImpl
 import com.usmonie.word.features.ui.AdMob
-import org.lighthousegames.logging.Log
 import wtf.speech.compass.core.rememberRouteManager
 import wtf.speech.core.ui.AppKeys
 import wtf.word.core.design.themes.WordColors
@@ -102,7 +100,6 @@ class MainActivity : ComponentActivity() {
 
         val logger = DefaultLogger(applicationContext, Firebase.analytics, amplitude)
         loadInterstitial(this)
-        RebuggerConfig.init("REBUGGER", logger = { tag, message -> Log.d(tag, message) })
         enableEdgeToEdge()
         setContent {
             val view = LocalView.current

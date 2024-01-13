@@ -16,7 +16,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.theapache64.rebugger.Rebugger
 
 /**
  * A composable that observes changes to the current screen in [RouteManagerImpl] and displays its content.
@@ -83,25 +82,12 @@ fun NavigationHost(
             routeManager,
             isGestureNavigationEnabled,
             {
-                previousScreen
+                val e = event
+                if (e is NavigationEvent.BackGesture.Ended.Success) e.previousScreen
+                else previousScreen
             },
-            {  currentScreen }
+            { currentScreen }
         ) { screen ->
-            Rebugger(
-                trackMap = mapOf(
-                    "currentScreen" to currentScreen,
-                    "previousScreen" to previousScreen,
-                    "screen" to screen,
-                    "event" to event,
-                    "offset value" to offset.value,
-                    "offset targetValue" to offset.targetValue,
-                    "offset isRunning" to offset.isRunning,
-                    "offset velocity" to offset.velocity,
-                    "offset" to offset,
-                    "modifier" to modifier,
-                ),
-                composableName = "BackGestureHandler Content"
-            )
             AnimationScreen(
                 screen,
                 enterTransition,
@@ -121,12 +107,6 @@ private fun AnimationScreen(
 ) {
     val zIndices = remember { mutableMapOf<String, Float>() }
     val transition = updateTransition(currentScreen, label = "entry")
-
-    Rebugger(
-        trackMap = mapOf(
-            "zIndices" to zIndices,
-        ),
-    )
     transition.AnimatedContent(
         modifier,
         transitionSpec = {
@@ -149,24 +129,6 @@ private fun AnimationScreen(
         Alignment.Center,
         contentKey = { it.id },
         content = { screen ->
-            Rebugger(
-                trackMap = mapOf(
-                    "currentScreen" to currentScreen,
-                    "enterTransition" to enterTransition,
-                    "exitTransition" to exitTransition,
-                    "modifier" to modifier,
-                    "zIndices size" to zIndices.size,
-                    "zIndices" to zIndices,
-                    "transition animations" to transition.animations,
-                    "transition currentState" to transition.currentState,
-                    "transition isRunning" to transition.isRunning,
-                    "transition targetState" to transition.targetState,
-                    "transition transitions" to transition.transitions,
-                    "transition" to transition,
-                    "screen" to screen,
-                ),
-                composableName = "AnimatedScreen"
-            )
             screen.Content()
         }
     )

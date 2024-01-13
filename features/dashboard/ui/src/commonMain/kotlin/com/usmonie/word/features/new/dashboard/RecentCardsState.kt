@@ -13,7 +13,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.theapache64.rebugger.Rebugger
 import com.usmonie.word.features.new.components.TitleUiComponent
 import com.usmonie.word.features.new.models.WordCombinedUi
 import com.usmonie.word.features.ui.BaseCard
@@ -29,13 +28,6 @@ fun RecentCards(
     onWordClick: (WordCombinedUi) -> Unit,
     recentCardsState: RecentCardsState
 ) {
-    Rebugger(
-        trackMap = mapOf(
-            "onWordClick" to onWordClick,
-            "words" to recentCardsState,
-        ),
-        composableName = "RecentCards"
-    )
     Column {
         RecentSearchLazyRow(recentCardsState, onWordClick = onWordClick)
         Spacer(Modifier.height(8.dp))

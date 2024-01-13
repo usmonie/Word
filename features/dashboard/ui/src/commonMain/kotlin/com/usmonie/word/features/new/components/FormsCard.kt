@@ -13,7 +13,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.new.models.FormUi
@@ -36,7 +35,6 @@ fun FormsCard(formsState: FormsCardState) {
                         .joinToString { it }
                 }
                 .toList()
-
         }
     }
     BaseCard({}, enabled = false, modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp)) {
@@ -78,7 +76,6 @@ fun FormsItem(tag: String?, forms: String) {
     Text(
         text = text,
         style = MaterialTheme.typography.titleMedium,
-        textAlign = TextAlign.Justify,
         modifier = Modifier.fillMaxWidth().padding(top = 8.dp).padding(horizontal = 20.dp)
     )
 }

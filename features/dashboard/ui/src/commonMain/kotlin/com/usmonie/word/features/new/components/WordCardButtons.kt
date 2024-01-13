@@ -10,7 +10,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.outlined.BookmarkBorder
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -47,6 +49,7 @@ fun WordCardButtons(
         BookmarkButton(onBookmark, bookmarked, modifier = Modifier)
     }
 }
+
 @Composable
 fun WordCardButtons(
     onLearnPressed: () -> Unit,
@@ -72,13 +75,25 @@ fun WordCardButtons(
     }
 }
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun BookmarkButton(
     onBookmark: () -> Unit,
     bookmarked: Boolean,
     tint: Color = MaterialTheme.colorScheme.secondary,
     modifier: Modifier = Modifier
+) {
+    if (bookmarked) {
+        BookmarkedButton(onBookmark, modifier, tint)
+    } else {
+        BookmarkButton(onBookmark, modifier, tint)
+    }
+}
+
+@Composable
+private fun BookmarkedButton(
+    onBookmark: () -> Unit,
+    modifier: Modifier,
+    tint: Color
 ) {
     Box(
         modifier = modifier
@@ -94,8 +109,36 @@ fun BookmarkButton(
         contentAlignment = Alignment.Center
     ) {
         Icon(
-            painterResource("drawable/" + if (bookmarked) "ic_bookmark_filled.xml" else "ic_bookmark.xml"),
-            contentDescription = "update favourite state. current state is in favourite: $bookmarked",
+            Icons.Filled.Bookmark,
+            contentDescription = "update favourite state. current state is in favourite: true",
+            modifier = Modifier.size(24.dp),
+            tint = tint
+        )
+    }
+}
+
+@Composable
+private fun BookmarkButton(
+    onBookmark: () -> Unit,
+    modifier: Modifier,
+    tint: Color
+) {
+    Box(
+        modifier = modifier
+            .size(24.dp)
+            .clip(RoundedCornerShape(4.dp))
+            .clickable(
+                onClick = onBookmark,
+                enabled = true,
+                role = Role.Button,
+                interactionSource = remember { MutableInteractionSource() },
+                indication = rememberRipple(bounded = true)
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            Icons.Outlined.BookmarkBorder,
+            contentDescription = "update favourite state. current state is in favourite: false",
             modifier = Modifier.size(24.dp),
             tint = tint
         )

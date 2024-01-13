@@ -12,7 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.theapache64.rebugger.Rebugger
 import com.usmonie.word.features.new.models.WordCombinedUi
 import com.usmonie.word.features.new.models.WordUi
 import com.usmonie.word.features.ui.BaseCard
@@ -30,62 +29,68 @@ fun RandomWordCard(
 ) {
     when (wordState) {
         is ContentState.Error<*, *> -> Unit
-        is ContentState.Loading -> BaseCard(
-            { },
-            elevation = 2.dp,
-            modifier = modifier
-        ) {
-            Box(Modifier.fillMaxWidth().padding(vertical = 20.dp), Alignment.Center) {
-                CircularProgressIndicator(
-                    Modifier.size(32.dp),
-                    MaterialTheme.colorScheme.onSurface
-                )
-            }
-        }
+        is ContentState.Loading -> RandomWordLoading(modifier)
 
         is ContentState.Success -> {
             val word = wordState.data
-            BaseCard(
-                { onCardClick(word.second) },
-                elevation = 2.dp,
-                modifier = modifier
-            ) {
-                Rebugger(
-                    trackMap = mapOf(
-                        "onCardClick" to onCardClick,
-                        "onBookmarkClick" to onBookmarkClick,
-                        "onLearnClick" to onLearnClick,
-                        "onUpdate" to onUpdate,
-                        "wordState" to wordState,
-                        "modifier" to modifier,
-                    ),
-                    composableName = "RandomWordCard"
+            RandomWordSuccess(onCardClick, word, modifier, onLearnClick, onBookmarkClick, onUpdate)
+        }
+    }
+}
+
+@Composable
+private fun RandomWordSuccess(
+    onCardClick: (WordCombinedUi) -> Unit,
+    word: Pair<WordUi, WordCombinedUi>,
+    modifier: Modifier,
+    onLearnClick: (WordCombinedUi) -> Unit,
+    onBookmarkClick: (WordCombinedUi) -> Unit,
+    onUpdate: () -> Unit
+) {
+    BaseCard(
+        { onCardClick(word.second) },
+        elevation = 2.dp,
+        modifier = modifier
+    ) {
+        Spacer(Modifier.height(20.dp))
+        WordMediumResizableTitle(
+            word.first.word,
+            Modifier.fillMaxWidth().padding(horizontal = 20.dp),
+            MaterialTheme.colorScheme.onSurface
+        )
+        Spacer(Modifier.height(8.dp))
+        word.first.senses.getOrNull(0)
+            ?.let { sense ->
+                Sense(
+                    sense.gloss,
+                    Modifier.padding(horizontal = 20.dp),
+                    false
                 )
-                Spacer(Modifier.height(20.dp))
-                WordMediumResizableTitle(
-                    word.first.word,
-                    Modifier.fillMaxWidth().padding(horizontal = 20.dp),
-                    MaterialTheme.colorScheme.onSurface
-                )
-                Spacer(Modifier.height(8.dp))
-                word.first.senses.getOrNull(0)
-                    ?.let { sense ->
-                        Sense(
-                            sense.gloss,
-                            Modifier.padding(horizontal = 20.dp),
-                            false
-                        )
-                    }
-                Spacer(Modifier.height(8.dp))
-                WordCardButtons(
-                    { onLearnClick(word.second) },
-                    { onBookmarkClick(word.second) },
-                    onUpdate,
-                    word.second.isFavorite,
-                    modifier = Modifier.fillMaxWidth()
-                )
-                Spacer(Modifier.height(20.dp))
             }
+        Spacer(Modifier.height(8.dp))
+        WordCardButtons(
+            { onLearnClick(word.second) },
+            { onBookmarkClick(word.second) },
+            onUpdate,
+            word.second.isFavorite,
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(Modifier.height(20.dp))
+    }
+}
+
+@Composable
+private fun RandomWordLoading(modifier: Modifier) {
+    BaseCard(
+        { },
+        elevation = 2.dp,
+        modifier = modifier
+    ) {
+        Box(Modifier.fillMaxWidth().padding(vertical = 20.dp), Alignment.Center) {
+            CircularProgressIndicator(
+                Modifier.size(32.dp),
+                MaterialTheme.colorScheme.onSurface
+            )
         }
     }
 }

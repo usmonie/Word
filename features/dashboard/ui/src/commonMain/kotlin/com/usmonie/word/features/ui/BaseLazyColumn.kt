@@ -12,7 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
-import com.theapache64.rebugger.Rebugger
 
 @Composable
 fun BaseLazyColumn(
@@ -22,16 +21,6 @@ fun BaseLazyColumn(
     modifier: Modifier = Modifier,
     content: LazyListScope.() -> Unit
 ) {
-    Rebugger(
-        trackMap = mapOf(
-            "listState" to listState,
-            "contentPadding" to contentPadding,
-            "verticalArrangement" to verticalArrangement,
-            "modifier" to modifier,
-            "content" to content,
-        ),
-        composableName = "BaseLazyList"
-    )
     LazyColumn(
         modifier = modifier
             .fillMaxSize()

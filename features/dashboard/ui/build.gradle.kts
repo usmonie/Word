@@ -26,7 +26,6 @@ commonDependencies {
 }
 androidDependencies {
     implementation(libs.compose.ui)
-    implementation(libs.google.admob)
 }
 
 kotlin {
