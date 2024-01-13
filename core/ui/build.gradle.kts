@@ -10,6 +10,7 @@ commonDependencies {
     api(projects.core.domain)
     api(projects.core.design)
     api(projects.compass.core)
+    api("io.github.theapache64:rebugger:1.0.0-rc02")
 }
 
 android {

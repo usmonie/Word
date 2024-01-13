@@ -8,24 +8,22 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.pointer.PointerInputScope
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.ui.MenuItem
 import com.usmonie.word.features.ui.VerticalAnimatedVisibility
 
-@Suppress("NonSkippableComposable")
 @Composable
 fun Settings(
     onSettingsMenuItemPressed: () -> Unit,
-    onPointerInput: suspend PointerInputScope.() -> Unit,
+    onPointerInput: () -> Unit,
     showItem: Boolean,
 ) {
     VerticalAnimatedVisibility(showItem) {
         Column {
             SettingsMenuItem(
                 onSettingsMenuItemPressed,
-                Modifier.fillMaxWidth().pointerInput(Unit, onPointerInput)
+                Modifier.fillMaxWidth().pointerInput(Unit) { onPointerInput() }
             )
         }
     }

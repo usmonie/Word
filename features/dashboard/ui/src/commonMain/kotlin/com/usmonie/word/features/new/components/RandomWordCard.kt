@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.theapache64.rebugger.Rebugger
 import com.usmonie.word.features.new.models.WordCombinedUi
 import com.usmonie.word.features.new.models.WordUi
 import com.usmonie.word.features.ui.BaseCard
@@ -49,6 +50,17 @@ fun RandomWordCard(
                 elevation = 2.dp,
                 modifier = modifier
             ) {
+                Rebugger(
+                    trackMap = mapOf(
+                        "onCardClick" to onCardClick,
+                        "onBookmarkClick" to onBookmarkClick,
+                        "onLearnClick" to onLearnClick,
+                        "onUpdate" to onUpdate,
+                        "wordState" to wordState,
+                        "modifier" to modifier,
+                    ),
+                    composableName = "RandomWordCard"
+                )
                 Spacer(Modifier.height(20.dp))
                 WordMediumResizableTitle(
                     word.first.word,

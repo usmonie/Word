@@ -47,7 +47,6 @@ abstract class Screen(private val viewModel: ViewModel) {
     @Composable
     abstract fun Content()
 
-
     internal fun onCleared() {
         viewModel.onCleared()
     }

@@ -18,9 +18,9 @@ class AdMob(
     @Composable
     fun Banner(adKey: String, modifier: Modifier = Modifier) {
         val subscriptionState by subscriptionUseCase(Unit).collectAsState(SubscriptionStatus.PURCHASED)
-        if (subscriptionState != SubscriptionStatus.PURCHASED) {
-            banner(adKey, modifier)
-        }
+//        if (subscriptionState != SubscriptionStatus.PURCHASED) {
+//            banner(adKey, modifier)
+//        }
     }
 
     @Composable

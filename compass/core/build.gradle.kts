@@ -27,6 +27,8 @@ kotlin {
 commonDependencies {
     api(projects.core.domain)
     api(projects.core.design)
+    implementation("io.github.theapache64:rebugger:1.0.0-rc02")
+
 }
 
 androidDependencies {

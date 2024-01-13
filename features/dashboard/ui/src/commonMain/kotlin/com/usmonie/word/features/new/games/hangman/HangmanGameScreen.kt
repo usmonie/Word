@@ -1,7 +1,6 @@
 package com.usmonie.word.features.new.games.hangman
 
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -74,27 +73,26 @@ class HangmanGameScreen(
 }
 
 @Composable
-private fun HangmanContent(hangmanGameViewModel: HangmanGameViewModel, adMob: AdMob) {
+private fun HangmanContent(
+    hangmanGameViewModel: HangmanGameViewModel,
+    adMob: AdMob
+) {
     val routerManager = LocalRouteManager.current
     val state by hangmanGameViewModel.state.collectAsState()
     val effect by hangmanGameViewModel.effect.collectAsState(null)
 
     HangmanEffect(effect, routerManager)
-    GameBoard(routerManager::navigateBack, {
-        AnimatedVisibility(state !is HangmanState.Playing) {
+    GameBoard(
+        routerManager::navigateBack,
+        {
             UpdateButton(
                 hangmanGameViewModel::onUpdatePressed,
                 tint = MaterialTheme.colorScheme.onPrimary
             )
         }
-    }) { insets ->
+    ) { insets ->
         if (state is HangmanState.Loading) {
-            Box(Modifier.fillMaxSize().padding(insets), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator(
-                    Modifier.size(32.dp),
-                    MaterialTheme.colorScheme.onPrimary
-                )
-            }
+            LoadingProgress(insets)
         } else {
             PlayBoard(insets, state, hangmanGameViewModel, adMob)
         }
@@ -106,6 +104,16 @@ private fun HangmanContent(hangmanGameViewModel: HangmanGameViewModel, adMob: Ad
         if (effect is HangmanEffect.StartGame) {
             adMob.Startup(AppKeys.STARTUP_ID)
         }
+    }
+}
+
+@Composable
+private fun LoadingProgress(insets: PaddingValues) {
+    Box(Modifier.fillMaxSize().padding(insets), contentAlignment = Alignment.Center) {
+        CircularProgressIndicator(
+            Modifier.size(32.dp),
+            MaterialTheme.colorScheme.onPrimary
+        )
     }
 }
 

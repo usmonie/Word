@@ -1,31 +1,22 @@
 package wtf.speech.compass.core
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.ContentTransform
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationVector1D
 import androidx.compose.animation.core.updateTransition
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.offset
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.unit.IntOffset
-import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.launch
+import com.theapache64.rebugger.Rebugger
 
 /**
  * A composable that observes changes to the current screen in [RouteManagerImpl] and displays its content.
@@ -40,59 +31,102 @@ fun NavigationHost(
     isGestureNavigationEnabled: Boolean = false
 ) {
     CompositionLocalProvider(LocalRouteManager provides routeManager) {
-        val state by routeManager.state.collectAsState()
-        val gestureState by routeManager.gestureState.collectAsState(null)
-        val offset = remember { Animatable(0f) }
-        val coroutineScope = rememberCoroutineScope()
-        val gesture = gestureState
-        val currentState = state
+        val currentScreen = routeManager.currentScreen
+        val previousScreen = routeManager.previousScreen
+        val event by routeManager.lastEvent
+        val offset: Animatable<Float, AnimationVector1D> = remember { Animatable(0f) }
 
-        LaunchedEffect(gestureState) {
-            if (gesture is BackGesture.Ended) {
-                offset.animateTo(gesture.screenWidth.toFloat())
+        val enterTransition: (AnimatedContentTransitionScope<Screen>.() -> EnterTransition) =
+            remember {
+                {
+                    when (val e = event) {
+                        is NavigationEvent.Back -> e.targetScreen.popEnterTransition(this)
+                        is NavigationEvent.Next -> e.targetScreen.enterTransition(this)
+                        else -> EnterTransition.None
+                    }
+                }
+            }
+        val exitTransition: (AnimatedContentTransitionScope<Screen>.() -> ExitTransition) =
+            remember {
+                {
+                    when (val e = event) {
+                        is NavigationEvent.Back -> e.targetScreen.popExitTransition(this)
+                        is NavigationEvent.Next -> e.targetScreen.exitTransition(this)
+                        else -> ExitTransition.None
+                    }
+                }
+            }
+        LaunchedEffect(offset.value) {
+            val e = event
+            if (e is NavigationEvent.BackGesture.Ended.Success && offset.value == e.screenWidth.toFloat()) {
+                routeManager.gestureBackAnimationEnded()
+            }
+        }
+
+        LaunchedEffect(event) {
+            when (val e = event) {
+                is NavigationEvent.BackGesture.Ended.Success -> {
+                    if (offset.value < e.screenWidth) {
+                        offset.animateTo(e.screenWidth.toFloat())
+                    } else {
+                        offset.snapTo(0f)
+                    }
+                }
+
+                is NavigationEvent.BackGesture.Dragging -> offset.snapTo(e.offset)
+                else -> offset.animateTo(0f)
             }
         }
 
         BackGestureHandler(
             offset,
-            { coroutineScope.launch { offset.snapTo(it) } },
             routeManager,
-            isGestureNavigationEnabled
-        ) {
-            if (currentState is BackGesture) {
-                BackGestureDraggingContent(currentState, offset)
-            } else {
-                AnimationScreen(state, modifier)
-            }
+            isGestureNavigationEnabled,
+            {
+                previousScreen
+            },
+            {  currentScreen }
+        ) { screen ->
+            Rebugger(
+                trackMap = mapOf(
+                    "currentScreen" to currentScreen,
+                    "previousScreen" to previousScreen,
+                    "screen" to screen,
+                    "event" to event,
+                    "offset value" to offset.value,
+                    "offset targetValue" to offset.targetValue,
+                    "offset isRunning" to offset.isRunning,
+                    "offset velocity" to offset.velocity,
+                    "offset" to offset,
+                    "modifier" to modifier,
+                ),
+                composableName = "BackGestureHandler Content"
+            )
+            AnimationScreen(
+                screen,
+                enterTransition,
+                exitTransition,
+                modifier.matchParentSize()
+            )
         }
     }
 }
 
 @Composable
-private fun BackGestureDraggingContent(
-    currentState: BackGesture,
-    offset: Animatable<Float, AnimationVector1D>
-) {
-    Box(Modifier.fillMaxSize()) {
-        currentState.previousScreen.Content()
-    }
-
-    Box(
-        Modifier
-            .offset { IntOffset(offset.value.toInt(), 0) }
-            .shadow(4.dp, clip = false)
-            .fillMaxSize()) {
-        currentState.currentScreen.Content()
-    }
-}
-
-@Composable
 private fun AnimationScreen(
-    state: NavigationState,
+    currentScreen: Screen,
+    enterTransition: AnimatedContentTransitionScope<Screen>.() -> EnterTransition,
+    exitTransition: AnimatedContentTransitionScope<Screen>.() -> ExitTransition,
     modifier: Modifier
 ) {
-    val zIndices = remember { mutableStateMapOf<String, Float>() }
-    val transition = updateTransition(state.targetScreen, label = "entry")
+    val zIndices = remember { mutableMapOf<String, Float>() }
+    val transition = updateTransition(currentScreen, label = "entry")
+
+    Rebugger(
+        trackMap = mapOf(
+            "zIndices" to zIndices,
+        ),
+    )
     transition.AnimatedContent(
         modifier,
         transitionSpec = {
@@ -107,23 +141,32 @@ private fun AnimationScreen(
             }.also { zIndices[targetState.id] = it }
 
             ContentTransform(
-                when (state) {
-                    is NavigationState.Back -> targetState.popEnterTransition(this)
-                    is NavigationState.Next -> targetState.enterTransition(this)
-                    else -> fadeIn(initialAlpha = 1f)
-                },
-                when (state) {
-                    is NavigationState.Back -> initialState.popExitTransition(this)
-                    is NavigationState.Next -> initialState.exitTransition(this)
-                    else -> fadeOut(targetAlpha = 1f)
-                },
-                targetZIndex,
-                null
+                enterTransition(this),
+                exitTransition(this),
+                targetZIndex
             )
         },
         Alignment.Center,
         contentKey = { it.id },
         content = { screen ->
+            Rebugger(
+                trackMap = mapOf(
+                    "currentScreen" to currentScreen,
+                    "enterTransition" to enterTransition,
+                    "exitTransition" to exitTransition,
+                    "modifier" to modifier,
+                    "zIndices size" to zIndices.size,
+                    "zIndices" to zIndices,
+                    "transition animations" to transition.animations,
+                    "transition currentState" to transition.currentState,
+                    "transition isRunning" to transition.isRunning,
+                    "transition targetState" to transition.targetState,
+                    "transition transitions" to transition.transitions,
+                    "transition" to transition,
+                    "screen" to screen,
+                ),
+                composableName = "AnimatedScreen"
+            )
             screen.Content()
         }
     )
@@ -135,17 +178,4 @@ private fun AnimationScreen(
                 .forEach { zIndices.remove(it.key) }
         }
     }
-}
-
-
-class Ref(var value: Int)
-
-// Note the inline function below which ensures that this function is essentially
-// copied at the call site to ensure that its logging only recompositions from the
-// original call site.
-@Composable
-inline fun LogCompositions(tag: String, msg: String) {
-    val ref = remember { Ref(0) }
-    SideEffect { ref.value++ }
-    println("$tag Compositions: $msg ${ref.value}")
 }

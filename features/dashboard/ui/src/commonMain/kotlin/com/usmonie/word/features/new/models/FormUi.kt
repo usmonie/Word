@@ -16,3 +16,6 @@ data class FormUi(
     val topics: List<String>,
     val form: Form,
 )
+
+@Immutable
+data class Forms(val forms: List<FormUi>)

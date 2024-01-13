@@ -1,6 +1,5 @@
 package com.usmonie.word.features.new.components
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -10,10 +9,8 @@ import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -42,11 +39,8 @@ fun SearchWordCard(
 
     val selectedPos = selectedEtymology.words[selectedPosIndex]
 
-    var expanded by remember(selectedEtymology) { mutableStateOf(false) }
-    val maxLines by remember(expanded) { mutableStateOf(if (expanded) Int.MAX_VALUE else 3) }
-
-    BaseCard({ onCardClick(wordCombined) }, elevation = 2.dp, modifier) {
-        Spacer(Modifier.height(32.dp))
+    BaseCard({ onCardClick(wordCombined) }, elevation = 4.dp, modifier) {
+        Spacer(Modifier.height(20.dp))
         WordMediumResizableTitle(
             wordCombined.word,
             Modifier.fillMaxWidth().padding(horizontal = 20.dp)
@@ -93,10 +87,10 @@ fun SearchWordCard(
         if (!selectedEtymology.etymologyText.isNullOrEmpty()) {
             Text(
                 selectedEtymology.etymologyText,
-                maxLines = maxLines,
+                maxLines = 3,
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.clickable { expanded = !expanded }.padding(horizontal = 20.dp),
+                modifier = Modifier.padding(horizontal = 20.dp),
                 overflow = TextOverflow.Ellipsis
             )
             Spacer(Modifier.height(16.dp))

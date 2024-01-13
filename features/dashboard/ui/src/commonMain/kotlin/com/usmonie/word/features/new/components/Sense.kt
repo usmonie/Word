@@ -32,18 +32,18 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.new.models.ExampleUi
-import com.usmonie.word.features.new.models.FormUi
+import com.usmonie.word.features.new.models.Forms
 import com.usmonie.word.features.new.models.SenseCombinedUi
 import com.usmonie.word.features.ui.BaseCard
 import wtf.word.core.domain.tools.fastForEach
 import wtf.word.core.domain.tools.fastForEachIndexed
 
-@Suppress("NonSkippableComposable")
+
 @Composable
 fun SenseCard(
     sense: SenseCombinedUi,
     word: String,
-    forms: List<FormUi>,
+    forms: Forms,
     modifier: Modifier = Modifier,
     elevation: Dp = 2.dp
 ) {
@@ -54,12 +54,11 @@ fun SenseCard(
     }
 }
 
-@Suppress("NonSkippableComposable")
 @Composable
 fun SenseTreeCard(
     sense: SenseCombinedUi,
     word: String,
-    forms: List<FormUi>,
+    forms: Forms,
     modifier: Modifier = Modifier,
     elevation: Dp = 2.dp
 ) {
@@ -70,9 +69,8 @@ fun SenseTreeCard(
     }
 }
 
-@Suppress("NonSkippableComposable")
 @Composable
-private fun SenseTreeItem(sense: SenseCombinedUi, word: String, forms: List<FormUi>) {
+private fun SenseTreeItem(sense: SenseCombinedUi, word: String, forms: Forms) {
     Sense(sense.gloss, modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp))
 
     sense.examples.forEach { example ->
@@ -147,12 +145,11 @@ private fun SenseNumber(position: Int) {
     )
 }
 
-@Suppress("NonSkippableComposable")
 @Composable
 fun ExampleItem(
     example: ExampleUi,
     word: String,
-    forms: List<FormUi>,
+    forms: Forms,
     modifier: Modifier = Modifier
 ) {
     val bodyMedium = MaterialTheme.typography.bodyMedium
@@ -172,7 +169,7 @@ fun ExampleItem(
 
             setSpan(exampleText, word, bodyLargeSpan, onSurfaceColor)
 
-            forms.fastForEach {
+            forms.forms.fastForEach {
                 it.formText?.let { form ->
                     setSpan(exampleText, form, bodyLargeSpan, onSurfaceColor)
                 }

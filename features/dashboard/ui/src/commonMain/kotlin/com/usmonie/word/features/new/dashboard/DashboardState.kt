@@ -17,7 +17,7 @@ data class DashboardState(
     val wordOfTheDay: ContentState<Pair<WordUi, WordCombinedUi>> = ContentState.Loading(),
     val randomWord: ContentState<Pair<WordUi, WordCombinedUi>> = ContentState.Loading(),
     val foundWords: ContentState<List<WordCombinedUi>> = ContentState.Loading(),
-    val recentSearch: List<WordCombinedUi> = listOf(),
+    val recentSearch: RecentCardsState = RecentCardsState(listOf()),
     val showRandomWord: Boolean = wordOfTheDay is ContentState.Error<*, *>,
     val showSettings: Boolean = false,
     val showGames: Boolean = false,
@@ -58,7 +58,7 @@ data class DashboardState(
             }
         }
 
-        val newRecentSearch = recentSearch.fastMap { mappedWord ->
+        val newRecentSearch = recentSearch.words.fastMap { mappedWord ->
             mapNewWord(mappedWord, updatedWord)
         }
 
@@ -66,7 +66,7 @@ data class DashboardState(
             wordOfTheDay = newWordOfTheDay,
             foundWords = newFoundWords,
             randomWord = newRandomWord,
-            recentSearch = newRecentSearch,
+            recentSearch = RecentCardsState(newRecentSearch),
         )
     }
 

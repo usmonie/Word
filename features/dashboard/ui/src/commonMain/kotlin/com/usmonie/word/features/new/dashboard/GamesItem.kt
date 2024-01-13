@@ -8,18 +8,16 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.pointer.PointerInputScope
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.ui.MenuItem
 import com.usmonie.word.features.ui.VerticalAnimatedVisibility
 
-@Suppress("NonSkippableComposable")
 @Composable
 fun Games(
     onGamesMenuItemPressed: () -> Unit,
     onHangmanPressed: () -> Unit,
-    onPointerInput: suspend PointerInputScope.() -> Unit,
+    onPointerInput: () -> Unit,
     showItem: Boolean,
     showGames: Boolean,
 ) {
@@ -27,23 +25,25 @@ fun Games(
         Column {
             GamesMenuItem(
                 onGamesMenuItemPressed,
-                Modifier.fillMaxWidth().pointerInput(Unit, onPointerInput)
+                Modifier.fillMaxWidth().pointerInput(Unit) { onPointerInput() }
             )
             GamesItems(showGames, onHangmanPressed, onPointerInput)
         }
     }
 }
 
-@Suppress("NonSkippableComposable")
 @Composable
 private fun GamesItems(
     showGames: Boolean,
     onHangmanPressed: () -> Unit,
-    onPointerInput: suspend PointerInputScope.() -> Unit,
+    onPointerInput: () -> Unit,
 ) {
     VerticalAnimatedVisibility(showGames) {
         Column {
-            HangmanMenuItem(onHangmanPressed, Modifier.fillMaxWidth().pointerInput(Unit, onPointerInput))
+            HangmanMenuItem(
+                onHangmanPressed,
+                Modifier.fillMaxWidth().pointerInput(Unit) { onPointerInput() }
+            )
         }
     }
 }

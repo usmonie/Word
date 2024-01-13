@@ -1,7 +1,6 @@
 package com.usmonie.word.features.new.dashboard
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,13 +28,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
-import androidx.compose.ui.input.pointer.PointerInputScope
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import com.theapache64.rebugger.Rebugger
 import com.usmonie.word.features.OpenBrowser
 import com.usmonie.word.features.Url
 import com.usmonie.word.features.dashboard.domain.repository.WordRepository
@@ -49,12 +48,10 @@ import com.usmonie.word.features.new.components.SearchWordCard
 import com.usmonie.word.features.new.details.WordDetailsScreen
 import com.usmonie.word.features.new.favorites.FavoritesScreen
 import com.usmonie.word.features.new.games.hangman.HangmanGameScreen
-import com.usmonie.word.features.new.models.WordCombinedUi
 import com.usmonie.word.features.new.settings.SettingsScreen
 import com.usmonie.word.features.ui.AdMob
 import com.usmonie.word.features.ui.BaseLazyColumn
 import com.usmonie.word.features.ui.MenuItem
-import com.usmonie.word.features.ui.RecentSearchLazyRow
 import com.usmonie.word.features.ui.SearchBar
 import com.usmonie.word.features.ui.TopBackButtonBar
 import com.usmonie.word.features.ui.VerticalAnimatedVisibility
@@ -81,9 +78,7 @@ class DashboardScreen(
         val localFocusManager = LocalFocusManager.current
         val listState = rememberLazyListState()
 
-        val onPointerInput: suspend PointerInputScope.() -> Unit = remember {
-            { detectTapGestures(onTap = { localFocusManager.clearFocus() }) }
-        }
+        val onPointerInput: () -> Unit = remember { { localFocusManager.clearFocus() } }
 
         if (effect is DashboardEffect.OpenUrl) {
             OpenBrowser(Url((effect as DashboardEffect.OpenUrl).url))
@@ -95,10 +90,7 @@ class DashboardScreen(
             topBar = {
                 TopBackButtonBar(dashboardViewModel::onBackClick, state.query.text.isNotBlank())
             },
-            modifier = Modifier.fillMaxSize()
-                .pointerInput(Unit) {
-                    detectTapGestures(onTap = { localFocusManager.clearFocus() })
-                }
+            modifier = Modifier.fillMaxSize().pointerInput(Unit) { onPointerInput() }
         ) { insets ->
             MainState(onPointerInput, dashboardViewModel, listState, insets, state, adMob)
         }
@@ -159,11 +151,10 @@ private fun DashboardEffects(
     }
 }
 
-@Suppress("NonSkippableComposable")
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun MainState(
-    onPointerInput: suspend PointerInputScope.() -> Unit,
+    onPointerInput: () -> Unit,
     dashboardViewModel: DashboardViewModel,
     listState: LazyListState,
     insets: PaddingValues,
@@ -171,7 +162,23 @@ private fun MainState(
     adMob: AdMob,
 ) {
     val showMenuItems by remember(state.query) { derivedStateOf { state.query.text.isBlank() } }
-    val (hasFocus, onFocusChange) = remember { mutableStateOf(false) }
+    val hasFocus = remember { mutableStateOf(false) }
+    val query by remember(state) { derivedStateOf { state.query } }
+    val searchEnabled by remember(state) { derivedStateOf { true } }
+    Rebugger(
+        trackMap = mapOf(
+            "onPointerInput" to onPointerInput,
+            "dashboardViewModel" to dashboardViewModel,
+            "listState" to listState,
+            "insets" to insets,
+//            "state" to state,
+            "adMob" to adMob,
+            "showMenuItems" to showMenuItems,
+            "query" to query,
+            "searchEnabled" to searchEnabled,
+        ),
+        composableName = "MainState"
+    )
     Box(
         Modifier.padding(
             start = insets.calculateLeftPadding(LayoutDirection.Ltr),
@@ -181,42 +188,41 @@ private fun MainState(
     ) {
         BaseLazyColumn(
             listState,
-            contentPadding = PaddingValues(bottom = insets.calculateBottomPadding())
+            contentPadding = PaddingValues(bottom = insets.calculateBottomPadding()),
         ) {
             item {
                 TopBar(
-                    state.query,
+                    query,
                     dashboardViewModel::onQueryChanged,
-                    state.wordOfTheDay !is ContentState.Loading,
-                    hasFocus,
-                    onFocusChange
-                )
+                    searchEnabled,
+                    hasFocus.value
+                ) { hasFocus.value = it }
             }
 
             item {
-                VerticalAnimatedVisibility(hasFocus && state.recentSearch.isNotEmpty()) {
+                VerticalAnimatedVisibility(hasFocus.value && state.recentSearch.isNotEmpty) {
                     RecentCards(dashboardViewModel::onOpenWord, state.recentSearch)
                 }
             }
 
-            if ((state.foundWords is ContentState.Loading && !showMenuItems)) {
-                item {
+            item {
+                if ((state.foundWords is ContentState.Loading && !showMenuItems)) {
                     LoadingProgress()
                 }
             }
 
-            if (!showMenuItems) {
-                items(state.foundWords.item ?: listOf(), key = { word -> word.word }) { word ->
+            items(state.foundWords.item ?: listOf(), key = { word -> word.word }) { word ->
+                if (!showMenuItems) {
                     SearchWordCard(
                         dashboardViewModel::onOpenWord,
-                        {},
+                        remember { {} },
                         dashboardViewModel::onUpdateFavouritesPressed,
-                        {},
+                        remember { {} },
                         word,
                         Modifier.fillMaxWidth()
                             .padding(horizontal = 16.dp, vertical = 8.dp)
                             .animateItemPlacement()
-                            .pointerInput(Unit, onPointerInput),
+                            .pointerInput(Unit) { onPointerInput() },
                     )
                 }
             }
@@ -258,7 +264,7 @@ private fun MainState(
                 FavouritesMenuItem(
                     showMenuItems,
                     dashboardViewModel::onFavouritesItemClicked,
-                    Modifier.fillMaxWidth().pointerInput(Unit, onPointerInput)
+                    Modifier.fillMaxWidth().pointerInput(Unit) { onPointerInput() }
                 )
             }
 
@@ -306,7 +312,7 @@ private fun TopBar(
         onQueryChanged,
         placeholder = "[S]earch",
         query = query,
-        modifier = Modifier.fillMaxWidth().testTag("DASHBOARD_SEARCH_BAR"),
+        modifier = Modifier.fillMaxWidth(),
         hasFocus = hasFocus,
         enabled = enabled,
         onFocusChange = onFocusChange,
@@ -321,18 +327,6 @@ private fun LoadingProgress() {
         modifier = Modifier.fillMaxWidth()
     ) {
         CircularProgressIndicator(color = MaterialTheme.colorScheme.secondary)
-    }
-}
-
-@Suppress("NonSkippableComposable")
-@Composable
-private fun RecentCards(
-    onWordClick: (WordCombinedUi) -> Unit,
-    words: List<WordCombinedUi>
-) {
-    Column {
-        RecentSearchLazyRow(words, onWordClick = onWordClick)
-        Spacer(Modifier.height(8.dp))
     }
 }
 

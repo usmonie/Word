@@ -18,9 +18,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.theapache64.rebugger.Rebugger
 
 @Composable
 fun TopBackButtonBar(onBackClickListener: () -> Unit, showItem: Boolean) {
+    Rebugger(
+        trackMap = mapOf(
+            "onBackClickListener" to onBackClickListener,
+            "showItem" to showItem,
+        ),
+        composableName = "TopBackButtonBar"
+    )
     AnimatedVisibility(showItem) {
         Column(
             Modifier

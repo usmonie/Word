@@ -45,7 +45,6 @@ class FavoritesScreen(
     override fun Content() {
         FavoritesContent(favoritesViewModel, adMob)
     }
-
     companion object {
         const val ID = "FAVOURITES_SCREEN"
     }
@@ -57,21 +56,22 @@ class FavoritesScreen(
     ) : ScreenBuilder {
         override val id: String = ID
 
-        override fun build(params: Map<String, String>?, extra: Extra?): Screen {
-            return FavoritesScreen(
-                FavouritesViewModel(
-                    UpdateFavouriteUseCaseImpl(wordRepository),
-                    GetAllFavouritesUseCaseImpl(wordRepository),
-                    analytics
-                ),
-                adMob
-            )
-        }
+        override fun build(params: Map<String, String>?, extra: Extra?): Screen = FavoritesScreen(
+            FavouritesViewModel(
+                UpdateFavouriteUseCaseImpl(wordRepository),
+                GetAllFavouritesUseCaseImpl(wordRepository),
+                analytics
+            ),
+            adMob
+        )
     }
 }
 
 @Composable
-private fun FavoritesContent(favoritesViewModel: FavouritesViewModel, adMob: AdMob) {
+private fun FavoritesContent(
+    favoritesViewModel: FavouritesViewModel,
+    adMob: AdMob,
+) {
     val routeManager = LocalRouteManager.current
     val state by favoritesViewModel.state.collectAsState()
     val effect by favoritesViewModel.effect.collectAsState(null)

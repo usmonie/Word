@@ -59,7 +59,7 @@ class DashboardViewModel(
 
         is DashboardEvent.InitialData -> copy(
             wordOfTheDay = event.wordOfTheDay,
-            recentSearch = event.recentSearch,
+            recentSearch = RecentCardsState(event.recentSearch),
             randomWord = event.randomWord,
             showRandomWord = event.wordOfTheDay is ContentState.Error<*, *>
         )
