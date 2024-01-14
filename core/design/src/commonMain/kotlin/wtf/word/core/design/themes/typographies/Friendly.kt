@@ -89,8 +89,8 @@ data object Friendly : WordTypography("Friendly") {
     override val headlineMedium = sourceSerifBold
     override val headlineSmall = sourceSerifRegular
 
-    override val titleLarge = sourceCodeRegular
-    override val titleMedium = sourceCodeSemibold
+    override val titleLarge = sourceCodeMedium
+    override val titleMedium = sourceCodeRegular
     override val titleSmall = sourceCodeMedium
 
     override val labelLarge = sourceSerifLight

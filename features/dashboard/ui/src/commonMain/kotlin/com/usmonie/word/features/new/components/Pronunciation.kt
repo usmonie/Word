@@ -35,7 +35,7 @@ fun PronunciationItem(
     phonetic: String,
     audio: String?
 ) {
-    val titleMediumStyle = MaterialTheme.typography.titleSmall.toSpanStyle()
+    val titleMediumStyle = MaterialTheme.typography.titleMedium.toSpanStyle()
     val onSurfaceColor = MaterialTheme.colorScheme.onSurface
     val labelLargeStyle = MaterialTheme.typography.labelLarge.toSpanStyle()
     val text = remember(pronunciation, phonetic) {

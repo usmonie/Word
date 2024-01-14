@@ -13,6 +13,12 @@ sealed class DashboardAnalyticsEvents(key: String, data: EventData) : AnalyticsE
     data object OpenFavourites :
         DashboardAnalyticsEvents("View Favorites", DashboardEventData.Favourites)
 
+    data object RandomWord :
+        DashboardAnalyticsEvents("View Random Word", DashboardEventData.RandomWord)
+
+    data object RandomWordUpdate :
+        DashboardAnalyticsEvents("Update Random Word", DashboardEventData.RandomWord)
+
     data object OpenSettings : DashboardAnalyticsEvents("View Settings", DashboardEventData.Settings)
 }
 
@@ -21,5 +27,6 @@ sealed class DashboardEventData : AnalyticsEvent.EventData {
     data class Search(val query: String) : DashboardEventData()
 
     data object Favourites : DashboardEventData()
+    data object RandomWord : DashboardEventData()
     data object Settings : DashboardEventData()
 }

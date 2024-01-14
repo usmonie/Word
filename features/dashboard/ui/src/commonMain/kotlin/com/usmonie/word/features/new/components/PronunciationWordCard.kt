@@ -141,7 +141,7 @@ fun Pronunciations(
     }
     if (word.sounds.isNotEmpty()) {
         PronunciationTitle()
-        Spacer(Modifier.height(8.dp))
+        Spacer(Modifier.height(4.dp))
         sounds.fastForEachIndexed { i, sound ->
             PronunciationItem(
                 { },

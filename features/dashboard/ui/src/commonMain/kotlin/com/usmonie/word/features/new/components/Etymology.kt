@@ -17,7 +17,7 @@ fun EtymologyCard(etymology: String, modifier: Modifier = Modifier) {
     BaseCard({}, enabled = false, elevation = 2.dp, modifier = modifier) {
         Spacer(Modifier.height(20.dp))
         EtymologyTitle()
-        Spacer(Modifier.height(12.dp))
+        Spacer(Modifier.height(4.dp))
         Text(
             etymology,
             textAlign = TextAlign.Justify,

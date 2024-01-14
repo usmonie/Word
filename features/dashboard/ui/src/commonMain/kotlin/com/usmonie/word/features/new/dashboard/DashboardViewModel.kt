@@ -75,7 +75,7 @@ class DashboardViewModel(
         is DashboardAction.InputQuery -> search(action.query)
 
         DashboardAction.OnMenuItemClick.RandomWord -> {
-            analytics.log(DashboardAnalyticsEvents.OpenFavourites)
+            analytics.log(DashboardAnalyticsEvents.RandomWord)
             DashboardEvent.UpdateMenuItemState.RandomWord
         }
 
