@@ -60,7 +60,7 @@ class MainActivity : ComponentActivity() {
         AppOpenAdManager()
     }
 
-    private var isSubscribed by mutableStateOf(false)
+    private var isSubscribed by mutableStateOf(true)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -128,8 +128,12 @@ class MainActivity : ComponentActivity() {
                     !isSubscribed && userSelectedColor.paid -> WordColors.RICH_MAROON
                     else -> userSelectedColor
                 }
-                val typography = if (isSubscribed) theme.fonts?.let { WordTypography.valueOf(it) }
-                    ?: ModernChic else ModernChic
+                val fonts = theme.fonts
+                val typography = if (isSubscribed && fonts != null) {
+                    WordTypography.valueOf(fonts)
+                } else {
+                    ModernChic
+                }
 
                 Pair(colors, typography)
             }

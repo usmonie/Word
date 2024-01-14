@@ -54,6 +54,7 @@ fun SearchBar(
     query: TextFieldValue,
     hasFocus: Boolean,
     modifier: Modifier = Modifier,
+    fontSize: TextUnit,
     enabled: Boolean = true
 ) {
     val focusRequester = remember { FocusRequester() }
@@ -78,12 +79,13 @@ fun SearchBar(
                     }
                 }
             },
-        textStyle = MaterialTheme.typography.displayLarge,
+        textStyle = MaterialTheme.typography.displayLarge.copy(fontSize = fontSize),
         placeholder = {
             val placeholderAlphaAnimation by animateFloatAsState(if (hasFocus) .5f else 1f)
             Text(
                 placeholder,
                 style = MaterialTheme.typography.displayLarge,
+                fontSize = fontSize,
                 color = MaterialTheme.colorScheme.onPrimary.copy(alpha = placeholderAlphaAnimation)
             )
         },
