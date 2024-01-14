@@ -94,7 +94,8 @@ fun BackGestureHandler(
                     .shadow(16.dp)
                     .fillMaxSize()
             ) {
-                content(currentScreen())
+                val current = currentScreen()
+                content(current)
             }
         }
     }

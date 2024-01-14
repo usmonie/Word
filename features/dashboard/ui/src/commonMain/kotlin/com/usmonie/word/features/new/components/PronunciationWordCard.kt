@@ -81,8 +81,9 @@ fun DetailsWordCardMedium(
     val maxLines by remember(expanded) { mutableStateOf(if (expanded) Int.MAX_VALUE else 3) }
     BaseCard(
         {},
-        elevation = 8.dp,
-        modifier = modifier
+        elevation = 4.dp,
+        modifier = modifier,
+        enabled = false
     ) {
         Spacer(Modifier.height(20.dp))
         WordMediumResizableTitle(word.word, Modifier.fillMaxWidth().padding(horizontal = 20.dp))

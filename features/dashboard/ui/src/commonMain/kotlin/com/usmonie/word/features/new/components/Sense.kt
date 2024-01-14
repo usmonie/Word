@@ -73,7 +73,7 @@ fun SenseTreeCard(
 private fun SenseTreeItem(sense: SenseCombinedUi, word: String, forms: Forms) {
     Sense(sense.gloss, modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp))
 
-    sense.examples.forEach { example ->
+    sense.examples.fastForEach { example ->
         Spacer(Modifier.height(8.dp))
         ExampleItem(example, word, forms)
     }

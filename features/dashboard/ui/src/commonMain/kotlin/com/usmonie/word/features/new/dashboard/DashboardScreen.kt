@@ -229,7 +229,6 @@ private fun MainState(
                     onAddFavouritePressed = dashboardViewModel::onUpdateFavouritesPressed,
                     onSharePressed = { },
                     onUpdatePressed = dashboardViewModel::onUpdateRandomCard,
-                    showItem = showMenuItems,
                     showRandomWord = state.showRandomWord,
                     word = state.randomWord
                 )
@@ -240,14 +239,12 @@ private fun MainState(
                     dashboardViewModel::onGamesClicked,
                     dashboardViewModel::onHangman,
                     onPointerInput,
-                    showMenuItems,
                     state.showGames,
                 )
             }
 
             item(key = "MENU_FAVORITES") {
                 FavouritesMenuItem(
-                    showMenuItems,
                     dashboardViewModel::onFavouritesItemClicked,
                     Modifier.fillMaxWidth().pointerInput(Unit) { onPointerInput() }
                 )
@@ -257,7 +254,6 @@ private fun MainState(
                 Settings(
                     dashboardViewModel::onSettingsItemClicked,
                     onPointerInput,
-                    showMenuItems,
                 )
             }
 
@@ -268,7 +264,6 @@ private fun MainState(
                     dashboardViewModel::onTelegramItemClicked,
                     {},
                     onPointerInput,
-                    showMenuItems,
                     state.showAbout
                 )
             }
@@ -317,13 +312,10 @@ private fun LoadingProgress() {
 
 @Composable
 fun FavouritesMenuItem(
-    showItem: Boolean,
     onMenuClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    VerticalAnimatedVisibility(showItem) {
-        Column {
-            MenuItem(onMenuClick, "Favorites", modifier.testTag("FAVOURITES_ITEM"))
-        }
+    Column {
+        MenuItem(onMenuClick, "Favorites", modifier.testTag("FAVOURITES_ITEM"))
     }
 }

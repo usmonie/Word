@@ -68,9 +68,10 @@ fun NavigationHost(
                     if (offset.value < e.screenWidth) {
                         offset.animateTo(e.screenWidth.toFloat())
                     } else {
-                        offset.snapTo(0f)
+                        offset.animateTo(0f)
                     }
                 }
+                is NavigationEvent.BackGesture.Ended.Cancel -> offset.animateTo(0f)
 
                 is NavigationEvent.BackGesture.Dragging -> offset.snapTo(e.offset)
                 else -> offset.animateTo(0f)
@@ -86,14 +87,23 @@ fun NavigationHost(
                 if (e is NavigationEvent.BackGesture.Ended.Success) e.previousScreen
                 else previousScreen
             },
-            { currentScreen }
+            {
+                val e = event
+                if (e is NavigationEvent.BackGesture.Ended.Success) {
+                    e.currentScreen
+                } else currentScreen
+            }
         ) { screen ->
-            AnimationScreen(
-                screen,
-                enterTransition,
-                exitTransition,
-                modifier.matchParentSize()
-            )
+            if (offset.value > 0) {
+                screen.Content()
+            } else {
+                AnimationScreen(
+                    screen,
+                    enterTransition,
+                    exitTransition,
+                    modifier.matchParentSize()
+                )
+            }
         }
     }
 }

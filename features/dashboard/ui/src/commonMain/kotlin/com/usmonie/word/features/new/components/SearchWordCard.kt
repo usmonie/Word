@@ -58,7 +58,7 @@ fun SearchWordCard(
         if (wordCombined.wordEtymology.size > 1) {
             Text(
                 "Etymologies",
-                style = MaterialTheme.typography.titleMedium,
+                style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier.padding(horizontal = 20.dp)
             )
             Spacer(Modifier.height(8.dp))

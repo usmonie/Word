@@ -11,21 +11,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.ui.MenuItem
-import com.usmonie.word.features.ui.VerticalAnimatedVisibility
 
 @Composable
 fun Settings(
     onSettingsMenuItemPressed: () -> Unit,
     onPointerInput: () -> Unit,
-    showItem: Boolean,
 ) {
-    VerticalAnimatedVisibility(showItem) {
-        Column {
-            SettingsMenuItem(
-                onSettingsMenuItemPressed,
-                Modifier.fillMaxWidth().pointerInput(Unit) { onPointerInput() }
-            )
-        }
+    Column {
+        SettingsMenuItem(
+            onSettingsMenuItemPressed,
+            Modifier.fillMaxWidth().pointerInput(Unit) { onPointerInput() }
+        )
     }
 }
 
@@ -41,7 +37,7 @@ fun SettingsItem(onClick: () -> Unit, title: String, modifier: Modifier) {
             title,
             modifier = Modifier.padding(vertical = 10.dp, horizontal = 36.dp),
             color = MaterialTheme.colorScheme.onPrimary,
-            style = MaterialTheme.typography.titleMedium
+            style = MaterialTheme.typography.titleLarge
         )
     }
 }

@@ -53,7 +53,7 @@ fun FormsCard(formsState: FormsCardState) {
 
 @Composable
 fun FormsItem(tag: String?, forms: String) {
-    val titleSmall = MaterialTheme.typography.titleSmall
+    val titleSmall = MaterialTheme.typography.titleMedium
     val labelLarge = MaterialTheme.typography.labelLarge
     val onSurfaceColor = MaterialTheme.colorScheme.onSurface
     val onSurfaceVariantColor = MaterialTheme.colorScheme.onSurfaceVariant

@@ -13,7 +13,6 @@ import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.ui.MenuItem
 import com.usmonie.word.features.ui.VerticalAnimatedVisibility
 
-@Suppress("NonSkippableComposable")
 @Composable
 fun About(
     onAboutMenuItemPressed: () -> Unit,
@@ -21,23 +20,20 @@ fun About(
     onTelegramPressed: () -> Unit,
     onDonatePressed: () -> Unit,
     onPointerInput: () -> Unit,
-    showItem: Boolean,
     showAbout: Boolean,
 ) {
-    VerticalAnimatedVisibility(showItem) {
-        Column {
-            AboutMenuItem(
-                onAboutMenuItemPressed,
-                Modifier.fillMaxWidth().pointerInput(Unit) { onPointerInput() }
-            )
-            AboutItems(
-                onAboutDeveloperPressed,
-                onTelegramPressed,
-                onDonatePressed,
-                onPointerInput,
-                showAbout
-            )
-        }
+    Column {
+        AboutMenuItem(
+            onAboutMenuItemPressed,
+            Modifier.fillMaxWidth().pointerInput(Unit) { onPointerInput() }
+        )
+        AboutItems(
+            onAboutDeveloperPressed,
+            onTelegramPressed,
+            onDonatePressed,
+            onPointerInput,
+            showAbout
+        )
     }
 }
 
@@ -81,7 +77,7 @@ fun AboutItem(onClick: () -> Unit, title: String, modifier: Modifier) {
             title,
             modifier = Modifier.padding(vertical = 10.dp, horizontal = 36.dp),
             color = MaterialTheme.colorScheme.onPrimary,
-            style = MaterialTheme.typography.titleMedium
+            style = MaterialTheme.typography.titleLarge
         )
     }
 }

@@ -160,12 +160,10 @@ class RouteManagerImpl(initialGraph: NavigationGraph) : RouteManager {
 
     override suspend fun gestureBackEnded(offset: Float, screenWidth: Int) {
         val previousScreen = activeGraph.value.previousScreen.value?.screen ?: return
-        lastEvent.value = if (offset < screenWidth * .15) NavigationEvent.BackGesture.Dragging(
+        lastEvent.value = if (offset < screenWidth * .15) NavigationEvent.BackGesture.Ended.Cancel(
             previousScreen,
-            currentScreen,
-            0f,
-            screenWidth
         ) else {
+            val currentScreen = currentScreen
             activeGraph.value.navigateBack()
             NavigationEvent.BackGesture.Ended.Success(
                 previousScreen,

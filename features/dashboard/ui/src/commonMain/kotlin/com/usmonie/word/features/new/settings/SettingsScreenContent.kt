@@ -1,5 +1,6 @@
 package com.usmonie.word.features.new.settings
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -9,13 +10,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.rounded.WorkspacePremium
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -24,14 +30,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.new.dashboard.SettingsItem
 import com.usmonie.word.features.subscription.domain.models.SubscriptionStatus
 import com.usmonie.word.features.ui.AdMob
 import com.usmonie.word.features.ui.BaseLazyColumn
 import com.usmonie.word.features.ui.MenuItemText
-import com.usmonie.word.features.ui.SearchBar
-import com.usmonie.word.features.ui.TopBackButtonBar
+import com.usmonie.word.features.ui.TitleBar
 import wtf.speech.compass.core.LocalRouteManager
 import wtf.speech.core.ui.AppKeys
 import wtf.word.core.design.themes.WordColors
@@ -40,6 +46,7 @@ import wtf.word.core.design.themes.typographies.ModernChic
 import wtf.word.core.design.themes.typographies.TimelessElegant
 import wtf.word.core.design.themes.typographies.WordTypography
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun SettingsScreenContent(
     changeTheme: (WordColors) -> Unit,
@@ -62,22 +69,38 @@ internal fun SettingsScreenContent(
         listOf(ModernChic, Friendly, TimelessElegant)
     }
     val routeManager = LocalRouteManager.current
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
     Scaffold(
-        topBar = { TopBackButtonBar(routeManager::navigateBack, true) },
+        topBar = {
+            LargeTopAppBar(
+                title = {
+                    TitleBar(
+                        "[S]ettings",
+                        MaterialTheme.typography.displayLarge.fontSize *
+                                (1 - scrollBehavior.state.collapsedFraction).coerceIn(0.5f, 1f)
+                    )
+                },
+                navigationIcon = {
+                    IconButton(routeManager::navigateBack) {
+                        Icon(
+                            Icons.Default.ArrowBack,
+                            contentDescription = Icons.Default.ArrowBack.name,
+                            tint = MaterialTheme.colorScheme.onPrimary
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.largeTopAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primary
+                ),
+                scrollBehavior = scrollBehavior
+            )
+        },
+        modifier = Modifier.background(MaterialTheme.colorScheme.primary)
+            .nestedScroll(scrollBehavior.nestedScrollConnection)
     ) { insets ->
         Box(Modifier.padding(insets)) {
             BaseLazyColumn {
-                item {
-                    SearchBar(
-                        {},
-                        {},
-                        "[S]ettings",
-                        "",
-                        false,
-                        enabled = false
-                    )
-                }
 
                 item {
                     SettingsSubtitle("Theme", Modifier.fillParentMaxWidth())

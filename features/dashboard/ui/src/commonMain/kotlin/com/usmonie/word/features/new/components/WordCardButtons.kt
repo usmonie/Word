@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bookmark
+import androidx.compose.material.icons.filled.Leaderboard
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.outlined.BookmarkBorder
 import androidx.compose.material.ripple.rememberRipple
@@ -154,7 +155,7 @@ fun LearnButton(
 ) {
     IconButton(onLearn, modifier = modifier) {
         Icon(
-            painterResource("drawable/" + "ic_bookmark_filled.xml"),
+            Icons.Default.Leaderboard,
             contentDescription = "start learn process",
             modifier = Modifier.size(24.dp),
             tint = tint

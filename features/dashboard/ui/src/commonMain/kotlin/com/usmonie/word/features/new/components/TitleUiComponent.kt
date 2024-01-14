@@ -16,6 +16,6 @@ fun TitleUiComponent(
         title,
         modifier = modifier,
         color = color,
-        style = MaterialTheme.typography.titleMedium
+        style = MaterialTheme.typography.titleLarge
     )
 }

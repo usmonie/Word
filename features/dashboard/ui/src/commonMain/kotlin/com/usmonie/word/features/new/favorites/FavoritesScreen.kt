@@ -1,5 +1,6 @@
 package com.usmonie.word.features.new.favorites
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -8,14 +9,22 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.LargeTopAppBar
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.dashboard.domain.repository.WordRepository
@@ -25,8 +34,7 @@ import com.usmonie.word.features.new.details.WordDetailsScreen
 import com.usmonie.word.features.ui.AdMob
 import com.usmonie.word.features.ui.BaseLazyColumn
 import com.usmonie.word.features.ui.EmptyItem
-import com.usmonie.word.features.ui.SearchBar
-import com.usmonie.word.features.ui.TopBackButtonBar
+import com.usmonie.word.features.ui.TitleBar
 import wtf.speech.compass.core.Extra
 import wtf.speech.compass.core.LocalRouteManager
 import wtf.speech.compass.core.RouteManager
@@ -45,6 +53,7 @@ class FavoritesScreen(
     override fun Content() {
         FavoritesContent(favoritesViewModel, adMob)
     }
+
     companion object {
         const val ID = "FAVOURITES_SCREEN"
     }
@@ -67,6 +76,7 @@ class FavoritesScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun FavoritesContent(
     favoritesViewModel: FavouritesViewModel,
@@ -78,8 +88,31 @@ private fun FavoritesContent(
 
     FavouritesEffect(effect, routeManager)
 
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     Scaffold(
-        topBar = { TopBackButtonBar(routeManager::navigateBack, true) },
+        topBar = {
+            LargeTopAppBar(
+                title = {
+                    TitleBar(
+                        "[F]avorites",
+                        MaterialTheme.typography.displayLarge.fontSize * (1 - scrollBehavior.state.collapsedFraction).coerceIn(0.5f, 1f)
+                    )
+                },
+                navigationIcon = {
+                    IconButton(routeManager::navigateBack) {
+                        Icon(
+                            Icons.Default.ArrowBack,
+                            contentDescription = Icons.Default.ArrowBack.name,
+                            tint = MaterialTheme.colorScheme.onPrimary
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.largeTopAppBarColors(containerColor = MaterialTheme.colorScheme.primary),
+                scrollBehavior = scrollBehavior
+            )
+        },
+        modifier = Modifier.background(MaterialTheme.colorScheme.primary)
+            .nestedScroll(scrollBehavior.nestedScrollConnection)
     ) { insets ->
         Box(
             Modifier.padding(
@@ -93,17 +126,6 @@ private fun FavoritesContent(
                 contentPadding = PaddingValues(bottom = insets.calculateBottomPadding()),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                item {
-                    SearchBar(
-                        {},
-                        {},
-                        "[F]avorites",
-                        "",
-                        hasFocus = false,
-                        enabled = false,
-                        modifier = Modifier.fillMaxWidth().testTag("FAVOURITES_SEARCH_BAR"),
-                    )
-                }
 
                 when (val s = state) {
                     is FavoritesState.Empty -> item {

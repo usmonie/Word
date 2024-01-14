@@ -21,6 +21,16 @@ fun MenuItemText(title: String, modifier: Modifier = Modifier) {
         title,
         modifier = modifier.padding(vertical = 10.dp, horizontal = 20.dp),
         color = MaterialTheme.colorScheme.onPrimary,
+        style = MaterialTheme.typography.titleLarge
+    )
+}
+
+@Composable
+fun SubtitleItemText(title: String, modifier: Modifier = Modifier) {
+    Text(
+        title,
+        modifier = modifier.padding(vertical = 10.dp, horizontal = 20.dp),
+        color = MaterialTheme.colorScheme.onPrimary,
         style = MaterialTheme.typography.titleMedium
     )
 }

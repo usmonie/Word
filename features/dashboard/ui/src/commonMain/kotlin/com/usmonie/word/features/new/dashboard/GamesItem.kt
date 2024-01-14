@@ -18,17 +18,14 @@ fun Games(
     onGamesMenuItemPressed: () -> Unit,
     onHangmanPressed: () -> Unit,
     onPointerInput: () -> Unit,
-    showItem: Boolean,
     showGames: Boolean,
 ) {
-    VerticalAnimatedVisibility(showItem) {
-        Column {
-            GamesMenuItem(
-                onGamesMenuItemPressed,
-                Modifier.fillMaxWidth().pointerInput(Unit) { onPointerInput() }
-            )
-            GamesItems(showGames, onHangmanPressed, onPointerInput)
-        }
+    Column {
+        GamesMenuItem(
+            onGamesMenuItemPressed,
+            Modifier.fillMaxWidth().pointerInput(Unit) { onPointerInput() }
+        )
+        GamesItems(showGames, onHangmanPressed, onPointerInput)
     }
 }
 
@@ -65,7 +62,7 @@ fun GamesItem(onClick: () -> Unit, title: String, modifier: Modifier) {
             title,
             modifier = Modifier.padding(vertical = 10.dp, horizontal = 36.dp),
             color = MaterialTheme.colorScheme.onPrimary,
-            style = MaterialTheme.typography.titleMedium
+            style = MaterialTheme.typography.titleLarge
         )
     }
 }

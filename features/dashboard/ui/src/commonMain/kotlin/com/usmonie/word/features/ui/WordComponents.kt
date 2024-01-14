@@ -135,56 +135,6 @@ fun WordMediumResizableTitle(
 }
 
 @Composable
-fun WordMediumTitle(word: String, modifier: Modifier = Modifier) {
-    val textStyle = MaterialTheme.typography.headlineMedium
-
-    Text(
-        word,
-        style = textStyle,
-        textAlign = TextAlign.Start,
-        modifier = modifier,
-        overflow = TextOverflow.Ellipsis,
-    )
-}
-
-@Composable
-fun WordSmallTitle(word: String, modifier: Modifier = Modifier) {
-    Text(
-        word,
-        style = MaterialTheme.typography.headlineSmall,
-        textAlign = TextAlign.Start,
-        modifier = modifier
-    )
-}
-
-@Composable
-fun PartOfSpeech(partOfSpeech: String, modifier: Modifier = Modifier) {
-    Text(
-        partOfSpeech,
-        style = MaterialTheme.typography.labelSmall,
-        modifier = modifier
-    )
-}
-
-@OptIn(ExperimentalResourceApi::class)
-@Composable
-fun AddToFavouriteButton(
-    onAddFavourite: () -> Unit,
-    isFavourite: Boolean,
-    tint: Color = MaterialTheme.colorScheme.secondary,
-    modifier: Modifier = Modifier
-) {
-    IconButton(onAddFavourite, modifier = modifier) {
-        Icon(
-            painterResource("drawable/" + if (isFavourite) "ic_bookmark_filled.xml" else "ic_bookmark.xml"),
-            contentDescription = "update favourite state. current state is in favourite: $isFavourite",
-            modifier = Modifier.size(24.dp),
-            tint = tint
-        )
-    }
-}
-
-@Composable
 fun UpdateButton(
     onUpdate: () -> Unit,
     tint: Color = MaterialTheme.colorScheme.secondary,

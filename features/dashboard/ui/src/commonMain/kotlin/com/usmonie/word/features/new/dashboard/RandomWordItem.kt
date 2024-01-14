@@ -22,25 +22,23 @@ fun RandomWordMenuItem(
     onSharePressed: (WordCombinedUi) -> Unit,
     onUpdatePressed: () -> Unit,
     showRandomWord: Boolean,
-    showItem: Boolean,
     word: ContentState<Pair<WordUi, WordCombinedUi>>
 ) {
-        Column(Modifier.animateContentSize()) {
-            MenuItem(
-                onMenuItemClick,
-                "Random Word",
-                Modifier.fillMaxWidth()
+    Column(Modifier.animateContentSize()) {
+        MenuItem(
+            onMenuItemClick,
+            "Random Word",
+            Modifier.fillMaxWidth()
+        )
+        VerticalAnimatedVisibility(showRandomWord) {
+            RandomWordCard(
+                onWordClick,
+                onAddFavouritePressed,
+                onSharePressed,
+                onUpdatePressed,
+                word,
+                modifier = Modifier.padding(horizontal = 16.dp).padding(bottom = 16.dp)
             )
-            VerticalAnimatedVisibility(showRandomWord) {
-                RandomWordCard(
-                    onWordClick,
-                    onAddFavouritePressed,
-                    onSharePressed,
-                    onUpdatePressed,
-                    word,
-                    modifier = Modifier.padding(horizontal = 16.dp).padding(bottom = 16.dp)
-                )
-            }
-
+        }
     }
 }

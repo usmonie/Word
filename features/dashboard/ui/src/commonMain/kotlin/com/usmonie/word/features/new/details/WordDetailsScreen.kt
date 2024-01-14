@@ -1,6 +1,7 @@
 package com.usmonie.word.features.new.details
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -10,12 +11,19 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -25,6 +33,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.dashboard.domain.repository.WordRepository
@@ -40,9 +49,8 @@ import com.usmonie.word.features.new.models.Forms
 import com.usmonie.word.features.new.models.WordCombinedUi
 import com.usmonie.word.features.ui.AdMob
 import com.usmonie.word.features.ui.BaseLazyColumn
-import com.usmonie.word.features.ui.MenuItemText
-import com.usmonie.word.features.ui.SearchBar
-import com.usmonie.word.features.ui.TopBackButtonBar
+import com.usmonie.word.features.ui.SubtitleItemText
+import com.usmonie.word.features.ui.TitleBar
 import wtf.speech.compass.core.Extra
 import wtf.speech.compass.core.LocalRouteManager
 import wtf.speech.compass.core.Screen
@@ -99,7 +107,7 @@ class WordDetailsScreen(
 }
 
 @Composable
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 private fun WordDetailsContent(wordViewModel: WordViewModel, adMob: AdMob) {
     val routeManager = LocalRouteManager.current
     val state by wordViewModel.state.collectAsState()
@@ -118,24 +126,39 @@ private fun WordDetailsContent(wordViewModel: WordViewModel, adMob: AdMob) {
     WordEffect(effect)
 
     val listState = rememberLazyListState()
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+
     Scaffold(
-        topBar = { TopBackButtonBar(routeManager::navigateBack, true) },
+        topBar = {
+            LargeTopAppBar(
+                title = {
+                    TitleBar(
+                        "[D]etails",
+                        MaterialTheme.typography.displayLarge.fontSize
+                                * (1 - scrollBehavior.state.collapsedFraction).coerceIn(0.5f, 1f)
+                    )
+                },
+                navigationIcon = {
+                    IconButton(routeManager::navigateBack) {
+                        Icon(
+                            Icons.Default.ArrowBack,
+                            contentDescription = Icons.Default.ArrowBack.name,
+                            tint = MaterialTheme.colorScheme.onPrimary
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.largeTopAppBarColors(containerColor = MaterialTheme.colorScheme.primary),
+                scrollBehavior = scrollBehavior
+            )
+        },
+        modifier = Modifier.background(MaterialTheme.colorScheme.primary)
+            .nestedScroll(scrollBehavior.nestedScrollConnection)
     ) {
         Box(Modifier.padding(it)) {
             BaseLazyColumn(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 listState = listState
             ) {
-                item {
-                    SearchBar(
-                        {},
-                        {},
-                        "[D]etails",
-                        "",
-                        false,
-                        enabled = false
-                    )
-                }
 
                 if (state.word.wordEtymology.size > 1) {
                     stickyHeader {
@@ -204,7 +227,7 @@ private fun WordDetailsContent(wordViewModel: WordViewModel, adMob: AdMob) {
 
                 item {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        MenuItemText("Senses", Modifier.weight(1f))
+                        SubtitleItemText("Senses", Modifier.weight(1f))
                         if (selectedPos.senses.size > MINIMUM_SENSES_TO_COLLAPSE_COUNT) {
                             TextButton({ sensesExpanded = !sensesExpanded }) {
                                 Text(
@@ -250,7 +273,7 @@ private fun WordDetailsContent(wordViewModel: WordViewModel, adMob: AdMob) {
                 if (selectedPos.thesaurusAvailable) {
                     item {
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            MenuItemText("Thesaurus", Modifier.weight(1f))
+                            SubtitleItemText("Thesaurus", Modifier.weight(1f))
                         }
                     }
                     items(selectedPos.thesaurus) { item ->

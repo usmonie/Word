@@ -81,6 +81,7 @@ sealed class WordTypography(val name: String) {
                 fontFamily = getFont(titleSmall)
             ),
             labelLarge = MaterialTheme.typography.labelLarge.copy(
+                fontSize = 16.sp,
                 fontFamily = getFont(labelLarge)
             ),
             labelMedium = MaterialTheme.typography.labelMedium.copy(

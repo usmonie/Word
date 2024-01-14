@@ -14,7 +14,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -28,52 +27,22 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.unit.TextUnit
 import kotlin.math.absoluteValue
 
 @Composable
-fun SearchBar(
-    onQueryChanged: (String) -> Unit,
-    onFocusChange: (Boolean) -> Unit,
+fun TitleBar(
     placeholder: String,
-    query: String,
-    hasFocus: Boolean,
-    modifier: Modifier = Modifier,
-    enabled: Boolean = true
+    fontSize: TextUnit = MaterialTheme.typography.displayLarge.fontSize
 ) {
-    val focusRequester = remember { FocusRequester() }
-
-    val textFieldSize = remember { mutableStateOf(IntSize.Zero) }
-    val threshold: Float = remember { textFieldSize.value.width * 0.5f }
-
-    TextInputField(
-        query,
-        onQueryChanged,
-        enabled = enabled,
-        readOnly = !enabled,
-        modifier = modifier
-            .background(MaterialTheme.colorScheme.primary)
-            .focusRequester(focusRequester)
-            .onFocusChanged { onFocusChange(it.hasFocus) }
-            .onGloballyPositioned { coordinates -> textFieldSize.value = coordinates.size }
-            .pointerInput(Unit) {
-                detectHorizontalDragGestures { _, dragAmount ->
-                    if (dragAmount.absoluteValue > threshold) {
-                        onQueryChanged("")
-                    }
-                }
-            },
-        textStyle = MaterialTheme.typography.displayLarge,
-        placeholder = {
-            val placeholderAlphaAnimation by animateFloatAsState(if (hasFocus) .5f else 1f)
-
-            LargeResizableTitle(
-                placeholder,
-                color = MaterialTheme.colorScheme.onPrimary.copy(alpha = placeholderAlphaAnimation)
-            )
-        },
-
-        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+    Text(
+        placeholder,
+        style = MaterialTheme.typography.displayLarge,
+        fontSize = fontSize,
+        textAlign = TextAlign.Center,
+        color = MaterialTheme.colorScheme.onPrimary,
     )
 }
 
@@ -89,8 +58,8 @@ fun SearchBar(
 ) {
     val focusRequester = remember { FocusRequester() }
 
-    val textFieldSize = remember { mutableStateOf(IntSize.Zero) }
-    val threshold: Float = remember { textFieldSize.value.width * 0.5f }
+    var textFieldSize = remember { IntSize.Zero }
+    val threshold: Float = remember { textFieldSize.width * 0.5f }
 
     TextInputField(
         query,
@@ -101,7 +70,7 @@ fun SearchBar(
             .background(MaterialTheme.colorScheme.primary)
             .focusRequester(focusRequester)
             .onFocusChanged { onFocusChange(it.hasFocus) }
-            .onGloballyPositioned { coordinates -> textFieldSize.value = coordinates.size }
+            .onGloballyPositioned { coordinates -> textFieldSize = coordinates.size }
             .pointerInput(Unit) {
                 detectHorizontalDragGestures { _, dragAmount ->
                     if (dragAmount.absoluteValue > threshold) {

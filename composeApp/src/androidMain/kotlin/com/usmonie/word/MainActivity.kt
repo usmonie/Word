@@ -104,7 +104,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             val view = LocalView.current
             val isDark = isSystemInDarkTheme()
-            val subscriptionStatus by subscriptionStatusUseCase(Unit).collectAsState(initial = SubscriptionStatus.PURCHASED)
+            val subscriptionStatus by subscriptionStatusUseCase(Unit)
+                .collectAsState(initial = SubscriptionStatus.PURCHASED)
 
             LaunchedEffect(subscriptionStatus) {
                 isSubscribed = subscriptionStatus == SubscriptionStatus.PURCHASED
@@ -132,10 +133,15 @@ class MainActivity : ComponentActivity() {
 
                 Pair(colors, typography)
             }
-            val (currentTheme, onCurrentColorsChanged) = remember { mutableStateOf(currentColors) }
-            val (currentFonts, onCurrentFontsChanged) = remember { mutableStateOf(currentTypography) }
-            val wordRepository =
-                remember { DashboardDataComponent.getWordsRepository(WordApi("http://16.170.6.0")) }
+            val (currentTheme, onCurrentColorsChanged) = remember {
+                mutableStateOf(currentColors)
+            }
+            val (currentFonts, onCurrentFontsChanged) = remember {
+                mutableStateOf(currentTypography)
+            }
+            val wordRepository = remember {
+                DashboardDataComponent.getWordsRepository(WordApi("http://16.170.6.0"))
+            }
 
             val initialGraph = remember(
                 onCurrentColorsChanged,
