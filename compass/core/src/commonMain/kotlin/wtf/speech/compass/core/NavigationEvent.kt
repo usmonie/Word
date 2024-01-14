@@ -2,6 +2,16 @@ package wtf.speech.compass.core
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.State
+
+@Stable
+data class NavigationState(
+    val activeGraph: State<NavigationGraph>,
+    val currentScreen: Screen,
+    val previousScreen: Screen?,
+    val offset: Float,
+    val currentEvent: State<NavigationEvent?>
+)
 
 @Stable
 sealed class NavigationEvent(val targetScreen: Screen) {

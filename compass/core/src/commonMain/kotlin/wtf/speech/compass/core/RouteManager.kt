@@ -7,6 +7,8 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 /**
  * Interface defining the core functionalities of the navigation system.
@@ -18,6 +20,8 @@ interface RouteManager {
      * The currently active [NavigationGraph].
      */
     val activeGraph: State<NavigationGraph>
+
+    val currentState: StateFlow<NavigationState>
     val lastEvent: State<NavigationEvent?>
 
     /**
@@ -100,6 +104,18 @@ class RouteManagerImpl(initialGraph: NavigationGraph) : RouteManager {
         get() = activeGraph.value.previousScreen.value?.screen
 
     override val lastEvent: MutableState<NavigationEvent?> = mutableStateOf(null)
+
+
+    override val currentState: MutableStateFlow<NavigationState> =
+        MutableStateFlow(
+            NavigationState(
+                activeGraph,
+                currentScreen,
+                previousScreen,
+                0f,
+                lastEvent
+            )
+        )
 
     private val previousGraph: NavigationGraph?
         get() = graphStack.getOrNull(graphStack.lastIndex - 1)
@@ -213,16 +229,9 @@ class RouteManagerImpl(initialGraph: NavigationGraph) : RouteManager {
         activeGraph.value = graphStack.last()
         val prevScreen = activeGraph.value.previousScreen.value?.screen
             ?: previousGraph?.currentScreen?.value?.screen
-        lastEvent.value = if (prevScreen != null) {
-            NavigationEvent.BackGesture.Dragging(
-                prevScreen,
-                currentScreen,
-                0f,
-                0
-            )
-        } else {
-            null
-        }
+        lastEvent.value = null
+
+
     }
 }
 

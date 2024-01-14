@@ -135,7 +135,7 @@ private fun WordDetailsContent(wordViewModel: WordViewModel, adMob: AdMob) {
                     TitleBar(
                         "[D]etails",
                         MaterialTheme.typography.displayLarge.fontSize
-                                * (1 - scrollBehavior.state.collapsedFraction).coerceIn(0.5f, 1f)
+                                * (1 - scrollBehavior.state.collapsedFraction).coerceIn(0.6f, 1f)
                     )
                 },
                 navigationIcon = {

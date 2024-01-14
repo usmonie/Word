@@ -94,7 +94,7 @@ fun NavigationHost(
                 } else currentScreen
             }
         ) { screen ->
-            if (offset.value > 0) {
+            if (event is NavigationEvent.BackGesture) {
                 screen.Content()
             } else {
                 AnimationScreen(

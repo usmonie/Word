@@ -37,7 +37,9 @@ fun SearchWordCard(
         selectedEtymologyTabIndex
     ) { mutableStateOf(0) }
 
-    val selectedPos = selectedEtymology.words[selectedPosIndex]
+    val selectedPos = remember(selectedPosIndex, wordCombined.word) {
+        selectedEtymology.words[selectedPosIndex]
+    }
 
     BaseCard({ onCardClick(wordCombined) }, elevation = 4.dp, modifier) {
         Spacer(Modifier.height(20.dp))
@@ -71,7 +73,7 @@ fun SearchWordCard(
                 wordCombined.wordEtymology.fastForEachIndexed { index, _ ->
                     Tab(
                         selected = selectedEtymologyTabIndex == index,
-                        onClick = remember { { onSelectedTab(index) } },
+                        onClick = { onSelectedTab(index) },
                     ) {
                         Text(
                             "Root ${index + 1}",
@@ -115,7 +117,7 @@ fun SearchWordCard(
                 selectedEtymology.words.fastForEachIndexed { index, word ->
                     Tab(
                         selected = selectedPosIndex == index,
-                        onClick = remember { { onSelectedPos(index) } },
+                        onClick = { onSelectedPos(index) },
                     ) {
                         Text(
                             word.pos,

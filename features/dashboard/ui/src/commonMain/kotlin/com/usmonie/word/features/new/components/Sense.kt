@@ -22,6 +22,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -36,7 +38,6 @@ import com.usmonie.word.features.new.models.Forms
 import com.usmonie.word.features.new.models.SenseCombinedUi
 import com.usmonie.word.features.ui.BaseCard
 import wtf.word.core.domain.tools.fastForEach
-import wtf.word.core.domain.tools.fastForEachIndexed
 
 
 @Composable
@@ -70,7 +71,7 @@ fun SenseTreeCard(
 }
 
 @Composable
-private fun SenseTreeItem(sense: SenseCombinedUi, word: String, forms: Forms) {
+private fun SenseTreeItem(sense: SenseCombinedUi, word: String, forms: Forms, deep: Int = 1) {
     Sense(sense.gloss, modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp))
 
     sense.examples.fastForEach { example ->
@@ -78,27 +79,17 @@ private fun SenseTreeItem(sense: SenseCombinedUi, word: String, forms: Forms) {
         ExampleItem(example, word, forms)
     }
 
-    if (sense.children.isNotEmpty()) {
-        Spacer(Modifier.height(8.dp))
+    val deepWidth = deep / 5f
+    sense.children.fastForEach { senseCombined ->
         Divider(
-            Modifier.fillMaxWidth(),
+            Modifier.fillMaxWidth(deepWidth)
+                .padding(vertical = 20.dp)
+                .clip(RoundedCornerShape(bottomEnd = 10.dp, topEnd = 10.dp)),
             thickness = 4.dp,
             color = MaterialTheme.colorScheme.primary
         )
-        Spacer(Modifier.height(8.dp))
 
-        sense.children.fastForEachIndexed { index, senseCombined ->
-            if (index > 0) {
-                Divider(
-                    Modifier.fillMaxWidth(),
-                    thickness = 2.dp,
-                    color = MaterialTheme.colorScheme.primaryContainer
-                )
-                Spacer(Modifier.height(8.dp))
-            }
-
-            SenseTreeItem(senseCombined, word, forms)
-        }
+        SenseTreeItem(senseCombined, word, forms, deep + 1)
     }
 }
 
@@ -123,6 +114,7 @@ fun Sense(
 @Composable
 fun Sense(gloss: String, modifier: Modifier = Modifier, maxLines: Int) {
     SelectionContainer {
+        LocalHapticFeedback.current.performHapticFeedback(HapticFeedbackType.LongPress)
         Text(
             text = gloss,
             textAlign = TextAlign.Justify,
