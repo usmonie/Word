@@ -76,7 +76,6 @@ fun NavigationHost(
 
                 is NavigationEvent.BackGesture.Ended.Cancel -> offset.animateTo(0f)
                 is NavigationEvent.BackGesture.Dragging -> offset.snapTo(e.offset)
-                null -> offset.snapTo(0f)
                 else -> offset.snapTo(0f)
             }
         }
