@@ -166,11 +166,11 @@ private fun WordDetailsContent(wordViewModel: WordViewModel, adMob: AdMob) {
             ) {
 
                 if (state.word.wordEtymology.size > 1) {
-                    stickyHeader {
+                    item {
                         ScrollableTabRow(
                             selectedEtymologyTabIndex,
                             modifier = Modifier.fillMaxWidth(),
-                            containerColor = MaterialTheme.colorScheme.primary,
+                            containerColor = Color.Transparent,
                             contentColor = MaterialTheme.colorScheme.onPrimary,
                         ) {
                             state.word.wordEtymology.fastForEachIndexed { index, _ ->
@@ -201,11 +201,11 @@ private fun WordDetailsContent(wordViewModel: WordViewModel, adMob: AdMob) {
                 }
 
                 if (selectedEtymology.words.size > 1) {
-                    stickyHeader {
+                    item {
                         ScrollableTabRow(
                             selectedPosIndex,
                             modifier = Modifier.fillMaxWidth(),
-                            containerColor = MaterialTheme.colorScheme.primary,
+                            containerColor = Color.Transparent,
                             contentColor = MaterialTheme.colorScheme.onPrimary
                         ) {
                             selectedEtymology.words.fastForEachIndexed { index, word ->

@@ -20,17 +20,17 @@ import com.usmonie.word.features.ui.BaseCard
 import wtf.word.core.domain.tools.fastForEach
 
 @Immutable
-data class RelatedCardState(val forms: List<RelatedUi>)
+data class RelatedCardState(val related: List<RelatedUi>)
 
 @Composable
 fun RelatedCard(title: String, relatedState: RelatedCardState) {
     val related by remember(relatedState) {
         derivedStateOf {
-            relatedState.forms
-                .groupBy { sound -> sound.tags.joinToString { tag -> tag } }
+            relatedState.related
+                .groupBy { related -> related.tags.joinToString { tag -> tag.replaceFirstChar { it.uppercaseChar() } } }
                 .mapValues { item ->
                     item.value.asSequence()
-                        .map { form -> form.word }
+                        .map { related -> related.word }
                         .filterNotNull()
                         .joinToString { it }
                 }
@@ -52,24 +52,24 @@ fun RelatedCard(title: String, relatedState: RelatedCardState) {
 }
 
 @Composable
-fun RelatedItem(tag: String?, forms: String) {
+fun RelatedItem(tag: String?, related: String) {
     val titleSmall = MaterialTheme.typography.titleMedium
-    val labelLarge = MaterialTheme.typography.labelLarge
+    val labelLarge = MaterialTheme.typography.bodyLarge
     val onSurfaceColor = MaterialTheme.colorScheme.onSurface
     val onSurfaceVariantColor = MaterialTheme.colorScheme.onSurfaceVariant
-    val text = remember(tag, forms) {
+    val text = remember(tag, related) {
         buildAnnotatedString {
             val titleSmallSpan = titleSmall.toSpanStyle()
             val labelLargeSpan = labelLarge.toSpanStyle()
             if (!tag.isNullOrBlank()) {
                 withStyle(titleSmallSpan.copy(onSurfaceColor)) {
-                    append(tag.replaceFirstChar { it.uppercaseChar() })
+                    append(tag)
                     append(": ")
                 }
             }
 
             withStyle(labelLargeSpan.copy(onSurfaceVariantColor)) {
-                append(forms)
+                append(related)
             }
         }
     }

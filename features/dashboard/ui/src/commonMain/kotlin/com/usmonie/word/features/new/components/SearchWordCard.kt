@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.new.models.SoundUi
@@ -67,7 +68,7 @@ fun SearchWordCard(
             ScrollableTabRow(
                 selectedEtymologyTabIndex,
                 modifier = Modifier.fillMaxWidth(),
-                containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                containerColor = Color.Transparent,
                 contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
             ) {
                 wordCombined.wordEtymology.fastForEachIndexed { index, _ ->
@@ -111,7 +112,7 @@ fun SearchWordCard(
             ScrollableTabRow(
                 selectedPosIndex,
                 modifier = Modifier.fillMaxWidth(),
-                containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                containerColor = Color.Transparent,
                 contentColor = MaterialTheme.colorScheme.onSurfaceVariant
             ) {
                 selectedEtymology.words.fastForEachIndexed { index, word ->

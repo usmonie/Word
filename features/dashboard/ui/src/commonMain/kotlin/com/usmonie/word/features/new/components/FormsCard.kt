@@ -60,7 +60,7 @@ fun FormsCard(formsState: FormsCardState) {
 @Composable
 fun FormsItem(tag: String?, forms: String) {
     val titleSmall = MaterialTheme.typography.titleMedium
-    val labelLarge = MaterialTheme.typography.labelLarge
+    val labelLarge = MaterialTheme.typography.bodyLarge
     val onSurfaceVariantColor = MaterialTheme.colorScheme.onSurfaceVariant
     val text = remember(tag, forms) {
         buildAnnotatedString {
@@ -68,7 +68,7 @@ fun FormsItem(tag: String?, forms: String) {
             val labelLargeSpan = labelLarge.toSpanStyle()
             if (!tag.isNullOrBlank()) {
                 withStyle(titleSmallSpan.copy(onSurfaceVariantColor)) {
-                    append(tag.replaceFirstChar { it.uppercaseChar() })
+                    append(tag)
                     append(": ")
                 }
             }

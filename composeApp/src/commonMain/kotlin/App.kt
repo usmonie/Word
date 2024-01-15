@@ -29,8 +29,7 @@ fun App(appConfiguration: AppConfiguration) {
     WordTheme(appConfiguration.currentTheme, appConfiguration.currentFonts) {
         NavigationHost(
             routeManager,
-            modifier = Modifier
-                .fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
             isGestureNavigationEnabled = true
         )
     }
