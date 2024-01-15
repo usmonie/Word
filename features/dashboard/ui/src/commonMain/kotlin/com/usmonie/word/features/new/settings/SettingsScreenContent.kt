@@ -32,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
+import com.usmonie.word.features.gradientBackground
 import com.usmonie.word.features.new.dashboard.SettingsItem
 import com.usmonie.word.features.subscription.domain.models.SubscriptionStatus
 import com.usmonie.word.features.ui.AdMob
@@ -40,7 +41,6 @@ import com.usmonie.word.features.ui.MenuItemText
 import com.usmonie.word.features.ui.TitleBar
 import wtf.speech.compass.core.LocalRouteManager
 import wtf.speech.core.ui.AppKeys
-import wtf.speech.core.ui.gradientBackground
 import wtf.word.core.design.themes.WordColors
 import wtf.word.core.design.themes.typographies.Friendly
 import wtf.word.core.design.themes.typographies.ModernChic

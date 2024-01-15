@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.dashboard.domain.repository.WordRepository
 import com.usmonie.word.features.dashboard.domain.usecase.GetAllFavouritesUseCaseImpl
 import com.usmonie.word.features.dashboard.domain.usecase.UpdateFavouriteUseCaseImpl
+import com.usmonie.word.features.gradientBackground
 import com.usmonie.word.features.new.details.WordDetailsScreen
 import com.usmonie.word.features.ui.AdMob
 import com.usmonie.word.features.ui.BaseLazyColumn
@@ -41,7 +42,6 @@ import wtf.speech.compass.core.RouteManager
 import wtf.speech.compass.core.Screen
 import wtf.speech.compass.core.ScreenBuilder
 import wtf.speech.core.ui.AppKeys
-import wtf.speech.core.ui.gradientBackground
 import wtf.word.core.domain.Analytics
 
 class FavoritesScreen(

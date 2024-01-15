@@ -32,12 +32,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.dashboard.domain.repository.WordRepository
 import com.usmonie.word.features.dashboard.domain.usecase.GetSimilarWordsUseCaseImpl
 import com.usmonie.word.features.dashboard.domain.usecase.UpdateFavouriteUseCaseImpl
+import com.usmonie.word.features.gradientBackground
 import com.usmonie.word.features.new.components.DetailsWordCardMedium
 import com.usmonie.word.features.new.components.FormsCard
 import com.usmonie.word.features.new.components.FormsCardState
@@ -55,7 +57,6 @@ import wtf.speech.compass.core.LocalRouteManager
 import wtf.speech.compass.core.Screen
 import wtf.speech.compass.core.ScreenBuilder
 import wtf.speech.core.ui.AppKeys
-import wtf.speech.core.ui.gradientBackground
 import wtf.word.core.domain.Analytics
 import wtf.word.core.domain.tools.fastForEachIndexed
 
@@ -147,7 +148,7 @@ private fun WordDetailsContent(wordViewModel: WordViewModel, adMob: AdMob) {
                         )
                     }
                 },
-                colors = TopAppBarDefaults.largeTopAppBarColors(containerColor = MaterialTheme.colorScheme.primary),
+                colors = TopAppBarDefaults.largeTopAppBarColors(containerColor = Color.Transparent),
                 scrollBehavior = scrollBehavior
             )
         },

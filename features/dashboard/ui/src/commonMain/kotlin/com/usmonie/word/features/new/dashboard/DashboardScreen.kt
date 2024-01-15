@@ -53,6 +53,7 @@ import com.usmonie.word.features.dashboard.domain.usecase.GetWordOfTheDayUseCase
 import com.usmonie.word.features.dashboard.domain.usecase.RandomWordUseCaseImpl
 import com.usmonie.word.features.dashboard.domain.usecase.SearchWordsUseCaseImpl
 import com.usmonie.word.features.dashboard.domain.usecase.UpdateFavouriteUseCaseImpl
+import com.usmonie.word.features.gradientBackground
 import com.usmonie.word.features.new.components.SearchWordCard
 import com.usmonie.word.features.new.details.WordDetailsScreen
 import com.usmonie.word.features.new.favorites.FavoritesScreen
@@ -69,7 +70,6 @@ import wtf.speech.compass.core.Screen
 import wtf.speech.compass.core.ScreenBuilder
 import wtf.speech.core.ui.AppKeys
 import wtf.speech.core.ui.ContentState
-import wtf.speech.core.ui.gradientBackground
 import wtf.word.core.domain.Analytics
 
 @Stable
