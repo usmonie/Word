@@ -57,6 +57,7 @@ fun NavigationHost(
                     }
                 }
             }
+
         LaunchedEffect(offset.value) {
             val e = event
             if (e is NavigationEvent.BackGesture.Ended.Success
@@ -76,7 +77,7 @@ fun NavigationHost(
 
                 is NavigationEvent.BackGesture.Ended.Cancel -> offset.animateTo(0f)
                 is NavigationEvent.BackGesture.Dragging -> offset.snapTo(e.offset)
-                else -> offset.snapTo(0f)
+                else -> offset.animateTo(0f)
             }
         }
 
@@ -87,6 +88,7 @@ fun NavigationHost(
             {
                 when (val e = event) {
                     is NavigationEvent.BackGesture.Ended.Success -> e.previousScreen
+                    is NavigationEvent.BackGesture.Ended.Cancel -> e.previousScreen
                     is NavigationEvent.BackGesture.Dragging -> previousScreen
                     else -> null
                 }

@@ -30,7 +30,7 @@ sealed class NavigationEvent(val targetScreen: Screen) {
     sealed class BackGesture(
         previousScreen: Screen
     ) : NavigationEvent(previousScreen) {
-        @Immutable
+        @Stable
         data class Dragging(
             val previousScreen: Screen,
             val currentScreen: Screen,

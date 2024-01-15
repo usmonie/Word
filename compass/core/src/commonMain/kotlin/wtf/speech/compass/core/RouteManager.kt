@@ -230,8 +230,6 @@ class RouteManagerImpl(initialGraph: NavigationGraph) : RouteManager {
         val prevScreen = activeGraph.value.previousScreen.value?.screen
             ?: previousGraph?.currentScreen?.value?.screen
         lastEvent.value = null
-
-
     }
 }
 
