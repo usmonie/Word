@@ -8,6 +8,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.ui.MenuItem
@@ -72,7 +73,7 @@ fun AboutMenuItem(onClick: () -> Unit, modifier: Modifier = Modifier) {
 
 @Composable
 fun AboutItem(onClick: () -> Unit, title: String, modifier: Modifier) {
-    Surface(onClick, modifier = modifier, color = MaterialTheme.colorScheme.primary) {
+    Surface(onClick, modifier = modifier, color = Color.Transparent) {
         Text(
             title,
             modifier = Modifier.padding(vertical = 10.dp, horizontal = 36.dp),

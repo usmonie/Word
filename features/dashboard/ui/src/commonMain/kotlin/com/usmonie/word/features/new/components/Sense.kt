@@ -86,7 +86,7 @@ private fun SenseTreeItem(sense: SenseCombinedUi, word: String, forms: Forms, de
                 .padding(vertical = 20.dp)
                 .clip(RoundedCornerShape(bottomEnd = 10.dp, topEnd = 10.dp)),
             thickness = 4.dp,
-            color = MaterialTheme.colorScheme.primary
+            color = Color.Transparent
         )
 
         SenseTreeItem(senseCombined, word, forms, deep + 1)

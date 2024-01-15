@@ -43,7 +43,7 @@ fun DetailsWordCardLarge(
         Spacer(Modifier.height(4.dp))
         if (!word.etymologyText.isNullOrBlank()) {
             EtymologyTitle()
-            Spacer(Modifier.height(12.dp))
+            Spacer(Modifier.height(4.dp))
             Text(
                 word.etymologyText,
                 textAlign = TextAlign.Justify,
@@ -100,7 +100,7 @@ fun DetailsWordCardMedium(
         if (word.etymologyText != null) {
             Column(Modifier.fillMaxWidth().clickable { expanded = !expanded }) {
                 EtymologyTitle()
-                Spacer(Modifier.height(12.dp))
+                Spacer(Modifier.height(4.dp))
                 Text(
                     word.etymologyText,
                     maxLines = maxLines,

@@ -7,7 +7,7 @@ data object PastelSunsetColors : Colors() {
 
     override val light_primary = Color(0xFFF8BBD0)
     override val light_onPrimary = Color(0xFF880E4F)
-    override val light_primaryContainer = Color(0xFFF8BBD0)
+    override val light_primaryContainer = light_primary
     override val light_onPrimaryContainer = Color(0xFF880E4F)
     override val light_secondary = Color(0xFF800000)
     override val light_onSecondary = Color(0xFFFFFFFF)

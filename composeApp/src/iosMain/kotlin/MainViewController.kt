@@ -74,7 +74,7 @@ fun MainViewController(
     val content: @Composable () -> Unit = {
         var isSubscribed by mutableStateOf(true)
 
-        val subscriptionStatus by subscriptionStatusUseCase(Unit).collectAsState(null)
+        val subscriptionStatus by subscriptionStatusUseCase(Unit).collectAsState(SubscriptionStatus.PURCHASED)
 
         LaunchedEffect(subscriptionStatus) {
             isSubscribed = subscriptionStatus == SubscriptionStatus.PURCHASED

@@ -1,7 +1,6 @@
 package com.usmonie.word.features.new.dashboard
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -36,6 +35,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
@@ -69,11 +69,13 @@ import wtf.speech.compass.core.Screen
 import wtf.speech.compass.core.ScreenBuilder
 import wtf.speech.core.ui.AppKeys
 import wtf.speech.core.ui.ContentState
+import wtf.speech.core.ui.gradientBackground
 import wtf.word.core.domain.Analytics
 
 @Stable
 class DashboardScreen(
-    private val dashboardViewModel: DashboardViewModel, private val adMob: AdMob
+    private val dashboardViewModel: DashboardViewModel,
+    private val adMob: AdMob
 ) : Screen(dashboardViewModel) {
 
     override val id: String = ID
@@ -125,15 +127,24 @@ class DashboardScreen(
                             }
                         }
                     },
-                    colors = TopAppBarDefaults.largeTopAppBarColors(containerColor = MaterialTheme.colorScheme.primary),
+                    colors = TopAppBarDefaults.largeTopAppBarColors(
+                        containerColor = Color.Transparent
+                    ),
                     scrollBehavior = scrollBehavior
                 )
             },
-            modifier = Modifier.background(MaterialTheme.colorScheme.primary)
+            modifier = Modifier
+                .gradientBackground()
                 .nestedScroll(scrollBehavior.nestedScrollConnection)
         ) { insets ->
             MainState(
-                onPointerInput, dashboardViewModel, listState, hasFocus.value, insets, state, adMob
+                onPointerInput,
+                dashboardViewModel,
+                listState,
+                hasFocus.value,
+                insets,
+                state,
+                adMob
             )
         }
     }
@@ -202,7 +213,9 @@ private fun MainState(
 ) {
     val showMenuItems by remember(state.query) { derivedStateOf { state.query.text.isBlank() } }
     Box(
-        Modifier.padding(
+        Modifier
+            .gradientBackground()
+            .padding(
             start = insets.calculateLeftPadding(LayoutDirection.Ltr),
             end = insets.calculateRightPadding(LayoutDirection.Ltr),
             top = insets.calculateTopPadding()

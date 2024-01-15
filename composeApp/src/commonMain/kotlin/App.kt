@@ -1,3 +1,4 @@
+
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -5,6 +6,7 @@ import androidx.compose.runtime.Stable
 import androidx.compose.ui.Modifier
 import wtf.speech.compass.core.NavigationHost
 import wtf.speech.compass.core.RouteManager
+import wtf.speech.core.ui.gradientBackground
 import wtf.word.core.design.themes.WordColors
 import wtf.word.core.design.themes.WordTheme
 import wtf.word.core.design.themes.typographies.WordTypography
@@ -28,7 +30,9 @@ fun App(appConfiguration: AppConfiguration) {
     WordTheme(appConfiguration.currentTheme, appConfiguration.currentFonts) {
         NavigationHost(
             routeManager,
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .gradientBackground(),
             isGestureNavigationEnabled = true
         )
     }

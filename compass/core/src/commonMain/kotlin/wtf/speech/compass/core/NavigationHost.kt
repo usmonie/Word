@@ -57,7 +57,9 @@ fun NavigationHost(
             }
         LaunchedEffect(offset.value) {
             val e = event
-            if (e is NavigationEvent.BackGesture.Ended.Success && offset.value == e.screenWidth.toFloat()) {
+            if (e is NavigationEvent.BackGesture.Ended.Success
+                && offset.value == e.screenWidth.toFloat()
+            ) {
                 routeManager.gestureBackAnimationEnded()
             }
         }
@@ -71,6 +73,7 @@ fun NavigationHost(
                         offset.animateTo(0f)
                     }
                 }
+
                 is NavigationEvent.BackGesture.Ended.Cancel -> offset.animateTo(0f)
 
                 is NavigationEvent.BackGesture.Dragging -> offset.snapTo(e.offset)

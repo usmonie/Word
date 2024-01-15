@@ -68,7 +68,7 @@ fun SearchBar(
         enabled = enabled,
         readOnly = !enabled,
         modifier = modifier
-            .background(MaterialTheme.colorScheme.primary)
+            .background(Color.Transparent)
             .focusRequester(focusRequester)
             .onFocusChanged { onFocusChange(it.hasFocus) }
             .onGloballyPositioned { coordinates -> textFieldSize = coordinates.size }

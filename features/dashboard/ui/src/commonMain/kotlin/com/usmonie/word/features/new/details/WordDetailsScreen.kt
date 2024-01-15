@@ -1,7 +1,6 @@
 package com.usmonie.word.features.new.details
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -56,6 +55,7 @@ import wtf.speech.compass.core.LocalRouteManager
 import wtf.speech.compass.core.Screen
 import wtf.speech.compass.core.ScreenBuilder
 import wtf.speech.core.ui.AppKeys
+import wtf.speech.core.ui.gradientBackground
 import wtf.word.core.domain.Analytics
 import wtf.word.core.domain.tools.fastForEachIndexed
 
@@ -151,10 +151,15 @@ private fun WordDetailsContent(wordViewModel: WordViewModel, adMob: AdMob) {
                 scrollBehavior = scrollBehavior
             )
         },
-        modifier = Modifier.background(MaterialTheme.colorScheme.primary)
+        modifier = Modifier
+            .gradientBackground()
             .nestedScroll(scrollBehavior.nestedScrollConnection)
     ) {
-        Box(Modifier.padding(it)) {
+        Box(
+            Modifier
+                .gradientBackground()
+                .padding(it)
+        ) {
             BaseLazyColumn(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
                 listState = listState

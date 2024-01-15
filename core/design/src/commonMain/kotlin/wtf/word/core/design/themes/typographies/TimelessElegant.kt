@@ -100,8 +100,8 @@ data object TimelessElegant : WordTypography("Timeless Elegant") {
     override val headlineMedium = notoSerifBold
     override val headlineSmall = notoSerifSemiBold
 
-    override val titleLarge: FontFamilyData = robotoMonoNormal
-    override val titleMedium: FontFamilyData = robotoMonoBold
+    override val titleLarge: FontFamilyData = robotoMonoMedium
+    override val titleMedium: FontFamilyData = robotoMonoNormal
     override val titleSmall: FontFamilyData = robotoMonoMedium
 
     override val labelLarge = notoSerifLight

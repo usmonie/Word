@@ -27,7 +27,13 @@ fun FormsCard(formsState: FormsCardState) {
     val forms by remember(formsState) {
         derivedStateOf {
             formsState.forms
-                .groupBy { it.tags.lastOrNull() }
+                .groupBy {
+                    it.tags
+                        .map { tag ->
+                            tag.replaceFirstChar { c -> c.uppercaseChar() }
+                        }
+                        .lastOrNull()
+                }
                 .mapValues { item ->
                     item.value.asSequence()
                         .map { form -> form.formText }
@@ -55,14 +61,13 @@ fun FormsCard(formsState: FormsCardState) {
 fun FormsItem(tag: String?, forms: String) {
     val titleSmall = MaterialTheme.typography.titleMedium
     val labelLarge = MaterialTheme.typography.labelLarge
-    val onSurfaceColor = MaterialTheme.colorScheme.onSurface
     val onSurfaceVariantColor = MaterialTheme.colorScheme.onSurfaceVariant
     val text = remember(tag, forms) {
         buildAnnotatedString {
             val titleSmallSpan = titleSmall.toSpanStyle()
             val labelLargeSpan = labelLarge.toSpanStyle()
             if (!tag.isNullOrBlank()) {
-                withStyle(titleSmallSpan.copy(onSurfaceColor)) {
+                withStyle(titleSmallSpan.copy(onSurfaceVariantColor)) {
                     append(tag.replaceFirstChar { it.uppercaseChar() })
                     append(": ")
                 }

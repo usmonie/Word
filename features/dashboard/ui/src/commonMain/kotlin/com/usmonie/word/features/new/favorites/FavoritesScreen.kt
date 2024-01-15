@@ -1,6 +1,5 @@
 package com.usmonie.word.features.new.favorites
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -24,6 +23,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
@@ -41,6 +41,7 @@ import wtf.speech.compass.core.RouteManager
 import wtf.speech.compass.core.Screen
 import wtf.speech.compass.core.ScreenBuilder
 import wtf.speech.core.ui.AppKeys
+import wtf.speech.core.ui.gradientBackground
 import wtf.word.core.domain.Analytics
 
 class FavoritesScreen(
@@ -95,7 +96,10 @@ private fun FavoritesContent(
                 title = {
                     TitleBar(
                         "[F]avorites",
-                        MaterialTheme.typography.displayLarge.fontSize * (1 - scrollBehavior.state.collapsedFraction).coerceIn(0.5f, 1f)
+                        MaterialTheme.typography.displayLarge.fontSize * (1 - scrollBehavior.state.collapsedFraction).coerceIn(
+                            0.5f,
+                            1f
+                        )
                     )
                 },
                 navigationIcon = {
@@ -107,19 +111,20 @@ private fun FavoritesContent(
                         )
                     }
                 },
-                colors = TopAppBarDefaults.largeTopAppBarColors(containerColor = MaterialTheme.colorScheme.primary),
+                colors = TopAppBarDefaults.largeTopAppBarColors(containerColor = Color.Transparent),
                 scrollBehavior = scrollBehavior
             )
         },
-        modifier = Modifier.background(MaterialTheme.colorScheme.primary)
-            .nestedScroll(scrollBehavior.nestedScrollConnection)
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
     ) { insets ->
         Box(
-            Modifier.padding(
-                start = insets.calculateLeftPadding(LayoutDirection.Ltr),
-                end = insets.calculateRightPadding(LayoutDirection.Ltr),
-                top = insets.calculateTopPadding()
-            )
+            Modifier
+                .gradientBackground()
+                .padding(
+                    start = insets.calculateLeftPadding(LayoutDirection.Ltr),
+                    end = insets.calculateRightPadding(LayoutDirection.Ltr),
+                    top = insets.calculateTopPadding()
+                )
         ) {
             BaseLazyColumn(
                 rememberLazyListState(),

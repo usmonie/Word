@@ -39,6 +39,7 @@ import wtf.speech.compass.core.RouteManager
 import wtf.speech.compass.core.Screen
 import wtf.speech.compass.core.ScreenBuilder
 import wtf.speech.core.ui.AppKeys
+import wtf.speech.core.ui.gradientBackground
 
 class HangmanGameScreen(
     private val hangmanGameViewModel: HangmanGameViewModel,
@@ -109,7 +110,12 @@ private fun HangmanContent(
 
 @Composable
 private fun LoadingProgress(insets: PaddingValues) {
-    Box(Modifier.fillMaxSize().padding(insets), contentAlignment = Alignment.Center) {
+    Box(
+        Modifier
+            .gradientBackground()
+            .fillMaxSize()
+            .padding(insets), contentAlignment = Alignment.Center
+    ) {
         CircularProgressIndicator(
             Modifier.size(32.dp),
             MaterialTheme.colorScheme.onPrimary
@@ -119,13 +125,16 @@ private fun LoadingProgress(insets: PaddingValues) {
 
 @Composable
 private fun PlayBoard(
-    it: PaddingValues,
+    insets: PaddingValues,
     state: HangmanState,
     hangmanGameViewModel: HangmanGameViewModel,
     adMob: AdMob
 ) {
     Column(
-        modifier = Modifier.fillMaxSize().padding(it),
+        modifier = Modifier
+            .gradientBackground()
+            .fillMaxSize()
+            .padding(insets),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         HangmanImage(state.incorrectGuesses, Modifier.fillMaxWidth().weight(1f))

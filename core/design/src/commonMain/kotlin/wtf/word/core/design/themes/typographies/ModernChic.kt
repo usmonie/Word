@@ -90,8 +90,8 @@ data object ModernChic : WordTypography("Modern Chic") {
     override val headlineMedium = ralewayBold
     override val headlineSmall = ralewaySemibold
 
-    override val titleLarge = latoRegular
-    override val titleMedium = latoBold
+    override val titleLarge = latoMedium
+    override val titleMedium = latoRegular
     override val titleSmall = latoMedium
 
     override val labelLarge = ralewayLight

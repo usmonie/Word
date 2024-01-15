@@ -21,7 +21,7 @@ struct ComposeView: UIViewControllerRepresentable {
             ))
         #else
             amplitude = Amplitude(configuration: Configuration(
-                apiKey: "244f468ae1266bd4dbfb8fd739cdc87e"
+                apiKey: "78f6281a02303905977f69718014b64f"
             ))
         #endif
         controller = MainViewControllerKt.MainViewController(

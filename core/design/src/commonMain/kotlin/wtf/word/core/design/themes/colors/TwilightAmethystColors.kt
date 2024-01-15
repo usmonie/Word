@@ -6,7 +6,7 @@ import wtf.word.core.design.themes.Colors
 object TwilightAmethystColors: Colors() {
     override val light_primary = Color(0xFF6A1B9A)
     override val light_onPrimary = Color(0xFFFFFFFF)
-    override val light_primaryContainer = Color(0xFFFFDAD4)
+    override val light_primaryContainer = light_primary
     override val light_onPrimaryContainer = Color(0xFF410000)
     override val light_secondary = Color(0xFFAB47BC)
     override val light_onSecondary = Color(0xFFFFFFFF)

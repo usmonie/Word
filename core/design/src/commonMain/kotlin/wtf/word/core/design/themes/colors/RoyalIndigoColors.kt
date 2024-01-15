@@ -6,7 +6,7 @@ import wtf.word.core.design.themes.Colors
 object RoyalIndigoColors: Colors() {
     override val light_primary: Color = Color(0xFF3F51B5)
     override val light_onPrimary: Color = Color(0xFFFFFFFF)
-    override val light_primaryContainer: Color = Color(0xFFC5CAE9)
+    override val light_primaryContainer: Color = light_primary
     override val light_onPrimaryContainer: Color = Color(0xFF000063)
     override val light_secondary: Color = Color(0xFF5C6BC0)
     override val light_onSecondary: Color = Color(0xFFEDE7F6)

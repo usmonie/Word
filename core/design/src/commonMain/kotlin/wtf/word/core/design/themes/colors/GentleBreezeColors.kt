@@ -3,10 +3,11 @@ package wtf.word.core.design.themes.colors
 import androidx.compose.ui.graphics.Color
 import wtf.word.core.design.themes.Colors
 
-object GentleBreezeColors: Colors() {
+object GentleBreezeColors : Colors() {
     override val light_primary: Color = Color(0xFFA7C7E7)
     override val light_onPrimary: Color = Color(0xFF000000)
-    override val light_primaryContainer: Color = Color(0xFFD3E3FC)
+    override val light_primaryContainer: Color
+        get() = light_secondary
     override val light_onPrimaryContainer: Color = Color(0xFF00227B)
     override val light_secondary: Color = Color(0xFFF4A8A8)
     override val light_onSecondary: Color = Color(0xFF5D001E)
@@ -57,11 +58,16 @@ object GentleBreezeColors: Colors() {
     override val dark_onSurface: Color = Color(0xFFFFFFFF)
     override val dark_surfaceVariant: Color = Color(0xFF121212)
     override val dark_onSurfaceVariant: Color = Color(0xFFEDE7F6)
-    override val dark_inverseSurface: Color = Color(0xFFF1F1F1) // Светло-серый цвет для контрастных поверхностей в темной теме
-    override val dark_inverseOnSurface: Color = Color(0xFF2E2E2E) // Темно-серый цвет текста на инверсной поверхности
-    override val dark_inversePrimary: Color = Color(0xFF6D9EFF) // Светлый вариант основного цвета для контраста на темных поверхностях
-    override val dark_surfaceTint: Color = dark_primary // Используется основной цвет темной темы для тонирования
-    override val dark_outlineVariant: Color = Color(0xFF919191) // Серый цвет для контуров и разделительных элементов
+    override val dark_inverseSurface: Color =
+        Color(0xFFF1F1F1) // Светло-серый цвет для контрастных поверхностей в темной теме
+    override val dark_inverseOnSurface: Color =
+        Color(0xFF2E2E2E) // Темно-серый цвет текста на инверсной поверхности
+    override val dark_inversePrimary: Color =
+        Color(0xFF6D9EFF) // Светлый вариант основного цвета для контраста на темных поверхностях
+    override val dark_surfaceTint: Color =
+        dark_primary // Используется основной цвет темной темы для тонирования
+    override val dark_outlineVariant: Color =
+        Color(0xFF919191) // Серый цвет для контуров и разделительных элементов
 
     override val dark_outline: Color = Color(0xFF919191)
     override val dark_scrim: Color = Color(0xFF000000)

@@ -6,11 +6,12 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun MenuItem(onClick: () -> Unit, title: String, modifier: Modifier) {
-    Surface(onClick, modifier = modifier, color = MaterialTheme.colorScheme.primary) {
+    Surface(onClick, modifier = modifier, color = Color.Transparent) {
         MenuItemText(title)
     }
 }

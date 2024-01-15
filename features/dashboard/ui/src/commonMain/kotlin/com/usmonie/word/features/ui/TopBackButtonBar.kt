@@ -17,6 +17,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -25,7 +26,7 @@ fun TopBackButtonBar(onBackClickListener: () -> Unit, showItem: Boolean) {
         Column(
             Modifier
                 .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.primary)
+                .background(Color.Transparent)
         ) {
             Spacer(Modifier.height(48.dp))
             IconButton(onBackClickListener) {
@@ -49,7 +50,7 @@ fun TopBackButtonBar(
         Column(
             Modifier
                 .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.primary)
+                .background(Color.Transparent)
         ) {
             Spacer(Modifier.height(48.dp))
 

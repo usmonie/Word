@@ -1,6 +1,5 @@
 package com.usmonie.word.features.new.settings
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -30,6 +29,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.new.dashboard.SettingsItem
@@ -40,6 +40,7 @@ import com.usmonie.word.features.ui.MenuItemText
 import com.usmonie.word.features.ui.TitleBar
 import wtf.speech.compass.core.LocalRouteManager
 import wtf.speech.core.ui.AppKeys
+import wtf.speech.core.ui.gradientBackground
 import wtf.word.core.design.themes.WordColors
 import wtf.word.core.design.themes.typographies.Friendly
 import wtf.word.core.design.themes.typographies.ModernChic
@@ -91,15 +92,18 @@ internal fun SettingsScreenContent(
                     }
                 },
                 colors = TopAppBarDefaults.largeTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary
+                    containerColor = Color.Transparent
                 ),
                 scrollBehavior = scrollBehavior
             )
         },
-        modifier = Modifier.background(MaterialTheme.colorScheme.primary)
+        modifier = Modifier
+            .gradientBackground()
             .nestedScroll(scrollBehavior.nestedScrollConnection)
     ) { insets ->
-        Box(Modifier.padding(insets)) {
+        Box(Modifier
+            .gradientBackground()
+            .padding(insets)) {
             BaseLazyColumn {
 
                 item {
@@ -195,7 +199,7 @@ internal fun SettingsSubscriptionItem(
     Surface(
         onClick,
         modifier = modifier,
-        color = MaterialTheme.colorScheme.primary,
+        color = Color.Transparent,
         enabled = !selected && isSubscribed
     ) {
         Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
@@ -233,7 +237,7 @@ internal fun SettingsItem(
     Surface(
         onClick,
         modifier = modifier,
-        color = MaterialTheme.colorScheme.primary,
+        color = Color.Transparent,
     ) {
         MenuItemText(title, Modifier.padding(start = 36.dp, end = 20.dp))
     }
