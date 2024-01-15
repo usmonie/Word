@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -27,9 +26,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -37,7 +34,6 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.dashboard.domain.repository.WordRepository
-import com.usmonie.word.features.dashboard.domain.usecase.GetSimilarWordsUseCaseImpl
 import com.usmonie.word.features.dashboard.domain.usecase.UpdateFavouriteUseCaseImpl
 import com.usmonie.word.features.gradientBackground
 import com.usmonie.word.features.new.components.DetailsWordCardMedium
@@ -98,7 +94,6 @@ class WordDetailsScreen(
                 WordViewModel(
                     wordExtra,
                     UpdateFavouriteUseCaseImpl(wordRepository),
-                    GetSimilarWordsUseCaseImpl(wordRepository),
                     analytics,
                 ),
                 adMob
@@ -114,20 +109,19 @@ private fun WordDetailsContent(wordViewModel: WordViewModel, adMob: AdMob) {
     val state by wordViewModel.state.collectAsState()
     val effect by wordViewModel.effect.collectAsState(null)
 
-    val (selectedEtymologyTabIndex, onSelectedTab) = remember(state.word) { mutableStateOf(0) }
-    val selectedEtymology = state.word.wordEtymology[selectedEtymologyTabIndex]
-    val (selectedPosIndex, onSelectedPos) = remember(
-        state.word,
-        selectedEtymologyTabIndex
-    ) { mutableStateOf(0) }
+    val selectedEtymologyTabIndex = state.selectedEtymologyIndex
+    val selectedEtymology =
+        state.word.wordEtymology.getOrElse(selectedEtymologyTabIndex) { state.word.wordEtymology.last() }
+    val selectedPosIndex = state.selectedPosIndex
     val selectedPos =
         remember(selectedEtymology, selectedPosIndex) { selectedEtymology.words[selectedPosIndex] }
 
-    var sensesExpanded by remember(selectedPos) { mutableStateOf(false) }
+    var sensesExpanded = state.sensesExpanded
     WordEffect(effect)
 
-    val listState = rememberLazyListState()
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+    val listState = state.listState
+    val appBarState = state.appBarState
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(appBarState)
 
     Scaffold(
         topBar = {
@@ -136,7 +130,8 @@ private fun WordDetailsContent(wordViewModel: WordViewModel, adMob: AdMob) {
                     TitleBar(
                         "[D]etails",
                         MaterialTheme.typography.displayLarge.fontSize
-                                * (1 - scrollBehavior.state.collapsedFraction).coerceIn(0.6f, 1f)
+                                * (1 - scrollBehavior.state.collapsedFraction)
+                            .coerceIn(0.6f, 1f)
                     )
                 },
                 navigationIcon = {
@@ -152,8 +147,7 @@ private fun WordDetailsContent(wordViewModel: WordViewModel, adMob: AdMob) {
                 scrollBehavior = scrollBehavior
             )
         },
-        modifier = Modifier
-            .nestedScroll(scrollBehavior.nestedScrollConnection)
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
     ) {
         Box(
             Modifier
@@ -176,7 +170,7 @@ private fun WordDetailsContent(wordViewModel: WordViewModel, adMob: AdMob) {
                             state.word.wordEtymology.fastForEachIndexed { index, _ ->
                                 Tab(
                                     selected = selectedEtymologyTabIndex == index,
-                                    onClick = remember { { onSelectedTab(index) } },
+                                    onClick = remember { { wordViewModel.selectEtymology(index) } },
                                 ) {
                                     Text(
                                         "Root ${index + 1}",
@@ -211,7 +205,7 @@ private fun WordDetailsContent(wordViewModel: WordViewModel, adMob: AdMob) {
                             selectedEtymology.words.fastForEachIndexed { index, word ->
                                 Tab(
                                     selected = selectedPosIndex == index,
-                                    onClick = remember { { onSelectedPos(index) } },
+                                    onClick = remember { { wordViewModel.selectPos(index) } },
                                 ) {
                                     Text(
                                         word.pos,

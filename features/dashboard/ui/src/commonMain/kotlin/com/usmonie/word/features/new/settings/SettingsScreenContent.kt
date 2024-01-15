@@ -70,7 +70,11 @@ internal fun SettingsScreenContent(
         listOf(ModernChic, Friendly, TimelessElegant)
     }
     val routeManager = LocalRouteManager.current
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+
+    val listState = state.listState
+    val appBarState = state.appBarState
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(appBarState)
+
 
     Scaffold(
         topBar = {
@@ -103,7 +107,7 @@ internal fun SettingsScreenContent(
         Box(Modifier
             .gradientBackground()
             .padding(insets)) {
-            BaseLazyColumn {
+            BaseLazyColumn(listState) {
 
                 item {
                     SettingsSubtitle("Theme", Modifier.fillParentMaxWidth())

@@ -1,10 +1,14 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.usmonie.word.features.new.favorites
 
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.TopAppBarState
 import androidx.compose.runtime.Immutable
 import com.usmonie.word.features.analytics.DashboardAnalyticsEvents
 import com.usmonie.word.features.dashboard.domain.usecase.GetAllFavouritesUseCase
 import com.usmonie.word.features.dashboard.domain.usecase.UpdateFavouriteUseCase
-import com.usmonie.word.features.models.SynonymUi
 import com.usmonie.word.features.new.models.WordCombinedUi
 import com.usmonie.word.features.new.models.toDomain
 import com.usmonie.word.features.new.models.toUi
@@ -19,12 +23,14 @@ import wtf.word.core.domain.Analytics
 import wtf.word.core.domain.tools.fastMap
 
 @Immutable
-class FavouritesViewModel(
+class FavouritesViewModel constructor(
     private val updateFavouriteUseCase: UpdateFavouriteUseCase,
     private val getAllFavouritesUseCase: GetAllFavouritesUseCase,
-    private val analytics: Analytics
+    private val analytics: Analytics,
+    private val listState: LazyListState = LazyListState(0, 0),
+    private val appBarState: TopAppBarState = TopAppBarState(-Float.MAX_VALUE, 0f, 0f),
 ) : BaseViewModel<FavoritesState, FavoritesAction, FavoritesEvent, FavoritesEffect>(
-    FavoritesState.Loading(),
+    FavoritesState.Loading(listState, appBarState),
 ) {
 
     private var favouritesJob: Job? = null
@@ -35,8 +41,8 @@ class FavouritesViewModel(
 
     override fun FavoritesState.reduce(event: FavoritesEvent) = when (event) {
         is FavoritesEvent.Next -> TODO()
-        is FavoritesEvent.Updated -> if (event.favourites.isEmpty()) FavoritesState.Empty()
-        else FavoritesState.Items(event.favourites)
+        is FavoritesEvent.Updated -> if (event.favourites.isEmpty()) FavoritesState.Empty(listState, appBarState)
+        else FavoritesState.Items(event.favourites, listState, appBarState)
 
         is FavoritesEvent.UpdatedWord -> when (this) {
             is FavoritesState.Items -> this.updateFavourite(event.wordUi)
@@ -45,7 +51,7 @@ class FavouritesViewModel(
 
         FavoritesEvent.Loading -> when (this) {
             is FavoritesState.Items -> this
-            else -> FavoritesState.Loading()
+            else -> FavoritesState.Loading(listState, appBarState)
         }
 
         else -> this
@@ -59,6 +65,7 @@ class FavouritesViewModel(
             analytics.log(DashboardAnalyticsEvents.OpenWord(action.word))
             FavoritesEvent.OpenWord(action.word)
         }
+
     }
 
     override suspend fun handleEvent(event: FavoritesEvent) = when (event) {
@@ -68,10 +75,11 @@ class FavouritesViewModel(
     }
 
     fun onBack() = handleAction(FavoritesAction.OnBack)
-    fun onUpdateFavourite(word: WordCombinedUi) = handleAction(FavoritesAction.UpdateFavouriteWord(word))
+    fun onUpdateFavourite(word: WordCombinedUi) =
+        handleAction(FavoritesAction.UpdateFavouriteWord(word))
+
     fun onOpenWord(word: WordCombinedUi) = handleAction(FavoritesAction.OpenWord(word))
     fun onShareWord(word: WordCombinedUi) = handleAction(FavoritesAction.UpdateFavouriteWord(word))
-    fun onSynonym(synonym: SynonymUi) {}
 
     private fun loadData(): FavoritesEvent {
         favouritesJob?.cancel()

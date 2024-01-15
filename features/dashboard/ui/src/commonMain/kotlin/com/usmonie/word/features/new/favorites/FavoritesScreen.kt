@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -83,23 +82,22 @@ private fun FavoritesContent(
     favoritesViewModel: FavouritesViewModel,
     adMob: AdMob,
 ) {
+
     val routeManager = LocalRouteManager.current
     val state by favoritesViewModel.state.collectAsState()
     val effect by favoritesViewModel.effect.collectAsState(null)
 
     FavouritesEffect(effect, routeManager)
-
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(state.appBarState)
     Scaffold(
         topBar = {
             LargeTopAppBar(
                 title = {
                     TitleBar(
                         "[F]avorites",
-                        MaterialTheme.typography.displayLarge.fontSize * (1 - scrollBehavior.state.collapsedFraction).coerceIn(
-                            0.5f,
-                            1f
-                        )
+                        MaterialTheme.typography.displayLarge.fontSize
+                                * (1 - scrollBehavior.state.collapsedFraction)
+                            .coerceIn(0.6f, 1f  )
                     )
                 },
                 navigationIcon = {
@@ -127,7 +125,7 @@ private fun FavoritesContent(
                 )
         ) {
             BaseLazyColumn(
-                rememberLazyListState(),
+                state.listState,
                 contentPadding = PaddingValues(bottom = insets.calculateBottomPadding()),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
