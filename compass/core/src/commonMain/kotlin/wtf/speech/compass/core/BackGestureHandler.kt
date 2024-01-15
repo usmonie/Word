@@ -59,17 +59,16 @@ fun BackGestureHandler(
                 }
             }),
     ) {
-
         val prevScreen = previousScreen()
         val showPrev = (offset.value > 0 && prevScreen != null)
-            val prevOffset = if (showPrev) {
-                with(LocalDensity.current) {
-                    (-MAX_PREV_SCREEN_OFFSET + offset.value.toDp() * 0.5f).coerceIn(
-                        -MAX_PREV_SCREEN_OFFSET, 0.dp)
-                }
-            } else {
-                0.dp
+        val prevOffset = if (showPrev) {
+            with(LocalDensity.current) {
+                (-MAX_PREV_SCREEN_OFFSET + offset.value.toDp() * 0.5f)
+                    .coerceIn(-MAX_PREV_SCREEN_OFFSET, 0.dp)
             }
+        } else {
+            0.dp
+        }
 
         Box(
             Modifier

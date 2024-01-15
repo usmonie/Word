@@ -12,6 +12,7 @@ import androidx.compose.animation.core.updateTransition
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -30,6 +31,7 @@ fun NavigationHost(
     isGestureNavigationEnabled: Boolean = false
 ) {
     CompositionLocalProvider(LocalRouteManager provides routeManager) {
+        val currentState by routeManager.currentState.collectAsState()
         val currentScreen = routeManager.currentScreen
         val previousScreen = routeManager.previousScreen
         val event by routeManager.lastEvent
@@ -69,15 +71,13 @@ fun NavigationHost(
                 is NavigationEvent.BackGesture.Ended.Success -> {
                     if (offset.value < e.screenWidth) {
                         offset.animateTo(e.screenWidth.toFloat())
-                    } else {
-                        offset.animateTo(0f)
                     }
                 }
 
                 is NavigationEvent.BackGesture.Ended.Cancel -> offset.animateTo(0f)
-
                 is NavigationEvent.BackGesture.Dragging -> offset.snapTo(e.offset)
-                else -> offset.animateTo(0f)
+                null -> offset.snapTo(0f)
+                else -> offset.snapTo(0f)
             }
         }
 
@@ -86,9 +86,11 @@ fun NavigationHost(
             routeManager,
             isGestureNavigationEnabled,
             {
-                val e = event
-                if (e is NavigationEvent.BackGesture.Ended.Success) e.previousScreen
-                else previousScreen
+                when (val e = event) {
+                    is NavigationEvent.BackGesture.Ended.Success -> e.previousScreen
+                    is NavigationEvent.BackGesture.Dragging -> previousScreen
+                    else -> null
+                }
             },
             {
                 val e = event

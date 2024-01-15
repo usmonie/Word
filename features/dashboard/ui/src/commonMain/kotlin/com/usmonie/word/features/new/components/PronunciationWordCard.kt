@@ -127,7 +127,7 @@ fun Pronunciations(
     val sounds by remember(word) {
         derivedStateOf {
             word.sounds
-                .groupBy { sound -> sound.tags.joinToString { tag -> tag } }
+                .groupBy { sound -> sound.tags.joinToString { tag -> tag.replaceFirstChar { it.uppercaseChar() } } }
                 .mapValues {
                     it.value.asSequence()
                         .map { pronunciation -> (pronunciation.ipa ?: pronunciation.enpr) }
