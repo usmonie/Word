@@ -98,7 +98,6 @@ internal fun SettingsScreenContent(
             )
         },
         modifier = Modifier
-            .gradientBackground()
             .nestedScroll(scrollBehavior.nestedScrollConnection)
     ) { insets ->
         Box(Modifier

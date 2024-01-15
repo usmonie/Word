@@ -153,7 +153,6 @@ private fun WordDetailsContent(wordViewModel: WordViewModel, adMob: AdMob) {
             )
         },
         modifier = Modifier
-            .gradientBackground()
             .nestedScroll(scrollBehavior.nestedScrollConnection)
     ) {
         Box(

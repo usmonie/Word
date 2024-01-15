@@ -134,7 +134,6 @@ class DashboardScreen(
                 )
             },
             modifier = Modifier
-                .gradientBackground()
                 .nestedScroll(scrollBehavior.nestedScrollConnection)
         ) { insets ->
             MainState(

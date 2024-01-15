@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.Modifier
-import com.usmonie.word.features.gradientBackground
 import wtf.speech.compass.core.NavigationHost
 import wtf.speech.compass.core.RouteManager
 import wtf.word.core.design.themes.WordColors
@@ -31,8 +30,7 @@ fun App(appConfiguration: AppConfiguration) {
         NavigationHost(
             routeManager,
             modifier = Modifier
-                .fillMaxSize()
-                .gradientBackground(),
+                .fillMaxSize(),
             isGestureNavigationEnabled = true
         )
     }
