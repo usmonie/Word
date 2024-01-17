@@ -31,7 +31,7 @@ fun DashboardTopBar(
     onQueryChanged: (TextFieldValue) -> Unit,
     enabled: Boolean,
     placeholder: String,
-    query: TextFieldValue,
+    query: () -> TextFieldValue,
     hasFocus: MutableState<Boolean>,
     scrollBehavior: TopAppBarScrollBehavior
 ) {
@@ -52,7 +52,7 @@ fun DashboardTopBar(
                 hasFocus
             )
         },
-        navigationIcon = { NavigationBack({ query.text.isNotEmpty() }, onBackClick) },
+        navigationIcon = { NavigationBack({ query().text.isNotEmpty() }, onBackClick) },
         colors = TopAppBarDefaults.largeTopAppBarColors(
             containerColor = Color.Transparent
         ),
@@ -78,7 +78,7 @@ fun DashboardTopBar(
     LargeTopAppBar(
         title = {
             SearchTopBar(
-                query,
+                { query },
                 placeholder,
                 false,
                 { fontSize },
@@ -97,7 +97,7 @@ fun DashboardTopBar(
 
 @Composable
 private fun SearchTopBar(
-    query: TextFieldValue,
+    query: () -> TextFieldValue,
     placeholder: String,
     enabled: Boolean,
     fontSize: () -> TextUnit,
@@ -110,14 +110,13 @@ private fun SearchTopBar(
         onQueryChanged,
         enabled,
         hasFocus.value,
-        fontSize,
-        onFocusChange = { hasFocus.value = it }
-    )
+        fontSize
+    ) { hasFocus.value = it }
 }
 
 @Composable
 private fun TopBar(
-    query: TextFieldValue,
+    query: () -> TextFieldValue,
     placeholder: String,
     onQueryChanged: (TextFieldValue) -> Unit,
     enabled: Boolean,

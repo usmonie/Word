@@ -49,7 +49,7 @@ fun SearchBar(
     onQueryChanged: (TextFieldValue) -> Unit,
     onFocusChange: (Boolean) -> Unit,
     placeholder: String,
-    query: TextFieldValue,
+    query: () -> TextFieldValue,
     hasFocus: () -> Boolean,
     modifier: Modifier = Modifier,
     fontSize: () -> TextUnit,
@@ -61,7 +61,7 @@ fun SearchBar(
     val threshold: Float = remember { textFieldSize.width * 0.5f }
     val size = fontSize()
     TextInputField(
-        query,
+        query(),
         onQueryChanged,
         enabled = enabled,
         readOnly = !enabled,

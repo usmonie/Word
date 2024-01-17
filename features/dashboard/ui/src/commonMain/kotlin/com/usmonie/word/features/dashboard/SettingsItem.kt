@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.ui.MenuItem
 
 @Composable
-fun Settings(
+fun SettingsMenuItems(
     onSettingsMenuItemPressed: () -> Unit
 ) {
     Column {

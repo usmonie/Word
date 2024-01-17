@@ -1,5 +1,6 @@
 package com.usmonie.word.features.studying
 
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -42,7 +43,7 @@ fun StudyingCard(
 }
 
 @Composable
-fun StudyingRevealedCard(
+fun ColumnScope.StudyingRevealedCard(
     onClick: (WordUi) -> Unit,
     word: WordUi,
     userLanguageCode: String,
@@ -67,44 +68,43 @@ fun StudyingRevealedCard(
         sense.examples.getOrNull(0)
     }
 
-    BaseCard({ onClick(word) }, modifier = modifier) {
-        Spacer(Modifier.height(24.dp))
-        WordLargeResizableTitle(
-            word.word,
+    Spacer(Modifier.height(24.dp))
+    WordLargeResizableTitle(
+        word.word,
+        Modifier.fillMaxWidth()
+            .padding(horizontal = 20.dp)
+    )
+    if (pronunciation != null) {
+        Spacer(Modifier.height(8.dp))
+        PronunciationLabel(
+            pronunciation,
             Modifier.fillMaxWidth()
                 .padding(horizontal = 20.dp)
         )
-        if (pronunciation != null) {
-            Spacer(Modifier.height(8.dp))
-            PronunciationLabel(
-                pronunciation,
-                Modifier.fillMaxWidth()
-                    .padding(horizontal = 20.dp)
-            )
-        }
-        TranslationText(
-            translation,
-            Modifier.fillMaxWidth()
-                .padding(horizontal = 20.dp)
-        )
-        Spacer(Modifier.height(20.dp))
-        DescriptionText(
-            sense.gloss,
-            Modifier.fillMaxWidth()
-                .padding(horizontal = 20.dp)
-        )
-        example?.let { example ->
-            Spacer(Modifier.height(12.dp))
-            Example(
-                example,
-                word.word,
-                Forms(word.forms),
-                Modifier.fillMaxWidth()
-                    .padding(start = 36.dp)
-            )
-        }
-        Spacer(Modifier.height(20.dp))
     }
+    TranslationText(
+        translation,
+        Modifier.fillMaxWidth()
+            .padding(horizontal = 20.dp)
+    )
+    Spacer(Modifier.height(20.dp))
+    DescriptionText(
+        sense.gloss,
+        Modifier.fillMaxWidth()
+            .padding(horizontal = 20.dp)
+    )
+    example?.let { example ->
+        Spacer(Modifier.height(12.dp))
+        Example(
+            example,
+            word.word,
+            Forms(word.forms),
+            Modifier.fillMaxWidth()
+                .padding(start = 36.dp)
+        )
+    }
+    Spacer(Modifier.height(20.dp))
+
 }
 
 @Composable

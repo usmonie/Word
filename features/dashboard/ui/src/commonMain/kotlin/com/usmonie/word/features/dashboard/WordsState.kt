@@ -26,7 +26,7 @@ data class WordsState(val words: List<WordCombinedUi>) {
 @Composable
 fun RecentCards(
     onWordClick: (WordCombinedUi) -> Unit,
-    recentCardsState: WordsState
+    recentCardsState: () -> WordsState
 ) {
     Column {
         RecentSearchLazyRow(recentCardsState, onWordClick = onWordClick)
@@ -36,7 +36,7 @@ fun RecentCards(
 
 @Composable
 fun RecentSearchLazyRow(
-    recentCardsState: WordsState,
+    recentCardsState: () -> WordsState,
     modifier: Modifier = Modifier,
     onWordClick: (WordCombinedUi) -> Unit
 ) {
@@ -45,7 +45,7 @@ fun RecentSearchLazyRow(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         contentPadding = PaddingValues(horizontal = 20.dp)
     ) {
-        items(recentCardsState.words, key = { it.word }) { wordCombinedUi ->
+        items(recentCardsState().words, key = { it.word }) { wordCombinedUi ->
             WordRecentCard(
                 wordCombinedUi,
                 onWordClick,

@@ -3,7 +3,8 @@ package com.usmonie.word.features.ui
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CardDefaults
@@ -42,8 +43,8 @@ fun FlipBaseCard(
     modifier: Modifier = Modifier,
     axis: RotationAxis = RotationAxis.AxisY,
     elevation: Dp = 2.dp,
-    back: @Composable () -> Unit = {},
-    front: @Composable () -> Unit = {},
+    back: @Composable ColumnScope.() -> Unit = {},
+    front: @Composable ColumnScope.() -> Unit = {},
 ) {
     val rotation = animateFloatAsState(
         targetValue = cardFace.angle,
@@ -72,13 +73,13 @@ fun FlipBaseCard(
         )
     ) {
         if (rotation.value <= 90f) {
-            Box(
+            Column(
                 Modifier.fillMaxSize()
             ) {
                 front()
             }
         } else {
-            Box(
+            Column(
                 Modifier
                     .fillMaxSize()
                     .graphicsLayer {

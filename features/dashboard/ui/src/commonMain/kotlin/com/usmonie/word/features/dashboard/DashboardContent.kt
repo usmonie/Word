@@ -33,6 +33,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import com.theapache64.rebugger.Rebugger
 import com.usmonie.word.features.SearchWordCard
 import com.usmonie.word.features.models.WordCombinedUi
 import com.usmonie.word.features.models.WordUi
@@ -53,36 +54,6 @@ fun DashboardContent(
     adMob: AdMob
 ) {
     val state by viewModel.state.collectAsState()
-    val recentSearchWords by remember(state) {
-        derivedStateOf { state.recentSearch }
-    }
-
-    val randomWord by remember(state) {
-        derivedStateOf { state.randomWord }
-    }
-
-    val wordOfTheDay by remember(state) {
-        derivedStateOf { state.wordOfTheDay }
-    }
-
-    val query by remember(state) {
-        derivedStateOf { state.query }
-    }
-
-    val showRandomWord by remember(state) {
-        derivedStateOf { state.showRandomWord }
-    }
-
-    val showGames by remember(state) {
-        derivedStateOf { state.showGames }
-    }
-
-    val showAbout by remember(state) {
-        derivedStateOf { state.showAbout }
-    }
-
-    val showMenuItems by remember(query.text) { derivedStateOf { query.text.isBlank() } }
-
     val hasFocus = remember { mutableStateOf(false) }
 
     val focused by remember(hasFocus.value) {
@@ -91,53 +62,37 @@ fun DashboardContent(
         }
     }
 
-    val showRecentWords by remember(focused, recentSearchWords.isNotEmpty) {
-        derivedStateOf {
-            focused && recentSearchWords.isNotEmpty
-        }
-    }
-
-    val foundWordsState by remember(state) {
-        derivedStateOf { state.foundWords }
-    }
-
-    val foundWords by remember(state, showMenuItems) {
-        derivedStateOf {
-            val words = state.foundWords.item
-            if (showMenuItems || words == null) WordsState(listOf()) else WordsState(words)
-        }
-    }
-
-    val showLoading by remember(foundWordsState, showMenuItems) {
-        derivedStateOf { foundWordsState is ContentState.Loading && !showMenuItems }
-    }
-
     val onPointerInput: () -> Unit = remember { { } }
     val listState = rememberLazyListState()
     val localFocusManager = LocalFocusManager.current
 
     LaunchedEffect(listState.firstVisibleItemScrollOffset) {
-        if (listState.firstVisibleItemScrollOffset > 100) {
-            localFocusManager.clearFocus()
-        }
+        localFocusManager.clearFocus()
     }
+
     DashboardContent(
         scrollBehavior,
         viewModel,
-        query,
+        remember { { state.query } },
         hasFocus,
         listState,
-        showRecentWords,
-        recentSearchWords,
-        showLoading,
-        foundWords,
+        remember { { focused && state.recentSearch.isNotEmpty } },
+        remember { { state.recentSearch } },
+        remember { { state.foundWords is ContentState.Loading && state.query.text.isNotBlank() } },
+        remember {
+            {
+                val words = state.foundWords.item
+                if (state.query.text.isBlank() || words == null) WordsState(listOf())
+                else WordsState(words)
+            }
+        },
         onPointerInput,
-        showMenuItems,
-        wordOfTheDay,
-        showRandomWord,
-        randomWord,
-        showGames,
-        showAbout,
+        remember { { state.query.text.isBlank() } },
+        remember { { state.wordOfTheDay } },
+        remember { { state.showRandomWord } },
+        remember { { state.randomWord } },
+        remember { { state.showGames } },
+        remember { { state.showAbout } },
         adMob
     )
 }
@@ -147,24 +102,46 @@ fun DashboardContent(
 private fun DashboardContent(
     scrollBehavior: TopAppBarScrollBehavior,
     viewModel: DashboardViewModel,
-    query: TextFieldValue,
+    query: () -> TextFieldValue,
     hasFocus: MutableState<Boolean>,
     listState: LazyListState,
-    showRecentWords: Boolean,
-    recentSearchWords: WordsState,
-    showLoading: Boolean,
-    foundWords: WordsState,
+    showRecentWords: () -> Boolean,
+    recentSearchWords: () -> WordsState,
+    showLoading: () -> Boolean,
+    foundWords: () -> WordsState,
     onPointerInput: () -> Unit,
-    showMenuItems: Boolean,
-    wordOfTheDay: ContentState<Pair<WordUi, WordCombinedUi>>,
-    showRandomWord: Boolean,
-    randomWord: ContentState<Pair<WordUi, WordCombinedUi>>,
-    showGames: Boolean,
-    showAbout: Boolean,
+    showMenuItems: () -> Boolean,
+    wordOfTheDay: () -> ContentState<Pair<WordUi, WordCombinedUi>>,
+    showRandomWord: () -> Boolean,
+    randomWord: () -> ContentState<Pair<WordUi, WordCombinedUi>>,
+    showGames: () -> Boolean,
+    showAbout: () -> Boolean,
     adMob: AdMob
 ) {
     val localFocusManager = LocalFocusManager.current
-
+    Rebugger(
+        trackMap = mapOf(
+            "scrollBehavior" to scrollBehavior,
+            "viewModel" to viewModel,
+            "query" to query,
+            "hasFocus" to hasFocus,
+            "listState" to listState,
+            "showRecentWords" to showRecentWords,
+            "recentSearchWords" to recentSearchWords,
+            "showLoading" to showLoading,
+            "foundWords" to foundWords,
+            "onPointerInput" to onPointerInput,
+            "showMenuItems" to showMenuItems,
+            "wordOfTheDay" to wordOfTheDay,
+            "showRandomWord" to showRandomWord,
+            "randomWord" to randomWord,
+            "showGames" to showGames,
+            "showAbout" to showAbout,
+            "adMob" to adMob,
+            "localFocusManager" to localFocusManager,
+        ),
+        composableName = "DashboardContentDeep"
+    )
     Scaffold(
         modifier = Modifier
             .nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -207,20 +184,21 @@ private fun DashboardContent(
 private fun ListContent(
     insets: PaddingValues,
     listState: LazyListState,
-    showRecentWords: Boolean,
+    showRecentWords: () -> Boolean,
     viewModel: DashboardViewModel,
-    recentSearchWords: WordsState,
-    showLoading: Boolean,
-    foundWords: WordsState,
-    showMenuItems: Boolean,
-    wordOfTheDay: ContentState<Pair<WordUi, WordCombinedUi>>,
-    showRandomWord: Boolean,
-    randomWord: ContentState<Pair<WordUi, WordCombinedUi>>,
-    showGames: Boolean,
-    showAbout: Boolean,
+    recentSearchWords: () -> WordsState,
+    showLoading: () -> Boolean,
+    foundWords: () -> WordsState,
+    onShowMenuItems: () -> Boolean,
+    wordOfTheDay: () -> ContentState<Pair<WordUi, WordCombinedUi>>,
+    showRandomWord: () -> Boolean,
+    randomWord: () -> ContentState<Pair<WordUi, WordCombinedUi>>,
+    showGames: () -> Boolean,
+    showAbout: () -> Boolean,
     adMob: AdMob,
     modifier: Modifier
 ) {
+    val showMenuItems = onShowMenuItems()
     GradientBox(
         modifier.fillMaxSize(),
         insets = PaddingValues(
@@ -234,18 +212,18 @@ private fun ListContent(
             contentPadding = PaddingValues(bottom = insets.calculateBottomPadding()),
         ) {
             item {
-                VerticalAnimatedVisibility(showRecentWords) {
+                VerticalAnimatedVisibility(showRecentWords()) {
                     RecentCards(viewModel::onOpenWord, recentSearchWords)
                 }
             }
 
             item {
-                if (showLoading) {
+                if (showLoading()) {
                     LoadingProgress()
                 }
             }
 
-            items(foundWords.words, key = { it.word }) { wordCombined ->
+            items(foundWords().words, key = { it.word }) { wordCombined ->
                 SearchWordCard(
                     viewModel::onOpenWord,
                     remember { {} },
@@ -278,7 +256,7 @@ private fun ListContent(
                         onAddFavouritePressed = viewModel::onUpdateFavouritesPressed,
                         onSharePressed = { },
                         onUpdatePressed = viewModel::onUpdateRandomCard,
-                        showRandomWord = { showRandomWord },
+                        showRandomWord = showRandomWord,
                         word = randomWord
                     )
                 }
@@ -305,7 +283,7 @@ private fun ListContent(
 
             item(key = "MENU_SETTINGS") {
                 if (showMenuItems) {
-                    Settings(
+                    SettingsMenuItems(
                         viewModel::onSettingsItemClicked,
                     )
                 }
@@ -313,7 +291,7 @@ private fun ListContent(
 
             item(key = "MENU_ABOUT") {
                 if (showMenuItems) {
-                    About(
+                    AboutMenuItems(
                         viewModel::onAboutItemClicked,
                         {},
                         viewModel::onTelegramItemClicked,

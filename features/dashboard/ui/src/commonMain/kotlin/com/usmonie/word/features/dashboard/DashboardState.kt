@@ -1,6 +1,6 @@
 package com.usmonie.word.features.dashboard
 
-import androidx.compose.runtime.Stable
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.text.input.TextFieldValue
 import com.usmonie.word.features.models.WordCombinedUi
 import com.usmonie.word.features.models.WordUi
@@ -11,7 +11,7 @@ import wtf.speech.core.ui.ScreenEvent
 import wtf.speech.core.ui.ScreenState
 import wtf.word.core.domain.tools.fastMap
 
-@Stable
+@Immutable
 data class DashboardState(
     val query: TextFieldValue = TextFieldValue(),
     val wordOfTheDay: ContentState<Pair<WordUi, WordCombinedUi>> = ContentState.Loading(),

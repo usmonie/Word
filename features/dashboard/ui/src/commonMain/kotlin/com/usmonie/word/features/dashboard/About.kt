@@ -10,21 +10,32 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.theapache64.rebugger.Rebugger
 import com.usmonie.word.features.ui.MenuItem
 import com.usmonie.word.features.ui.VerticalAnimatedVisibility
 
 @Composable
-fun About(
+fun AboutMenuItems(
     onAboutMenuItemPressed: () -> Unit,
     onAboutDeveloperPressed: () -> Unit,
     onTelegramPressed: () -> Unit,
     onDonatePressed: () -> Unit,
-    showAbout: Boolean,
+    showAbout: () -> Boolean,
 ) {
+    Rebugger(
+        trackMap = mapOf(
+            "onAboutMenuItemPressed" to onAboutMenuItemPressed,
+            "onAboutDeveloperPressed" to onAboutDeveloperPressed,
+            "onTelegramPressed" to onTelegramPressed,
+            "onDonatePressed" to onDonatePressed,
+            "showAbout" to showAbout,
+        ),
+        composableName = "About"
+    )
     Column {
-        AboutMenuItem(
+        AboutMenuItems(
             onAboutMenuItemPressed,
-            Modifier.fillMaxWidth()
+            fillMaxWidthModifier
         )
         AboutItems(
             onAboutDeveloperPressed,
@@ -40,18 +51,18 @@ private fun AboutItems(
     onAboutDeveloperPressed: () -> Unit,
     onTelegramPressed: () -> Unit,
     onDonatePressed: () -> Unit,
-    showSettings: Boolean,
+    showAbout: () -> Boolean,
 ) {
-    VerticalAnimatedVisibility(showSettings) {
+    VerticalAnimatedVisibility(showAbout()) {
         Column {
             if (false) AboutItem(
                 onAboutDeveloperPressed,
                 "About Me",
-                )
+            )
             AboutItem(
                 onTelegramPressed,
                 "Telegram",
-                Modifier.fillMaxWidth()
+                fillMaxWidthModifier
             )
             if (false) AboutItem(
                 onDonatePressed,
@@ -62,7 +73,7 @@ private fun AboutItems(
 }
 
 @Composable
-fun AboutMenuItem(onClick: () -> Unit, modifier: Modifier = Modifier) {
+fun AboutMenuItems(onClick: () -> Unit, modifier: Modifier = Modifier) {
     MenuItem(onClick, "About", modifier)
 }
 
@@ -71,9 +82,12 @@ fun AboutItem(onClick: () -> Unit, title: String, modifier: Modifier = Modifier)
     Surface(onClick, modifier = modifier, color = Color.Transparent) {
         Text(
             title,
-            modifier = Modifier.padding(vertical = 10.dp, horizontal = 36.dp),
+            modifier = aboutItemModifier,
             color = MaterialTheme.colorScheme.onPrimary,
             style = MaterialTheme.typography.titleLarge
         )
     }
 }
+
+private val aboutItemModifier = Modifier.padding(vertical = 10.dp, horizontal = 36.dp)
+private val fillMaxWidthModifier = Modifier.fillMaxWidth()

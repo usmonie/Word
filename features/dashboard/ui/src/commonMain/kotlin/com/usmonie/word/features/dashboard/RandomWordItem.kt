@@ -21,7 +21,7 @@ fun RandomWordMenuItem(
     onSharePressed: (WordCombinedUi) -> Unit,
     onUpdatePressed: () -> Unit,
     showRandomWord: () -> Boolean,
-    word: ContentState<Pair<WordUi, WordCombinedUi>>
+    word: () -> ContentState<Pair<WordUi, WordCombinedUi>>
 ) {
     Column {
         MenuItem(
@@ -35,7 +35,7 @@ fun RandomWordMenuItem(
                 onAddFavouritePressed,
                 onSharePressed,
                 onUpdatePressed,
-                word,
+                word(),
                 modifier = Modifier.padding(horizontal = 16.dp).padding(bottom = 16.dp)
             )
         }

@@ -17,14 +17,14 @@ fun WordOfTheDayMenuItem(
     onAddFavouritePressed: (WordCombinedUi) -> Unit,
     onSharePressed: (WordCombinedUi) -> Unit,
     showWordOfTheDay: Boolean,
-    word: ContentState<Pair<WordUi, WordCombinedUi>>
+    word: () -> ContentState<Pair<WordUi, WordCombinedUi>>
 ) {
     WordOfTheDay(
         showWordOfTheDay,
         onClick = onWordClick,
         onAddFavouritePressed = onAddFavouritePressed,
         onSharePressed = onSharePressed,
-        word = word,
+        word = word(),
         modifier = Modifier.animateContentSize()
     )
 }

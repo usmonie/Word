@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.theapache64.rebugger.Rebugger
 import com.usmonie.word.features.models.WordCombinedUi
 import com.usmonie.word.features.models.WordUi
 import com.usmonie.word.features.ui.BaseCard
@@ -55,6 +56,13 @@ fun RandomWordCard(
 
 }
 
+private val fillMaxWidth = Modifier.fillMaxWidth()
+private val cardOuterVerticalPaddingSpacerModifier = Modifier.height(20.dp)
+private val cardInnerVerticalPaddingSpacerModifier = Modifier.height(8.dp)
+private val itemHorizontalPaddingModifier = fillMaxWidth.padding(horizontal = 20.dp)
+private val itemVerticalPaddingModifier = fillMaxWidth.padding(vertical = 20.dp)
+private val progressBarLoadingModifier = Modifier.size(32.dp)
+
 @Composable
 private fun RandomWordSuccess(
     word: Pair<WordUi, WordCombinedUi>,
@@ -63,20 +71,29 @@ private fun RandomWordSuccess(
     onBookmarkClick: (WordCombinedUi) -> Unit,
     onUpdate: () -> Unit
 ) {
-    val cardOuterVerticalPaddingSpacerModifier = Modifier.height(20.dp)
-    val cardInnerVerticalPaddingSpacerModifier = Modifier.height(8.dp)
-    val itemModifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp)
-
+    Rebugger(
+        trackMap = mapOf(
+            "word" to word,
+            "modifier" to modifier,
+            "onLearnClick" to onLearnClick,
+            "onBookmarkClick" to onBookmarkClick,
+            "onUpdate" to onUpdate,
+            "cardOuterVerticalPaddingSpacerModifier" to cardOuterVerticalPaddingSpacerModifier,
+            "cardInnerVerticalPaddingSpacerModifier" to cardInnerVerticalPaddingSpacerModifier,
+            "itemModifier" to itemHorizontalPaddingModifier,
+        ),
+        composableName = "RandomWordSuccess"
+    )
     Spacer(cardOuterVerticalPaddingSpacerModifier)
     WordMediumResizableTitle(
         word.first.word,
-        itemModifier,
+        itemHorizontalPaddingModifier,
         MaterialTheme.colorScheme.onSurface
     )
     Spacer(cardInnerVerticalPaddingSpacerModifier)
     word.first.senses.getOrNull(0)
         ?.let { sense ->
-            Sense(sense.gloss, itemModifier, false)
+            Sense(sense.gloss, itemHorizontalPaddingModifier, false)
         }
     Spacer(cardInnerVerticalPaddingSpacerModifier)
     WordCardButtons(
@@ -84,16 +101,16 @@ private fun RandomWordSuccess(
         { onBookmarkClick(word.second) },
         onUpdate,
         word.second.isFavorite,
-        modifier = Modifier.fillMaxWidth()
+        modifier = fillMaxWidth
     )
     Spacer(cardOuterVerticalPaddingSpacerModifier)
 }
 
 @Composable
 private fun RandomWordLoading() {
-    Box(Modifier.fillMaxWidth().padding(vertical = 20.dp), Alignment.Center) {
+    Box(itemVerticalPaddingModifier, Alignment.Center) {
         CircularProgressIndicator(
-            Modifier.size(32.dp),
+            progressBarLoadingModifier,
             MaterialTheme.colorScheme.onSurface
         )
     }

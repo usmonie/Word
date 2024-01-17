@@ -17,7 +17,7 @@ import com.usmonie.word.features.ui.VerticalAnimatedVisibility
 fun Games(
     onGamesMenuItemPressed: () -> Unit,
     onHangmanPressed: () -> Unit,
-    showGames: Boolean,
+    showGames: () -> Boolean,
 ) {
     Column {
         GamesMenuItem(
@@ -30,10 +30,10 @@ fun Games(
 
 @Composable
 private fun GamesItems(
-    showGames: Boolean,
+    showGames: () -> Boolean,
     onHangmanPressed: () -> Unit,
 ) {
-    VerticalAnimatedVisibility(showGames) {
+    VerticalAnimatedVisibility(showGames()) {
         Column {
             HangmanMenuItem(
                 onHangmanPressed,
