@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
@@ -61,21 +60,15 @@ fun DashboardContent(
             hasFocus.value
         }
     }
-
-    val onPointerInput: () -> Unit = remember { { } }
-    val listState = rememberLazyListState()
     val localFocusManager = LocalFocusManager.current
 
-    LaunchedEffect(listState.firstVisibleItemScrollOffset) {
-        localFocusManager.clearFocus()
-    }
+    val onPointerInput: () -> Unit = remember { { localFocusManager.clearFocus(true) } }
 
     DashboardContent(
-        scrollBehavior,
+        remember { { scrollBehavior } },
         viewModel,
         remember { { state.query } },
         hasFocus,
-        listState,
         remember { { focused && state.recentSearch.isNotEmpty } },
         remember { { state.recentSearch } },
         remember { { state.foundWords is ContentState.Loading && state.query.text.isNotBlank() } },
@@ -100,11 +93,10 @@ fun DashboardContent(
 @ExperimentalMaterial3Api
 @Composable
 private fun DashboardContent(
-    scrollBehavior: TopAppBarScrollBehavior,
+    scrollBehavior: () -> TopAppBarScrollBehavior,
     viewModel: DashboardViewModel,
     query: () -> TextFieldValue,
     hasFocus: MutableState<Boolean>,
-    listState: LazyListState,
     showRecentWords: () -> Boolean,
     recentSearchWords: () -> WordsState,
     showLoading: () -> Boolean,
@@ -125,7 +117,6 @@ private fun DashboardContent(
             "viewModel" to viewModel,
             "query" to query,
             "hasFocus" to hasFocus,
-            "listState" to listState,
             "showRecentWords" to showRecentWords,
             "recentSearchWords" to recentSearchWords,
             "showLoading" to showLoading,
@@ -144,7 +135,7 @@ private fun DashboardContent(
     )
     Scaffold(
         modifier = Modifier
-            .nestedScroll(scrollBehavior.nestedScrollConnection),
+            .nestedScroll(scrollBehavior().nestedScrollConnection),
         topBar = {
             DashboardTopBar(
                 viewModel::onBackClick,
@@ -159,7 +150,6 @@ private fun DashboardContent(
     ) { insets ->
         ListContent(
             insets,
-            listState,
             showRecentWords,
             viewModel,
             recentSearchWords,
@@ -183,7 +173,6 @@ private fun DashboardContent(
 @Composable
 private fun ListContent(
     insets: PaddingValues,
-    listState: LazyListState,
     showRecentWords: () -> Boolean,
     viewModel: DashboardViewModel,
     recentSearchWords: () -> WordsState,
@@ -198,6 +187,12 @@ private fun ListContent(
     adMob: AdMob,
     modifier: Modifier
 ) {
+    val listState = rememberLazyListState()
+    val localFocusManager = LocalFocusManager.current
+
+    LaunchedEffect(listState.firstVisibleItemScrollOffset) {
+        localFocusManager.clearFocus()
+    }
     val showMenuItems = onShowMenuItems()
     GradientBox(
         modifier.fillMaxSize(),

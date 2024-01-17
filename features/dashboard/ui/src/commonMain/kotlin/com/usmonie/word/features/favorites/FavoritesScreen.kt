@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
@@ -80,8 +81,6 @@ private fun FavoritesContent(
 
     val state by favoritesViewModel.state.collectAsState()
 
-    val listState = state.listState
-
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(state.appBarState)
     Scaffold(
         topBar = {
@@ -89,55 +88,68 @@ private fun FavoritesContent(
                 routeManager::navigateBack,
                 "[F]avorites",
                 { true },
-                scrollBehavior,
+                { scrollBehavior },
             )
         },
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
     ) { insets ->
-        GradientBox(
-            Modifier.fillMaxSize(),
-            insets = PaddingValues(
-                start = insets.calculateLeftPadding(LayoutDirection.Ltr),
-                end = insets.calculateRightPadding(LayoutDirection.Ltr),
-                top = insets.calculateTopPadding()
-            )
+        FavoritesContent({ insets }, { state.listState }, { state }, favoritesViewModel, adMob)
+    }
+}
+
+@Composable
+private fun FavoritesContent(
+    getInsets: () -> PaddingValues,
+    getListState: () -> LazyListState,
+    getState: () -> FavoritesState,
+    favoritesViewModel: FavouritesViewModel,
+    adMob: AdMob
+) {
+    val insets = getInsets()
+    val listState = getListState()
+    GradientBox(
+        Modifier.fillMaxSize(),
+        insets = PaddingValues(
+            start = insets.calculateLeftPadding(LayoutDirection.Ltr),
+            end = insets.calculateRightPadding(LayoutDirection.Ltr),
+            top = insets.calculateTopPadding()
+        )
+    ) {
+        BaseLazyColumn(
+            listState,
+            contentPadding = PaddingValues(bottom = insets.calculateBottomPadding()),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            BaseLazyColumn(
-                listState,
-                contentPadding = PaddingValues(bottom = insets.calculateBottomPadding()),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
 
-                when (val s = state) {
-                    is FavoritesState.Empty -> item {
-                        EmptyItem(
-                            "Favorites are empty",
-                            "You can add favorite words from the search screen"
-                        )
-                    }
-
-                    is FavoritesState.Items -> wordsCardsList(
-                        favoritesViewModel::onOpenWord,
-                        favoritesViewModel::onUpdateFavourite,
-                        favoritesViewModel::onShareWord,
-                        //                            favouritesViewModel::onSynonym,
-                        s.favourites,
-                        Modifier.fillMaxWidth()
-                            .padding(horizontal = 16.dp),
+            when (val s = getState()) {
+                is FavoritesState.Empty -> item {
+                    EmptyItem(
+                        "Favorites are empty",
+                        "You can add favorite words from the search screen"
                     )
-
-                    is FavoritesState.Loading -> Unit
                 }
 
-                item { Spacer(Modifier.height(80.dp)) }
+                is FavoritesState.Items -> wordsCardsList(
+                    favoritesViewModel::onOpenWord,
+                    favoritesViewModel::onUpdateFavourite,
+                    favoritesViewModel::onShareWord,
+                    //                            favouritesViewModel::onSynonym,
+                    s.favourites,
+                    Modifier.fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                )
+
+                is FavoritesState.Loading -> Unit
             }
-            adMob.Banner(
-                AppKeys.BANNER_ID,
-                Modifier.fillMaxWidth()
-                    .align(Alignment.BottomCenter)
-                    .padding(insets)
-            )
+
+            item { Spacer(Modifier.height(80.dp)) }
         }
+        adMob.Banner(
+            AppKeys.BANNER_ID,
+            Modifier.fillMaxWidth()
+                .align(Alignment.BottomCenter)
+                .padding(insets)
+        )
     }
 }
 

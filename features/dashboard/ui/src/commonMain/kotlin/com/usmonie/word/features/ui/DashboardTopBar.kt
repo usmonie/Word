@@ -33,8 +33,9 @@ fun DashboardTopBar(
     placeholder: String,
     query: () -> TextFieldValue,
     hasFocus: MutableState<Boolean>,
-    scrollBehavior: TopAppBarScrollBehavior
+    getScrollBehavior: () -> TopAppBarScrollBehavior
 ) {
+    val scrollBehavior = getScrollBehavior()
     val searchBarFontSizeMax = MaterialTheme.typography.displayLarge.fontSize
     val fontSize by remember(scrollBehavior.state.collapsedFraction) {
         derivedStateOf {
@@ -66,8 +67,9 @@ fun DashboardTopBar(
     onBackClick: () -> Unit,
     placeholder: String,
     showNavigationBack: () -> Boolean,
-    scrollBehavior: TopAppBarScrollBehavior
+    getScrollBehavior: () -> TopAppBarScrollBehavior
 ) {
+    val scrollBehavior = getScrollBehavior()
     val query = remember { TextFieldValue() }
     val searchBarFontSizeMax = MaterialTheme.typography.displayLarge.fontSize
     val fontSize by remember(scrollBehavior.state.collapsedFraction) {
