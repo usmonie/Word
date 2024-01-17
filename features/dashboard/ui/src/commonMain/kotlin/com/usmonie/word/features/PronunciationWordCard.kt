@@ -1,5 +1,6 @@
 package com.usmonie.word.features
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -77,13 +78,12 @@ fun DetailsWordCardMedium(
     word: WordUi,
     modifier: Modifier = Modifier
 ) {
+
     var expanded by remember(word) { mutableStateOf(false) }
     val maxLines by remember(expanded) { mutableStateOf(if (expanded) Int.MAX_VALUE else 3) }
     BaseCard(
-        {},
         elevation = 4.dp,
         modifier = modifier,
-        enabled = false
     ) {
         Spacer(Modifier.height(20.dp))
         WordMediumResizableTitle(word.word, Modifier.fillMaxWidth().padding(horizontal = 20.dp))
@@ -98,7 +98,11 @@ fun DetailsWordCardMedium(
 
         Spacer(Modifier.height(16.dp))
         if (word.etymologyText != null) {
-            Column(Modifier.fillMaxWidth().clickable { expanded = !expanded }) {
+            Column(Modifier
+                .fillMaxWidth()
+                .animateContentSize()
+                .clickable { expanded = !expanded }
+            ) {
                 EtymologyTitle()
                 Spacer(Modifier.height(4.dp))
                 Text(

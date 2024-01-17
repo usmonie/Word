@@ -13,7 +13,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.theapache64.rebugger.Rebugger
 import com.usmonie.word.features.models.WordCombinedUi
 import com.usmonie.word.features.models.WordUi
 import com.usmonie.word.features.ui.BaseCard
@@ -71,19 +70,6 @@ private fun RandomWordSuccess(
     onBookmarkClick: (WordCombinedUi) -> Unit,
     onUpdate: () -> Unit
 ) {
-    Rebugger(
-        trackMap = mapOf(
-            "word" to word,
-            "modifier" to modifier,
-            "onLearnClick" to onLearnClick,
-            "onBookmarkClick" to onBookmarkClick,
-            "onUpdate" to onUpdate,
-            "cardOuterVerticalPaddingSpacerModifier" to cardOuterVerticalPaddingSpacerModifier,
-            "cardInnerVerticalPaddingSpacerModifier" to cardInnerVerticalPaddingSpacerModifier,
-            "itemModifier" to itemHorizontalPaddingModifier,
-        ),
-        composableName = "RandomWordSuccess"
-    )
     Spacer(cardOuterVerticalPaddingSpacerModifier)
     WordMediumResizableTitle(
         word.first.word,

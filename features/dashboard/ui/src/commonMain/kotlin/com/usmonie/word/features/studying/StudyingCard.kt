@@ -24,13 +24,13 @@ import com.usmonie.word.features.ui.WordLargeResizableTitle
 @Composable
 fun StudyingCard(
     onClick: (WordUi) -> Unit,
-    revealed: Boolean,
+    revealed: () -> Boolean,
     word: WordUi,
     userLanguageCode: String,
     modifier: Modifier = Modifier
 ) {
     FlipBaseCard(
-        if (revealed) CardFace.Back else CardFace.Front,
+        { if (revealed()) CardFace.Back else CardFace.Front },
         { onClick(word) },
         modifier,
         back = {

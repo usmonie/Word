@@ -38,7 +38,7 @@ enum class RotationAxis {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FlipBaseCard(
-    cardFace: CardFace,
+    getCardFace: () -> CardFace,
     onClick: (CardFace) -> Unit,
     modifier: Modifier = Modifier,
     axis: RotationAxis = RotationAxis.AxisY,
@@ -46,6 +46,7 @@ fun FlipBaseCard(
     back: @Composable ColumnScope.() -> Unit = {},
     front: @Composable ColumnScope.() -> Unit = {},
 ) {
+    val cardFace = getCardFace()
     val rotation = animateFloatAsState(
         targetValue = cardFace.angle,
         animationSpec = tween(

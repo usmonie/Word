@@ -3,18 +3,15 @@ package com.usmonie.word.features.details
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScrollableTabRow
@@ -26,18 +23,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.theapache64.rebugger.Rebugger
 import com.usmonie.word.features.DetailsWordCardMedium
 import com.usmonie.word.features.FormsCard
-import com.usmonie.word.features.FormsCardState
 import com.usmonie.word.features.RelatedCard
 import com.usmonie.word.features.RelatedCardState
 import com.usmonie.word.features.SenseTreeCard
@@ -46,11 +41,11 @@ import com.usmonie.word.features.dashboard.domain.usecase.UpdateFavouriteUseCase
 import com.usmonie.word.features.gradientBackground
 import com.usmonie.word.features.models.Forms
 import com.usmonie.word.features.models.WordCombinedUi
-import com.usmonie.word.features.studying.StudyingCard
+import com.usmonie.word.features.models.WordUi
 import com.usmonie.word.features.ui.AdMob
 import com.usmonie.word.features.ui.BaseLazyColumn
+import com.usmonie.word.features.ui.DashboardTopBar
 import com.usmonie.word.features.ui.SubtitleItemText
-import com.usmonie.word.features.ui.TitleBar
 import wtf.speech.compass.core.Extra
 import wtf.speech.compass.core.LocalRouteManager
 import wtf.speech.compass.core.Screen
@@ -68,9 +63,51 @@ class WordDetailsScreen(
 ) : Screen(wordViewModel) {
     override val id: String = ID
 
+    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
-        WordDetailsContent(wordViewModel, adMob)
+        val routeManager = LocalRouteManager.current
+        val state by wordViewModel.state.collectAsState()
+        val effect by wordViewModel.effect.collectAsState(null)
+
+        WordEffect(effect)
+
+        val appBarState = state.appBarState
+        val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(appBarState)
+        Rebugger(
+            trackMap = mapOf(
+                "routeManager" to routeManager,
+                "state" to state,
+                "effect" to effect,
+                "appBarState" to appBarState,
+                "scrollBehavior" to scrollBehavior,
+            ),
+            composableName = "WordDetailsScreen"
+        )
+        Scaffold(
+            topBar = {
+                DashboardTopBar(
+                    routeManager::navigateBack,
+                    "[D]etails",
+                    remember { { true } }
+                ) { scrollBehavior }
+            },
+            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+        ) { insets ->
+            WordDetailsContent(
+                insets,
+                { state.listState },
+                { state.word },
+                { state.selectedEtymologyIndex },
+                wordViewModel,
+                { state.selectedPosIndex },
+                { state.sensesExpanded },
+                wordViewModel::selectEtymology,
+                wordViewModel::selectPos,
+                wordViewModel::onSenseExpand,
+                adMob
+            )
+        }
     }
 
     companion object {
@@ -105,209 +142,198 @@ class WordDetailsScreen(
 }
 
 @Composable
-@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
-private fun WordDetailsContent(wordViewModel: WordViewModel, adMob: AdMob) {
-    val routeManager = LocalRouteManager.current
-    val state by wordViewModel.state.collectAsState()
-    val effect by wordViewModel.effect.collectAsState(null)
+@OptIn(ExperimentalFoundationApi::class)
+private fun WordDetailsContent(
+    insets: PaddingValues,
+    listState: () -> LazyListState,
+    getWordCombined: () -> WordCombinedUi,
+    getSelectedEtymologyTabIndex: () -> Int,
+    wordViewModel: WordViewModel,
+    getSelectedPosIndex: () -> Int,
+    getSensesExpanded: () -> Boolean,
+    onEtymologySelected: (Int) -> Unit,
+    onPosSelected: (Int) -> Unit,
+    onExpandSenses: () -> Unit,
+    adMob: AdMob
+) {
+    val sensesExpanded = getSensesExpanded()
+    val selectedPosIndex = getSelectedPosIndex()
+    val selectedEtymologyIndex = getSelectedEtymologyTabIndex()
+    val wordCombined = getWordCombined()
 
-    val selectedEtymologyTabIndex = state.selectedEtymologyIndex
-    val selectedEtymology =
-        state.word.wordEtymology.getOrElse(selectedEtymologyTabIndex) { state.word.wordEtymology.last() }
-    val selectedPosIndex = state.selectedPosIndex
-    val selectedPos =
-        remember(selectedEtymology, selectedPosIndex) { selectedEtymology.words[selectedPosIndex] }
+    val selectedEtymology = remember(selectedEtymologyIndex) {
+        wordCombined.wordEtymology.getOrElse(selectedEtymologyIndex) {
+            wordCombined.wordEtymology.last()
+        }
+    }
 
-    var sensesExpanded = state.sensesExpanded
-    WordEffect(effect)
-
-    val listState = state.listState
-    val appBarState = state.appBarState
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(appBarState)
-
-    Scaffold(
-        topBar = {
-            LargeTopAppBar(
-                title = {
-                    TitleBar(
-                        "[D]etails",
-                        MaterialTheme.typography.displayLarge.fontSize
-                                * (1 - scrollBehavior.state.collapsedFraction)
-                            .coerceIn(0.6f, 1f)
-                    )
-                },
-                navigationIcon = {
-                    IconButton(routeManager::navigateBack) {
-                        Icon(
-                            Icons.Default.ArrowBack,
-                            contentDescription = Icons.Default.ArrowBack.name,
-                            tint = MaterialTheme.colorScheme.onPrimary
-                        )
-                    }
-                },
-                colors = TopAppBarDefaults.largeTopAppBarColors(containerColor = Color.Transparent),
-                scrollBehavior = scrollBehavior
-            )
-        },
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+    val selectedPos = remember(selectedEtymology, selectedPosIndex) {
+        selectedEtymology.words.getOrElse(selectedPosIndex) { selectedEtymology.words.last() }
+    }
+    Box(
+        Modifier
+            .gradientBackground()
+            .padding(insets)
     ) {
-        Box(
-            Modifier
-                .gradientBackground()
-                .padding(it)
+        BaseLazyColumn(
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            listState = listState()
         ) {
-            BaseLazyColumn(
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                listState = listState
-            ) {
 
-                if (state.word.wordEtymology.size > 1) {
-                    item {
-                        ScrollableTabRow(
-                            selectedEtymologyTabIndex,
-                            modifier = Modifier.fillMaxWidth(),
-                            containerColor = Color.Transparent,
-                            contentColor = MaterialTheme.colorScheme.onPrimary,
-                        ) {
-                            state.word.wordEtymology.fastForEachIndexed { index, _ ->
-                                Tab(
-                                    selected = selectedEtymologyTabIndex == index,
-                                    onClick = remember { { wordViewModel.selectEtymology(index) } },
-                                ) {
-                                    Text(
-                                        "Root ${index + 1}",
-                                        style = MaterialTheme.typography.titleMedium,
-                                        modifier = Modifier.padding(top = 10.dp, bottom = 20.dp)
-                                    )
-                                }
-                            }
-                        }
-                    }
-                }
-
+            if (wordCombined.wordEtymology.size > 1) {
                 item {
-                    DetailsWordCardMedium(
-                        {},
-                        {},
-                        { wordViewModel.onUpdateFavouritePressed(state.word) },
-                        modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
-                        word = selectedPos,
-                        bookmarked = state.word.isFavorite
-                    )
-                }
-
-                if (selectedEtymology.words.size > 1) {
-                    item {
-                        ScrollableTabRow(
-                            selectedPosIndex,
-                            modifier = Modifier.fillMaxWidth(),
-                            containerColor = Color.Transparent,
-                            contentColor = MaterialTheme.colorScheme.onPrimary
-                        ) {
-                            selectedEtymology.words.fastForEachIndexed { index, word ->
-                                Tab(
-                                    selected = selectedPosIndex == index,
-                                    onClick = remember { { wordViewModel.selectPos(index) } },
-                                ) {
-                                    Text(
-                                        word.pos,
-                                        style = MaterialTheme.typography.titleMedium,
-                                        modifier = Modifier.padding(top = 10.dp, bottom = 20.dp)
-                                    )
-                                }
-                            }
-                        }
-                    }
-                }
-
-                if (selectedPos.forms.isNotEmpty()) {
-                    item {
-                        FormsCard(FormsCardState(selectedPos.forms))
-                    }
-                }
-
-                item {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        SubtitleItemText("Senses", Modifier.weight(1f))
-                        if (selectedPos.senses.size > MINIMUM_SENSES_TO_COLLAPSE_COUNT) {
-                            TextButton({ sensesExpanded = !sensesExpanded }) {
+                    ScrollableTabRow(
+                        selectedEtymologyIndex,
+                        modifier = Modifier.fillMaxWidth(),
+                        containerColor = Color.Transparent,
+                        contentColor = MaterialTheme.colorScheme.onPrimary,
+                    ) {
+                        wordCombined.wordEtymology.fastForEachIndexed { index, _ ->
+                            Tab(
+                                selected = selectedEtymologyIndex == index,
+                                onClick = remember { { wordViewModel.selectEtymology(index) } },
+                            ) {
                                 Text(
-                                    text = if (sensesExpanded) "Collapse" else "Expand",
-                                    modifier = Modifier.padding(
-                                        vertical = 10.dp,
-                                        horizontal = 20.dp
-                                    ),
-                                    color = MaterialTheme.colorScheme.onPrimary,
-                                    style = MaterialTheme.typography.titleMedium
+                                    "Root ${index + 1}",
+                                    style = MaterialTheme.typography.titleMedium,
+                                    modifier = Modifier.padding(top = 10.dp, bottom = 20.dp)
                                 )
                             }
                         }
                     }
                 }
+            }
 
+            item {
+                DetailsWordCardMedium(
+                    remember { {} },
+                    remember { {} },
+                    remember { { wordViewModel.onUpdateFavouritePressed(wordCombined) } },
+                    modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
+                    word = selectedPos,
+                    bookmarked = wordCombined.isFavorite
+                )
+            }
+
+            if (selectedEtymology.words.size > 1) {
                 item {
-                    var revealed by remember {
-                        mutableStateOf(false)
-                    }
-                    StudyingCard(
-                        { revealed = !revealed},
-                        revealed = revealed,
-                        selectedPos,
-                        "ru",
-                        Modifier.fillMaxWidth()
-                            .padding(horizontal = 20.dp)
-                    )
-                }
-
-                items(selectedPos.senses.take(if (sensesExpanded) Int.MAX_VALUE else COLLAPSED_SENSES_COUNT)) { sense ->
-                    SenseTreeCard(
-                        sense,
-                        state.word.word,
-                        Forms(selectedPos.forms),
-                        modifier = Modifier.padding(horizontal = 20.dp).animateItemPlacement()
-                    )
-                }
-
-                if (selectedPos.senses.size > MINIMUM_SENSES_TO_COLLAPSE_COUNT) {
-                    item {
-                        TextButton(wordViewModel::onSenseExpand) {
-                            Text(
-                                text = if (sensesExpanded) "Collapse Senses" else "Expand Senses",
-                                modifier = Modifier.fillMaxWidth().padding(
-                                    vertical = 10.dp,
-                                    horizontal = 20.dp
-                                ),
-                                textAlign = TextAlign.Center,
-                                color = MaterialTheme.colorScheme.onPrimary,
-                                style = MaterialTheme.typography.titleMedium
-                            )
+                    ScrollableTabRow(
+                        selectedPosIndex,
+                        modifier = Modifier.fillMaxWidth(),
+                        containerColor = Color.Transparent,
+                        contentColor = MaterialTheme.colorScheme.onPrimary
+                    ) {
+                        selectedEtymology.words.fastForEachIndexed { index, word ->
+                            Tab(
+                                selected = selectedPosIndex == index,
+                                onClick = remember { { wordViewModel.selectPos(index) } },
+                            ) {
+                                Text(
+                                    word.pos,
+                                    style = MaterialTheme.typography.titleMedium,
+                                    modifier = Modifier.padding(top = 10.dp, bottom = 20.dp)
+                                )
+                            }
                         }
                     }
-                }
-
-                if (selectedPos.thesaurusAvailable) {
-                    item {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            SubtitleItemText("Thesaurus", Modifier.weight(1f))
-                        }
-                    }
-                    items(selectedPos.thesaurus) { item ->
-                        val relatedCardState =
-                            remember(selectedPos) { RelatedCardState(item.second) }
-                        RelatedCard(item.first, relatedCardState)
-                    }
-                }
-
-                item {
-                    Spacer(Modifier.height(80.dp))
                 }
             }
 
-            adMob.Banner(
-                AppKeys.BANNER_ID,
-                Modifier.fillMaxWidth()
-                    .align(Alignment.BottomCenter)
-            )
+            if (selectedPos.forms.isNotEmpty()) {
+                item {
+                    FormsCard { selectedPos.forms }
+                }
+            }
+
+            item {
+                SensesTitle(
+                    selectedPos,
+                    onExpandSenses,
+                    getSensesExpanded,
+                    remember { { selectedPos.senses.size > MINIMUM_SENSES_TO_COLLAPSE_COUNT } })
+            }
+
+            items(selectedPos.senses.take(if (sensesExpanded) Int.MAX_VALUE else COLLAPSED_SENSES_COUNT)) { sense ->
+                SenseTreeCard(
+                    remember { { sense } },
+                    remember { { wordCombined.word } },
+                    remember { { Forms(selectedPos.forms) } },
+                    modifier = Modifier.padding(horizontal = 20.dp).animateItemPlacement()
+                )
+            }
+
+            item {
+                if (selectedPos.senses.size > MINIMUM_SENSES_TO_COLLAPSE_COUNT) {
+                    SensesExpandButton(wordViewModel, getSensesExpanded)
+                }
+            }
+
+            if (selectedPos.thesaurusAvailable) {
+                item {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        SubtitleItemText("Thesaurus", Modifier.weight(1f))
+                    }
+                }
+                items(selectedPos.thesaurus) { item ->
+                    val relatedCardState =
+                        remember(selectedPos) { RelatedCardState(item.second) }
+                    RelatedCard(remember { { item.first } }, remember { { relatedCardState } })
+                }
+            }
+
+            item {
+                Spacer(Modifier.height(80.dp))
+            }
+        }
+
+        adMob.Banner(
+            AppKeys.BANNER_ID,
+            Modifier.fillMaxWidth()
+                .align(Alignment.BottomCenter)
+        )
+    }
+}
+
+@Composable
+private fun SensesExpandButton(
+    wordViewModel: WordViewModel,
+    sensesExpanded: () -> Boolean
+) {
+    TextButton(wordViewModel::onSenseExpand) {
+        Text(
+            text = if (sensesExpanded()) "Collapse Senses" else "Expand Senses",
+            modifier = Modifier.fillMaxWidth().padding(
+                vertical = 10.dp,
+                horizontal = 20.dp
+            ),
+            textAlign = TextAlign.Center,
+            color = MaterialTheme.colorScheme.onPrimary,
+            style = MaterialTheme.typography.titleMedium
+        )
+    }
+}
+
+@Composable
+private fun SensesTitle(
+    selectedPos: WordUi,
+    onExpandSenses: () -> Unit,
+    sensesExpanded: () -> Boolean,
+    sensesExpandable: () -> Boolean,
+) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        SubtitleItemText("Senses", Modifier.weight(1f))
+        if (sensesExpandable()) {
+            TextButton(onExpandSenses) {
+                Text(
+                    text = if (sensesExpanded()) "Collapse" else "Expand",
+                    modifier = Modifier.padding(
+                        vertical = 10.dp,
+                        horizontal = 20.dp
+                    ),
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    style = MaterialTheme.typography.titleMedium
+                )
+            }
         }
     }
 }

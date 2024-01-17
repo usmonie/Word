@@ -10,7 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.theapache64.rebugger.Rebugger
 import com.usmonie.word.features.ui.MenuItem
 import com.usmonie.word.features.ui.VerticalAnimatedVisibility
 
@@ -22,16 +21,6 @@ fun AboutMenuItems(
     onDonatePressed: () -> Unit,
     showAbout: () -> Boolean,
 ) {
-    Rebugger(
-        trackMap = mapOf(
-            "onAboutMenuItemPressed" to onAboutMenuItemPressed,
-            "onAboutDeveloperPressed" to onAboutDeveloperPressed,
-            "onTelegramPressed" to onTelegramPressed,
-            "onDonatePressed" to onDonatePressed,
-            "showAbout" to showAbout,
-        ),
-        composableName = "About"
-    )
     Column {
         AboutMenuItems(
             onAboutMenuItemPressed,

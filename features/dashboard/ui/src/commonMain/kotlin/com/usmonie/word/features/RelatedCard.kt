@@ -23,7 +23,9 @@ import wtf.word.core.domain.tools.fastForEach
 data class RelatedCardState(val related: List<RelatedUi>)
 
 @Composable
-fun RelatedCard(title: String, relatedState: RelatedCardState) {
+fun RelatedCard(getTitle: () -> String, getRelatedState: () -> RelatedCardState) {
+    val title = getTitle()
+    val relatedState = getRelatedState()
     val related by remember(relatedState) {
         derivedStateOf {
             relatedState.related

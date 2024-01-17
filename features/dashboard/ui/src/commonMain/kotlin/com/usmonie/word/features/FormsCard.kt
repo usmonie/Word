@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -19,14 +18,12 @@ import com.usmonie.word.features.models.FormUi
 import com.usmonie.word.features.ui.BaseCard
 import wtf.word.core.domain.tools.fastForEach
 
-@Immutable
-data class FormsCardState(val forms: List<FormUi>)
-
 @Composable
-fun FormsCard(formsState: FormsCardState) {
+fun FormsCard(getFormsState: () -> List<FormUi>) {
+    val formsState = getFormsState()
     val forms by remember(formsState) {
         derivedStateOf {
-            formsState.forms
+            formsState
                 .groupBy {
                     it.tags
                         .map { tag ->

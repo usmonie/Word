@@ -32,7 +32,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import com.theapache64.rebugger.Rebugger
 import com.usmonie.word.features.SearchWordCard
 import com.usmonie.word.features.models.WordCombinedUi
 import com.usmonie.word.features.models.WordUi
@@ -62,8 +61,6 @@ fun DashboardContent(
     }
     val localFocusManager = LocalFocusManager.current
 
-    val onPointerInput: () -> Unit = remember { { localFocusManager.clearFocus(true) } }
-
     DashboardContent(
         remember { { scrollBehavior } },
         viewModel,
@@ -79,7 +76,7 @@ fun DashboardContent(
                 else WordsState(words)
             }
         },
-        onPointerInput,
+        remember { { localFocusManager.clearFocus(true) } },
         remember { { state.query.text.isBlank() } },
         remember { { state.wordOfTheDay } },
         remember { { state.showRandomWord } },
@@ -111,28 +108,6 @@ private fun DashboardContent(
     adMob: AdMob
 ) {
     val localFocusManager = LocalFocusManager.current
-    Rebugger(
-        trackMap = mapOf(
-            "scrollBehavior" to scrollBehavior,
-            "viewModel" to viewModel,
-            "query" to query,
-            "hasFocus" to hasFocus,
-            "showRecentWords" to showRecentWords,
-            "recentSearchWords" to recentSearchWords,
-            "showLoading" to showLoading,
-            "foundWords" to foundWords,
-            "onPointerInput" to onPointerInput,
-            "showMenuItems" to showMenuItems,
-            "wordOfTheDay" to wordOfTheDay,
-            "showRandomWord" to showRandomWord,
-            "randomWord" to randomWord,
-            "showGames" to showGames,
-            "showAbout" to showAbout,
-            "adMob" to adMob,
-            "localFocusManager" to localFocusManager,
-        ),
-        composableName = "DashboardContentDeep"
-    )
     Scaffold(
         modifier = Modifier
             .nestedScroll(scrollBehavior().nestedScrollConnection),

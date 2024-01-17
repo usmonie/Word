@@ -26,7 +26,6 @@ class WordViewModel(
         extra.word,
         listState = listState,
         appBarState = appBarState,
-
     )
 ) {
 
@@ -47,7 +46,11 @@ class WordViewModel(
         is WordEvent.OpenWord -> this
         is WordEvent.UpdateWord -> this.copy(word = event.word)
         is WordEvent.SimilarWords -> this.copy(similarWords = ContentState.Success(event.words))
-        is WordEvent.SelectEtymology -> this.copy(selectedEtymologyIndex = event.index, selectedPosIndex = 0)
+        is WordEvent.SelectEtymology -> this.copy(
+            selectedEtymologyIndex = event.index,
+            selectedPosIndex = 0
+        )
+
         is WordEvent.SelectPos -> this.copy(selectedPosIndex = event.index)
         WordEvent.OnExpandSense -> this.copy(sensesExpanded = !sensesExpanded)
     }

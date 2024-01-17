@@ -3,6 +3,7 @@ package com.usmonie.word.features
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -38,33 +39,18 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.theapache64.rebugger.Rebugger
 import com.usmonie.word.features.models.ExampleUi
 import com.usmonie.word.features.models.Forms
 import com.usmonie.word.features.models.SenseCombinedUi
 import com.usmonie.word.features.ui.BaseCard
 import wtf.word.core.domain.tools.fastForEach
 
-
-@Composable
-fun SenseCard(
-    sense: SenseCombinedUi,
-    word: String,
-    forms: Forms,
-    modifier: Modifier = Modifier,
-    elevation: Dp = 2.dp
-) {
-    BaseCard(elevation, modifier) {
-        Spacer(Modifier.height(20.dp))
-        SenseTreeItem(sense, word, forms)
-        Spacer(Modifier.height(20.dp))
-    }
-}
-
 @Composable
 fun SenseTreeCard(
-    sense: SenseCombinedUi,
-    word: String,
-    forms: Forms,
+    sense: () -> SenseCombinedUi,
+    word: () -> String,
+    forms: () -> Forms,
     modifier: Modifier = Modifier,
     elevation: Dp = 2.dp
 ) {
@@ -76,7 +62,22 @@ fun SenseTreeCard(
 }
 
 @Composable
-private fun SenseTreeItem(sense: SenseCombinedUi, word: String, forms: Forms, deep: Int = 1) {
+private fun ColumnScope.SenseTreeItem(getSense: () -> SenseCombinedUi, getWord: () -> String, getForms: () -> Forms, deep: Int = 1) {
+    val sense = getSense()
+    val forms = getForms()
+    val word = getWord()
+    Rebugger(
+        trackMap = mapOf(
+            "getSense" to getSense,
+            "getWord" to getWord,
+            "getForms" to getForms,
+            "deep" to deep,
+            "sense" to sense,
+            "forms" to forms,
+            "word" to word,
+        ),
+        composableName = "SenseTreeItem"
+    )
     Sense(sense.gloss, modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp))
 
     sense.examples.fastForEach { example ->
@@ -93,7 +94,7 @@ private fun SenseTreeItem(sense: SenseCombinedUi, word: String, forms: Forms, de
             thickness = 4.dp,
         )
 
-        SenseTreeItem(senseCombined, word, forms, deep + 1)
+        SenseTreeItem({ senseCombined }, getWord, getForms, deep + 1)
     }
 }
 
