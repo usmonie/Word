@@ -39,7 +39,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.theapache64.rebugger.Rebugger
 import com.usmonie.word.features.models.ExampleUi
 import com.usmonie.word.features.models.Forms
 import com.usmonie.word.features.models.SenseCombinedUi
@@ -66,18 +65,6 @@ private fun ColumnScope.SenseTreeItem(getSense: () -> SenseCombinedUi, getWord: 
     val sense = getSense()
     val forms = getForms()
     val word = getWord()
-    Rebugger(
-        trackMap = mapOf(
-            "getSense" to getSense,
-            "getWord" to getWord,
-            "getForms" to getForms,
-            "deep" to deep,
-            "sense" to sense,
-            "forms" to forms,
-            "word" to word,
-        ),
-        composableName = "SenseTreeItem"
-    )
     Sense(sense.gloss, modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp))
 
     sense.examples.fastForEach { example ->

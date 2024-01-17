@@ -30,7 +30,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.theapache64.rebugger.Rebugger
 import com.usmonie.word.features.DetailsWordCardMedium
 import com.usmonie.word.features.FormsCard
 import com.usmonie.word.features.RelatedCard
@@ -74,16 +73,7 @@ class WordDetailsScreen(
 
         val appBarState = state.appBarState
         val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(appBarState)
-        Rebugger(
-            trackMap = mapOf(
-                "routeManager" to routeManager,
-                "state" to state,
-                "effect" to effect,
-                "appBarState" to appBarState,
-                "scrollBehavior" to scrollBehavior,
-            ),
-            composableName = "WordDetailsScreen"
-        )
+
         Scaffold(
             topBar = {
                 DashboardTopBar(
