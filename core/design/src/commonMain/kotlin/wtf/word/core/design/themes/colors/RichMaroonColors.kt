@@ -6,7 +6,7 @@ import wtf.word.core.design.themes.Colors
 object RichMaroonColors: Colors() {
     override val light_primary = Color(0xFF800000)
     override val light_onPrimary = Color(0xFFFFFFFF)
-    override val light_primaryContainer = light_primary
+    override val light_primaryContainer = Color(0xFF410000)
     override val light_onPrimaryContainer = Color(0xFF410000)
     override val light_secondary = Color(0xFF775651)
     override val light_onSecondary = Color(0xFFFFFFFF)

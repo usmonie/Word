@@ -1,5 +1,8 @@
 import org.gradle.api.internal.FeaturePreviews
 
+include(":benchmark")
+
+
 include(":baselineprofile")
 
 
@@ -16,6 +19,7 @@ pluginManagement {
         gradlePluginPortal()
         mavenCentral()
     }
+
 }
 
 dependencyResolutionManagement {

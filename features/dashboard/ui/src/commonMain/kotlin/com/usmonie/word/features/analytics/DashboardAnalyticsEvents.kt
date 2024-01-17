@@ -1,6 +1,6 @@
 package com.usmonie.word.features.analytics
 
-import com.usmonie.word.features.new.models.WordCombinedUi
+import com.usmonie.word.features.models.WordCombinedUi
 import wtf.word.core.domain.models.AnalyticsEvent
 
 sealed class DashboardAnalyticsEvents(key: String, data: EventData) : AnalyticsEvent(key, data) {

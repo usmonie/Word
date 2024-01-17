@@ -9,6 +9,7 @@ import SwiftUI
 import ComposeApp
 import GoogleMobileAds
 import AmplitudeSwift
+
 struct ComposeView: UIViewControllerRepresentable {
     let onShowAd: () -> Void
 
@@ -16,13 +17,13 @@ struct ComposeView: UIViewControllerRepresentable {
         var controller: UIViewController
         let amplitude: Amplitude
         #if DEBUG
-             amplitude = Amplitude(configuration: Configuration(
-                apiKey: "244f468ae1266bd4dbfb8fd739cdc87e"
-            ))
+        amplitude = Amplitude(configuration: Configuration(
+            apiKey: "244f468ae1266bd4dbfb8fd739cdc87e"
+        ))
         #else
-            amplitude = Amplitude(configuration: Configuration(
-                apiKey: "78f6281a02303905977f69718014b64f"
-            ))
+        amplitude = Amplitude(configuration: Configuration(
+            apiKey: "78f6281a02303905977f69718014b64f"
+        ))
         #endif
         controller = MainViewControllerKt.MainViewController(
             onViewDidLoad: {},

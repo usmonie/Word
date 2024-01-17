@@ -7,7 +7,7 @@ object BritishRacingGreenColors: Colors() {
 
     override val light_primary = Color(0xFF004225)
     override val light_onPrimary = Color(0xFFFFFFFF)
-    override val light_primaryContainer = light_primary
+    override val light_primaryContainer = Color(0xFF00391F)
     override val light_onPrimaryContainer = Color(0xFF002110)
     override val light_secondary = Color(0xFFA0401F)
     override val light_onSecondary = Color(0xFFFFFFFF)

@@ -7,15 +7,25 @@
 
 import SwiftUI
 import SwiftData
+import AppTrackingTransparency
 
 @main
 struct WordApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
      
+    @Environment(\.scenePhase) var scenePhase
 
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .onChange(of: scenePhase, perform: { newValue in
+                    if newValue == .active {
+                        print("active")
+                        ATTrackingManager.requestTrackingAuthorization { status in
+                            // do something
+                        }
+                    }
+                })
         }
     }
 }

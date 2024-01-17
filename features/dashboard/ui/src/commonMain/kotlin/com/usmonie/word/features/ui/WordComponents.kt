@@ -189,3 +189,21 @@ fun BaseCard(
         content = content
     )
 }
+
+@Composable
+fun BaseCard(
+    elevation: Dp = 2.dp,
+    modifier: Modifier = Modifier,
+    content: @Composable ColumnScope.() -> Unit
+) {
+    ElevatedCard(
+        modifier = modifier,
+        colors = CardDefaults.cardColors(disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant),
+        shape = RoundedCornerShape(16.dp),
+        elevation = CardDefaults.elevatedCardElevation(
+            defaultElevation = elevation,
+            pressedElevation = (-12).dp
+        ),
+        content = content
+    )
+}
