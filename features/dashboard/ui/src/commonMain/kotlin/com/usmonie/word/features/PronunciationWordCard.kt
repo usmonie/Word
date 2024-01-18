@@ -31,7 +31,7 @@ fun DetailsWordCardLarge(
     onLearnClicked: (WordUi) -> Unit,
     onBookmarkedClicked: (WordUi) -> Unit,
     word: WordUi,
-    bookmarked: Boolean,
+    bookmarked: () -> Boolean,
     modifier: Modifier = Modifier
 ) {
     BaseCard(
@@ -56,7 +56,7 @@ fun DetailsWordCardLarge(
             Spacer(Modifier.height(16.dp))
         }
 
-        Pronunciations(word, onAudioPlayClicked)
+        Pronunciations({ word }, onAudioPlayClicked)
         Spacer(Modifier.height(16.dp))
         WordCardButtons(
             { onLearnClicked(word) },
@@ -68,19 +68,16 @@ fun DetailsWordCardLarge(
     }
 }
 
-
 @Composable
 fun DetailsWordCardMedium(
     onAudioPlayClicked: (String) -> Unit,
     onLearnClicked: (WordUi) -> Unit,
     onBookmarkedClicked: (WordUi) -> Unit,
-    bookmarked: Boolean,
-    word: WordUi,
+    getBookmarked: () -> Boolean,
+    getWord: () -> WordUi,
     modifier: Modifier = Modifier
 ) {
-
-    var expanded by remember(word) { mutableStateOf(false) }
-    val maxLines by remember(expanded) { mutableStateOf(if (expanded) Int.MAX_VALUE else 3) }
+    val word = getWord()
     BaseCard(
         elevation = 4.dp,
         modifier = modifier,
@@ -92,12 +89,17 @@ fun DetailsWordCardMedium(
         WordCardButtons(
             { onLearnClicked(word) },
             { onBookmarkedClicked(word) },
-            bookmarked,
+            getBookmarked,
             modifier = Modifier.fillMaxWidth()
         )
 
         Spacer(Modifier.height(16.dp))
+
         if (word.etymologyText != null) {
+
+            var expanded by remember(word) { mutableStateOf(false) }
+            val maxLines by remember(expanded) { mutableStateOf(if (expanded) Int.MAX_VALUE else 3) }
+
             Column(Modifier
                 .fillMaxWidth()
                 .animateContentSize()
@@ -118,16 +120,17 @@ fun DetailsWordCardMedium(
 
         }
 
-        Pronunciations(word, onAudioPlayClicked)
+        Pronunciations(getWord, onAudioPlayClicked)
         Spacer(Modifier.height(20.dp))
     }
 }
 
 @Composable
 fun Pronunciations(
-    word: WordUi,
+    getWord: () -> WordUi,
     onAudioPlayClicked: (String) -> Unit
 ) {
+    val word = remember { getWord() }
     val sounds by remember(word) {
         derivedStateOf {
             word.sounds

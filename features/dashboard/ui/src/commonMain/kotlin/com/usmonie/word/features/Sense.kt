@@ -61,15 +61,21 @@ fun SenseTreeCard(
 }
 
 @Composable
-private fun ColumnScope.SenseTreeItem(getSense: () -> SenseCombinedUi, getWord: () -> String, getForms: () -> Forms, deep: Int = 1) {
-    val sense = getSense()
-    val forms = getForms()
-    val word = getWord()
-    Sense(sense.gloss, modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp))
+private fun ColumnScope.SenseTreeItem(
+    getSense: () -> SenseCombinedUi,
+    getWord: () -> String,
+    getForms: () -> Forms,
+    deep: Int = 1
+) {
+    val sense = remember { getSense() }
+    val gloss = remember(sense) {
+        sense.gloss
+    }
+    Sense(gloss, modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp))
 
     sense.examples.fastForEach { example ->
         Spacer(Modifier.height(8.dp))
-        ExampleItem(example, word, forms)
+        ExampleItem(remember { { example } }, getWord, getForms)
     }
 
     val deepWidth = deep / 5f
@@ -131,11 +137,14 @@ private fun SenseNumber(position: Int) {
 
 @Composable
 fun ExampleItem(
-    example: ExampleUi,
-    word: String,
-    forms: Forms,
+    getExample: () -> ExampleUi,
+    getWord: () -> String,
+    getForms: () -> Forms,
     modifier: Modifier = Modifier
 ) {
+    val example = getExample()
+    val word = getWord()
+    val forms = getForms()
     val bodyMedium = MaterialTheme.typography.bodyMedium
     val bodyLarge = MaterialTheme.typography.bodyLarge
     val onSurfaceColor = MaterialTheme.colorScheme.onSurface

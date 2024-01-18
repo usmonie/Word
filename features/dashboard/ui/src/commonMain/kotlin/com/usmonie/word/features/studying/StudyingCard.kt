@@ -171,5 +171,5 @@ fun DescriptionText(description: String, modifier: Modifier = Modifier) {
 
 @Composable
 fun Example(example: ExampleUi, word: String, forms: Forms, modifier: Modifier = Modifier) {
-    ExampleItem(example, word, forms, modifier)
+    ExampleItem({ example }, { word }, { forms }, modifier)
 }

@@ -22,7 +22,7 @@ fun LazyListScope.wordsCardsList(
             onShareWordPressed,
             {},
 //            onSynonymPressed,
-            wordCombined = word,
+            getWordCombined = { word },
             modifier = cardModifier
         )
     }

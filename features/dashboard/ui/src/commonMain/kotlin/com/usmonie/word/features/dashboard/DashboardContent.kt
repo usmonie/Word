@@ -199,7 +199,7 @@ private fun ListContent(
                     remember { {} },
                     viewModel::onUpdateFavouritesPressed,
                     remember { {} },
-                    wordCombined,
+                    remember { { wordCombined } },
                     Modifier.fillMaxWidth()
                         .padding(horizontal = 20.dp, vertical = 8.dp)
                         .animateItemPlacement(),

@@ -102,7 +102,7 @@ fun NavigationHost(
                 screen.Content()
             } else {
                 AnimationScreen(
-                    screen,
+                    { screen },
                     enterTransition,
                     exitTransition,
                     modifier.matchParentSize()
@@ -114,11 +114,12 @@ fun NavigationHost(
 
 @Composable
 private fun AnimationScreen(
-    currentScreen: Screen,
+    getCurrentScreen: () -> Screen,
     enterTransition: AnimatedContentTransitionScope<Screen>.() -> EnterTransition,
     exitTransition: AnimatedContentTransitionScope<Screen>.() -> ExitTransition,
     modifier: Modifier
 ) {
+    val currentScreen = getCurrentScreen()
     val zIndices = remember { mutableMapOf<String, Float>() }
     val transition = updateTransition(currentScreen, label = "entry")
     transition.AnimatedContent(

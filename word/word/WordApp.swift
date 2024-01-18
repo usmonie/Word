@@ -20,7 +20,6 @@ struct WordApp: App {
             ContentView()
                 .onChange(of: scenePhase, perform: { newValue in
                     if newValue == .active {
-                        print("active")
                         ATTrackingManager.requestTrackingAuthorization { status in
                             // do something
                         }

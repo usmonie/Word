@@ -28,9 +28,10 @@ fun SearchWordCard(
     onLearnClick: (WordCombinedUi) -> Unit,
     onBookmarkClick: (WordCombinedUi) -> Unit,
     onPlayClick: (SoundUi) -> Unit,
-    wordCombined: WordCombinedUi,
+    getWordCombined: () -> WordCombinedUi,
     modifier: Modifier = Modifier
 ) {
+    val wordCombined = getWordCombined()
     val (selectedEtymologyTabIndex, onSelectedTab) = remember(wordCombined.word) { mutableStateOf(0) }
     val selectedEtymology = wordCombined.wordEtymology[selectedEtymologyTabIndex]
     val (selectedPosIndex, onSelectedPos) = remember(
@@ -53,7 +54,7 @@ fun SearchWordCard(
         WordCardButtons(
             { onLearnClick(wordCombined) },
             { onBookmarkClick(wordCombined) },
-            wordCombined.isFavorite,
+            { wordCombined.isFavorite },
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(Modifier.height(16.dp))
@@ -99,7 +100,7 @@ fun SearchWordCard(
             Spacer(Modifier.height(16.dp))
         }
 
-        Pronunciations(selectedPos, {})
+        Pronunciations({ selectedPos }, {})
         Spacer(Modifier.height(16.dp))
 
         if (selectedEtymology.words.size > 1) {

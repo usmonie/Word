@@ -33,7 +33,7 @@ import org.jetbrains.compose.resources.painterResource
 fun WordCardButtons(
     onLearnPressed: () -> Unit,
     onBookmark: () -> Unit,
-    bookmarked: Boolean,
+    bookmarked: () -> Boolean,
     learningEnabled: Boolean = false,
     modifier: Modifier = Modifier
 ) {
@@ -47,7 +47,7 @@ fun WordCardButtons(
             LearnButton(onLearnPressed)
             Spacer(Modifier.width(24.dp))
         }
-        BookmarkButton(onBookmark, bookmarked, modifier = Modifier)
+        BookmarkButton(onBookmark, bookmarked(), modifier = Modifier)
     }
 }
 

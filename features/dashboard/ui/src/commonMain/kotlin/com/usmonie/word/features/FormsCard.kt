@@ -18,6 +18,8 @@ import com.usmonie.word.features.models.FormUi
 import com.usmonie.word.features.ui.BaseCard
 import wtf.word.core.domain.tools.fastForEach
 
+private val formsModifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp)
+
 @Composable
 fun FormsCard(getFormsState: () -> List<FormUi>) {
     val formsState = getFormsState()
@@ -26,10 +28,8 @@ fun FormsCard(getFormsState: () -> List<FormUi>) {
             formsState
                 .groupBy {
                     it.tags
-                        .map { tag ->
-                            tag.replaceFirstChar { c -> c.uppercaseChar() }
-                        }
                         .lastOrNull()
+                        ?.replaceFirstChar { c -> c.uppercaseChar() }
                 }
                 .mapValues { item ->
                     item.value.asSequence()
@@ -40,10 +40,10 @@ fun FormsCard(getFormsState: () -> List<FormUi>) {
                 .toList()
         }
     }
-    BaseCard(modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp)) {
+    BaseCard(modifier = formsModifier) {
         TitleUiComponent(
             "Forms",
-            Modifier.fillMaxWidth().padding(horizontal = 20.dp).padding(top = 20.dp),
+            formsModifier.padding(top = 20.dp),
             MaterialTheme.colorScheme.onSurface
         )
 

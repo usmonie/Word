@@ -58,7 +58,7 @@ fun WordOfTheDayCard(
                 WordCardButtons(
                     { onLearnClick(wordState.data.second) },
                     { onBookmarkClick(wordState.data.second) },
-                    wordState.data.second.isFavorite,
+                    { wordState.data.second.isFavorite },
                     modifier = Modifier.fillMaxWidth()
                 )
                 Spacer(Modifier.height(24.dp))

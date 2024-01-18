@@ -67,10 +67,6 @@ class WordDetailsScreen(
     override fun Content() {
         val routeManager = LocalRouteManager.current
         val state by wordViewModel.state.collectAsState()
-        val effect by wordViewModel.effect.collectAsState(null)
-
-        WordEffect(effect)
-
         val appBarState = state.appBarState
         val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(appBarState)
 
@@ -84,6 +80,11 @@ class WordDetailsScreen(
             },
             modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
         ) { insets ->
+
+            val effect by wordViewModel.effect.collectAsState(null)
+
+            WordEffect(effect)
+
             WordDetailsContent(
                 insets,
                 { state.listState },
@@ -178,17 +179,12 @@ private fun WordDetailsContent(
                         containerColor = Color.Transparent,
                         contentColor = MaterialTheme.colorScheme.onPrimary,
                     ) {
-                        wordCombined.wordEtymology.fastForEachIndexed { index, _ ->
-                            Tab(
-                                selected = selectedEtymologyIndex == index,
-                                onClick = remember { { wordViewModel.selectEtymology(index) } },
-                            ) {
-                                Text(
-                                    "Root ${index + 1}",
-                                    style = MaterialTheme.typography.titleMedium,
-                                    modifier = Modifier.padding(top = 10.dp, bottom = 20.dp)
-                                )
-                            }
+                        wordCombined.wordEtymology.fastForEachIndexed { index, word ->
+                            TabItem(
+                                { selectedEtymologyIndex == index },
+                                remember { { wordViewModel.selectEtymology(index) } },
+                                "Root ${index + 1}"
+                            )
                         }
                     }
                 }
@@ -200,8 +196,8 @@ private fun WordDetailsContent(
                     remember { {} },
                     remember { { wordViewModel.onUpdateFavouritePressed(wordCombined) } },
                     modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
-                    word = selectedPos,
-                    bookmarked = wordCombined.isFavorite
+                    getWord = { selectedPos },
+                    getBookmarked = { wordCombined.isFavorite }
                 )
             }
 
@@ -214,16 +210,11 @@ private fun WordDetailsContent(
                         contentColor = MaterialTheme.colorScheme.onPrimary
                     ) {
                         selectedEtymology.words.fastForEachIndexed { index, word ->
-                            Tab(
-                                selected = selectedPosIndex == index,
-                                onClick = remember { { wordViewModel.selectPos(index) } },
-                            ) {
-                                Text(
-                                    word.pos,
-                                    style = MaterialTheme.typography.titleMedium,
-                                    modifier = Modifier.padding(top = 10.dp, bottom = 20.dp)
-                                )
-                            }
+                            TabItem(
+                                { selectedPosIndex == index },
+                                remember { { wordViewModel.selectPos(index) } },
+                                word.pos
+                            )
                         }
                     }
                 }
@@ -240,7 +231,8 @@ private fun WordDetailsContent(
                     selectedPos,
                     onExpandSenses,
                     getSensesExpanded,
-                    remember { { selectedPos.senses.size > MINIMUM_SENSES_TO_COLLAPSE_COUNT } })
+                    remember { { selectedPos.senses.size > MINIMUM_SENSES_TO_COLLAPSE_COUNT } }
+                )
             }
 
             items(selectedPos.senses.take(if (sensesExpanded) Int.MAX_VALUE else COLLAPSED_SENSES_COUNT)) { sense ->
@@ -250,12 +242,6 @@ private fun WordDetailsContent(
                     remember { { Forms(selectedPos.forms) } },
                     modifier = Modifier.padding(horizontal = 20.dp).animateItemPlacement()
                 )
-            }
-
-            item {
-                if (selectedPos.senses.size > MINIMUM_SENSES_TO_COLLAPSE_COUNT) {
-                    SensesExpandButton(wordViewModel, getSensesExpanded)
-                }
             }
 
             if (selectedPos.thesaurusAvailable) {
@@ -285,11 +271,29 @@ private fun WordDetailsContent(
 }
 
 @Composable
+private fun TabItem(
+    isSelected: () -> Boolean,
+    onClick: () -> Unit,
+    title: String,
+) {
+    Tab(
+        selected = isSelected(),
+        onClick = onClick,
+    ) {
+        Text(
+            title,
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.padding(top = 10.dp, bottom = 20.dp)
+        )
+    }
+}
+
+@Composable
 private fun SensesExpandButton(
-    wordViewModel: WordViewModel,
+    onExpandSenses: () -> Unit,
     sensesExpanded: () -> Boolean
 ) {
-    TextButton(wordViewModel::onSenseExpand) {
+    TextButton(onExpandSenses) {
         Text(
             text = if (sensesExpanded()) "Collapse Senses" else "Expand Senses",
             modifier = Modifier.fillMaxWidth().padding(
