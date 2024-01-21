@@ -23,12 +23,12 @@ import wtf.word.core.domain.Analytics
 import wtf.word.core.domain.tools.fastMap
 
 @Immutable
-class FavouritesViewModel constructor(
+class FavouritesViewModel(
     private val updateFavouriteUseCase: UpdateFavouriteUseCase,
     private val getAllFavouritesUseCase: GetAllFavouritesUseCase,
     private val analytics: Analytics,
-    private val listState: LazyListState = LazyListState(0, 0),
-    private val appBarState: TopAppBarState = TopAppBarState(-Float.MAX_VALUE, 0f, 0f),
+    listState: LazyListState = LazyListState(0, 0),
+    appBarState: TopAppBarState = TopAppBarState(-Float.MAX_VALUE, 0f, 0f),
 ) : BaseViewModel<FavoritesState, FavoritesAction, FavoritesEvent, FavoritesEffect>(
     FavoritesState.Loading(listState, appBarState),
 ) {

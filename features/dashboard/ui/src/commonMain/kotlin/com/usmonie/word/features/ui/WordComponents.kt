@@ -63,7 +63,12 @@ fun LargeResizableTitle(word: String, modifier: Modifier = Modifier, color: Colo
 }
 
 @Composable
-fun WordLargeResizableTitle(word: String, modifier: Modifier = Modifier) {
+fun WordLargeResizableTitle(
+    word: String,
+    modifier: Modifier = Modifier,
+    textAlign: TextAlign = TextAlign.Center,
+    color: Color = MaterialTheme.colorScheme.onSurface
+) {
     val defaultTextStyle = MaterialTheme.typography.displayMedium
     var readyToDraw by remember(word) { mutableStateOf(false) }
     var defaultTextSize by remember { mutableStateOf(defaultTextStyle.fontSize) }
@@ -72,9 +77,9 @@ fun WordLargeResizableTitle(word: String, modifier: Modifier = Modifier) {
     Text(
         word,
         style = defaultTextStyle,
-        textAlign = TextAlign.Center,
+        textAlign = textAlign,
         fontSize = defaultTextSize,
-        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        color = color,
         modifier = modifier.drawWithContent { if (readyToDraw) drawContent() },
         maxLines = maxLines,
         overflow = TextOverflow.Ellipsis,

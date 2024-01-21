@@ -42,7 +42,7 @@ import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.models.ExampleUi
 import com.usmonie.word.features.models.Forms
 import com.usmonie.word.features.models.SenseCombinedUi
-import com.usmonie.word.features.ui.BaseCard
+import com.usmonie.word.features.new.ui.BaseCard
 import wtf.word.core.domain.tools.fastForEach
 
 @Composable
@@ -51,9 +51,8 @@ fun SenseTreeCard(
     word: () -> String,
     forms: () -> Forms,
     modifier: Modifier = Modifier,
-    elevation: Dp = 2.dp
 ) {
-    BaseCard(elevation, modifier) {
+    BaseCard(modifier) {
         Spacer(Modifier.height(20.dp))
         SenseTreeItem(sense, word, forms)
         Spacer(Modifier.height(20.dp))

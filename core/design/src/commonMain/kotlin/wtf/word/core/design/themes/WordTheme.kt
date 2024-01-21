@@ -33,8 +33,13 @@ fun WordTheme(
     useDarkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit,
 ) {
+    val theme = if (useDarkTheme) {
+        wordColors.colors.darkColorScheme()
+    } else {
+        wordColors.colors.lightColorScheme()
+    }
     MaterialTheme(
-        wordColors.colors.lightColorScheme(),
+        theme,
         typography = typography.typography(),
         content = content
     )

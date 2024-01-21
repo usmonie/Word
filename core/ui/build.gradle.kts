@@ -11,6 +11,9 @@ commonDependencies {
     api(projects.core.design)
     api(projects.compass.core)
     api("io.github.theapache64:rebugger:1.0.0-rc02")
+
+    api("dev.icerock.moko:resources:0.23.0")
+    api("dev.icerock.moko:resources-compose:0.23.0")
 }
 
 android {

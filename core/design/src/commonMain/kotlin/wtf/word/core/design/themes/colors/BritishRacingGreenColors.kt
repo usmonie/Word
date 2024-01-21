@@ -30,7 +30,7 @@ object BritishRacingGreenColors: Colors() {
     override val light_surfaceTint = Color(0xFF006D40)
     override val light_outlineVariant = Color(0xFFD0C5B4)
     override val light_scrim = Color(0xFF000000)
-    override val light_surface = Color(0xFFF8FAF5)
+    override val light_surface = Color(0xffe5e8db)
     override val light_onSurface = Color(0xFF191C1A)
     override val light_surfaceVariant = Color(0xFFECE1CF)
     override val light_onSurfaceVariant = Color(0xFF4D4639)

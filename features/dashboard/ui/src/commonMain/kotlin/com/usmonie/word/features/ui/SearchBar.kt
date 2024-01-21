@@ -77,6 +77,13 @@ fun SearchBar(
                     }
                 }
             },
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedTextColor = MaterialTheme.colorScheme.onBackground,
+            unfocusedTextColor = MaterialTheme.colorScheme.onBackground,
+            focusedBorderColor = Color.Transparent,
+            unfocusedBorderColor = Color.Transparent,
+            disabledBorderColor = Color.Transparent,
+        ),
         textStyle = MaterialTheme.typography.displayLarge.copy(fontSize = size),
         placeholder = {
 //            val placeholderAlphaAnimation by animateFloatAsState(if (hasFocus) .5f else 1f)
@@ -84,10 +91,13 @@ fun SearchBar(
                 placeholder,
                 style = MaterialTheme.typography.displayLarge,
                 fontSize = size,
-                color = MaterialTheme.colorScheme.onPrimary.copy(alpha = if (hasFocus()) .5f else 1f)
+                color = MaterialTheme.colorScheme.onBackground.copy(alpha = if (hasFocus()) .5f else 1f)
             )
         },
-        keyboardActions = KeyboardActions { focusRequester.freeFocus() },
+        keyboardActions = KeyboardActions {
+            focusRequester.freeFocus()
+            onFocusChange(false)
+        },
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
     )
 }

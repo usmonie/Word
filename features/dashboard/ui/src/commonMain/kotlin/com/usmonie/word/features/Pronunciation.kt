@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 fun PronunciationTitle() {
     TitleUiComponent(
         "Pronunciation",
-        Modifier.padding(horizontal = 20.dp),
+        Modifier.padding(horizontal = 24.dp),
         color = MaterialTheme.colorScheme.onSurface,
     )
 }
@@ -60,13 +60,13 @@ fun PronunciationItem(
         val showPlayButton = audio != null
         Text(
             text,
-            Modifier.padding(start = 20.dp, end = if (showPlayButton) 12.dp else 20.dp).weight(1f)
+            Modifier.padding(start = 24.dp, end = if (showPlayButton) 12.dp else 24.dp).weight(1f)
         )
 
         if (showPlayButton) {
             IconButton(
                 onPlayClick,
-                modifier = Modifier.padding(end = 20.dp).size(24.dp)
+                modifier = Modifier.padding(end = 24.dp).size(24.dp)
             ) {
                 Icon(
                     Icons.Default.PlayArrow,

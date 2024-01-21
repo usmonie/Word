@@ -13,6 +13,7 @@ plugins {
         alias(detekt) apply false
         alias(realm) apply false
         id("com.google.firebase.crashlytics") version "2.9.9" apply false
+//        id("dev.icerock.mobile.multiplatform-resources") apply false
     }
 }
 

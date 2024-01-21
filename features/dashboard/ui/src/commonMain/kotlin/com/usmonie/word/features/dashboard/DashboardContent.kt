@@ -19,7 +19,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,7 +36,6 @@ import com.usmonie.word.features.models.WordCombinedUi
 import com.usmonie.word.features.models.WordUi
 import com.usmonie.word.features.ui.AdMob
 import com.usmonie.word.features.ui.BaseLazyColumn
-import com.usmonie.word.features.ui.DashboardTopBar
 import com.usmonie.word.features.ui.GradientBox
 import com.usmonie.word.features.ui.MenuItem
 import com.usmonie.word.features.ui.VerticalAnimatedVisibility
@@ -54,11 +52,6 @@ fun DashboardContent(
     val state by viewModel.state.collectAsState()
     val hasFocus = remember { mutableStateOf(false) }
 
-    val focused by remember(hasFocus.value) {
-        derivedStateOf {
-            hasFocus.value
-        }
-    }
     val localFocusManager = LocalFocusManager.current
 
     DashboardContent(
@@ -66,7 +59,7 @@ fun DashboardContent(
         viewModel,
         remember { { state.query } },
         hasFocus,
-        remember { { focused && state.recentSearch.isNotEmpty } },
+        remember { { hasFocus.value && state.recentSearch.isNotEmpty } },
         remember { { state.recentSearch } },
         remember { { state.foundWords is ContentState.Loading && state.query.text.isNotBlank() } },
         remember {
@@ -112,15 +105,15 @@ private fun DashboardContent(
         modifier = Modifier
             .nestedScroll(scrollBehavior().nestedScrollConnection),
         topBar = {
-            DashboardTopBar(
-                viewModel::onBackClick,
-                viewModel::onQueryChanged,
-                true,
-                "[S]earch",
-                query,
-                hasFocus,
-                scrollBehavior
-            )
+//            WordTopBar(
+//                viewModel::onBackClick,
+//                viewModel::onQueryChanged,
+//                true,
+//                "[S]earch",
+//                query,
+//                hasFocus,
+//                scrollBehavior
+//            )
         },
     ) { insets ->
         ListContent(
@@ -169,6 +162,10 @@ private fun ListContent(
         localFocusManager.clearFocus()
     }
     val showMenuItems = onShowMenuItems()
+
+    LaunchedEffect(showRecentWords()) {
+        listState.scrollToItem(0)
+    }
     GradientBox(
         modifier.fillMaxSize(),
         insets = PaddingValues(

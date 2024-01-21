@@ -23,7 +23,7 @@ fun EtymologyCard(etymology: String, modifier: Modifier = Modifier) {
             textAlign = TextAlign.Justify,
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.padding(horizontal = 20.dp),
+            modifier = Modifier.padding(horizontal = 24.dp),
             overflow = TextOverflow.Ellipsis
         )
         Spacer(Modifier.height(20.dp))
@@ -34,7 +34,7 @@ fun EtymologyCard(etymology: String, modifier: Modifier = Modifier) {
 fun EtymologyTitle() {
     TitleUiComponent(
         "Etymology",
-        Modifier.padding(horizontal = 20.dp),
+        Modifier.padding(horizontal = 24.dp),
         color = MaterialTheme.colorScheme.onSurface,
     )
 }

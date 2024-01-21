@@ -15,7 +15,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.models.FormUi
-import com.usmonie.word.features.ui.BaseCard
+import com.usmonie.word.features.new.ui.BaseCard
 import wtf.word.core.domain.tools.fastForEach
 
 private val formsModifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp)

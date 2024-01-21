@@ -1,11 +1,10 @@
 package com.usmonie.word.features.favorites
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -26,9 +25,8 @@ import com.usmonie.word.features.dashboard.domain.usecase.UpdateFavouriteUseCase
 import com.usmonie.word.features.details.WordDetailsScreen
 import com.usmonie.word.features.ui.AdMob
 import com.usmonie.word.features.ui.BaseLazyColumn
-import com.usmonie.word.features.ui.DashboardTopBar
 import com.usmonie.word.features.ui.EmptyItem
-import com.usmonie.word.features.ui.GradientBox
+import com.usmonie.word.features.ui.WordTopBar
 import wtf.speech.compass.core.Extra
 import wtf.speech.compass.core.LocalRouteManager
 import wtf.speech.compass.core.RouteManager
@@ -84,7 +82,7 @@ private fun FavoritesContent(
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(state.appBarState)
     Scaffold(
         topBar = {
-            DashboardTopBar(
+            WordTopBar(
                 routeManager::navigateBack,
                 "[F]avorites",
                 { true },
@@ -107,18 +105,20 @@ private fun FavoritesContent(
 ) {
     val insets = getInsets()
     val listState = getListState()
-    GradientBox(
-        Modifier.fillMaxSize(),
-        insets = PaddingValues(
-            start = insets.calculateLeftPadding(LayoutDirection.Ltr),
-            end = insets.calculateRightPadding(LayoutDirection.Ltr),
-            top = insets.calculateTopPadding()
-        )
+    Box(
+        Modifier.fillMaxSize()
+            .padding(
+                PaddingValues(
+                    start = insets.calculateLeftPadding(LayoutDirection.Ltr),
+                    end = insets.calculateRightPadding(LayoutDirection.Ltr),
+                    top = insets.calculateTopPadding()
+                )
+            )
     ) {
         BaseLazyColumn(
             listState,
-            contentPadding = PaddingValues(bottom = insets.calculateBottomPadding()),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            contentPadding = PaddingValues(bottom = insets.calculateBottomPadding() + 80.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
 
             when (val s = getState()) {
@@ -141,8 +141,6 @@ private fun FavoritesContent(
 
                 is FavoritesState.Loading -> Unit
             }
-
-            item { Spacer(Modifier.height(80.dp)) }
         }
         adMob.Banner(
             AppKeys.BANNER_ID,

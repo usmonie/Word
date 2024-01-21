@@ -20,7 +20,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.models.WordUi
-import com.usmonie.word.features.ui.BaseCard
+import com.usmonie.word.features.new.ui.BaseCard
+import com.usmonie.word.features.new.ui.WordButtons
 import com.usmonie.word.features.ui.WordLargeResizableTitle
 import com.usmonie.word.features.ui.WordMediumResizableTitle
 import wtf.word.core.domain.tools.fastForEachIndexed
@@ -36,7 +37,6 @@ fun DetailsWordCardLarge(
 ) {
     BaseCard(
         {},
-        elevation = 4.dp,
         modifier = modifier
     ) {
         Spacer(Modifier.height(32.dp))
@@ -79,21 +79,18 @@ fun DetailsWordCardMedium(
 ) {
     val word = getWord()
     BaseCard(
-        elevation = 4.dp,
         modifier = modifier,
     ) {
         Spacer(Modifier.height(20.dp))
-        WordMediumResizableTitle(word.word, Modifier.fillMaxWidth().padding(horizontal = 20.dp))
-        Spacer(Modifier.height(16.dp))
+        WordMediumResizableTitle(word.word, Modifier.fillMaxWidth().padding(horizontal = 24.dp))
 
-        WordCardButtons(
+        WordButtons(
             { onLearnClicked(word) },
             { onBookmarkedClicked(word) },
+            {},
             getBookmarked,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp)
         )
-
-        Spacer(Modifier.height(16.dp))
 
         if (word.etymologyText != null) {
 
@@ -112,7 +109,7 @@ fun DetailsWordCardMedium(
                     maxLines = maxLines,
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.padding(horizontal = 20.dp),
+                    modifier = Modifier.padding(horizontal = 24.dp),
                     overflow = TextOverflow.Ellipsis
                 )
                 Spacer(Modifier.height(16.dp))
@@ -121,7 +118,7 @@ fun DetailsWordCardMedium(
         }
 
         Pronunciations(getWord, onAudioPlayClicked)
-        Spacer(Modifier.height(20.dp))
+        Spacer(Modifier.height(24.dp))
     }
 }
 

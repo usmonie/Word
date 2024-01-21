@@ -55,7 +55,6 @@ fun FlipBaseCard(
         )
     )
 
-
     ElevatedCard(
         onClick = { onClick(cardFace) },
         modifier = modifier.graphicsLayer {

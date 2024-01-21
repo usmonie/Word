@@ -13,10 +13,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,36 +24,42 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-fun DashboardTopBar(
+fun WordTopBar(
     onBackClick: () -> Unit,
     onQueryChanged: (TextFieldValue) -> Unit,
     enabled: Boolean,
     placeholder: String,
     query: () -> TextFieldValue,
-    hasFocus: MutableState<Boolean>,
+    hasFocus: () -> Boolean,
+    onFocusChange: (Boolean) -> Unit,
     getScrollBehavior: () -> TopAppBarScrollBehavior
 ) {
     val scrollBehavior = getScrollBehavior()
-    val searchBarFontSizeMax = MaterialTheme.typography.displayLarge.fontSize
-    val fontSize by remember(scrollBehavior.state.collapsedFraction) {
-        derivedStateOf {
-            searchBarFontSizeMax * (1 - scrollBehavior.state.collapsedFraction).coerceIn(0.6f, 1f)
-        }
-    }
+
     LargeTopAppBar(
         title = {
+            val searchBarFontSizeMax = MaterialTheme.typography.displayMedium.fontSize
+            val fontSize by remember(scrollBehavior.state.collapsedFraction) {
+                derivedStateOf {
+                    searchBarFontSizeMax * (1 - scrollBehavior.state.collapsedFraction).coerceIn(
+                        0.7f,
+                        1f
+                    )
+                }
+            }
             SearchTopBar(
                 query,
                 placeholder,
                 enabled,
                 { fontSize },
                 onQueryChanged,
-                hasFocus
+                onFocusChange,
+                hasFocus,
             )
         },
         navigationIcon = { NavigationBack({ query().text.isNotEmpty() }, onBackClick) },
         colors = TopAppBarDefaults.largeTopAppBarColors(
-            containerColor = Color.Transparent
+            containerColor = MaterialTheme.colorScheme.background
         ),
         scrollBehavior = scrollBehavior
     )
@@ -63,29 +67,33 @@ fun DashboardTopBar(
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-fun DashboardTopBar(
+fun WordTopBar(
     onBackClick: () -> Unit,
     placeholder: String,
     showNavigationBack: () -> Boolean,
     getScrollBehavior: () -> TopAppBarScrollBehavior
 ) {
     val scrollBehavior = getScrollBehavior()
-    val query = remember { TextFieldValue() }
-    val searchBarFontSizeMax = MaterialTheme.typography.displayLarge.fontSize
-    val fontSize by remember(scrollBehavior.state.collapsedFraction) {
-        derivedStateOf {
-            searchBarFontSizeMax * (1 - scrollBehavior.state.collapsedFraction).coerceIn(0.6f, 1f)
-        }
-    }
     LargeTopAppBar(
         title = {
+            val query = remember { TextFieldValue() }
+            val searchBarFontSizeMax = MaterialTheme.typography.displayMedium.fontSize
+            val fontSize by remember(scrollBehavior.state.collapsedFraction) {
+                derivedStateOf {
+                    searchBarFontSizeMax * (1 - scrollBehavior.state.collapsedFraction).coerceIn(
+                        0.7f,
+                        1f
+                    )
+                }
+            }
             SearchTopBar(
                 { query },
                 placeholder,
                 false,
-                { fontSize },
-                { },
-                remember { mutableStateOf(false) }
+                remember { { fontSize } },
+                remember { {} },
+                remember { {} },
+                remember { { false } }
             )
         },
         navigationIcon = { NavigationBack(showNavigationBack, onBackClick) },
@@ -104,16 +112,18 @@ private fun SearchTopBar(
     enabled: Boolean,
     fontSize: () -> TextUnit,
     onQueryChanged: (TextFieldValue) -> Unit,
-    hasFocus: MutableState<Boolean>,
+    onFocusChange: (Boolean) -> Unit,
+    hasFocus: () -> Boolean,
 ) {
     TopBar(
         query,
         placeholder,
         onQueryChanged,
         enabled,
-        hasFocus.value,
-        fontSize
-    ) { hasFocus.value = it }
+        hasFocus,
+        fontSize,
+        onFocusChange
+    )
 }
 
 @Composable
@@ -122,7 +132,7 @@ private fun TopBar(
     placeholder: String,
     onQueryChanged: (TextFieldValue) -> Unit,
     enabled: Boolean,
-    hasFocus: Boolean,
+    hasFocus: () -> Boolean,
     fontSize: () -> TextUnit,
     onFocusChange: (Boolean) -> Unit
 ) {
@@ -130,8 +140,8 @@ private fun TopBar(
         onQueryChanged,
         placeholder = placeholder,
         query = query,
-        modifier = Modifier.offset(x = (-16).dp).fillMaxWidth(),
-        hasFocus = { hasFocus },
+        modifier = Modifier.offset(x = (-12).dp).fillMaxWidth(),
+        hasFocus = hasFocus,
         enabled = enabled,
         fontSize = fontSize,
         onFocusChange = onFocusChange,
@@ -152,6 +162,6 @@ private fun NavigationBackIcon() {
     Icon(
         Icons.Default.ArrowBack,
         contentDescription = Icons.Default.ArrowBack.name,
-        tint = MaterialTheme.colorScheme.onPrimary
+        tint = MaterialTheme.colorScheme.onBackground
     )
 }

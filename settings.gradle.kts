@@ -20,6 +20,9 @@ pluginManagement {
         mavenCentral()
     }
 
+    plugins {
+        id("dev.icerock.moko.resources-generator") version "0.23.0" apply false
+    }
 }
 
 dependencyResolutionManagement {

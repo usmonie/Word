@@ -5,9 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
@@ -37,14 +35,13 @@ import com.usmonie.word.features.RelatedCardState
 import com.usmonie.word.features.SenseTreeCard
 import com.usmonie.word.features.dashboard.domain.repository.WordRepository
 import com.usmonie.word.features.dashboard.domain.usecase.UpdateFavouriteUseCaseImpl
-import com.usmonie.word.features.gradientBackground
 import com.usmonie.word.features.models.Forms
 import com.usmonie.word.features.models.WordCombinedUi
 import com.usmonie.word.features.models.WordUi
 import com.usmonie.word.features.ui.AdMob
 import com.usmonie.word.features.ui.BaseLazyColumn
-import com.usmonie.word.features.ui.DashboardTopBar
 import com.usmonie.word.features.ui.SubtitleItemText
+import com.usmonie.word.features.ui.WordTopBar
 import wtf.speech.compass.core.Extra
 import wtf.speech.compass.core.LocalRouteManager
 import wtf.speech.compass.core.Screen
@@ -72,7 +69,7 @@ class WordDetailsScreen(
 
         Scaffold(
             topBar = {
-                DashboardTopBar(
+                WordTopBar(
                     routeManager::navigateBack,
                     "[D]etails",
                     remember { { true } }
@@ -162,11 +159,10 @@ private fun WordDetailsContent(
         selectedEtymology.words.getOrElse(selectedPosIndex) { selectedEtymology.words.last() }
     }
     Box(
-        Modifier
-            .gradientBackground()
-            .padding(insets)
+        Modifier.padding(insets)
     ) {
         BaseLazyColumn(
+            contentPadding = PaddingValues(bottom = insets.calculateBottomPadding() + 80.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
             listState = listState()
         ) {
@@ -177,7 +173,7 @@ private fun WordDetailsContent(
                         selectedEtymologyIndex,
                         modifier = Modifier.fillMaxWidth(),
                         containerColor = Color.Transparent,
-                        contentColor = MaterialTheme.colorScheme.onPrimary,
+                        contentColor = MaterialTheme.colorScheme.onBackground,
                     ) {
                         wordCombined.wordEtymology.fastForEachIndexed { index, word ->
                             TabItem(
@@ -207,7 +203,7 @@ private fun WordDetailsContent(
                         selectedPosIndex,
                         modifier = Modifier.fillMaxWidth(),
                         containerColor = Color.Transparent,
-                        contentColor = MaterialTheme.colorScheme.onPrimary
+                        contentColor = MaterialTheme.colorScheme.onBackground
                     ) {
                         selectedEtymology.words.fastForEachIndexed { index, word ->
                             TabItem(
@@ -256,10 +252,6 @@ private fun WordDetailsContent(
                     RelatedCard(remember { { item.first } }, remember { { relatedCardState } })
                 }
             }
-
-            item {
-                Spacer(Modifier.height(80.dp))
-            }
         }
 
         adMob.Banner(
@@ -301,7 +293,7 @@ private fun SensesExpandButton(
                 horizontal = 20.dp
             ),
             textAlign = TextAlign.Center,
-            color = MaterialTheme.colorScheme.onPrimary,
+            color = MaterialTheme.colorScheme.onBackground,
             style = MaterialTheme.typography.titleMedium
         )
     }
@@ -324,7 +316,7 @@ private fun SensesTitle(
                         vertical = 10.dp,
                         horizontal = 20.dp
                     ),
-                    color = MaterialTheme.colorScheme.onPrimary,
+                    color = MaterialTheme.colorScheme.onBackground,
                     style = MaterialTheme.typography.titleMedium
                 )
             }

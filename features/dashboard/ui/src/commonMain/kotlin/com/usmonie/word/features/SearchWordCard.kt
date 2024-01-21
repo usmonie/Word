@@ -17,7 +17,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.models.SoundUi
 import com.usmonie.word.features.models.WordCombinedUi
-import com.usmonie.word.features.ui.BaseCard
+import com.usmonie.word.features.new.ui.BaseCard
+import com.usmonie.word.features.new.ui.WordButtons
 import com.usmonie.word.features.ui.WordMediumResizableTitle
 import wtf.word.core.domain.tools.fastForEach
 import wtf.word.core.domain.tools.fastForEachIndexed
@@ -43,28 +44,23 @@ fun SearchWordCard(
         selectedEtymology.words[selectedPosIndex]
     }
 
-    BaseCard({ onCardClick(wordCombined) }, elevation = 4.dp, modifier) {
-        Spacer(Modifier.height(20.dp))
+    BaseCard({ onCardClick(wordCombined) }, modifier) {
+        Spacer(Modifier.height(24.dp))
         WordMediumResizableTitle(
             wordCombined.word,
-            Modifier.fillMaxWidth().padding(horizontal = 20.dp)
+            Modifier.fillMaxWidth().padding(horizontal = 24.dp)
         )
-        Spacer(Modifier.height(16.dp))
 
-        WordCardButtons(
+        WordButtons(
             { onLearnClick(wordCombined) },
             { onBookmarkClick(wordCombined) },
+            {},
             { wordCombined.isFavorite },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp)
         )
-        Spacer(Modifier.height(16.dp))
 
         if (wordCombined.wordEtymology.size > 1) {
-            Text(
-                "Etymologies",
-                style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.padding(horizontal = 20.dp)
-            )
+            EtymologyTitle()
             Spacer(Modifier.height(8.dp))
             ScrollableTabRow(
                 selectedEtymologyTabIndex,
@@ -94,7 +90,7 @@ fun SearchWordCard(
                 maxLines = 3,
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(horizontal = 20.dp),
+                modifier = Modifier.padding(horizontal = 24.dp),
                 overflow = TextOverflow.Ellipsis
             )
             Spacer(Modifier.height(16.dp))
@@ -107,7 +103,7 @@ fun SearchWordCard(
             Text(
                 "Part Of Speech",
                 style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(horizontal = 20.dp)
+                modifier = Modifier.padding(horizontal = 24.dp)
             )
             Spacer(Modifier.height(8.dp))
             ScrollableTabRow(
@@ -134,7 +130,7 @@ fun SearchWordCard(
 
         selectedPos.senses.take(2).fastForEach { sense ->
             Spacer(Modifier.height(8.dp))
-            Sense(sense.gloss, Modifier.padding(horizontal = 20.dp))
+            Sense(sense.gloss, Modifier.padding(horizontal = 24.dp))
             Spacer(Modifier.height(8.dp))
         }
         Spacer(Modifier.height(24.dp))

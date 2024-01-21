@@ -9,12 +9,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.rounded.WorkspacePremium
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.RadioButtonDefaults
@@ -32,13 +29,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
-import com.usmonie.word.features.gradientBackground
 import com.usmonie.word.features.dashboard.SettingsItem
 import com.usmonie.word.features.subscription.domain.models.SubscriptionStatus
 import com.usmonie.word.features.ui.AdMob
 import com.usmonie.word.features.ui.BaseLazyColumn
 import com.usmonie.word.features.ui.MenuItemText
-import com.usmonie.word.features.ui.TitleBar
+import com.usmonie.word.features.ui.WordTopBar
 import wtf.speech.compass.core.LocalRouteManager
 import wtf.speech.core.ui.AppKeys
 import wtf.word.core.design.themes.WordColors
@@ -75,38 +71,19 @@ internal fun SettingsScreenContent(
     val appBarState = state.appBarState
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(appBarState)
 
-
     Scaffold(
         topBar = {
-            LargeTopAppBar(
-                title = {
-                    TitleBar(
-                        "[S]ettings",
-                        MaterialTheme.typography.displayLarge.fontSize *
-                                (1 - scrollBehavior.state.collapsedFraction).coerceIn(0.6f, 1f)
-                    )
-                },
-                navigationIcon = {
-                    IconButton(routeManager::navigateBack) {
-                        Icon(
-                            Icons.Default.ArrowBack,
-                            contentDescription = Icons.Default.ArrowBack.name,
-                            tint = MaterialTheme.colorScheme.onPrimary
-                        )
-                    }
-                },
-                colors = TopAppBarDefaults.largeTopAppBarColors(
-                    containerColor = Color.Transparent
-                ),
-                scrollBehavior = scrollBehavior
+            WordTopBar(
+                routeManager::navigateBack,
+                "[S]ettings",
+                { true },
+                { scrollBehavior }
             )
         },
         modifier = Modifier
             .nestedScroll(scrollBehavior.nestedScrollConnection)
     ) { insets ->
-        Box(Modifier
-            .gradientBackground()
-            .padding(insets)) {
+        Box(Modifier.padding(insets)) {
             BaseLazyColumn(listState) {
 
                 item {
@@ -210,10 +187,10 @@ internal fun SettingsSubscriptionItem(
                 selected,
                 onClick,
                 colors = RadioButtonDefaults.colors(
-                    selectedColor = MaterialTheme.colorScheme.onPrimary,
-                    unselectedColor = MaterialTheme.colorScheme.onPrimary,
-                    disabledSelectedColor = MaterialTheme.colorScheme.onPrimary,
-                    disabledUnselectedColor = MaterialTheme.colorScheme.onPrimary,
+                    selectedColor = MaterialTheme.colorScheme.onBackground,
+                    unselectedColor = MaterialTheme.colorScheme.onBackground,
+                    disabledSelectedColor = MaterialTheme.colorScheme.onBackground,
+                    disabledUnselectedColor = MaterialTheme.colorScheme.onBackground,
                 ),
                 modifier = Modifier.padding(start = 20.dp),
                 enabled = isSubscribed
