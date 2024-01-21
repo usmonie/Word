@@ -296,7 +296,7 @@ fun DashboardMenuItem(
             text = title,
             style = MaterialTheme.typography.titleLarge,
             color = color,
-            modifier = Modifier.fillMaxWidth().padding(8.dp)
+            modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)
         )
     }
 }

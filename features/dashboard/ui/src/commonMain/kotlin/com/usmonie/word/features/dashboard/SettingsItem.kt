@@ -34,8 +34,8 @@ fun SettingsItem(onClick: () -> Unit, title: String, modifier: Modifier) {
     Surface(onClick, modifier = modifier, color = Color.Transparent) {
         Text(
             title,
-            modifier = Modifier.padding(vertical = 10.dp, horizontal = 36.dp),
-            color = MaterialTheme.colorScheme.onPrimary,
+            modifier = Modifier.padding(vertical = 10.dp, horizontal = 40.dp),
+            color = MaterialTheme.colorScheme.onBackground,
             style = MaterialTheme.typography.titleLarge
         )
     }

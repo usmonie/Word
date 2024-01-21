@@ -187,12 +187,12 @@ internal fun SettingsSubscriptionItem(
                 selected,
                 onClick,
                 colors = RadioButtonDefaults.colors(
-                    selectedColor = MaterialTheme.colorScheme.onBackground,
-                    unselectedColor = MaterialTheme.colorScheme.onBackground,
-                    disabledSelectedColor = MaterialTheme.colorScheme.onBackground,
-                    disabledUnselectedColor = MaterialTheme.colorScheme.onBackground,
+                    selectedColor = MaterialTheme.colorScheme.primary,
+                    unselectedColor = MaterialTheme.colorScheme.primary,
+                    disabledSelectedColor = MaterialTheme.colorScheme.primary,
+                    disabledUnselectedColor = MaterialTheme.colorScheme.primary,
                 ),
-                modifier = Modifier.padding(start = 20.dp),
+                modifier = Modifier.padding(start = 24.dp),
                 enabled = isSubscribed
             )
 
@@ -202,7 +202,7 @@ internal fun SettingsSubscriptionItem(
                     Icons.Rounded.WorkspacePremium,
                     contentDescription = "$title only with subscription"
                 )
-                Spacer(Modifier.width(20.dp))
+                Spacer(Modifier.width(24.dp))
             }
         }
     }
