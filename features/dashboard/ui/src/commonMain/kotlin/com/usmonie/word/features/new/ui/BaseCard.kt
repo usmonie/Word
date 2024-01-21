@@ -52,7 +52,7 @@ fun BaseCard(
             disabledContainerColor = containerColor
         ),
         shape = BaseCardDefaults.shape,
-        elevation = CardDefaults.elevatedCardElevation(
+        elevation = CardDefaults.cardElevation(
             defaultElevation = elevation,
             pressedElevation = elevation
         ),
