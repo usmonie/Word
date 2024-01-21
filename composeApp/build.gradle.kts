@@ -103,7 +103,7 @@ android {
         minSdk = 25 //config.versions.android.minSdk.get().toInt()
         targetSdk = 34
 
-        versionCode = 15
+        versionCode = 16
         versionName = "1.2.0"
     }
     buildFeatures {
@@ -120,6 +120,7 @@ android {
     buildTypes {
         getByName("release") {
             isMinifyEnabled = true
+            isShrinkResources = true
             signingConfig = signingConfigs.getByName("debug")
         }
 
@@ -127,6 +128,11 @@ android {
             applicationIdSuffix = ".debug"
             isMinifyEnabled = false
             versionNameSuffix = ".debug"
+        }
+        create("benchmark") {
+            initWith(buildTypes.getByName("release"))
+            matchingFallbacks += listOf("release")
+            isDebuggable = false
         }
     }
     compileOptions {
@@ -146,64 +152,9 @@ android {
     }
 }
 
-//copyNativeResources("commonMain")
 dependencies {
-    implementation("androidx.compose.runtime:runtime-tracing:1.0.0-beta01")
-
+    debugImplementation(libs.androidx.runtime.tracing)
+    debugImplementation(libs.androidx.tracing.perfetto)
+    debugImplementation(libs.androidx.tracing.perfetto.binary)
     debugImplementation(libs.compose.ui.tooling)
-}
-//
-//fun copyNativeResources(sourceSet: String) {
-//    if (sourceSet.isEmpty()) throw IllegalStateException("Valid sourceSet required")
-//
-//    val prefix = "copy${sourceSet.capitalize()}Resources"
-//
-//    tasks.withType<KotlinNativeLink> {
-//        val firstIndex = name.indexOfFirst { it.isUpperCase() }
-//        val taskName = "$prefix${name.substring(firstIndex)}"
-//
-//        dependsOn(
-//            tasks.register<Copy>(taskName) {
-//                from("../core/design/src/$sourceSet/resources")
-//                when (outputKind) {
-//                    CompilerOutputKind.FRAMEWORK -> into(outputFile.get())
-//                    CompilerOutputKind.PROGRAM -> into(destinationDirectory.get())
-//                    else -> throw IllegalStateException("Unhandled binary outputKind: $outputKind")
-//                }
-//            }
-//        )
-//    }
-//
-//    tasks.withType<FatFrameworkTask> {
-//        if (destinationDir.path.contains("Temp")) return@withType
-//
-//        val firstIndex = name.indexOfFirst { it.isUpperCase() }
-//        val taskName = "$prefix${name.substring(firstIndex)}"
-//
-//        dependsOn(
-//            tasks.register<Copy>(taskName) {
-//                from("../core/design/src/$sourceSet/resources")
-//                into(fatFramework)
-//            }
-//        )
-//    }
-//}
-
-subprojects {
-    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
-        kotlinOptions {
-            if (project.findProperty("composeCompilerReports") == "true") {
-                freeCompilerArgs += listOf(
-                    "-P",
-                    "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=${project.path}/compose_compiler"
-                )
-            }
-            if (project.findProperty("composeCompilerMetrics") == "true") {
-                freeCompilerArgs += listOf(
-                    "-P",
-                    "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=${project.path}/compose_compiler"
-                )
-            }
-        }
-    }
 }

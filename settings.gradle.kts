@@ -1,5 +1,8 @@
 import org.gradle.api.internal.FeaturePreviews
 
+include(":benchmark")
+
+
 include(":baselineprofile")
 
 
@@ -15,6 +18,10 @@ pluginManagement {
         google()
         gradlePluginPortal()
         mavenCentral()
+    }
+
+    plugins {
+        id("dev.icerock.moko.resources-generator") version "0.23.0" apply false
     }
 }
 

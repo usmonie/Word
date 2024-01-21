@@ -4,8 +4,8 @@ import androidx.compose.ui.graphics.Color
 import wtf.word.core.design.themes.Colors
 
 object GentleBreezeColors : Colors() {
-    override val light_primary: Color = Color(0xFFA7C7E7)
-    override val light_onPrimary: Color = Color(0xFF000000)
+    override val light_primary: Color = Color(0xFF006399)
+    override val light_onPrimary: Color = Color(0xFFffffff)
     override val light_primaryContainer: Color
         get() = light_secondary
     override val light_onPrimaryContainer: Color = Color(0xFF00227B)
@@ -23,7 +23,7 @@ object GentleBreezeColors : Colors() {
     override val light_onErrorContainer: Color = Color(0xFF5D001E)
     override val light_background: Color = Color(0xFFFFFBFE)
     override val light_onBackground: Color = Color(0xFF1E1E1E)
-    override val light_surface: Color = Color(0xFFFFFBFE)
+    override val light_surface: Color = Color(0xfff6f1f1)
     override val light_onSurface: Color = Color(0xFF1E1E1E)
     override val light_surfaceVariant = Color(0xFFECE1CF)
     override val light_onSurfaceVariant = Color(0xFF4D4639)
@@ -52,9 +52,9 @@ object GentleBreezeColors : Colors() {
     override val dark_onError: Color = Color(0xFF000000)
     override val dark_errorContainer: Color = dark_error
     override val dark_onErrorContainer: Color = dark_onError
-    override val dark_background: Color = Color(0xFF3949AB)
+    override val dark_background: Color = Color(0xFF121212)
     override val dark_onBackground: Color = Color(0xFFFFFFFF)
-    override val dark_surface: Color = Color(0xFF121212)
+    override val dark_surface: Color = Color(0xff252222)
     override val dark_onSurface: Color = Color(0xFFFFFFFF)
     override val dark_surfaceVariant: Color = Color(0xFF121212)
     override val dark_onSurfaceVariant: Color = Color(0xFFEDE7F6)

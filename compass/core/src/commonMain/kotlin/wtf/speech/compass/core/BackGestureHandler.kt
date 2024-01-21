@@ -23,7 +23,7 @@ private val MAX_PREV_SCREEN_OFFSET = 150.dp
 
 @Composable
 fun BackGestureHandler(
-    offset: Animatable<Float, AnimationVector1D>,
+    getOffset: () -> Animatable<Float, AnimationVector1D>,
     routeManager: RouteManager,
     isGestureNavigationEnabled: Boolean,
     previousScreen: () -> Screen?,
@@ -38,6 +38,7 @@ fun BackGestureHandler(
             .background(MaterialTheme.colorScheme.background)
             .pointerInput(Unit, remember {
                 {
+                    val offset = getOffset()
                     if (isGestureNavigationEnabled) {
                         detectHorizontalDragGestures(
                             onDragEnd = {
@@ -59,6 +60,7 @@ fun BackGestureHandler(
                 }
             }),
     ) {
+        val offset = getOffset()
         val prevScreen = previousScreen()
         val showPrev = (offset.value > 0 && prevScreen != null)
         val prevOffset = if (showPrev) {

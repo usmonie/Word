@@ -15,6 +15,9 @@ import io.realm.kotlin.UpdatePolicy
 import io.realm.kotlin.ext.query
 import io.realm.kotlin.query.Sort
 import io.realm.kotlin.query.find
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
+import kotlinx.coroutines.withContext
 import wtf.word.core.domain.tools.fastForEach
 
 class WordsRepositoryImpl(private val realm: Realm, private val api: WordApi) : WordRepository {
@@ -22,33 +25,35 @@ class WordsRepositoryImpl(private val realm: Realm, private val api: WordApi) : 
     override suspend fun searchWords(query: String, limit: Int, offset: Int): List<WordCombined> {
         val found = api.searchWords(query, limit, offset)
 
-        try {
-            if (!realm.isClosed()) {
-                found.fastForEach { wordDto ->
-                    realm.write {
-                        val wordDb = wordDto.toDatabase()
-                        val findLatestQuery = realm
-                            .query<WordDb>(
-                                "primaryKey == $0",
-                                wordDb.word
-                                        + wordDb.pos
-                                        + wordDb.lang
-                                        + wordDb.langCode
-                                        + wordDb.etymologyNumber
-                                        + wordDb.etymologyText
-                            )
-                            .find()
-                            .firstOrNull()
+        withContext(Dispatchers.IO) {
+            try {
+                if (!realm.isClosed()) {
+                    found.fastForEach { wordDto ->
+                        realm.write {
+                            val wordDb = wordDto.toDatabase()
+                            val findLatestQuery = realm
+                                .query<WordDb>(
+                                    "primaryKey == $0",
+                                    wordDb.word
+                                            + wordDb.pos
+                                            + wordDb.lang
+                                            + wordDb.langCode
+                                            + wordDb.etymologyNumber
+                                            + wordDb.etymologyText
+                                )
+                                .find()
+                                .firstOrNull()
 
-                        if (findLatestQuery == null) {
-                            copyToRealm(wordDb, UpdatePolicy.ALL)
-                            copyToRealm(WordSearchHistoryDb(wordDb.word), UpdatePolicy.ALL)
+                            if (findLatestQuery == null) {
+                                copyToRealm(wordDb, UpdatePolicy.ALL)
+                                copyToRealm(WordSearchHistoryDb(wordDb.word), UpdatePolicy.ALL)
+                            }
                         }
                     }
                 }
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
-        } catch (e: Exception) {
-            e.printStackTrace()
         }
 
         return realm.query<WordDb>(query = "word LIKE $0", query)

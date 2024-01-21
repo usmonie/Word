@@ -92,7 +92,7 @@ abstract class Colors {
             onErrorContainer = light_onErrorContainer,
             outline = light_outline,
             background = light_background,
-            onBackground = light_onPrimary,
+            onBackground = light_onBackground,
             surface = light_surface,
             onSurface = light_onSurface,
             surfaceVariant = light_surfaceVariant,

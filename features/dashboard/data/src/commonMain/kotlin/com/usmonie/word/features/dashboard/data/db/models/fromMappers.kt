@@ -82,7 +82,9 @@ fun combineSenses(senses: List<Sense>): List<SenseCombined> {
     return groupByPrefix(senses, emptyList())
 }
 
-internal fun List<RelatedDb>.toDomain() = map { it.toDomain() }
+internal fun List<RelatedDb>.toDomain(): List<Related> {
+    return map { it.toDomain() }
+}
 internal fun CategoryDb.toDomain() =
     Category(_id.toHexString(), kind, langcode, name, orig, parents, source)
 

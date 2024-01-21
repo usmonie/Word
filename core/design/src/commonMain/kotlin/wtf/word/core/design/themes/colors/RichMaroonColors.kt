@@ -6,7 +6,7 @@ import wtf.word.core.design.themes.Colors
 object RichMaroonColors: Colors() {
     override val light_primary = Color(0xFF800000)
     override val light_onPrimary = Color(0xFFFFFFFF)
-    override val light_primaryContainer = light_primary
+    override val light_primaryContainer = Color(0xFF410000)
     override val light_onPrimaryContainer = Color(0xFF410000)
     override val light_secondary = Color(0xFF775651)
     override val light_onSecondary = Color(0xFFFFFFFF)
@@ -22,7 +22,7 @@ object RichMaroonColors: Colors() {
     override val light_onErrorContainer = Color(0xFF410002)
     override val light_background = Color(0xFFFFFBFF)
     override val light_onBackground = Color(0xFF201A19)
-    override val light_surface = Color(0xFFFFFBFF)
+    override val light_surface = Color(0xfff5ecf5)
     override val light_onSurface = Color(0xFF201A19)
     override val light_surfaceVariant = Color(0xFFECE1CF)
     override val light_onSurfaceVariant = Color(0xFF4D4639)
@@ -52,7 +52,7 @@ object RichMaroonColors: Colors() {
     override val dark_onErrorContainer = Color(0xFFFFDAD6)
     override val dark_background = Color(0xFF201A19)
     override val dark_onBackground = Color(0xFFEDE0DD)
-    override val dark_surface = Color(0xFF201A19)
+    override val dark_surface = Color(0xff3f3433)
     override val dark_onSurface = Color(0xFFEDE0DD)
     override val dark_surfaceVariant = Color(0xFF534341)
     override val dark_onSurfaceVariant = Color(0xFFD8C2BE)

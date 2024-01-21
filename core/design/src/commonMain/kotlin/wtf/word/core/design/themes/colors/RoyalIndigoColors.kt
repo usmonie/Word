@@ -6,7 +6,7 @@ import wtf.word.core.design.themes.Colors
 object RoyalIndigoColors: Colors() {
     override val light_primary: Color = Color(0xFF3F51B5)
     override val light_onPrimary: Color = Color(0xFFFFFFFF)
-    override val light_primaryContainer: Color = light_primary
+    override val light_primaryContainer: Color = Color(0xFF0000BA)
     override val light_onPrimaryContainer: Color = Color(0xFF000063)
     override val light_secondary: Color = Color(0xFF5C6BC0)
     override val light_onSecondary: Color = Color(0xFFEDE7F6)
@@ -22,7 +22,7 @@ object RoyalIndigoColors: Colors() {
     override val light_onErrorContainer: Color = Color(0xFF5D001E)
     override val light_background: Color = Color(0xFFE8EAF6)
     override val light_onBackground: Color = Color(0xFF1A237E)
-    override val light_surface: Color = Color(0xFFE8EAF6)
+    override val light_surface: Color = Color(0xffd6d9e8)
     override val light_onSurface: Color = Color(0xFF1A237E)
     override val light_surfaceVariant = Color(0xFFECE1CF)
     override val light_onSurfaceVariant = Color(0xFF4D4639)
@@ -53,7 +53,7 @@ object RoyalIndigoColors: Colors() {
     override val dark_onErrorContainer: Color = Color(0xFFCF6679)
     override val dark_background: Color = Color(0xFF303F9F)
     override val dark_onBackground: Color = Color(0xFFEDE7F6)
-    override val dark_surface: Color = Color(0xFF303F9F)
+    override val dark_surface: Color = Color(0xff182686)
     override val dark_onSurface: Color = Color(0xFFEDE7F6)
     override val dark_surfaceVariant: Color = Color(0xFF3F51B5)
     override val dark_onSurfaceVariant: Color = Color(0xFFC5CAE9)

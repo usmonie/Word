@@ -6,6 +6,6 @@ object AppKeys {
     const val REWARDED_LIFE_ID: String = "ca-app-pub-2198867984469198/6618150752"
     const val REWARDED_NEW_GAME: String = "ca-app-pub-2198867984469198/3769917136"
 
-    const val AMPLITUDE_KEY = "78f6281a02303905977f69718014b64f"
+    const val AMPLITUDE_KEY = "244f468ae1266bd4dbfb8fd739cdc87e"
     const val AMPLITUDE_DEBUG_KEY = "244f468ae1266bd4dbfb8fd739cdc87e"
 }

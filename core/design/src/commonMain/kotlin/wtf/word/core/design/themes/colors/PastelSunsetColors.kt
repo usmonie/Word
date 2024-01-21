@@ -5,9 +5,9 @@ import wtf.word.core.design.themes.Colors
 
 data object PastelSunsetColors : Colors() {
 
-    override val light_primary = Color(0xFFF8BBD0)
-    override val light_onPrimary = Color(0xFF880E4F)
-    override val light_primaryContainer = light_primary
+    override val light_primary = Color(0xFF974066)
+    override val light_onPrimary = Color(0xFFffffff)
+    override val light_primaryContainer = Color(0xFFffd9e4)
     override val light_onPrimaryContainer = Color(0xFF880E4F)
     override val light_secondary = Color(0xFF800000)
     override val light_onSecondary = Color(0xFFFFFFFF)
@@ -23,7 +23,7 @@ data object PastelSunsetColors : Colors() {
     override val light_onErrorContainer = Color(0xFF5D001E)
     override val light_background = Color(0xFFFFF3E0)
     override val light_onBackground = Color(0xFFBF360C)
-    override val light_surface = Color(0xFFFFF3E0)
+    override val light_surface = Color(0xFFfffbff)
     override val light_onSurface = Color(0xFFBF360C)
     override val light_surfaceVariant = Color(0xFFF8BBD0)
     override val light_onSurfaceVariant = Color(0xFF880E4F)
@@ -53,7 +53,7 @@ data object PastelSunsetColors : Colors() {
     override val dark_onErrorContainer = Color(0xFFFFDAD6)
     override val dark_background = Color(0xFF201A19)
     override val dark_onBackground = Color(0xFFEDE0DD)
-    override val dark_surface = Color(0xFF201A19)
+    override val dark_surface = Color(0xff2c2428)
     override val dark_onSurface = Color(0xFFEDE0DD)
     override val dark_surfaceVariant = Color(0xFF534341)
     override val dark_onSurfaceVariant = Color(0xFFD8C2BE)

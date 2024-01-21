@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.ReportDrawn
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -168,6 +169,7 @@ class MainActivity : ComponentActivity() {
             }
 
             val routeManager = rememberRouteManager(initialGraph)
+            ReportDrawn()
             App(AppConfiguration(routeManager, currentTheme, currentFonts))
         }
     }

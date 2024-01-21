@@ -12,7 +12,6 @@ import androidx.compose.animation.core.updateTransition
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -31,7 +30,6 @@ fun NavigationHost(
     isGestureNavigationEnabled: Boolean = false
 ) {
     CompositionLocalProvider(LocalRouteManager provides routeManager) {
-        val currentState by routeManager.currentState.collectAsState()
         val currentScreen = routeManager.currentScreen
         val previousScreen = routeManager.previousScreen
         val event by routeManager.lastEvent
@@ -82,7 +80,7 @@ fun NavigationHost(
         }
 
         BackGestureHandler(
-            offset,
+            { offset },
             routeManager,
             isGestureNavigationEnabled,
             {
@@ -104,7 +102,7 @@ fun NavigationHost(
                 screen.Content()
             } else {
                 AnimationScreen(
-                    screen,
+                    { screen },
                     enterTransition,
                     exitTransition,
                     modifier.matchParentSize()
@@ -116,11 +114,12 @@ fun NavigationHost(
 
 @Composable
 private fun AnimationScreen(
-    currentScreen: Screen,
+    getCurrentScreen: () -> Screen,
     enterTransition: AnimatedContentTransitionScope<Screen>.() -> EnterTransition,
     exitTransition: AnimatedContentTransitionScope<Screen>.() -> ExitTransition,
     modifier: Modifier
 ) {
+    val currentScreen = getCurrentScreen()
     val zIndices = remember { mutableMapOf<String, Float>() }
     val transition = updateTransition(currentScreen, label = "entry")
     transition.AnimatedContent(

@@ -21,7 +21,7 @@ fun EmptyItem(title: String, description: String) {
         Text(
             text = title,
             modifier = Modifier.padding(horizontal = 20.dp),
-            style = MaterialTheme.typography.bodyLarge,
+            style = MaterialTheme.typography.displaySmall,
             color = MaterialTheme.colorScheme.onPrimary
         )
 

@@ -1,6 +1,5 @@
 package com.usmonie.word.features.ui
 
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -13,7 +12,6 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -51,19 +49,19 @@ fun SearchBar(
     onQueryChanged: (TextFieldValue) -> Unit,
     onFocusChange: (Boolean) -> Unit,
     placeholder: String,
-    query: TextFieldValue,
-    hasFocus: Boolean,
+    query: () -> TextFieldValue,
+    hasFocus: () -> Boolean,
     modifier: Modifier = Modifier,
-    fontSize: TextUnit,
+    fontSize: () -> TextUnit,
     enabled: Boolean = true
 ) {
     val focusRequester = remember { FocusRequester() }
 
     var textFieldSize = remember { IntSize.Zero }
     val threshold: Float = remember { textFieldSize.width * 0.5f }
-
+    val size = fontSize()
     TextInputField(
-        query,
+        query(),
         onQueryChanged,
         enabled = enabled,
         readOnly = !enabled,
@@ -79,15 +77,26 @@ fun SearchBar(
                     }
                 }
             },
-        textStyle = MaterialTheme.typography.displayLarge.copy(fontSize = fontSize),
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedTextColor = MaterialTheme.colorScheme.onBackground,
+            unfocusedTextColor = MaterialTheme.colorScheme.onBackground,
+            focusedBorderColor = Color.Transparent,
+            unfocusedBorderColor = Color.Transparent,
+            disabledBorderColor = Color.Transparent,
+        ),
+        textStyle = MaterialTheme.typography.displayLarge.copy(fontSize = size),
         placeholder = {
-            val placeholderAlphaAnimation by animateFloatAsState(if (hasFocus) .5f else 1f)
+//            val placeholderAlphaAnimation by animateFloatAsState(if (hasFocus) .5f else 1f)
             Text(
                 placeholder,
                 style = MaterialTheme.typography.displayLarge,
-                fontSize = fontSize,
-                color = MaterialTheme.colorScheme.onPrimary.copy(alpha = placeholderAlphaAnimation)
+                fontSize = size,
+                color = MaterialTheme.colorScheme.onBackground.copy(alpha = if (hasFocus()) .5f else 1f)
             )
+        },
+        keyboardActions = KeyboardActions {
+            focusRequester.freeFocus()
+            onFocusChange(false)
         },
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
     )

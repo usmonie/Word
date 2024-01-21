@@ -5,6 +5,8 @@ import extensions.commonDependencies
 plugins {
     alias(libs.plugins.compose)
     id(libs.plugins.speech.multiplatform.ui.get().pluginId)
+    id("dev.shreyaspatil.compose-compiler-report-generator") version "1.1.0"
+
 }
 
 android.namespace = "com.usmonie.word.features.dashboard.ui"
