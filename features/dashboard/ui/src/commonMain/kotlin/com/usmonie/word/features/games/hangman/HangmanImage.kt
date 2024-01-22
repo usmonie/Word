@@ -9,7 +9,7 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 
 @Composable
 fun HangmanImage(incorrectGuesses: Int, modifier: Modifier = Modifier) {
-    val hangmanColor = MaterialTheme.colorScheme.onPrimary
+    val hangmanColor = MaterialTheme.colorScheme.onBackground
     
     Canvas(modifier = modifier) {
         val headRadius = size.height * 0.08f

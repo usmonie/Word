@@ -6,8 +6,9 @@ import com.usmonie.word.features.dashboard.domain.repository.UserRepository
 import com.usmonie.word.features.dashboard.domain.repository.WordRepository
 import com.usmonie.word.features.details.WordDetailsScreen
 import com.usmonie.word.features.favorites.FavoritesScreen
+import com.usmonie.word.features.games.GamesScreen
 import com.usmonie.word.features.games.hangman.HangmanGameScreen
-import com.usmonie.word.features.new.dashboard.NewDashboardScreen
+import com.usmonie.word.features.new.dashboard.DashboardScreen
 import com.usmonie.word.features.settings.SettingsScreen
 import com.usmonie.word.features.subscription.domain.repository.SubscriptionRepository
 import com.usmonie.word.features.ui.AdMob
@@ -28,7 +29,7 @@ fun rememberDashboardGraph(
     analytics: Analytics
 ): NavigationGraph {
     val dashboardScreen = remember {
-        NewDashboardScreen.Builder(
+        DashboardScreen.Builder(
             wordRepository,
             adMob,
             analytics
@@ -77,7 +78,7 @@ fun getDashboardGraph(
     analytics: Analytics
 ): NavigationGraph {
     val dashboardScreen =
-        NewDashboardScreen.Builder(
+        DashboardScreen.Builder(
             wordRepository,
             adMob,
             analytics
@@ -95,6 +96,12 @@ fun getDashboardGraph(
             Route(
                 WordDetailsScreen.ID,
                 WordDetailsScreen.Builder(wordRepository, analytics, adMob)
+            )
+        )
+        register(
+            Route(
+                GamesScreen.ID,
+                GamesScreen
             )
         )
         register(Route(HangmanGameScreen.ID, HangmanGameScreen.Builder(wordRepository, adMob)))

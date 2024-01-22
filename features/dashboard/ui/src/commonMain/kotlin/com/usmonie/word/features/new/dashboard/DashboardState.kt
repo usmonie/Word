@@ -9,7 +9,7 @@ import wtf.speech.core.ui.ScreenEffect
 import wtf.speech.core.ui.ScreenEvent
 import wtf.speech.core.ui.ScreenState
 
-internal sealed class NewDashboardState : ScreenState {
+internal sealed class DashboardState : ScreenState {
 
     data class Success(
         val hasFocus: Boolean = false,
@@ -22,28 +22,28 @@ internal sealed class NewDashboardState : ScreenState {
         val practiceWordsStatus: LearningStatus,
         val newWordsStatus: LearningStatus,
         val streakDaysStatus: LearningStatus
-    ) : NewDashboardState() {
+    ) : DashboardState() {
 
         val showIdleItems: Boolean
             get() = query.text.isBlank()
     }
 
-    class Loading : NewDashboardState()
+    class Loading : DashboardState()
 
-    class Error : NewDashboardState()
+    class Error : DashboardState()
 }
 
-internal sealed class NewDashboardAction : ScreenAction {
-    data object ClearQuery : NewDashboardAction()
-    data object Initial : NewDashboardAction()
-    data object Refresh : NewDashboardAction()
-    data class NextRandomWord(val state: NewDashboardState.Success) : NewDashboardAction()
-    data class UpdateFavorite(val word: WordCombinedUi) : NewDashboardAction()
-    data class InputQuery(val query: TextFieldValue) : NewDashboardAction()
-    data class QueryFieldFocusChange(val isFocus: Boolean) : NewDashboardAction()
-    data class OpenWord(val word: WordCombinedUi) : NewDashboardAction()
+internal sealed class DashboardAction : ScreenAction {
+    data object ClearQuery : DashboardAction()
+    data object Initial : DashboardAction()
+    data object Refresh : DashboardAction()
+    data class NextRandomWord(val state: DashboardState.Success) : DashboardAction()
+    data class UpdateFavorite(val word: WordCombinedUi) : DashboardAction()
+    data class InputQuery(val query: TextFieldValue) : DashboardAction()
+    data class QueryFieldFocusChange(val isFocus: Boolean) : DashboardAction()
+    data class OpenWord(val word: WordCombinedUi) : DashboardAction()
 
-    sealed class OnMenuItemClicked: NewDashboardAction() {
+    sealed class OnMenuItemClicked: DashboardAction() {
         data object Favorites: OnMenuItemClicked()
         data object Games: OnMenuItemClicked()
         data object Settings: OnMenuItemClicked()
@@ -51,9 +51,9 @@ internal sealed class NewDashboardAction : ScreenAction {
     }
 }
 
-internal sealed class NewDashboardEvent : ScreenEvent {
-    data object BackToMain : NewDashboardEvent()
-    data object ContentLoading : NewDashboardEvent()
+internal sealed class DashboardEvent : ScreenEvent {
+    data object BackToMain : DashboardEvent()
+    data object ContentLoading : DashboardEvent()
     data class Content(
         val recentSearch: List<WordCombinedUi>,
         val wordOfTheDay: ContentState<Pair<WordUi, WordCombinedUi>>,
@@ -64,14 +64,14 @@ internal sealed class NewDashboardEvent : ScreenEvent {
         val newWordsStatus: String,
         val streakDaysStatus: String,
         val query: TextFieldValue,
-    ) : NewDashboardEvent()
+    ) : DashboardEvent()
 
-    data class InputQuery(val query: TextFieldValue) : NewDashboardEvent()
-    data class QueryFocusChanged(val hasFocus: Boolean) : NewDashboardEvent()
-    data class OpenWord(val word: WordCombinedUi) : NewDashboardEvent()
+    data class InputQuery(val query: TextFieldValue) : DashboardEvent()
+    data class QueryFocusChanged(val hasFocus: Boolean) : DashboardEvent()
+    data class OpenWord(val word: WordCombinedUi) : DashboardEvent()
 
 
-    sealed class MenuItemOpen: NewDashboardEvent() {
+    sealed class MenuItemOpen: DashboardEvent() {
         data object Favorites: MenuItemOpen()
         data object Games: MenuItemOpen()
         data object Settings: MenuItemOpen()
@@ -79,11 +79,11 @@ internal sealed class NewDashboardEvent : ScreenEvent {
     }
 }
 
-internal sealed class NewDashboardEffect : ScreenEffect {
-    data class OpenWord(val word: WordCombinedUi): NewDashboardEffect()
+internal sealed class DashboardEffect : ScreenEffect {
+    data class OpenWord(val word: WordCombinedUi): DashboardEffect()
 
-    class OpenFavorites: NewDashboardEffect()
-    class OpenGames: NewDashboardEffect()
-    class OpenSettings: NewDashboardEffect()
-    class OpenAbout: NewDashboardEffect()
+    class OpenFavorites: DashboardEffect()
+    class OpenGames: DashboardEffect()
+    class OpenSettings: DashboardEffect()
+    class OpenAbout: DashboardEffect()
 }

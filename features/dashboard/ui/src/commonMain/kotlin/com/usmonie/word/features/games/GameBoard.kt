@@ -9,7 +9,7 @@ import com.usmonie.word.features.ui.TopBackButtonBar
 @Composable
 fun GameBoard(
     onBackClickListener: () -> Unit,
-    actions: @Composable() (RowScope.() -> Unit),
+    actions: @Composable (RowScope.() -> Unit),
     content: @Composable (insets: PaddingValues) -> Unit
 ) {
     Scaffold(

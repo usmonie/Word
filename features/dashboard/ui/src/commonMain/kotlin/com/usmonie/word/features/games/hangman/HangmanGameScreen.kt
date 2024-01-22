@@ -29,7 +29,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.dashboard.domain.repository.WordRepository
 import com.usmonie.word.features.dashboard.domain.usecase.RandomWordUseCaseImpl
-import com.usmonie.word.features.gradientBackground
 import com.usmonie.word.features.details.WordDetailsScreen
 import com.usmonie.word.features.games.GameBoard
 import com.usmonie.word.features.ui.AdMob
@@ -65,9 +64,8 @@ class HangmanGameScreen(
 
         override fun build(params: Map<String, String>?, extra: Extra?): Screen {
             return HangmanGameScreen(
-                HangmanGameViewModel(
-                    RandomWordUseCaseImpl(wordRepository)
-                ), adMob
+                HangmanGameViewModel(RandomWordUseCaseImpl(wordRepository)),
+                adMob
             )
         }
     }
@@ -88,7 +86,7 @@ private fun HangmanContent(
         {
             UpdateButton(
                 hangmanGameViewModel::onUpdatePressed,
-                tint = MaterialTheme.colorScheme.onPrimary
+                tint = MaterialTheme.colorScheme.onBackground
             )
         }
     ) { insets ->
@@ -112,13 +110,11 @@ private fun HangmanContent(
 private fun LoadingProgress(insets: PaddingValues) {
     Box(
         Modifier
-            .gradientBackground()
             .fillMaxSize()
             .padding(insets), contentAlignment = Alignment.Center
     ) {
         CircularProgressIndicator(
             Modifier.size(32.dp),
-            MaterialTheme.colorScheme.onPrimary
         )
     }
 }
@@ -132,7 +128,6 @@ private fun PlayBoard(
 ) {
     Column(
         modifier = Modifier
-            .gradientBackground()
             .fillMaxSize()
             .padding(insets),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -202,7 +197,7 @@ private fun HintButton(
         Text(
             title,
             style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onPrimary
+            color = MaterialTheme.colorScheme.primary
         )
     }
 }
@@ -244,9 +239,9 @@ fun WordDisplay(gameState: HangmanState, modifier: Modifier = Modifier) {
         modifier,
         color = when (gameState) {
             is HangmanState.Lost -> MaterialTheme.colorScheme.error
-            is HangmanState.Playing -> MaterialTheme.colorScheme.onPrimary
+            is HangmanState.Playing -> MaterialTheme.colorScheme.onBackground
             is HangmanState.Won -> MaterialTheme.colorScheme.tertiary
-            is HangmanState.Loading -> MaterialTheme.colorScheme.onPrimary
+            is HangmanState.Loading -> MaterialTheme.colorScheme.onBackground
         },
         style = MaterialTheme.typography.displaySmall,
         textAlign = TextAlign.Center
@@ -270,7 +265,7 @@ fun LetterButtons(onLetterClick: (Char) -> Unit, guessedLetters: Set<Char>, modi
                 Text(
                     letter.toString(),
                     style = MaterialTheme.typography.titleLarge,
-                    color = if (wasGuessed) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onPrimary
+                    color = if (wasGuessed) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.primary
                 )
             }
         }

@@ -23,11 +23,10 @@ import wtf.speech.compass.core.Screen
 import wtf.speech.compass.core.ScreenBuilder
 import wtf.word.core.domain.Analytics
 
-class NewDashboardScreen private constructor(
-    private val dashboardViewModel: NewDashboardViewModel,
+class DashboardScreen private constructor(
+    private val dashboardViewModel: DashboardViewModel,
     private val adMob: AdMob
-) :
-    Screen(dashboardViewModel) {
+) : Screen(dashboardViewModel) {
     override val id: String
         get() = ID
 
@@ -36,11 +35,11 @@ class NewDashboardScreen private constructor(
     override fun Content() {
         val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
-        NewDashboardEffects(dashboardViewModel)
+        DashboardEffects(dashboardViewModel)
         Scaffold(
             modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
             topBar = { DashboardTopBar(dashboardViewModel) { scrollBehavior } },
-            content = { insets -> NewDashboardContent(dashboardViewModel, adMob, insets) }
+            content = { insets -> DashboardContent(dashboardViewModel, adMob, insets) }
         )
     }
 
@@ -55,8 +54,8 @@ class NewDashboardScreen private constructor(
     ) : ScreenBuilder {
         override val id: String = ID
 
-        override fun build(params: Map<String, String>?, extra: Extra?) = NewDashboardScreen(
-            NewDashboardViewModel(
+        override fun build(params: Map<String, String>?, extra: Extra?) = DashboardScreen(
+            DashboardViewModel(
                 SearchWordsUseCaseImpl(wordRepository),
                 GetSearchHistoryUseCaseImpl(wordRepository),
                 GetWordOfTheDayUseCaseImpl(wordRepository),
@@ -71,15 +70,15 @@ class NewDashboardScreen private constructor(
 @ExperimentalMaterial3Api
 @Composable
 internal fun DashboardTopBar(
-    dashboardViewModel: NewDashboardViewModel,
+    dashboardViewModel: DashboardViewModel,
     getScrollBehavior: () -> TopAppBarScrollBehavior
 ) {
     val state by dashboardViewModel.state.collectAsState()
 
     val currentState = state
     val query =
-        if (currentState is NewDashboardState.Success) currentState.query else TextFieldValue()
-    val hasFocus = if (currentState is NewDashboardState.Success) currentState.hasFocus else false
+        if (currentState is DashboardState.Success) currentState.query else TextFieldValue()
+    val hasFocus = if (currentState is DashboardState.Success) currentState.hasFocus else false
 
     WordTopBar(
         dashboardViewModel::onBackClick,

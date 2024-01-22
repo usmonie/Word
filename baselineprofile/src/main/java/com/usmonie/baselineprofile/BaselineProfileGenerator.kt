@@ -4,7 +4,6 @@ import androidx.benchmark.macro.junit4.BaselineProfileRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.uiautomator.By
-import androidx.test.uiautomator.Direction
 import androidx.test.uiautomator.Until
 import org.junit.Rule
 import org.junit.Test
@@ -51,21 +50,6 @@ class BaselineProfileGenerator {
 
             device.wait(Until.hasObject(By.pkg("com.usmonie.word").depth(0)), 15_000)
 
-            val searchBar = device.findObject(By.desc("DASHBOARD_SEARCH_BAR"))
-            searchBar?.click()
-            device.pressKeyCode(28)
-
-            // Interact with the UI components
-            // Example: Scroll the LazyColumn
-            val lazyColumn = device.findObject(By.desc("DASHBOARD_LAZY_COLUMN"))
-            lazyColumn?.let {
-                for (i in 0 until 5) {
-                    it.scroll(Direction.DOWN, 50f)
-                    Thread.sleep(1000)
-                    it.scroll(Direction.DOWN, 50f)
-                    Thread.sleep(1000)
-                }
-            }
 
             // Example: Tap on a specific item, such as a word card
 //            val wordCard = device.findObject(By.desc("Word Card Description")) // Replace with actual content-desc

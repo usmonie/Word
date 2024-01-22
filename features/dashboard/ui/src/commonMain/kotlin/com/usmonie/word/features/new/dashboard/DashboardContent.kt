@@ -45,8 +45,8 @@ import wtf.speech.core.ui.ContentState
 
 @ExperimentalMaterial3Api
 @Composable
-internal fun NewDashboardContent(
-    dashboardViewModel: NewDashboardViewModel,
+internal fun DashboardContent(
+    dashboardViewModel: DashboardViewModel,
     adMob: AdMob,
     insets: PaddingValues,
 ) {
@@ -66,7 +66,7 @@ internal fun NewDashboardContent(
         val state by dashboardViewModel.state.collectAsState()
 
         when (val s = state) {
-            is NewDashboardState.Error -> {
+            is DashboardState.Error -> {
                 Column(Modifier.align(Alignment.Center)) {
                     Text("Error while loading", style = MaterialTheme.typography.headlineMedium)
                     Spacer(Modifier.height(12.dp))
@@ -74,11 +74,11 @@ internal fun NewDashboardContent(
                 }
             }
 
-            is NewDashboardState.Loading -> CircularProgressIndicator(
+            is DashboardState.Loading -> CircularProgressIndicator(
                 Modifier.align(Alignment.Center)
             )
 
-            is NewDashboardState.Success -> {
+            is DashboardState.Success -> {
                 val learnedWords = s.learnedWordsStatus
                 val practiceWords = s.practiceWordsStatus
                 val newWords = s.newWordsStatus
@@ -118,9 +118,9 @@ internal fun NewDashboardContent(
     }
 }
 
-private val fillMaxWidthModifier = Modifier.fillMaxSize()
+private val fillMaxWidthModifier = Modifier.fillMaxWidth()
 private val fillMaxWidthModifierHorizontalPadding =
-    Modifier.fillMaxSize().padding(horizontal = 24.dp)
+    fillMaxWidthModifier.padding(horizontal = 24.dp)
 
 @Composable
 private fun DashboardItemsList(
@@ -133,7 +133,7 @@ private fun DashboardItemsList(
     onUpdateFavoriteClick: (WordCombinedUi) -> Unit,
     onUpdateRandomWord: () -> Unit,
     contentPadding: () -> PaddingValues,
-    showSearchItems: () -> Boolean,
+    getShowSearchItems: () -> Boolean,
     learnedWords: LearningStatus,
     practiceWords: LearningStatus,
     newWords: LearningStatus,
@@ -144,6 +144,7 @@ private fun DashboardItemsList(
 ) {
     val columns = GridCells.Fixed(5)
 
+    val showSearchItems = getShowSearchItems()
     LazyVerticalGrid(
         columns,
         modifier = fillMaxWidthModifier.imePadding(),
@@ -152,7 +153,7 @@ private fun DashboardItemsList(
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
 
-        if (!showSearchItems()) {
+        if (!showSearchItems) {
             item(span = { GridItemSpan(5) }) {
                 DashboardSubtitle(
                     "Discover new words",
@@ -249,12 +250,12 @@ private fun DashboardItemsList(
                     fillMaxWidthModifierHorizontalPadding.clickable(onClick = onSettingsClick)
                 )
             }
-            item(span = { GridItemSpan(5) }) {
-                DashboardMenuItem(
-                    "[A]bout",
-                    fillMaxWidthModifierHorizontalPadding.clickable(onClick = onAboutClick)
-                )
-            }
+//            item(span = { GridItemSpan(5) }) {
+//                DashboardMenuItem(
+//                    "[A]bout",
+//                    fillMaxWidthModifierHorizontalPadding.clickable(onClick = onAboutClick)
+//                )
+//            }
         } else {
             items(foundWords.item ?: listOf(), span = { GridItemSpan(5) }) {
                 SearchWordCard(

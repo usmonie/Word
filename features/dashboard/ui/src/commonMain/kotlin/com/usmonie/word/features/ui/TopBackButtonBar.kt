@@ -59,7 +59,7 @@ fun TopBackButtonBar(
                     Icon(
                         Icons.Default.ArrowBack,
                         contentDescription = Icons.Default.ArrowBack.name,
-                        tint = MaterialTheme.colorScheme.onPrimary
+                        tint = MaterialTheme.colorScheme.onBackground
                     )
                 }
 

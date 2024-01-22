@@ -3,7 +3,6 @@ package com.usmonie.word.features.new.dashboard
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.text.input.TextFieldValue
 import com.usmonie.word.features.analytics.DashboardAnalyticsEvents
-import com.usmonie.word.features.dashboard.DashboardViewModel
 import com.usmonie.word.features.dashboard.domain.usecase.GetSearchHistoryUseCase
 import com.usmonie.word.features.dashboard.domain.usecase.GetWordOfTheDayUseCase
 import com.usmonie.word.features.dashboard.domain.usecase.RandomWordUseCase
@@ -27,7 +26,7 @@ import wtf.word.core.domain.Analytics
 import wtf.word.core.domain.tools.fastMap
 
 @Immutable
-internal class NewDashboardViewModel(
+internal class DashboardViewModel(
     private val searchWordsUseCase: SearchWordsUseCase,
     private val getSearchHistoryUseCase: GetSearchHistoryUseCase,
     private val getWordOfTheDayUseCase: GetWordOfTheDayUseCase,
@@ -35,8 +34,8 @@ internal class NewDashboardViewModel(
     private val getRandomWordUseCase: RandomWordUseCase,
     private val analytics: Analytics
 ) :
-    BaseViewModel<NewDashboardState, NewDashboardAction, NewDashboardEvent, NewDashboardEffect>(
-        NewDashboardState.Loading()
+    BaseViewModel<DashboardState, DashboardAction, DashboardEvent, DashboardEffect>(
+        DashboardState.Loading()
     ) {
 
     private var searchJob: Job? = null
@@ -45,17 +44,17 @@ internal class NewDashboardViewModel(
         onTryAgain()
     }
 
-    override fun NewDashboardState.reduce(event: NewDashboardEvent): NewDashboardState {
+    override fun DashboardState.reduce(event: DashboardEvent): DashboardState {
         return when (event) {
-            NewDashboardEvent.ContentLoading -> NewDashboardState.Loading()
-            NewDashboardEvent.BackToMain -> when (this) {
-                is NewDashboardState.Error -> this
-                is NewDashboardState.Loading -> this
-                is NewDashboardState.Success -> copy(hasFocus = false, query = TextFieldValue())
+            DashboardEvent.ContentLoading -> DashboardState.Loading()
+            DashboardEvent.BackToMain -> when (this) {
+                is DashboardState.Error -> this
+                is DashboardState.Loading -> this
+                is DashboardState.Success -> copy(hasFocus = false, query = TextFieldValue())
             }
 
-            is NewDashboardEvent.Content -> when (this) {
-                is NewDashboardState.Success -> copy(
+            is DashboardEvent.Content -> when (this) {
+                is DashboardState.Success -> copy(
                     wordOfTheDay = event.wordOfTheDay,
                     randomWord = event.randomWord,
                     recentSearch = event.recentSearch,
@@ -82,7 +81,7 @@ internal class NewDashboardViewModel(
                     ),
                 )
 
-                else -> NewDashboardState.Success(
+                else -> DashboardState.Success(
                     wordOfTheDay = event.wordOfTheDay,
                     randomWord = event.randomWord,
                     recentSearch = event.recentSearch,
@@ -111,38 +110,38 @@ internal class NewDashboardViewModel(
 
             }
 
-            is NewDashboardEvent.InputQuery -> when (this) {
-                is NewDashboardState.Error -> this
-                is NewDashboardState.Loading -> this
-                is NewDashboardState.Success -> copy(query = event.query)
+            is DashboardEvent.InputQuery -> when (this) {
+                is DashboardState.Error -> this
+                is DashboardState.Loading -> this
+                is DashboardState.Success -> copy(query = event.query)
             }
 
-            is NewDashboardEvent.QueryFocusChanged -> when (this) {
-                is NewDashboardState.Error -> this
-                is NewDashboardState.Loading -> this
-                is NewDashboardState.Success -> copy(hasFocus = event.hasFocus)
+            is DashboardEvent.QueryFocusChanged -> when (this) {
+                is DashboardState.Error -> this
+                is DashboardState.Loading -> this
+                is DashboardState.Success -> copy(hasFocus = event.hasFocus)
             }
 
             else -> this
         }
     }
 
-    override suspend fun processAction(action: NewDashboardAction): NewDashboardEvent {
+    override suspend fun processAction(action: DashboardAction): DashboardEvent {
         return when (action) {
-            NewDashboardAction.ClearQuery -> NewDashboardEvent.BackToMain
-            NewDashboardAction.Initial -> {
+            DashboardAction.ClearQuery -> DashboardEvent.BackToMain
+            DashboardAction.Initial -> {
                 loadData(0L)
-                NewDashboardEvent.ContentLoading
+                DashboardEvent.ContentLoading
             }
 
-            is NewDashboardAction.InputQuery -> search(action.query, 0)
-            is NewDashboardAction.NextRandomWord -> {
+            is DashboardAction.InputQuery -> search(action.query, 0)
+            is DashboardAction.NextRandomWord -> {
                 val currentState = state.value
 
-                if (currentState !is NewDashboardState.Success) return NewDashboardEvent.ContentLoading
+                if (currentState !is DashboardState.Success) return DashboardEvent.ContentLoading
                 val newRandomWord = newRandomWord(false, currentState)
 
-                NewDashboardEvent.Content(
+                DashboardEvent.Content(
                     currentState.recentSearch,
                     currentState.wordOfTheDay,
                     newRandomWord,
@@ -155,93 +154,93 @@ internal class NewDashboardViewModel(
                 )
             }
 
-            is NewDashboardAction.OpenWord -> NewDashboardEvent.OpenWord(action.word)
+            is DashboardAction.OpenWord -> DashboardEvent.OpenWord(action.word)
 
-            is NewDashboardAction.QueryFieldFocusChange ->
-                NewDashboardEvent.QueryFocusChanged(action.isFocus)
+            is DashboardAction.QueryFieldFocusChange ->
+                DashboardEvent.QueryFocusChanged(action.isFocus)
 
-            NewDashboardAction.Refresh -> {
+            DashboardAction.Refresh -> {
                 updateData()
-                NewDashboardEvent.ContentLoading
+                DashboardEvent.ContentLoading
             }
 
-            is NewDashboardAction.UpdateFavorite -> {
+            is DashboardAction.UpdateFavorite -> {
                 val currentState = state.value
 
-                if (currentState !is NewDashboardState.Success) return NewDashboardEvent.ContentLoading
+                if (currentState !is DashboardState.Success) return DashboardEvent.ContentLoading
                 updateFavourite(action.word, currentState)
             }
 
-            NewDashboardAction.OnMenuItemClicked.About -> NewDashboardEvent.MenuItemOpen.About
-            NewDashboardAction.OnMenuItemClicked.Favorites -> NewDashboardEvent.MenuItemOpen.Favorites
-            NewDashboardAction.OnMenuItemClicked.Games -> NewDashboardEvent.MenuItemOpen.Games
-            NewDashboardAction.OnMenuItemClicked.Settings -> NewDashboardEvent.MenuItemOpen.Settings
+            DashboardAction.OnMenuItemClicked.About -> DashboardEvent.MenuItemOpen.About
+            DashboardAction.OnMenuItemClicked.Favorites -> DashboardEvent.MenuItemOpen.Favorites
+            DashboardAction.OnMenuItemClicked.Games -> DashboardEvent.MenuItemOpen.Games
+            DashboardAction.OnMenuItemClicked.Settings -> DashboardEvent.MenuItemOpen.Settings
         }
     }
 
-    override suspend fun handleEvent(event: NewDashboardEvent) = when (event) {
-        is NewDashboardEvent.OpenWord -> NewDashboardEffect.OpenWord(event.word)
-        is NewDashboardEvent.MenuItemOpen.Favorites -> NewDashboardEffect.OpenFavorites()
-        is NewDashboardEvent.MenuItemOpen.Games -> NewDashboardEffect.OpenGames()
-        is NewDashboardEvent.MenuItemOpen.Settings -> NewDashboardEffect.OpenSettings()
-        is NewDashboardEvent.MenuItemOpen.About -> NewDashboardEffect.OpenAbout()
+    override suspend fun handleEvent(event: DashboardEvent) = when (event) {
+        is DashboardEvent.OpenWord -> DashboardEffect.OpenWord(event.word)
+        is DashboardEvent.MenuItemOpen.Favorites -> DashboardEffect.OpenFavorites()
+        is DashboardEvent.MenuItemOpen.Games -> DashboardEffect.OpenGames()
+        is DashboardEvent.MenuItemOpen.Settings -> DashboardEffect.OpenSettings()
+        is DashboardEvent.MenuItemOpen.About -> DashboardEffect.OpenAbout()
         else -> null
     }
 
-    fun onFavoritesClick() = handleAction(NewDashboardAction.OnMenuItemClicked.Favorites)
-    fun onSettingsClick() = handleAction(NewDashboardAction.OnMenuItemClicked.Settings)
-    fun onGamesClick() = handleAction(NewDashboardAction.OnMenuItemClicked.Games)
-    fun onAboutClick() = handleAction(NewDashboardAction.OnMenuItemClicked.About)
-    fun onQueryChanged(query: TextFieldValue) = handleAction(NewDashboardAction.InputQuery(query))
+    fun onFavoritesClick() = handleAction(DashboardAction.OnMenuItemClicked.Favorites)
+    fun onSettingsClick() = handleAction(DashboardAction.OnMenuItemClicked.Settings)
+    fun onGamesClick() = handleAction(DashboardAction.OnMenuItemClicked.Games)
+    fun onAboutClick() = handleAction(DashboardAction.OnMenuItemClicked.About)
+    fun onQueryChanged(query: TextFieldValue) = handleAction(DashboardAction.InputQuery(query))
 
     fun onQueryFieldFocusChanged(isFocus: Boolean) =
-        handleAction(NewDashboardAction.QueryFieldFocusChange(isFocus))
+        handleAction(DashboardAction.QueryFieldFocusChange(isFocus))
 
-    fun onBackClick() = handleAction(NewDashboardAction.ClearQuery)
+    fun onBackClick() = handleAction(DashboardAction.ClearQuery)
 
     fun onOpenWord(wordCombined: WordCombinedUi) =
-        handleAction(NewDashboardAction.OpenWord(wordCombined))
+        handleAction(DashboardAction.OpenWord(wordCombined))
 
     fun onUpdateFavorite(wordCombined: WordCombinedUi) =
-        handleAction(NewDashboardAction.UpdateFavorite(wordCombined))
+        handleAction(DashboardAction.UpdateFavorite(wordCombined))
 
-    fun onNextRandomWord(state: NewDashboardState.Success) =
-        handleAction(NewDashboardAction.NextRandomWord(state))
+    fun onNextRandomWord(state: DashboardState.Success) =
+        handleAction(DashboardAction.NextRandomWord(state))
 
     fun onLearnClick(wordCombined: WordCombinedUi) {
 
     }
 
     fun onTryAgain() {
-        handleAction(NewDashboardAction.Initial)
+        handleAction(DashboardAction.Initial)
     }
 
-    private suspend fun search(query: TextFieldValue, offset: Long = 0): NewDashboardEvent {
+    private suspend fun search(query: TextFieldValue, offset: Long = 0): DashboardEvent {
         val currentState = state.value
-        if (currentState !is NewDashboardState.Success) return NewDashboardEvent.BackToMain
+        if (currentState !is DashboardState.Success) return DashboardEvent.BackToMain
 
         if (query.text == currentState.query.text && query.text.isNotBlank()) {
-            return NewDashboardEvent.InputQuery(query)
+            return DashboardEvent.InputQuery(query)
         }
         searchJob?.cancel()
         if (query.text.isBlank()) {
             updateData()
-            return NewDashboardEvent.InputQuery(query)
+            return DashboardEvent.InputQuery(query)
         }
 
         launchSearch(currentState, query, offset)
-        return NewDashboardEvent.InputQuery(query)
+        return DashboardEvent.InputQuery(query)
     }
 
     private suspend fun launchSearch(
-        state: NewDashboardState.Success,
+        state: DashboardState.Success,
         query: TextFieldValue,
         offset: Long,
-        limit: Long = DashboardViewModel.DEFAULT_LIMIT,
+        limit: Long = DEFAULT_LIMIT,
         exactly: Boolean = false
     ) {
         searchJob = viewModelScope.launch(Dispatchers.IO) {
-            delay(350L)
+            delay(400L)
             ensureActive()
 
             val found = searchWordsUseCase(
@@ -254,8 +253,9 @@ internal class NewDashboardViewModel(
             withContext(Dispatchers.Main) {
                 ensureActive()
                 analytics.log(DashboardAnalyticsEvents.Search(query.text))
+                println("found: ${found.size}")
                 handleState(
-                    NewDashboardEvent.Content(
+                    DashboardEvent.Content(
                         state.recentSearch,
                         state.wordOfTheDay,
                         state.randomWord,
@@ -280,11 +280,11 @@ internal class NewDashboardViewModel(
             val recentSearch = getSearchHistoryUseCase(
                 GetSearchHistoryUseCase.Param(
                     offset,
-                    DashboardViewModel.START_LIMIT
+                    START_LIMIT
                 )
             ).fastMap { it.toUi() }
 
-            val wordOfTheDay = if (update && currentState is NewDashboardState.Success) {
+            val wordOfTheDay = if (update && currentState is DashboardState.Success) {
                 currentState.wordOfTheDay
             } else {
                 try {
@@ -300,8 +300,8 @@ internal class NewDashboardViewModel(
 
 
             handleState(
-                if (currentState is NewDashboardState.Success) {
-                    NewDashboardEvent.Content(
+                if (currentState is DashboardState.Success) {
+                    DashboardEvent.Content(
                         recentSearch = recentSearch,
                         wordOfTheDay = wordOfTheDay,
                         randomWord = randomWord,
@@ -313,7 +313,7 @@ internal class NewDashboardViewModel(
                         query = currentState.query
                     )
                 } else {
-                    NewDashboardEvent.Content(
+                    DashboardEvent.Content(
                         recentSearch = recentSearch,
                         wordOfTheDay = wordOfTheDay,
                         randomWord = randomWord,
@@ -329,11 +329,11 @@ internal class NewDashboardViewModel(
         }
     }
 
-    private suspend fun NewDashboardViewModel.newRandomWord(
+    private suspend fun DashboardViewModel.newRandomWord(
         update: Boolean,
-        currentState: NewDashboardState
+        currentState: DashboardState
     ): ContentState<Pair<WordUi, WordCombinedUi>> {
-        val randomWord = if (update && currentState is NewDashboardState.Success) {
+        val randomWord = if (update && currentState is DashboardState.Success) {
             currentState.randomWord
         } else {
             try {
@@ -349,14 +349,14 @@ internal class NewDashboardViewModel(
 
     private suspend fun updateFavourite(
         word: WordCombinedUi,
-        state: NewDashboardState.Success
-    ): NewDashboardEvent.Content {
+        state: DashboardState.Success
+    ): DashboardEvent.Content {
         updateFavouriteUseCase(UpdateFavouriteUseCase.Param(word.toDomain()))
 
         return state.updateFavourite(word.copy(isFavorite = !word.isFavorite))
     }
 
-    private fun NewDashboardState.Success.updateFavourite(updatedWord: WordCombinedUi): NewDashboardEvent.Content {
+    private fun DashboardState.Success.updateFavourite(updatedWord: WordCombinedUi): DashboardEvent.Content {
         val newWordOfTheDay: ContentState<Pair<WordUi, WordCombinedUi>> = when (wordOfTheDay) {
             is ContentState.Error<*, *> -> wordOfTheDay
             is ContentState.Loading -> wordOfTheDay
@@ -395,7 +395,7 @@ internal class NewDashboardViewModel(
             mapNewWord(mappedWord, updatedWord)
         }
 
-        return NewDashboardEvent.Content(
+        return DashboardEvent.Content(
             wordOfTheDay = newWordOfTheDay,
             foundWords = newFoundWords,
             randomWord = newRandomWord,
@@ -412,4 +412,9 @@ internal class NewDashboardViewModel(
         mappedWord: WordCombinedUi,
         updatedWord: WordCombinedUi
     ) = if (mappedWord.word == updatedWord.word) updatedWord else mappedWord
+
+    companion object {
+        private const val DEFAULT_LIMIT = 20L
+        private const val START_LIMIT = DEFAULT_LIMIT * 2
+    }
 }
