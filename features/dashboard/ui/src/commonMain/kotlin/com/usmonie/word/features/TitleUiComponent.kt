@@ -10,7 +10,7 @@ import androidx.compose.ui.graphics.Color
 fun TitleUiComponent(
     title: String,
     modifier: Modifier = Modifier,
-    color: Color = MaterialTheme.colorScheme.onPrimary
+    color: Color = MaterialTheme.colorScheme.onBackground
 ) {
     Text(
         title,

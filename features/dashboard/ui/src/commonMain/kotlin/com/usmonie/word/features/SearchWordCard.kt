@@ -17,8 +17,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.models.SoundUi
 import com.usmonie.word.features.models.WordCombinedUi
-import com.usmonie.word.features.new.ui.BaseCard
-import com.usmonie.word.features.new.ui.WordButtons
+import com.usmonie.word.features.ui.BaseCard
+import com.usmonie.word.features.ui.WordButtons
 import com.usmonie.word.features.ui.WordMediumResizableTitle
 import wtf.word.core.domain.tools.fastForEach
 import wtf.word.core.domain.tools.fastForEachIndexed

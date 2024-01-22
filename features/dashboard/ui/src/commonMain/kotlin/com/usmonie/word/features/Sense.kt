@@ -42,7 +42,7 @@ import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.models.ExampleUi
 import com.usmonie.word.features.models.Forms
 import com.usmonie.word.features.models.SenseCombinedUi
-import com.usmonie.word.features.new.ui.BaseCard
+import com.usmonie.word.features.ui.BaseCard
 import wtf.word.core.domain.tools.fastForEach
 
 @Composable

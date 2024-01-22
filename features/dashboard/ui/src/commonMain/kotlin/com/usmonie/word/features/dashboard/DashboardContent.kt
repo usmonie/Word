@@ -1,4 +1,4 @@
-package com.usmonie.word.features.new.dashboard
+package com.usmonie.word.features.dashboard
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -34,11 +34,11 @@ import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.SearchWordCard
 import com.usmonie.word.features.models.WordCombinedUi
 import com.usmonie.word.features.models.WordUi
-import com.usmonie.word.features.new.ui.BaseCard
-import com.usmonie.word.features.new.ui.BaseTextButton
-import com.usmonie.word.features.new.ui.PrimaryStatusCard
-import com.usmonie.word.features.new.ui.StatusCard
-import com.usmonie.word.features.new.ui.WordButtons
+import com.usmonie.word.features.ui.BaseCard
+import com.usmonie.word.features.ui.BaseTextButton
+import com.usmonie.word.features.ui.PrimaryStatusCard
+import com.usmonie.word.features.ui.StatusCard
+import com.usmonie.word.features.ui.WordButtons
 import com.usmonie.word.features.ui.AdMob
 import com.usmonie.word.features.ui.WordLargeResizableTitle
 import wtf.speech.core.ui.ContentState

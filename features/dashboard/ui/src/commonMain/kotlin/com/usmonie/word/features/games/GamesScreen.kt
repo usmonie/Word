@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.games.hangman.HangmanGameScreen
-import com.usmonie.word.features.new.dashboard.DashboardMenuItem
+import com.usmonie.word.features.dashboard.DashboardMenuItem
 import com.usmonie.word.features.ui.WordTopBar
 import wtf.speech.compass.core.Extra
 import wtf.speech.compass.core.LocalRouteManager

@@ -1,4 +1,4 @@
-package com.usmonie.word.features.new.ui
+package com.usmonie.word.features.ui
 
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.shape.RoundedCornerShape

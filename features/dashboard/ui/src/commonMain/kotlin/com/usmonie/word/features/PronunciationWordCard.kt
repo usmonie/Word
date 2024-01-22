@@ -20,8 +20,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.models.WordUi
-import com.usmonie.word.features.new.ui.BaseCard
-import com.usmonie.word.features.new.ui.WordButtons
+import com.usmonie.word.features.ui.BaseCard
+import com.usmonie.word.features.ui.WordButtons
 import com.usmonie.word.features.ui.WordLargeResizableTitle
 import com.usmonie.word.features.ui.WordMediumResizableTitle
 import wtf.word.core.domain.tools.fastForEachIndexed
@@ -58,9 +58,10 @@ fun DetailsWordCardLarge(
 
         Pronunciations({ word }, onAudioPlayClicked)
         Spacer(Modifier.height(16.dp))
-        WordCardButtons(
+        WordButtons(
             { onLearnClicked(word) },
             { onBookmarkedClicked(word) },
+            {},
             bookmarked,
             modifier = Modifier.fillMaxWidth()
         )

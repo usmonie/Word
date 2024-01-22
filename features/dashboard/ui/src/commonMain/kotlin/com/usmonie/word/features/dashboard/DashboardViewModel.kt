@@ -1,4 +1,4 @@
-package com.usmonie.word.features.new.dashboard
+package com.usmonie.word.features.dashboard
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.text.input.TextFieldValue
