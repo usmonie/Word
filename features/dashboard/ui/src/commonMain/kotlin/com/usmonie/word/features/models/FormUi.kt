@@ -14,7 +14,6 @@ data class FormUi(
     val ruby: List<List<String>>,
     val tags: List<String>,
     val topics: List<String>,
-    val form: Form,
 )
 
 @Immutable

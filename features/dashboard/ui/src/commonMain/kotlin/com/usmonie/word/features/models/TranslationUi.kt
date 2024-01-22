@@ -15,5 +15,4 @@ data class TranslationUi(
     val taxonomic: String?,
     val topics: List<String>,
     val word: String?,
-    val translation: Translation
 )

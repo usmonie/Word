@@ -7,8 +7,6 @@ import androidx.compose.runtime.Immutable
 import com.usmonie.word.features.analytics.DashboardAnalyticsEvents
 import com.usmonie.word.features.dashboard.domain.usecase.UpdateFavouriteUseCase
 import com.usmonie.word.features.models.WordCombinedUi
-import com.usmonie.word.features.models.toDomain
-import com.usmonie.word.features.models.toUi
 import wtf.speech.core.ui.BaseViewModel
 import wtf.speech.core.ui.ContentState
 import wtf.word.core.domain.Analytics
@@ -76,9 +74,8 @@ class WordViewModel(
     }
 
     private suspend fun updateFavourite(word: WordCombinedUi): WordEvent {
-        return WordEvent.UpdateWord(
-            updateFavouriteUseCase(UpdateFavouriteUseCase.Param(word = word.toDomain())).toUi(),
-        )
+        updateFavouriteUseCase(UpdateFavouriteUseCase.Param(word.word, word.isFavorite))
+        return WordEvent.UpdateWord(word.copy(isFavorite = !word.isFavorite))
     }
 
     private suspend fun loadSimilar(word: WordCombinedUi): WordEvent {

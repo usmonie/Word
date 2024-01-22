@@ -10,5 +10,4 @@ data class InstanceUi(
     val word: String?,
     val tags: List<String>,
     val topics: List<String>,
-    val instance: Instance
 )

@@ -32,14 +32,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.SearchWordCard
+import com.usmonie.word.features.models.LearningStatus
 import com.usmonie.word.features.models.WordCombinedUi
 import com.usmonie.word.features.models.WordUi
+import com.usmonie.word.features.ui.AdMob
 import com.usmonie.word.features.ui.BaseCard
 import com.usmonie.word.features.ui.BaseTextButton
 import com.usmonie.word.features.ui.PrimaryStatusCard
 import com.usmonie.word.features.ui.StatusCard
 import com.usmonie.word.features.ui.WordButtons
-import com.usmonie.word.features.ui.AdMob
 import com.usmonie.word.features.ui.WordLargeResizableTitle
 import wtf.speech.core.ui.ContentState
 
@@ -210,7 +211,7 @@ private fun DashboardItemsList(
 
             if (wordOfTheDay !is ContentState.Error<*, *>) {
                 item(span = { GridItemSpan(5) }) {
-                    NewWordOfTheDayCard(
+                    WordOfTheDayCard(
                         onClick,
                         onUpdateFavoriteClick,
                         onLearnClick,
@@ -221,7 +222,7 @@ private fun DashboardItemsList(
             }
 
             item(span = { GridItemSpan(5) }) {
-                NewRandomWordCard(
+                RandomWordCard(
                     onClick,
                     onUpdateFavoriteClick,
                     onUpdateRandomWord,
@@ -303,7 +304,7 @@ fun DashboardMenuItem(
 }
 
 @Composable
-fun NewWordOfTheDayCard(
+fun WordOfTheDayCard(
     onClick: (WordCombinedUi) -> Unit,
     onUpdateFavoriteClick: (WordCombinedUi) -> Unit,
     onLearnClick: (WordCombinedUi) -> Unit,
@@ -355,7 +356,7 @@ fun NewWordOfTheDayCard(
 
 
 @Composable
-fun NewRandomWordCard(
+fun RandomWordCard(
     onClick: (WordCombinedUi) -> Unit,
     onUpdateFavoriteClick: (WordCombinedUi) -> Unit,
     onUpdateRandomWord: () -> Unit,
@@ -369,7 +370,7 @@ fun NewRandomWordCard(
             { },
             modifier = modifier
         ) {
-            Box(Modifier.fillMaxWidth().padding(vertical = 20.dp), Alignment.Center) {
+            Box(Modifier.fillMaxWidth().padding(vertical = 24.dp), Alignment.Center) {
                 CircularProgressIndicator(
                     Modifier.size(32.dp),
                     MaterialTheme.colorScheme.onSurface

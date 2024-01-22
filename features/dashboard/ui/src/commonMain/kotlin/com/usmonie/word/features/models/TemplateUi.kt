@@ -7,5 +7,4 @@ data class TemplateUi(
 //    val args: Map<String, String>,
     val expansion: String?,
     val name: String?,
-    val template: Template
 )

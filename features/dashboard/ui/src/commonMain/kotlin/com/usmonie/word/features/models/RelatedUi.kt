@@ -2,7 +2,6 @@ package com.usmonie.word.features.models
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
-import com.usmonie.word.features.dashboard.domain.models.Related
 
 @Stable
 @Immutable
@@ -21,5 +20,4 @@ data class RelatedUi(
     val urls: List<String>,
     val word: String?,
     val extra: String?,
-    val related: Related
 )

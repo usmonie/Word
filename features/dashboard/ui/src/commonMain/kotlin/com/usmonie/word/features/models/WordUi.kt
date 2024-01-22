@@ -2,7 +2,6 @@ package com.usmonie.word.features.models
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
-import com.usmonie.word.features.dashboard.domain.models.Word
 
 @Stable
 @Immutable
@@ -45,8 +44,6 @@ data class WordUi(
     val related: List<RelatedUi> = listOf(),
     val synonyms: List<RelatedUi> = listOf(),
     val troponyms: List<RelatedUi> = listOf(),
-
-    val wordDomain: Word,
 ) {
     val thesaurusAvailable: Boolean = abbreviations.isNotEmpty() || altOf.isNotEmpty()
             || antonyms.isNotEmpty() || coordinateTerms.isNotEmpty() || derived.isNotEmpty()

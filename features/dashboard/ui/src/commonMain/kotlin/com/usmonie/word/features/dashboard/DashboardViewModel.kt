@@ -8,9 +8,9 @@ import com.usmonie.word.features.dashboard.domain.usecase.GetWordOfTheDayUseCase
 import com.usmonie.word.features.dashboard.domain.usecase.RandomWordUseCase
 import com.usmonie.word.features.dashboard.domain.usecase.SearchWordsUseCase
 import com.usmonie.word.features.dashboard.domain.usecase.UpdateFavouriteUseCase
+import com.usmonie.word.features.models.LearningStatus
 import com.usmonie.word.features.models.WordCombinedUi
 import com.usmonie.word.features.models.WordUi
-import com.usmonie.word.features.models.toDomain
 import com.usmonie.word.features.models.toUi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -351,7 +351,7 @@ internal class DashboardViewModel(
         word: WordCombinedUi,
         state: DashboardState.Success
     ): DashboardEvent.Content {
-        updateFavouriteUseCase(UpdateFavouriteUseCase.Param(word.toDomain()))
+        updateFavouriteUseCase(UpdateFavouriteUseCase.Param(word.word, word.isFavorite))
 
         return state.updateFavourite(word.copy(isFavorite = !word.isFavorite))
     }

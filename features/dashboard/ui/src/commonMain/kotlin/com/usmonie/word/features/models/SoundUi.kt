@@ -21,5 +21,4 @@ data class SoundUi(
     val text: String?,
     val topics: List<String>,
     val zhPron: String?,
-    val sound: Sound
 )

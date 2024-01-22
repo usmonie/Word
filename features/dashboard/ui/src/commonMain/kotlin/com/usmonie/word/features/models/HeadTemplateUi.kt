@@ -8,5 +8,4 @@ data class HeadTemplateUi(
 //                              val args: Map<String, String>,
     val expansion: String?,
     val name: String?,
-    val headTemplate: HeadTemplate
 )

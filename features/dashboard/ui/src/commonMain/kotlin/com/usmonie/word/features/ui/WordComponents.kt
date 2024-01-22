@@ -1,13 +1,8 @@
 package com.usmonie.word.features.ui
 
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -22,7 +17,6 @@ import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.resources.ExperimentalResourceApi
@@ -170,45 +164,4 @@ fun ShareButton(
             tint = tint
         )
     }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun BaseCard(
-    onClick: () -> Unit,
-    elevation: Dp = 2.dp,
-    modifier: Modifier = Modifier,
-    enabled: Boolean = true,
-    content: @Composable ColumnScope.() -> Unit
-) {
-    ElevatedCard(
-        onClick,
-        modifier = modifier,
-        colors = CardDefaults.cardColors(disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant),
-        shape = RoundedCornerShape(16.dp),
-        elevation = CardDefaults.elevatedCardElevation(
-            defaultElevation = elevation,
-            pressedElevation = (-12).dp
-        ),
-        enabled = enabled,
-        content = content
-    )
-}
-
-@Composable
-fun BaseCard(
-    elevation: Dp = 2.dp,
-    modifier: Modifier = Modifier,
-    content: @Composable ColumnScope.() -> Unit
-) {
-    ElevatedCard(
-        modifier = modifier,
-        colors = CardDefaults.cardColors(disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant),
-        shape = RoundedCornerShape(16.dp),
-        elevation = CardDefaults.elevatedCardElevation(
-            defaultElevation = elevation,
-            pressedElevation = (-12).dp
-        ),
-        content = content
-    )
 }

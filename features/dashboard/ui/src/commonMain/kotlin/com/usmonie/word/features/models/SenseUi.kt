@@ -2,8 +2,6 @@ package com.usmonie.word.features.models
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
-import com.usmonie.word.features.dashboard.domain.models.Sense
-import com.usmonie.word.features.dashboard.domain.models.SenseCombined
 
 @Stable
 @Immutable
@@ -37,7 +35,6 @@ data class SenseUi(
     val troponyms: List<RelatedUi> = listOf(),
     val wikidata: List<String> = listOf(),
     val wikipedia: List<String> = listOf(),
-    val sense: Sense
 )
 
 @Stable
@@ -71,7 +68,6 @@ data class SenseCombinedUi(
     val troponyms: List<RelatedUi>,
     val wikidata: List<String>,
     val wikipedia: List<String>,
-    val senseCombined: SenseCombined
 )
 
 data class Gloss(val text: String, val children: List<Gloss>, val examples: List<ExampleUi>)

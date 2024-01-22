@@ -27,6 +27,5 @@ internal fun InstanceUi.toDomain() = instance
 
 internal fun SoundUi.toDomain() = sound
 
-internal fun WordCombinedUi.toDomain() = wordCombined
 
 internal fun WordEtymologyUi.toDomain() = wordEtymology

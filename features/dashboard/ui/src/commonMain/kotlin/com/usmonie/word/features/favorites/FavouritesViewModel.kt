@@ -10,7 +10,6 @@ import com.usmonie.word.features.analytics.DashboardAnalyticsEvents
 import com.usmonie.word.features.dashboard.domain.usecase.GetAllFavouritesUseCase
 import com.usmonie.word.features.dashboard.domain.usecase.UpdateFavouriteUseCase
 import com.usmonie.word.features.models.WordCombinedUi
-import com.usmonie.word.features.models.toDomain
 import com.usmonie.word.features.models.toUi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -102,8 +101,7 @@ class FavouritesViewModel(
     }
 
     private suspend fun updateFavourite(word: WordCombinedUi): FavoritesEvent {
-        val updatedWord = updateFavouriteUseCase(UpdateFavouriteUseCase.Param(word.toDomain()))
-
-        return FavoritesEvent.UpdatedWord(updatedWord.toUi())
+        updateFavouriteUseCase(UpdateFavouriteUseCase.Param(word.word, word.isFavorite))
+        return FavoritesEvent.UpdatedWord(word.copy(isFavorite = word.isFavorite))
     }
 }

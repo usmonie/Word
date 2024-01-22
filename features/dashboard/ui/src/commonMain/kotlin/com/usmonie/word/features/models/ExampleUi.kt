@@ -13,5 +13,4 @@ data class ExampleUi(
     val ruby: List<List<String>>,
     val text: String?,
     val type: String?,
-    val example: Example
 )

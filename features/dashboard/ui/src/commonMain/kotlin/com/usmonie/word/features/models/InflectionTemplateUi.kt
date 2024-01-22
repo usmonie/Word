@@ -6,5 +6,4 @@ data class InflectionTemplateUi(
     val id: String,
 //    val args: Map<String, String>,
     val name: String?,
-    val inflectionTemplate: InflectionTemplate
 )

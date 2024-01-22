@@ -1,6 +1,7 @@
 package com.usmonie.word.features.dashboard
 
 import androidx.compose.ui.text.input.TextFieldValue
+import com.usmonie.word.features.models.LearningStatus
 import com.usmonie.word.features.models.WordCombinedUi
 import com.usmonie.word.features.models.WordUi
 import wtf.speech.core.ui.ContentState

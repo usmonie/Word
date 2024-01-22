@@ -57,15 +57,14 @@ internal fun Word.toUi() = WordUi(
     troponyms = troponyms.toUi(),
     wikidata = wikidata,
     wikipedia = wikipedia,
-    wordDomain = this
 )
 
 internal fun List<Related>.toUi() = map { it.toUi() }
 internal fun Category.toUi() =
-    CategoryUi(id, kind, langcode, name, orig, parents, source, this)
+        CategoryUi(id, kind, langcode, name, orig, parents, source)
 
 internal fun Descendant.toUi() =
-    DescendantUi(id, depth, tags, templates.fastMap { it.toUi() }, text, this)
+    DescendantUi(id, depth, tags, templates.fastMap { it.toUi() }, text)
 
 internal fun Form.toUi() =
     FormUi(
@@ -77,8 +76,7 @@ internal fun Form.toUi() =
         source,
         ruby,
         tags,
-        topics,
-        this
+        topics
     )
 
 internal fun Related.toUi() = RelatedUi(
@@ -95,8 +93,7 @@ internal fun Related.toUi() = RelatedUi(
     topics = topics,
     urls = urls,
     word = word,
-    extra = extra,
-    this
+    extra = extra
 )
 
 internal fun Translation.toUi() = TranslationUi(
@@ -112,7 +109,6 @@ internal fun Translation.toUi() = TranslationUi(
     taxonomic = taxonomic,
     topics = topics,
     word = word,
-    translation = this
 )
 
 internal fun Sense.toUi() = SenseUi(
@@ -144,7 +140,6 @@ internal fun Sense.toUi() = SenseUi(
     troponyms = troponyms.toUi(),
     wikidata = wikidata,
     wikipedia = wikipedia,
-    sense = this
 )
 
 internal fun SenseCombined.toUi(): SenseCombinedUi = SenseCombinedUi(
@@ -177,18 +172,17 @@ internal fun SenseCombined.toUi(): SenseCombinedUi = SenseCombinedUi(
     troponyms = troponyms.toUi(),
     wikidata = wikidata,
     wikipedia = wikipedia,
-    senseCombined = this
 )
 
 internal fun EtymologyTemplate.toUi() = EtymologyTemplateUi(
-    id, expansion, name, this
+    id, expansion, name
 )
 
-internal fun Template.toUi() = TemplateUi(id, expansion, name, this)
+internal fun Template.toUi() = TemplateUi(id, expansion, name)
 
-internal fun HeadTemplate.toUi() = HeadTemplateUi(id, expansion, name, this)
+internal fun HeadTemplate.toUi() = HeadTemplateUi(id, expansion, name)
 
-internal fun InflectionTemplate.toUi() = InflectionTemplateUi(id, name, this)
+internal fun InflectionTemplate.toUi() = InflectionTemplateUi(id, name)
 
 internal fun Example.toUi() = ExampleUi(
     id = id,
@@ -199,10 +193,9 @@ internal fun Example.toUi() = ExampleUi(
     ruby = ruby,
     text = text,
     type = type,
-    example = this
 )
 
-internal fun Instance.toUi() = InstanceUi(id, sense, source, word, tags, topics, this)
+internal fun Instance.toUi() = InstanceUi(id, sense, source, word, tags, topics)
 
 internal fun Sound.toUi() = SoundUi(
     id = id,
@@ -221,11 +214,10 @@ internal fun Sound.toUi() = SoundUi(
     text = text,
     topics = topics,
     zhPron = zhPron,
-    sound = this
 )
 
 internal fun WordCombined.toUi(): WordCombinedUi {
-    return WordCombinedUi(word, wordEtymology.fastMap { it.toUi() }, isFavorite, this)
+    return WordCombinedUi(word, wordEtymology.fastMap { it.toUi() }, isFavorite,)
 }
 
 internal fun WordEtymology.toUi(): WordEtymologyUi {
@@ -234,6 +226,5 @@ internal fun WordEtymology.toUi(): WordEtymologyUi {
         etymologyNumber,
         sounds.fastMap { it.toUi() },
         words.fastMap { it.toUi() },
-        this
     )
 }
