@@ -1,7 +1,6 @@
 package com.usmonie.word.features.games.hangman
 
 import androidx.compose.runtime.Stable
-import com.usmonie.word.features.dashboard.domain.models.WordCombined
 import com.usmonie.word.features.models.WordCombinedUi
 import wtf.speech.core.ui.ScreenAction
 import wtf.speech.core.ui.ScreenEffect
@@ -20,7 +19,6 @@ sealed class HangmanState(
             "",
             listOf(),
             false,
-            WordCombined(listOf(), false, "")
         ),
         setOf(),
         0
