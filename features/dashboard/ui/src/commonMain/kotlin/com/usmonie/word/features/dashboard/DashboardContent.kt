@@ -36,12 +36,12 @@ import com.usmonie.word.features.models.LearningStatus
 import com.usmonie.word.features.models.WordCombinedUi
 import com.usmonie.word.features.models.WordUi
 import com.usmonie.word.features.ui.AdMob
-import com.usmonie.word.features.ui.BaseCard
 import com.usmonie.word.features.ui.BaseTextButton
 import com.usmonie.word.features.ui.PrimaryStatusCard
 import com.usmonie.word.features.ui.StatusCard
 import com.usmonie.word.features.ui.WordButtons
 import com.usmonie.word.features.ui.WordLargeResizableTitle
+import wtf.speech.core.ui.BaseCard
 import wtf.speech.core.ui.ContentState
 
 @ExperimentalMaterial3Api
@@ -75,9 +75,9 @@ internal fun DashboardContent(
                 }
             }
 
-            is DashboardState.Loading -> CircularProgressIndicator(
-                Modifier.align(Alignment.Center)
-            )
+            is DashboardState.Loading -> {
+//                LinearProgressIndicator()
+            }
 
             is DashboardState.Success -> {
                 val learnedWords = s.learnedWordsStatus

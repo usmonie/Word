@@ -31,6 +31,7 @@ fun BackGestureHandler(
     content: @Composable BoxScope.(Screen) -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
+    val current = currentScreen()
 
     Box(
         modifier = Modifier
@@ -39,7 +40,7 @@ fun BackGestureHandler(
             .pointerInput(Unit, remember {
                 {
                     val offset = getOffset()
-                    if (isGestureNavigationEnabled) {
+                    if (isGestureNavigationEnabled && current.backGestureEnabled) {
                         detectHorizontalDragGestures(
                             onDragEnd = {
                                 coroutineScope.launch {
@@ -95,7 +96,6 @@ fun BackGestureHandler(
                     .shadow(16.dp)
                     .fillMaxSize()
             ) {
-                val current = currentScreen()
                 content(current)
             }
         }

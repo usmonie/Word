@@ -15,7 +15,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
         #if DEBUG
         #else
-        FirebaseApp.configure()
+            FirebaseApp.configure()
         #endif
 
         GADMobileAds.sharedInstance().requestConfiguration.testDeviceIdentifiers = [

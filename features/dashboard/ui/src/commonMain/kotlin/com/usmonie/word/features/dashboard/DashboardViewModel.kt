@@ -113,7 +113,10 @@ internal class DashboardViewModel(
             is DashboardEvent.InputQuery -> when (this) {
                 is DashboardState.Error -> this
                 is DashboardState.Loading -> this
-                is DashboardState.Success -> copy(query = event.query)
+                is DashboardState.Success -> copy(
+                    query = event.query,
+                    foundWords = ContentState.Loading()
+                )
             }
 
             is DashboardEvent.QueryFocusChanged -> when (this) {

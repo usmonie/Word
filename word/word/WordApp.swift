@@ -12,19 +12,19 @@ import AppTrackingTransparency
 @main
 struct WordApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
-     
+
     @Environment(\.scenePhase) var scenePhase
 
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .onChange(of: scenePhase, perform: { newValue in
-                    if newValue == .active {
-                        ATTrackingManager.requestTrackingAuthorization { status in
-                            // do something
+                    .onChange(of: scenePhase, perform: { newValue in
+                        if newValue == .active {
+                            ATTrackingManager.requestTrackingAuthorization { status in
+                                // do something
+                            }
                         }
-                    }
-                })
+                    })
         }
     }
 }

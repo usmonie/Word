@@ -39,16 +39,19 @@ import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
 import com.liftric.kvault.KVault
+import com.usmonie.word.features.DASHBOARD_GRAPH_ID
 import com.usmonie.word.features.dashboard.data.api.WordApi
 import com.usmonie.word.features.dashboard.data.di.DashboardDataComponent
 import com.usmonie.word.features.dashboard.data.repository.UserRepositoryImpl
 import com.usmonie.word.features.dashboard.domain.usecase.CurrentThemeUseCaseImpl
 import com.usmonie.word.features.getDashboardGraph
+import com.usmonie.word.features.onboarding.ui.getWelcomeGraph
 import com.usmonie.word.features.subscription.data.Billing
 import com.usmonie.word.features.subscription.data.getSubscriptionRepository
 import com.usmonie.word.features.subscription.domain.models.SubscriptionStatus
 import com.usmonie.word.features.subscription.domain.usecase.SubscriptionStatusUseCaseImpl
 import com.usmonie.word.features.ui.AdMob
+import wtf.speech.compass.core.RouteManager
 import wtf.speech.compass.core.rememberRouteManager
 import wtf.speech.core.ui.AppKeys
 import wtf.word.core.design.themes.WordColors
@@ -62,8 +65,25 @@ class MainActivity : ComponentActivity() {
     }
 
     private var isSubscribed by mutableStateOf(true)
+
+    private var routeManager: RouteManager? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val amplitude = Amplitude(
+            Configuration(
+                apiKey = if (packageName.contains("debug")) {
+                    AppKeys.AMPLITUDE_DEBUG_KEY
+                } else {
+                    AppKeys.AMPLITUDE_KEY
+                },
+                context = applicationContext,
+                defaultTracking = DefaultTrackingOptions.ALL,
+            )
+        )
+
+        val logger = DefaultLogger(applicationContext, Firebase.analytics, amplitude)
 
         val billing = BillingClient.newBuilder(this)
         val subscriptionRepository = getSubscriptionRepository(Billing(billing))
@@ -87,19 +107,6 @@ class MainActivity : ComponentActivity() {
             subscriptionStatusUseCase
         )
 
-        val amplitude = Amplitude(
-            Configuration(
-                apiKey = if (packageName.contains("debug")) {
-                    AppKeys.AMPLITUDE_DEBUG_KEY
-                } else {
-                    AppKeys.AMPLITUDE_KEY
-                },
-                context = applicationContext,
-                defaultTracking = DefaultTrackingOptions.ALL,
-            )
-        )
-
-        val logger = DefaultLogger(applicationContext, Firebase.analytics, amplitude)
         loadInterstitial(this)
         enableEdgeToEdge()
         setContent {
@@ -148,7 +155,7 @@ class MainActivity : ComponentActivity() {
                 DashboardDataComponent.getWordsRepository(WordApi("http://16.170.6.0"))
             }
 
-            val initialGraph = remember(
+            val dashboardGraph = remember(
                 onCurrentColorsChanged,
                 onCurrentColorsChanged,
                 subscriptionRepository,
@@ -168,7 +175,15 @@ class MainActivity : ComponentActivity() {
                 )
             }
 
-            val routeManager = rememberRouteManager(initialGraph)
+            val welcomeGraph = getWelcomeGraph({
+                routeManager?.switchToGraph(DASHBOARD_GRAPH_ID)
+            }, userRepository)
+
+            val routeManager = rememberRouteManager(welcomeGraph ?: dashboardGraph)
+            this.routeManager = routeManager
+            if (welcomeGraph != null) {
+                routeManager.registerGraph(dashboardGraph)
+            }
             ReportDrawn()
             App(AppConfiguration(routeManager, currentTheme, currentFonts))
         }
@@ -196,7 +211,8 @@ class MainActivity : ComponentActivity() {
                 override fun onAdLoaded(interstitialAd: InterstitialAd) {
                     mInterstitialAd = interstitialAd
                 }
-            })
+            }
+        )
     }
 
     private fun showInterstitial(context: Context, onAdDismissed: () -> Unit) {

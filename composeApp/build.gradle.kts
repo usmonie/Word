@@ -51,6 +51,10 @@ kotlin {
                 implementation(projects.features.dashboard.domain)
                 implementation(projects.features.dashboard.data)
 
+                implementation(projects.features.onboarding.ui)
+                implementation(projects.features.onboarding.domain)
+                implementation(projects.features.onboarding.data)
+
                 implementation(projects.features.subscription.domain)
                 implementation(projects.features.subscription.data)
 

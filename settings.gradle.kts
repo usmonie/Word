@@ -49,6 +49,10 @@ include(":features:admob:ui")
 include(":features:admob:domain")
 include(":features:admob:data")
 
+include(":features:onboarding:ui")
+include(":features:onboarding:domain")
+include(":features:onboarding:data")
+
 include(":features:subscription:domain")
 include(":features:subscription:data")
 

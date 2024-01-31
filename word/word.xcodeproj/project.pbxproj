@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DA07D34B2B695B2B00CCE2D0 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = DA07D34A2B695B2B00CCE2D0 /* FirebaseCrashlytics */; };
 		DA1D117F2B29F2E200194749 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DA1D11772B29F2E200194749 /* GoogleService-Info.plist */; };
 		DA1D11802B29F2E200194749 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1D11782B29F2E200194749 /* AppDelegate.swift */; };
 		DA1D11812B29F2E200194749 /* NativeAnalytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1D11792B29F2E200194749 /* NativeAnalytics.swift */; };
@@ -146,6 +147,7 @@
 				DAA84F7B2B5935BB003C228D /* FirebaseDynamicLinks in Frameworks */,
 				DAA84F932B5935BB003C228D /* FirebaseRemoteConfig in Frameworks */,
 				DAD18C262B29E8E600E74100 /* FirebaseAnalytics in Frameworks */,
+				DA07D34B2B695B2B00CCE2D0 /* FirebaseCrashlytics in Frameworks */,
 				DAA84F772B5935BB003C228D /* FirebaseDatabase in Frameworks */,
 				DAA84F832B5935BB003C228D /* FirebaseFunctions in Frameworks */,
 				DAA84F872B5935BB003C228D /* FirebaseInAppMessaging-Beta in Frameworks */,
@@ -172,6 +174,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		DA07D3492B695B2B00CCE2D0 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		DA1D11A72B2A097F00194749 /* font */ = {
 			isa = PBXGroup;
 			children = (
@@ -215,6 +224,7 @@
 			children = (
 				DAD18C032B29E7C400E74100 /* word */,
 				DAD18C022B29E7C400E74100 /* Products */,
+				DA07D3492B695B2B00CCE2D0 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -306,6 +316,7 @@
 				DAA84F942B5935BB003C228D /* FirebaseRemoteConfigSwift */,
 				DAA84F962B5935BB003C228D /* FirebaseStorage */,
 				DAA84F982B5935BB003C228D /* FirebaseStorageCombine-Community */,
+				DA07D34A2B695B2B00CCE2D0 /* FirebaseCrashlytics */,
 			);
 			productName = word;
 			productReference = DAD18C012B29E7C400E74100 /* Word Debug.app */;
@@ -319,7 +330,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1510;
-				LastUpgradeCheck = 1510;
+				LastUpgradeCheck = 1520;
 				TargetAttributes = {
 					DAD18C002B29E7C400E74100 = {
 						CreatedOnToolsVersion = 15.1;
@@ -486,6 +497,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -547,6 +559,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -575,6 +588,7 @@
 				CODE_SIGN_ENTITLEMENTS = word/word.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 15;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"word/Preview Content\"";
 				DEVELOPMENT_TEAM = GE26949KEK;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -609,6 +623,7 @@
 					composeApp,
 					"-lz",
 					"-lsqlite3",
+					"-ObjC",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.usmonie.word.debug;
 				PRODUCT_NAME = "Word Debug";
@@ -631,6 +646,7 @@
 				CODE_SIGN_ENTITLEMENTS = word/word.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 15;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"word/Preview Content\"";
 				DEVELOPMENT_TEAM = GE26949KEK;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -665,6 +681,7 @@
 					composeApp,
 					"-lz",
 					"-lsqlite3",
+					"-ObjC",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.usmonie.word;
 				PRODUCT_NAME = Word;
@@ -729,6 +746,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		DA07D34A2B695B2B00CCE2D0 /* FirebaseCrashlytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DAD18C242B29E8E600E74100 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCrashlytics;
+		};
 		DAA84F662B5935BB003C228D /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = DAD18C242B29E8E600E74100 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;

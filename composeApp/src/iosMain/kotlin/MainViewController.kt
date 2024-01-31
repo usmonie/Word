@@ -11,11 +11,13 @@ import androidx.compose.ui.interop.UIKitView
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.ComposeUIViewController
 import com.liftric.kvault.KVault
+import com.usmonie.word.features.DASHBOARD_GRAPH_ID
 import com.usmonie.word.features.dashboard.data.api.WordApi
 import com.usmonie.word.features.dashboard.data.di.DashboardDataComponent
 import com.usmonie.word.features.dashboard.data.repository.UserRepositoryImpl
 import com.usmonie.word.features.dashboard.domain.usecase.CurrentThemeUseCaseImpl
 import com.usmonie.word.features.getDashboardGraph
+import com.usmonie.word.features.onboarding.ui.getWelcomeGraph
 import com.usmonie.word.features.subscription.data.Billing
 import com.usmonie.word.features.subscription.data.getSubscriptionRepository
 import com.usmonie.word.features.subscription.domain.models.SubscriptionStatus
@@ -24,6 +26,7 @@ import com.usmonie.word.features.ui.AdMob
 import kotlinx.cinterop.ExperimentalForeignApi
 import platform.UIKit.UIView
 import platform.UIKit.UIViewController
+import wtf.speech.compass.core.RouteManager
 import wtf.speech.compass.core.getRouteManager
 import wtf.word.core.design.themes.WordColors
 import wtf.word.core.design.themes.typographies.ModernChic
@@ -60,7 +63,7 @@ fun MainViewController(
     val wordRepository =
         DashboardDataComponent.getWordsRepository(WordApi("http://16.170.6.0"))
 
-    val initialGraph = getDashboardGraph(
+    val dashboardGraph = getDashboardGraph(
         { currentTheme = it },
         { currentFonts = it },
         subscriptionRepository,
@@ -70,7 +73,16 @@ fun MainViewController(
         logger
     )
 
-    val routeManager = getRouteManager(initialGraph)
+    var routeManager: RouteManager? = null
+    val welcomeGraph = getWelcomeGraph({
+        routeManager?.switchToGraph(DASHBOARD_GRAPH_ID)
+    }, userRepository)
+
+    routeManager = getRouteManager(welcomeGraph ?: dashboardGraph)
+    if (welcomeGraph != null) {
+        routeManager.registerGraph(dashboardGraph)
+    }
+
     val content: @Composable () -> Unit = {
         var isSubscribed by mutableStateOf(true)
 

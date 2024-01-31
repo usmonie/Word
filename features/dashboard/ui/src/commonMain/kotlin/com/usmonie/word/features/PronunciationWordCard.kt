@@ -20,7 +20,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.models.WordUi
-import com.usmonie.word.features.ui.BaseCard
+import wtf.speech.core.ui.BaseCard
 import com.usmonie.word.features.ui.WordButtons
 import com.usmonie.word.features.ui.WordLargeResizableTitle
 import com.usmonie.word.features.ui.WordMediumResizableTitle

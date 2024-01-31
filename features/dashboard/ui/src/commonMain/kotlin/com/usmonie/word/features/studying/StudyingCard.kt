@@ -16,7 +16,7 @@ import com.usmonie.word.features.ExampleItem
 import com.usmonie.word.features.models.ExampleUi
 import com.usmonie.word.features.models.Forms
 import com.usmonie.word.features.models.WordUi
-import com.usmonie.word.features.ui.BaseCard
+import wtf.speech.core.ui.BaseCard
 import com.usmonie.word.features.ui.CardFace
 import com.usmonie.word.features.ui.FlipBaseCard
 import com.usmonie.word.features.ui.WordLargeResizableTitle

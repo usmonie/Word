@@ -233,9 +233,9 @@ private fun WordDetailsContent(
 
             items(selectedPos.senses.take(if (sensesExpanded) Int.MAX_VALUE else COLLAPSED_SENSES_COUNT)) { sense ->
                 SenseTreeCard(
-                    remember { { sense } },
-                    remember { { wordCombined.word } },
-                    remember { { Forms(selectedPos.forms) } },
+                    { sense },
+                    { wordCombined.word },
+                    { Forms(selectedPos.forms) },
                     modifier = Modifier.padding(horizontal = 20.dp).animateItemPlacement()
                 )
             }
@@ -249,7 +249,7 @@ private fun WordDetailsContent(
                 items(selectedPos.thesaurus) { item ->
                     val relatedCardState =
                         remember(selectedPos) { RelatedCardState(item.second) }
-                    RelatedCard(remember { { item.first } }, remember { { relatedCardState } })
+                    RelatedCard({ item.first }, { relatedCardState })
                 }
             }
         }

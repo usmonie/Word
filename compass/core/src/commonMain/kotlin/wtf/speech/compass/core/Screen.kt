@@ -5,7 +5,7 @@ import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.runtime.Composable
 
-abstract class Screen(private val viewModel: ViewModel?) {
+abstract class Screen(private val viewModel: ViewModel? = null) {
     open val enterTransition: (AnimatedContentTransitionScope<Screen>.() -> EnterTransition) = {
         slideIntoContainer(
             AnimatedContentTransitionScope.SlideDirection.Left,
@@ -41,6 +41,8 @@ abstract class Screen(private val viewModel: ViewModel?) {
             }
         )
     }
+
+    open val backGestureEnabled: Boolean = true
 
     abstract val id: String
 

@@ -9,16 +9,6 @@ data class UserLearningStatusUi(
     val streak: Int
 )
 
-sealed class UserLearningStatus {
-    data object NotStarted : UserLearningStatus()
-
-    data class Started(
-        val learned: Int,
-        val pending: Int,
-        val new: Int,
-        val streak: Int
-    ): UserLearningStatus()
-}
 
 data class PracticeStatus(val lastPracticeTime: Long)
 

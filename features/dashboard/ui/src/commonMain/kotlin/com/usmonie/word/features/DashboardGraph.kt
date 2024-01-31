@@ -2,13 +2,13 @@ package com.usmonie.word.features
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import com.usmonie.word.features.dashboard.DashboardScreen
 import com.usmonie.word.features.dashboard.domain.repository.UserRepository
 import com.usmonie.word.features.dashboard.domain.repository.WordRepository
 import com.usmonie.word.features.details.WordDetailsScreen
 import com.usmonie.word.features.favorites.FavoritesScreen
 import com.usmonie.word.features.games.GamesScreen
 import com.usmonie.word.features.games.hangman.HangmanGameScreen
-import com.usmonie.word.features.dashboard.DashboardScreen
 import com.usmonie.word.features.settings.SettingsScreen
 import com.usmonie.word.features.subscription.domain.repository.SubscriptionRepository
 import com.usmonie.word.features.ui.AdMob
@@ -77,15 +77,13 @@ fun getDashboardGraph(
     adMob: AdMob,
     analytics: Analytics
 ): NavigationGraph {
-    val dashboardScreen =
-        DashboardScreen.Builder(
-            wordRepository,
-            adMob,
-            analytics
-        )
+    val dashboardScreen = DashboardScreen.Builder(
+        wordRepository,
+        adMob,
+        analytics
+    )
 
-
-    return NavigationGraph("DASHBOARD_GRAPH", dashboardScreen).apply {
+    return NavigationGraph(DASHBOARD_GRAPH_ID, dashboardScreen).apply {
         register(
             Route(
                 FavoritesScreen.ID,
@@ -120,3 +118,5 @@ fun getDashboardGraph(
         )
     }
 }
+
+const val DASHBOARD_GRAPH_ID = "DASHBOARD_GRAPH"

@@ -16,7 +16,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.models.RelatedUi
-import com.usmonie.word.features.ui.BaseCard
+import wtf.speech.core.ui.BaseCard
 import wtf.word.core.domain.tools.fastForEach
 
 @Immutable

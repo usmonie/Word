@@ -42,7 +42,7 @@ import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.models.ExampleUi
 import com.usmonie.word.features.models.Forms
 import com.usmonie.word.features.models.SenseCombinedUi
-import com.usmonie.word.features.ui.BaseCard
+import wtf.speech.core.ui.BaseCard
 import wtf.word.core.domain.tools.fastForEach
 
 @Composable
@@ -66,7 +66,9 @@ private fun ColumnScope.SenseTreeItem(
     getForms: () -> Forms,
     deep: Int = 1
 ) {
-    val sense = remember { getSense() }
+    val sense = remember {
+        getSense()
+    }
     val gloss = remember(sense) {
         sense.gloss
     }
@@ -74,7 +76,7 @@ private fun ColumnScope.SenseTreeItem(
 
     sense.examples.fastForEach { example ->
         Spacer(Modifier.height(8.dp))
-        ExampleItem(remember { { example } }, getWord, getForms)
+        ExampleItem({ example }, getWord, getForms)
     }
 
     val deepWidth = deep / 5f

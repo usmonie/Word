@@ -30,20 +30,21 @@ data class NavigationGraph(
     val storeInBackStack: Boolean = true
 ) {
     internal val routes = mutableMapOf<String, ScreenBuilder>()
-    private val backStack = mutableListOf(
-        NavigationEntry(
-            initialScreenBuilder.build(parameters, extra),
-            parameters,
-            extra
+    private val backStack by lazy {
+        mutableListOf(
+            NavigationEntry(
+                initialScreenBuilder.build(parameters, extra),
+                parameters,
+                extra
+            )
         )
-    )
+    }
 
-    internal var currentScreen: MutableState<NavigationEntry> = mutableStateOf(backStack.last())
-        private set
+    internal val currentScreen: MutableState<NavigationEntry>
+        get() = mutableStateOf(backStack.last())
 
-    internal var previousScreen: MutableState<NavigationEntry?> =
-        mutableStateOf(backStack.getOrNull(backStack.lastIndex - 1))
-        private set
+    internal val previousScreen: MutableState<NavigationEntry?>
+        get() = mutableStateOf(backStack.getOrNull(backStack.lastIndex - 1))
 
     fun register(route: Route) {
         routes[route.id] = route.screenBuilder
