@@ -321,10 +321,10 @@ internal class DashboardViewModel(
                         wordOfTheDay = wordOfTheDay,
                         randomWord = randomWord,
                         foundWords = ContentState.Success(listOf()),
-                        learnedWordsStatus = "12",//"currentState.learnedWordsStatus.status",
-                        practiceWordsStatus = "24",// "currentState.practiceWordsStatus.status",
-                        newWordsStatus = "8", //"currentState.learnedWordsStatus.status",
-                        streakDaysStatus = "7", //"currentState.streakDaysStatus.status",
+                        learnedWordsStatus = 0, //"currentState.learnedWordsStatus.status",
+                        practiceWordsStatus = 24, // "currentState.practiceWordsStatus.status",
+                        newWordsStatus = 8, //"currentState.learnedWordsStatus.status",
+                        streakDaysStatus = 0, //"currentState.streakDaysStatus.status",
                         query = TextFieldValue()
                     )
                 }

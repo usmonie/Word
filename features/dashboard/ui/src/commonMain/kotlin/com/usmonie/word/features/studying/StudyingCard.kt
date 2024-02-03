@@ -16,10 +16,10 @@ import com.usmonie.word.features.ExampleItem
 import com.usmonie.word.features.models.ExampleUi
 import com.usmonie.word.features.models.Forms
 import com.usmonie.word.features.models.WordUi
-import wtf.speech.core.ui.BaseCard
 import com.usmonie.word.features.ui.CardFace
 import com.usmonie.word.features.ui.FlipBaseCard
 import com.usmonie.word.features.ui.WordLargeResizableTitle
+import wtf.speech.core.ui.BaseCard
 
 @Composable
 fun StudyingCard(
@@ -120,7 +120,7 @@ fun StudyingCoveredCard(
         sound?.ipa ?: sound?.enpr
     }
 
-    BaseCard({ onClick(word) }, modifier = modifier) {
+    BaseCard(onClick = { onClick(word) }, modifier = modifier) {
         Spacer(Modifier.height(24.dp))
         WordLargeResizableTitle(
             word.word,

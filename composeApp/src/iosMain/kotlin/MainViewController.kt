@@ -76,7 +76,7 @@ fun MainViewController(
     var routeManager: RouteManager? = null
     val welcomeGraph = getWelcomeGraph({
         routeManager?.switchToGraph(DASHBOARD_GRAPH_ID)
-    }, userRepository)
+    }, userRepository, logger)
 
     routeManager = getRouteManager(welcomeGraph ?: dashboardGraph)
     if (welcomeGraph != null) {

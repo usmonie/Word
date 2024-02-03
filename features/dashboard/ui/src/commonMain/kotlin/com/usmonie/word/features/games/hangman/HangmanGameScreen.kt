@@ -109,9 +109,10 @@ private fun LoadingProgress(insets: PaddingValues) {
     Box(
         Modifier
             .fillMaxSize()
-            .padding(insets), contentAlignment = Alignment.Center
+            .padding(insets),
+        contentAlignment = Alignment.Center
     ) {
-//        CircularProgressIndicator()
+//        LinearProgressIndicator()
     }
 }
 

@@ -34,7 +34,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.dashboard.domain.models.Language
 import com.usmonie.word.features.onboarding.ui.models.LanguageType
-import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import wtf.speech.core.ui.BaseCard
@@ -47,13 +46,13 @@ fun SelectNativeLanguagePage(
     onSelectLanguage: (Language) -> Unit,
     onBackClick: () -> Unit,
 ) {
-    val flagDe = painterResource(DrawableResource("drawable/de.xml"))
-    val flagIt = painterResource(DrawableResource("drawable/it.xml"))
-    val flagPt = painterResource(DrawableResource("drawable/pt.xml"))
-    val flagFr = painterResource(DrawableResource("drawable/fr.xml"))
-    val flagEs = painterResource(DrawableResource("drawable/es.xml"))
-    val flagRu = painterResource(DrawableResource("drawable/ru.xml"))
-    val flagUa = painterResource(DrawableResource("drawable/ua.xml"))
+    val flagDe = painterResource("drawable/de.xml")
+    val flagIt = painterResource("drawable/it.xml")
+    val flagPt = painterResource("drawable/pt.xml")
+    val flagFr = painterResource("drawable/fr.xml")
+    val flagEs = painterResource("drawable/es.xml")
+    val flagRu = painterResource("drawable/ru.xml")
+    val flagUa = painterResource("drawable/ua.xml")
 
 
     val languages = remember {
@@ -116,7 +115,6 @@ fun SelectNativeLanguagePage(
         }
     ) {
         Box(Modifier.fillMaxSize().padding(it)) {
-
             BaseCard(
                 Modifier.fillMaxWidth()
                     .padding(24.dp)

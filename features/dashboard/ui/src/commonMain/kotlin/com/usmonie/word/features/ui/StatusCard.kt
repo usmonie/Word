@@ -19,7 +19,7 @@ fun StatusCard(
     modifier: Modifier = Modifier,
 ) {
     BaseCard(
-        onClick,
+        onClick = onClick,
         modifier = modifier,
     ) {
         Text(
@@ -57,7 +57,7 @@ fun PrimaryStatusCard(
     modifier: Modifier = Modifier,
 ) {
     BaseCard(
-        onClick,
+        onClick = onClick,
         modifier = modifier,
         containerColor = MaterialTheme.colorScheme.primary
     ) {

@@ -8,7 +8,7 @@ plugins {
     id(libs.plugins.realm.get().pluginId)
 }
 
-android.namespace = "com.usmonie.word.features.learning.data"
+android.namespace = "com.usmonie.word.features.onboarding.data"
 
 kotlin {
     listOf(

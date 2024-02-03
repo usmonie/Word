@@ -3,6 +3,7 @@ import extensions.androidDependencies
 import extensions.commonDependencies
 
 plugins {
+    id(libs.plugins.speech.multiplatform.core.get().pluginId)
     alias(libs.plugins.compose)
     id(libs.plugins.speech.multiplatform.ui.get().pluginId)
 }
@@ -15,10 +16,9 @@ commonDependencies {
     implementation(projects.features.dashboard.domain)
     implementation(projects.features.onboarding.domain)
     @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
-//    implementation(compose.components.resources)
     implementation(libs.compose.material3.jetbrains)
-//    implementation(libs.compose.material3)
 }
+
 androidDependencies {
     implementation(libs.compose.ui)
     implementation(libs.google.admob)
@@ -54,9 +54,9 @@ kotlin {
 
 android {
     compileSdk = 34 // config.versions.android.compileSdk.get().toInt()
-    namespace = "com.usmonie.word.features.learning.ui"
+    namespace = "com.usmonie.word.features.onboarding.ui"
 
-//    sourceSets["main"].resources.srcDirs("src/commonMain/resources")
+    sourceSets["main"].resources.srcDirs("src/commonMain/resources")
 
     defaultConfig {
         minSdk = 24 //config.versions.android.minSdk.get().toInt()

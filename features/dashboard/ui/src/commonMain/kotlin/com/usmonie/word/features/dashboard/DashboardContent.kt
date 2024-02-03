@@ -15,10 +15,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -47,6 +49,7 @@ import wtf.speech.core.ui.ContentState
 @ExperimentalMaterial3Api
 @Composable
 internal fun DashboardContent(
+    listState: LazyGridState,
     dashboardViewModel: DashboardViewModel,
     adMob: AdMob,
     insets: PaddingValues,
@@ -76,7 +79,11 @@ internal fun DashboardContent(
             }
 
             is DashboardState.Loading -> {
-//                LinearProgressIndicator()
+                LinearProgressIndicator(
+                    Modifier.align(Alignment.Center)
+                        .fillMaxWidth()
+                        .padding(horizontal = 24.dp)
+                )
             }
 
             is DashboardState.Success -> {
@@ -89,6 +96,7 @@ internal fun DashboardContent(
                 val foundWords = s.foundWords
 
                 DashboardItemsList(
+                    listState,
                     dashboardViewModel::onFavoritesClick,
                     dashboardViewModel::onGamesClick,
                     dashboardViewModel::onSettingsClick,
@@ -101,6 +109,8 @@ internal fun DashboardContent(
                         {
                             PaddingValues(
                                 top = 12.dp,
+                                start = 24.dp,
+                                end = 24.dp,
                                 bottom = insets.calculateBottomPadding() + 80.dp
                             )
                         }
@@ -125,6 +135,7 @@ private val fillMaxWidthModifierHorizontalPadding =
 
 @Composable
 private fun DashboardItemsList(
+    listState: LazyGridState,
     onFavoritesClick: () -> Unit,
     onGamesClick: () -> Unit,
     onSettingsClick: () -> Unit,
@@ -148,6 +159,7 @@ private fun DashboardItemsList(
     val showSearchItems = getShowSearchItems()
     LazyVerticalGrid(
         columns,
+        state = listState,
         modifier = fillMaxWidthModifier.imePadding(),
         contentPadding = contentPadding(),
         verticalArrangement = Arrangement.spacedBy(20.dp),
@@ -158,7 +170,7 @@ private fun DashboardItemsList(
             item(span = { GridItemSpan(5) }) {
                 DashboardSubtitle(
                     "Discover new words",
-                    fillMaxWidthModifierHorizontalPadding
+                    fillMaxWidthModifier
                 )
             }
 
@@ -166,46 +178,43 @@ private fun DashboardItemsList(
                 StatusCard(
                     {},
                     { learnedWords.title },
-                    { learnedWords.status },
+                    { learnedWords.status.toString() },
                     { learnedWords.description },
-                    fillMaxWidthModifier.padding(start = 24.dp)
+                    fillMaxWidthModifier
                 )
             }
-
             item(span = { GridItemSpan(3) }) {
                 StatusCard(
                     {},
                     { practiceWords.title },
-                    { practiceWords.status },
+                    { practiceWords.status.toString() },
                     { practiceWords.description },
-                    fillMaxWidthModifier.padding(end = 24.dp)
+                    fillMaxWidthModifier
                 )
             }
-
             item(span = { GridItemSpan(3) }) {
                 PrimaryStatusCard(
                     {},
                     { newWords.title },
-                    { newWords.status },
+                    { newWords.status.toString() },
                     { newWords.description },
-                    fillMaxWidthModifier.padding(start = 24.dp)
+                    fillMaxWidthModifier
                 )
             }
-
             item(span = { GridItemSpan(2) }) {
                 StatusCard(
                     {},
                     { streak.title },
-                    { streak.status },
+                    { streak.status.toString() },
                     { streak.description },
-                    fillMaxWidthModifier.padding(end = 24.dp)
+                    fillMaxWidthModifier
                 )
             }
 
             item(span = { GridItemSpan(3) }) {
                 DashboardSubtitle(
                     "Vocabulary",
-                    fillMaxWidthModifierHorizontalPadding
+                    fillMaxWidthModifier
                 )
             }
 
@@ -216,7 +225,7 @@ private fun DashboardItemsList(
                         onUpdateFavoriteClick,
                         onLearnClick,
                         { wordOfTheDay },
-                        fillMaxWidthModifierHorizontalPadding
+                        fillMaxWidthModifier
                     )
                 }
             }
@@ -228,13 +237,13 @@ private fun DashboardItemsList(
                     onUpdateRandomWord,
                     onLearnClick,
                     { randomWord },
-                    fillMaxWidthModifierHorizontalPadding
+                    fillMaxWidthModifier
                 )
             }
             item(span = { GridItemSpan(5) }) {
                 DashboardMenuItem(
                     "[F]avorites",
-                    fillMaxWidthModifierHorizontalPadding.clickable(onClick = onFavoritesClick)
+                    fillMaxWidthModifier.clickable(onClick = onFavoritesClick)
                 )
             }
 
@@ -242,13 +251,13 @@ private fun DashboardItemsList(
                 Box(Modifier.clickable { })
                 DashboardMenuItem(
                     "[G]ames",
-                    fillMaxWidthModifierHorizontalPadding.clickable(onClick = onGamesClick)
+                    fillMaxWidthModifier.clickable(onClick = onGamesClick)
                 )
             }
             item(span = { GridItemSpan(5) }) {
                 DashboardMenuItem(
                     "[S]ettings",
-                    fillMaxWidthModifierHorizontalPadding.clickable(onClick = onSettingsClick)
+                    fillMaxWidthModifier.clickable(onClick = onSettingsClick)
                 )
             }
 //            item(span = { GridItemSpan(5) }) {
@@ -265,7 +274,7 @@ private fun DashboardItemsList(
                     onUpdateFavoriteClick,
                     {},
                     { it },
-                    fillMaxWidthModifierHorizontalPadding
+                    fillMaxWidthModifier
                 )
             }
         }
@@ -314,7 +323,6 @@ fun WordOfTheDayCard(
     when (val w = word()) {
         is ContentState.Error<*, *> -> Unit
         is ContentState.Loading -> BaseCard(
-            { },
             modifier = modifier
         ) {
             Box(Modifier.fillMaxWidth().padding(vertical = 20.dp), Alignment.Center) {
@@ -326,7 +334,7 @@ fun WordOfTheDayCard(
         }
 
         is ContentState.Success -> BaseCard(
-            remember { { onClick(w.data.second) } },
+            onClick = remember { { onClick(w.data.second) } },
             modifier = modifier
         ) {
             Spacer(Modifier.height(24.dp))
@@ -367,7 +375,6 @@ fun RandomWordCard(
     when (val w = word()) {
         is ContentState.Error<*, *> -> Unit
         is ContentState.Loading -> BaseCard(
-            { },
             modifier = modifier
         ) {
             Box(Modifier.fillMaxWidth().padding(vertical = 24.dp), Alignment.Center) {
@@ -379,7 +386,7 @@ fun RandomWordCard(
         }
 
         is ContentState.Success -> BaseCard(
-            { onClick(w.data.second) },
+            onClick = { onClick(w.data.second) },
             modifier = modifier
         ) {
             Spacer(Modifier.height(24.dp))

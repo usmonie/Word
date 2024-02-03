@@ -20,16 +20,12 @@ object BaseCardDefaults {
 @Composable
 fun BaseCard(
     modifier: Modifier = Modifier,
-    elevation: Dp = BaseCardDefaults.elevation,
-    containerColor: Color = MaterialTheme.colorScheme.surface,
     content: @Composable ColumnScope.() -> Unit
 ) {
     BaseCard(
         onClick = {},
-        elevation = elevation,
         enabled = false,
         modifier = modifier,
-        containerColor = containerColor,
         content = content
     )
 }
@@ -37,8 +33,8 @@ fun BaseCard(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BaseCard(
-    onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
     enabled: Boolean = true,
     elevation: Dp = BaseCardDefaults.elevation,
     containerColor: Color = MaterialTheme.colorScheme.surface,

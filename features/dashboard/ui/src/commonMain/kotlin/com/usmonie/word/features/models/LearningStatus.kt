@@ -1,6 +1,6 @@
 package com.usmonie.word.features.models
 
-data class LearningStatus(val title: String, val status: String, val description: String)
+data class LearningStatus(val title: String, val status: Int, val description: String)
 
 data class UserLearningStatusUi(
     val learned: Int,

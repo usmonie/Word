@@ -7,19 +7,23 @@ import com.usmonie.word.features.dashboard.domain.usecase.SetOnboardingWasShowed
 import com.usmonie.word.features.dashboard.domain.usecase.SetupNativeLanguageUseCase
 import com.usmonie.word.features.dashboard.domain.usecase.SetupRemindersTimeUseCase
 import com.usmonie.word.features.dashboard.domain.usecase.SetupWordsPerDayUseCase
+import com.usmonie.word.features.onboarding.ui.analytics.OnboardingAnalyticsEvent
 import wtf.speech.core.ui.BaseViewModel
+import wtf.word.core.domain.Analytics
 
 @Immutable
 internal class OnboardingViewModel(
     private val setupWordsPerDayUseCase: SetupWordsPerDayUseCase,
     private val setupNativeLanguageUseCase: SetupNativeLanguageUseCase,
     private val setupRemindersTimeUseCase: SetupRemindersTimeUseCase,
-    private val setupOnboardingWasShowedUseCase: SetOnboardingWasShowedUseCase
+    private val setupOnboardingWasShowedUseCase: SetOnboardingWasShowedUseCase,
+    private val analytics: Analytics
 ) : BaseViewModel<OnboardingState, OnboardingAction, OnboardingEvent, OnboardingEffect>(
     OnboardingState.SelectNativeLanguage
 ) {
     override fun OnboardingState.reduce(event: OnboardingEvent) = when (event) {
         OnboardingEvent.SelectNativeLanguage -> OnboardingState.SelectNativeLanguage
+        OnboardingEvent.SelectYears -> OnboardingState.HowOldAreUser
         OnboardingEvent.SelectCountWordsPerDay -> OnboardingState.SelectCountWordsPerDay
         OnboardingEvent.SelectReminderTime -> OnboardingState.SelectReminderTime
         OnboardingEvent.SelectedReminderTime -> this
@@ -28,22 +32,34 @@ internal class OnboardingViewModel(
     override suspend fun processAction(action: OnboardingAction): OnboardingEvent = when (action) {
         is OnboardingAction.SelectedNativeLanguage -> {
             setupNativeLanguageUseCase(action.language)
+            analytics.log(OnboardingAnalyticsEvent.SelectedNativeLanguage(action.language.name))
+
+            OnboardingEvent.SelectYears
+        }
+
+        is OnboardingAction.SelectedYears -> {
+            analytics.log(OnboardingAnalyticsEvent.SelectedYears(action.years))
             OnboardingEvent.SelectCountWordsPerDay
         }
 
-        is OnboardingAction.SelectedReminderTime -> {
-            setupRemindersTimeUseCase(action.notificationTime)
-            OnboardingEvent.SelectedReminderTime
+        is OnboardingAction.SelectedWordsCountPerDay -> {
+            analytics.log(OnboardingAnalyticsEvent.SelectedWordsPerDay(action.count))
+
+            setupWordsPerDayUseCase(action.count)
+            OnboardingEvent.SelectReminderTime
         }
 
-        is OnboardingAction.SelectedWordsCountPerDay -> {
-            setupWordsPerDayUseCase(action.count)
+        is OnboardingAction.SelectedReminderTime -> {
+            analytics.log(OnboardingAnalyticsEvent.SelectedReminderTime(action.notificationTime))
+
+            setupRemindersTimeUseCase(action.notificationTime)
             setupOnboardingWasShowedUseCase(Unit)
-            OnboardingEvent.SelectReminderTime
+            OnboardingEvent.SelectedReminderTime
         }
 
         is OnboardingAction.OnBackSelected -> when (action.page) {
             1 -> OnboardingEvent.SelectNativeLanguage
+            2 -> OnboardingEvent.SelectYears
             else -> OnboardingEvent.SelectCountWordsPerDay
         }
     }
@@ -55,6 +71,10 @@ internal class OnboardingViewModel(
 
     fun onLanguageSelected(language: Language) {
         handleAction(OnboardingAction.SelectedNativeLanguage(language))
+    }
+
+    fun onYearsSelected(years: String) {
+        handleAction(OnboardingAction.SelectedYears(years))
     }
 
     fun onWordsSelected(words: Int) {

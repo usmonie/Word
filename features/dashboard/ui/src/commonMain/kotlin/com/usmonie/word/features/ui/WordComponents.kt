@@ -19,7 +19,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 
@@ -159,7 +158,7 @@ fun ShareButton(
 ) {
     IconButton(onShare, modifier = modifier) {
         Icon(
-            painterResource(DrawableResource("ic_upload.xml")),
+            painterResource("ic_upload.xml"),
             contentDescription = "share button",
             modifier = Modifier.size(24.dp),
             tint = tint

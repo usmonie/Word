@@ -60,10 +60,10 @@ internal sealed class DashboardEvent : ScreenEvent {
         val wordOfTheDay: ContentState<Pair<WordUi, WordCombinedUi>>,
         val randomWord: ContentState<Pair<WordUi, WordCombinedUi>>,
         val foundWords: ContentState<List<WordCombinedUi>>,
-        val learnedWordsStatus: String,
-        val practiceWordsStatus: String,
-        val newWordsStatus: String,
-        val streakDaysStatus: String,
+        val learnedWordsStatus: Int,
+        val practiceWordsStatus: Int,
+        val newWordsStatus: Int,
+        val streakDaysStatus: Int,
         val query: TextFieldValue,
     ) : DashboardEvent()
 

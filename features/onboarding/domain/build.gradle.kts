@@ -5,7 +5,7 @@ plugins {
     kotlin("plugin.serialization") version "1.9.0"
 }
 
-android.namespace = "com.usmonie.word.learning.domain"
+android.namespace = "com.usmonie.word.onboarding.domain"
 
 kotlin {
     applyDefaultHierarchyTemplate()

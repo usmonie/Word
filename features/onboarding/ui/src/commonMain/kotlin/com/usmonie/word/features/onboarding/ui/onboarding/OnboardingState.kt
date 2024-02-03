@@ -9,12 +9,14 @@ import wtf.speech.core.ui.ScreenState
 
 sealed class OnboardingState : ScreenState {
     data object SelectNativeLanguage : OnboardingState()
+    data object HowOldAreUser : OnboardingState()
     data object SelectCountWordsPerDay : OnboardingState()
     data object SelectReminderTime : OnboardingState()
 }
 
 sealed class OnboardingAction : ScreenAction {
     data class SelectedNativeLanguage(val language: Language) : OnboardingAction()
+    data class SelectedYears(val years: String) : OnboardingAction()
     data class SelectedWordsCountPerDay(val count: Int) : OnboardingAction()
     data class SelectedReminderTime(val notificationTime: NotificationTime) : OnboardingAction()
 
@@ -23,6 +25,7 @@ sealed class OnboardingAction : ScreenAction {
 
 sealed class OnboardingEvent : ScreenEvent {
     data object SelectNativeLanguage : OnboardingEvent()
+    data object SelectYears : OnboardingEvent()
     data object SelectCountWordsPerDay : OnboardingEvent()
     data object SelectReminderTime : OnboardingEvent()
 

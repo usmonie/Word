@@ -24,5 +24,5 @@ internal fun KotlinMultiplatformExtension.configureTarget() {
  */
 internal fun KotlinMultiplatformExtension.configureJvmToolchain() {
     // Configure JVM toolchain with the specified Java version.
-    jvmToolchain(11)
+    jvmToolchain(17)
 }

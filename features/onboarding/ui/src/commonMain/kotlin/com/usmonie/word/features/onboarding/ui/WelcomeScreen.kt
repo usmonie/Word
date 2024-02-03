@@ -31,7 +31,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.onboarding.ui.onboarding.OnboardingScreen
 import kotlinx.coroutines.delay
-import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import wtf.speech.compass.core.Extra
@@ -50,7 +49,7 @@ class WelcomeScreen : Screen() {
             mutableStateOf(true)
         }
         LaunchedEffect(showMemorable) {
-            delay(1000L)
+            delay(2000L)
             showMemorable = false
         }
         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -67,8 +66,9 @@ class WelcomeScreen : Screen() {
             ) { show ->
                 if (show) {
                     Text(
-                        "In Memory of\n Alina Isaeva",
-                        style = MaterialTheme.typography.headlineSmall,
+                        "In memory of\n Alina Isaeva",
+                        style = MaterialTheme.typography.headlineLarge,
+                        color = MaterialTheme.colorScheme.onBackground,
                         modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp),
                         textAlign = TextAlign.Center
                     )
@@ -79,7 +79,7 @@ class WelcomeScreen : Screen() {
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Image(
-                            painterResource(DrawableResource("drawable/ic_app_icon.webp")),
+                            painterResource("drawable/ic_app_icon.png"),
                             modifier = Modifier.size(128.dp),
 
                             contentDescription = null
@@ -88,6 +88,7 @@ class WelcomeScreen : Screen() {
 
                         Text(
                             "Welcome to English",
+                            color = MaterialTheme.colorScheme.onBackground,
                             style = MaterialTheme.typography.displayMedium,
                             modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp),
                             textAlign = TextAlign.Center
@@ -96,6 +97,7 @@ class WelcomeScreen : Screen() {
                         Text(
                             "Expand your vocabulary, learn new words,\n" +
                                     "and improve your English skills.",
+                            color = MaterialTheme.colorScheme.onBackground,
                             style = MaterialTheme.typography.bodyLarge,
                             modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp),
                             textAlign = TextAlign.Center

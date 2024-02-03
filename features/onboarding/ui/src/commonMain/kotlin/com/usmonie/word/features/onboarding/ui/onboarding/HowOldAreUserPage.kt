@@ -22,30 +22,24 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.usmonie.word.features.dashboard.domain.models.NotificationTime
 import wtf.speech.core.ui.BaseCard
 import wtf.word.core.domain.tools.fastForEach
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ChooseReminderTimePage(
-    onSelectTime: (NotificationTime) -> Unit,
-    onBackClick: () -> Unit
+fun HowOldAreUserPage(
+    onSelectYearsCount: (String) -> Unit,
+    onBackClick: () -> Unit,
 ) {
-    val times = remember {
-        listOf(
-            Pair(NotificationTime.MORNING, "Morning (08:00-10:00)"),
-            Pair(NotificationTime.DAY, "Day (12:00-14:00)"),
-            Pair(NotificationTime.EVENING, "Evening (18:00-20:00)")
-        )
+    val words = remember {
+        listOf("Up to 25 years", "25-31 years", "35-50 years", "50+ years")
     }
-
     Scaffold(
         topBar = {
             LargeTopAppBar(
                 title = {
                     Text(
-                        "[C]hoose reminder time",
+                        "[H]ow old are you?",
                         style = MaterialTheme.typography.headlineMedium,
                     )
                 },
@@ -60,7 +54,6 @@ fun ChooseReminderTimePage(
             )
         }
     ) {
-
         Box(Modifier.fillMaxSize().padding(it)) {
 
             BaseCard(
@@ -68,22 +61,21 @@ fun ChooseReminderTimePage(
                     .padding(24.dp)
             ) {
                 Text(
-                    "To help you remember to repeat the words, we will send you reminders. You can choose what time you want to receive them.",
+                    "We will create an individual learning plan for you that will suit your age and learning style.",
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.fillMaxWidth().padding(24.dp)
                 )
 
-                times.fastForEach { time ->
-                    Row(
-                        Modifier.fillMaxWidth()
-                            .clickable { onSelectTime(time.first) }
-                            .padding(horizontal = 24.dp, vertical = 12.dp)
-                    ) {
+                words.fastForEach { years ->
+                    Row(Modifier.fillMaxWidth().clickable { onSelectYearsCount(years) }) {
+//                    RadioButton(selected = selectedWords == count, { onSelectWordsCount(count) })
                         Text(
-                            time.second,
+                            years,
+                            style = MaterialTheme.typography.titleLarge,
                             color = MaterialTheme.colorScheme.onSurface,
-                            style = MaterialTheme.typography.titleLarge
+                            modifier = Modifier.fillMaxWidth()
+                                .padding(horizontal = 24.dp, vertical = 12.dp)
                         )
                     }
                 }

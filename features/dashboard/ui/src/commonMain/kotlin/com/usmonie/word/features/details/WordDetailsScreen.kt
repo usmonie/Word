@@ -158,9 +158,14 @@ private fun WordDetailsContent(
     val selectedPos = remember(selectedEtymology, selectedPosIndex) {
         selectedEtymology.words.getOrElse(selectedPosIndex) { selectedEtymology.words.last() }
     }
-    Box(
-        Modifier.padding(insets)
-    ) {
+
+    val sensesCollapsed = remember(selectedPos, sensesExpanded) {
+        selectedPos.senses
+            .take(if (sensesExpanded) Int.MAX_VALUE else COLLAPSED_SENSES_COUNT)
+            .toMutableList()
+    }
+
+    Box(Modifier.padding(insets)) {
         BaseLazyColumn(
             contentPadding = PaddingValues(bottom = insets.calculateBottomPadding() + 80.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -226,12 +231,11 @@ private fun WordDetailsContent(
                 SensesTitle(
                     selectedPos,
                     onExpandSenses,
-                    getSensesExpanded,
-                    remember { { selectedPos.senses.size > MINIMUM_SENSES_TO_COLLAPSE_COUNT } }
-                )
+                    getSensesExpanded
+                ) { selectedPos.senses.size > MINIMUM_SENSES_TO_COLLAPSE_COUNT }
             }
 
-            items(selectedPos.senses.take(if (sensesExpanded) Int.MAX_VALUE else COLLAPSED_SENSES_COUNT)) { sense ->
+            items(sensesCollapsed) { sense ->
                 SenseTreeCard(
                     { sense },
                     { wordCombined.word },

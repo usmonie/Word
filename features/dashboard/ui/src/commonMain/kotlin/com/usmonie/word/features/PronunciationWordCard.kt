@@ -1,5 +1,6 @@
 package com.usmonie.word.features
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -20,10 +21,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.models.WordUi
-import wtf.speech.core.ui.BaseCard
 import com.usmonie.word.features.ui.WordButtons
 import com.usmonie.word.features.ui.WordLargeResizableTitle
 import com.usmonie.word.features.ui.WordMediumResizableTitle
+import wtf.speech.core.ui.BaseCard
 import wtf.word.core.domain.tools.fastForEachIndexed
 
 @Composable
@@ -36,7 +37,6 @@ fun DetailsWordCardLarge(
     modifier: Modifier = Modifier
 ) {
     BaseCard(
-        {},
         modifier = modifier
     ) {
         Spacer(Modifier.height(32.dp))
@@ -93,8 +93,7 @@ fun DetailsWordCardMedium(
             modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp)
         )
 
-        if (word.etymologyText != null) {
-
+        AnimatedVisibility(!word.etymologyText.isNullOrBlank()) {
             var expanded by remember(word) { mutableStateOf(false) }
             val maxLines by remember(expanded) { mutableStateOf(if (expanded) Int.MAX_VALUE else 3) }
 
@@ -106,7 +105,7 @@ fun DetailsWordCardMedium(
                 EtymologyTitle()
                 Spacer(Modifier.height(4.dp))
                 Text(
-                    word.etymologyText,
+                    word.etymologyText.orEmpty(),
                     maxLines = maxLines,
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,

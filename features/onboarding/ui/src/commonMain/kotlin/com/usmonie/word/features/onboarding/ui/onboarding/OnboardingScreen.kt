@@ -17,6 +17,7 @@ import wtf.speech.compass.core.Extra
 import wtf.speech.compass.core.LocalRouteManager
 import wtf.speech.compass.core.Screen
 import wtf.speech.compass.core.ScreenBuilder
+import wtf.word.core.domain.Analytics
 
 class OnboardingScreen internal constructor(
     private val onNextGraph: () -> Unit,
@@ -33,14 +34,15 @@ class OnboardingScreen internal constructor(
         val currentPage = remember(state) {
             when (state) {
                 is OnboardingState.SelectNativeLanguage -> 0
-                is OnboardingState.SelectCountWordsPerDay -> 1
-                is OnboardingState.SelectReminderTime -> 2
+                is OnboardingState.HowOldAreUser -> 1
+                is OnboardingState.SelectCountWordsPerDay -> 2
+                is OnboardingState.SelectReminderTime -> 3
                 else -> 0
             }
         }
 
         val initialPage = remember { currentPage }
-        val pagerState = rememberPagerState(initialPage) { 3 }
+        val pagerState = rememberPagerState(initialPage) { 4 }
         val effect by onboardingViewModel.effect.collectAsState(null)
 
         LaunchedEffect(state) {
@@ -55,20 +57,24 @@ class OnboardingScreen internal constructor(
             }
         }
 
-        HorizontalPager(pagerState, userScrollEnabled = false) {
-            when (it) {
+        HorizontalPager(pagerState, userScrollEnabled = false) { pageNumber ->
+            when (pageNumber) {
                 0 -> SelectNativeLanguagePage(
                     onboardingViewModel::onLanguageSelected,
                     routeManager::navigateBack
                 )
 
-                1 -> HowManyWordsPerDayPage(
-                    onboardingViewModel::onWordsSelected
+                1 -> HowOldAreUserPage(
+                    onboardingViewModel::onYearsSelected
                 ) { onboardingViewModel.onBackClicked(1) }
 
-                2 -> ChooseReminderTimePage(
-                    onboardingViewModel::onNotificationTimeSelected
+                2 -> HowManyWordsPerDayPage(
+                    onboardingViewModel::onWordsSelected
                 ) { onboardingViewModel.onBackClicked(2) }
+
+                3 -> ChooseReminderTimePage(
+                    onboardingViewModel::onNotificationTimeSelected
+                ) { onboardingViewModel.onBackClicked(3) }
             }
         }
     }
@@ -79,7 +85,8 @@ class OnboardingScreen internal constructor(
 
     class Builder(
         private val onNextGraph: () -> Unit,
-        private val userRepository: UserRepository
+        private val userRepository: UserRepository,
+        private val analytics: Analytics
     ) : ScreenBuilder {
         override val id: String = ID
 
@@ -91,6 +98,7 @@ class OnboardingScreen internal constructor(
                     SetupNativeLanguageUseCaseImpl(userRepository),
                     SetupRemindersTimeUseCaseImpl(userRepository),
                     SetOnboardingWasShowedUseCaseImpl(userRepository),
+                    analytics
                 )
             )
         }

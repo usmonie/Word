@@ -177,7 +177,7 @@ class MainActivity : ComponentActivity() {
 
             val welcomeGraph = getWelcomeGraph({
                 routeManager?.switchToGraph(DASHBOARD_GRAPH_ID)
-            }, userRepository)
+            }, userRepository, logger)
 
             val routeManager = rememberRouteManager(welcomeGraph ?: dashboardGraph)
             this.routeManager = routeManager
