@@ -256,7 +256,6 @@ internal class DashboardViewModel(
             withContext(Dispatchers.Main) {
                 ensureActive()
                 analytics.log(DashboardAnalyticsEvents.Search(query.text))
-                println("found: ${found.size}")
                 handleState(
                     DashboardEvent.Content(
                         state.recentSearch,

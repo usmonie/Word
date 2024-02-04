@@ -12,12 +12,8 @@ actual class DefaultLogger(
     private val firebaseAnalytics: FirebaseAnalytics,
     private val amplitude: Amplitude
 ) : Analytics() {
-    init {
-        firebaseAnalytics.resetAnalyticsData()
-    }
 
     override fun log(analyticsEvent: AnalyticsEvent) {
-
         Log.i("WORD_APP_EVENT", analyticsEvent.toString())
         if (!context.packageName.contains("debug")) {
             firebaseAnalytics.logEvent(analyticsEvent.key) {

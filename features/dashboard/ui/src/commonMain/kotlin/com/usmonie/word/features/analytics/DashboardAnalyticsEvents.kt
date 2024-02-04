@@ -5,21 +5,21 @@ import wtf.word.core.domain.models.AnalyticsEvent
 
 sealed class DashboardAnalyticsEvents(key: String, data: EventData) : AnalyticsEvent(key, data) {
     data class Search(private val query: String) :
-        DashboardAnalyticsEvents("Perform Search", DashboardEventData.Search(query))
+        DashboardAnalyticsEvents("Perform_Search", DashboardEventData.Search(query))
 
     data class OpenWord(private val wordUi: WordCombinedUi) :
-        DashboardAnalyticsEvents("View Content", DashboardEventData.WordData(wordUi.word))
+        DashboardAnalyticsEvents("View_Content", DashboardEventData.WordData(wordUi.word))
 
     data object OpenFavourites :
-        DashboardAnalyticsEvents("View Favorites", DashboardEventData.Favourites)
+        DashboardAnalyticsEvents("View_Favorites", DashboardEventData.Favourites)
 
     data object RandomWord :
-        DashboardAnalyticsEvents("View Random Word", DashboardEventData.RandomWord)
+        DashboardAnalyticsEvents("View_Random_Word", DashboardEventData.RandomWord)
 
     data object RandomWordUpdate :
-        DashboardAnalyticsEvents("Update Random Word", DashboardEventData.RandomWord)
+        DashboardAnalyticsEvents("Update_Random_Word", DashboardEventData.RandomWord)
 
-    data object OpenSettings : DashboardAnalyticsEvents("View Settings", DashboardEventData.Settings)
+    data object OpenSettings : DashboardAnalyticsEvents("View_Settings", DashboardEventData.Settings)
 }
 
 sealed class DashboardEventData : AnalyticsEvent.EventData {

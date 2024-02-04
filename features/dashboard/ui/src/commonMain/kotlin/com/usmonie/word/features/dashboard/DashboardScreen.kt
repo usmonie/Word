@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForwardIos
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -19,7 +20,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -67,10 +67,6 @@ class DashboardScreen private constructor(
                     }
                 }
                 val state by dashboardViewModel.state.collectAsState()
-
-                LaunchedEffect(state) {
-                    println(state.toString())
-                }
                 StartLearningButton(dashboardViewModel::onBackClick, state, expand)
             },
             content = { insets -> DashboardContent(listState, dashboardViewModel, adMob, insets) }
@@ -110,20 +106,27 @@ private fun StartLearningButton(onClick: () -> Unit, state: DashboardState, expa
     }
 
     if (showButton) {
-        FloatingActionButton(onClick) {
+        FloatingActionButton(onClick, shape = RoundedCornerShape(160.dp)) {
             Row(
                 Modifier.padding(horizontal = if (expand) 24.dp else 0.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
                 AnimatedVisibility(expand) {
-                    Text("Start Training", style = MaterialTheme.typography.titleMedium)
-                    Spacer(Modifier.width(8.dp))
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text(
+                            "Start Training",
+                            style = MaterialTheme.typography.titleMedium,
+                        )
+                        Spacer(Modifier.width(8.dp))
+                    }
                 }
                 Icon(
                     Icons.Default.ArrowForwardIos,
                     contentDescription = null,
-                    Modifier.size(24.dp)
+                    modifier = Modifier.size(18.dp)
                 )
             }
         }
