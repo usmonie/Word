@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Welcome Screen -->
+    <string name="in_memory_of_alina">For Alina</string>
+    <string name="welcome_title">Word</string>
+    <string name="welcome_description">Expand your vocabulary, learn new words\nand improve your English skills</string>
+    <string name="sign_in_with_google">Sign in with Google</string>
+    <string name="sign_in_with_apple">Sign in with Apple</string>
+
+    <!-- Select your native language Screen-->
+    <string name="select_your_native_language_title">Select your native language</string>
+
+    <!--Languages-->
+    <string name="lang_de_title">Deutsch</string>
+    <string name="lang_it_title">Italiano</string>
+    <string name="lang_pt_title">Português</string>
+    <string name="lang_fr_title">Français</string>
+    <string name="lang_es_title">Español</string>
+    <string name="lang_ua_title">Український</string>
+    <string name="lang_ru_title">Русский</string>
+
+    <!--How old are user Screen-->
+    <string name="how_old_are_user_title">How old are you?</string>
+    <string name="how_old_are_user_description">We will create an individual learning plan for you that will suit your age and learning style.</string>
+    <string name="up_to_25_years">Up to 25 years</string>
+    <string name="between_25_31_years">25-31 years</string>
+    <string name="between_31_35_years">31-35 years</string>
+    <string name="between_35_50_years">35-50 years</string>
+    <string name="above_50_years">50+ years</string>
+
+    <!-- How many words Screen-->
+    <string name="how_many_words_title">How many words do you want to learn per day?</string>
+    <string name="how_many_words_description">We will create a personalized learning plan for you, which will match your level and goals. You can choose how many words you want to learn per day.</string>
+    <string name="words_count">%1$d words</string>
+
+
+    <!--English level Screen-->
+    <string name="what_is_user_english_level_title">What is your English level?</string>
+
+    <!--Reminders time Screen-->
+    <string name="choose_reminder_time_title">What time is most convenient for you to study?</string>
+    <string name="choose_reminder_time_description">To help you remember to repeat the words, we will send you reminders. You can choose what time you want to receive them.</string>
+
+
+</resources>

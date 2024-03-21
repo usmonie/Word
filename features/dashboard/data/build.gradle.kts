@@ -35,6 +35,9 @@ kotlin {
         api(libs.kvault)
         api(projects.core.domain)
         api(projects.features.dashboard.domain)
+//        api(libs.gitlive.firebase.common)
+//        api(libs.gitlive.firebase.auth)
+//        api(libs.gitlive.firebase.firestore)
     }
 
     androidDependencies {
@@ -45,3 +48,4 @@ kotlin {
         implementation(libs.ktor.client.darwin)
     }
 }
+task("testClasses")

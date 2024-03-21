@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="in_memory_of_alina">Для Алины</string>
+    <string name="welcome_title">Слово</string>
+    <string name="welcome_description">Расширьте свой словарный запас, изучите новые слова и улучшите свои навыки английского языка</string>
+    <string name="sign_in_with_google">Войти через Google</string>
+    <string name="sign_in_with_apple">Войти через Apple</string>
+
+    <string name="select_your_native_language_title">Выберите свой родной язык</string>
+
+    <string name="how_old_are_user_title">Сколько вам лет?</string>
+    <string name="how_old_are_user_description">Мы создадим для вас индивидуальный план обучения, который будет соответствовать вашему возрасту и стилю обучения.</string>
+    <string name="up_to_25_years">До 25 лет</string>
+    <string name="between_25_31_years">25-31 лет</string>
+    <string name="between_31_35_years">31-35 лет</string>
+    <string name="between_35_50_years">35-50 лет</string>
+    <string name="above_50_years">50+ лет</string>
+
+    <string name="how_many_words_title">Сколько слов вы хотите учить в день?</string>
+    <string name="how_many_words_description">Мы создадим для вас персонализированный план обучения, который будет соответствовать вашему уровню и целям. Вы можете выбрать, сколько слов вы хотите учить в день.</string>
+    <string name="words_count">%1$d слов</string>
+
+    <string name="what_is_user_english_level_title">Какой у вас уровень английского языка?</string>
+
+    <string name="choose_reminder_time_title">В какое время вам удобнее заниматься?</string>
+    <string name="choose_reminder_time_description">Чтобы помочь вам вспомнить повторить слова, мы отправим вам напоминания. Вы можете выбрать, когда вы хотите их получать.</string>
+
+
+</resources>

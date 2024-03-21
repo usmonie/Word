@@ -1,63 +1,67 @@
+@file:OptIn(ExperimentalResourceApi::class)
+
 package wtf.word.core.design.themes.typographies
 
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import word.core.design.generated.resources.Res
+import word.core.design.generated.resources.notosans_light
+import word.core.design.generated.resources.notosans_light_italic
+import word.core.design.generated.resources.notosans_regular
+import word.core.design.generated.resources.notoserif_black
+import word.core.design.generated.resources.notoserif_bold
+import word.core.design.generated.resources.notoserif_light
+import word.core.design.generated.resources.notoserif_regular
+import word.core.design.generated.resources.notoserif_semibold
 
 data object TimelessElegant : WordTypography("Timeless Elegant") {
 
     private val notoSerifBlack = FontFamilyData.CustomFont(
-        "Noto Serif Black",
-        "notoserif_black",
+        Res.font.notoserif_black,
         FontWeight.Black,
         FontStyle.Normal
     )
 
     private val notoSerifBold = FontFamilyData.CustomFont(
-        "Noto Serif Bold",
-        "notoserif_bold",
+        Res.font.notoserif_bold,
         FontWeight.Bold,
         FontStyle.Normal
     )
 
     private val notoSerifSemiBold = FontFamilyData.CustomFont(
-        "Noto Serif Semibold",
-        "notoserif_semibold",
+        Res.font.notoserif_semibold,
         FontWeight.SemiBold,
         FontStyle.Normal
     )
 
     private val notoSerifRegular = FontFamilyData.CustomFont(
-        "Noto Serif Regular",
-        "notoserif_regular",
+        Res.font.notoserif_regular,
         FontWeight.SemiBold,
         FontStyle.Normal
     )
 
     private val notoSerifLight = FontFamilyData.CustomFont(
-        "Noto Serif Light",
-        "notoserif_light",
+        Res.font.notoserif_light,
         FontWeight.Light,
         FontStyle.Normal
     )
 
     private val notoSansRegular = FontFamilyData.CustomFont(
-        "Noto Sans Regular",
-        "notosans_regular",
+        Res.font.notosans_regular,
         FontWeight.Normal,
         FontStyle.Normal
     )
 
     private val notoSansLight = FontFamilyData.CustomFont(
-        "Noto Sans Light",
-        "notosans_light",
+        Res.font.notosans_light,
         FontWeight.Light,
         FontStyle.Normal
     )
 
     private val notoSansLightItalic = FontFamilyData.CustomFont(
-        "Noto Sans Light",
-        "notosans_light_italic",
+        Res.font.notosans_light_italic,
         FontWeight.Light,
         FontStyle.Italic
     )

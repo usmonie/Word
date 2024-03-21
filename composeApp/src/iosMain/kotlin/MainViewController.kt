@@ -11,18 +11,20 @@ import androidx.compose.ui.interop.UIKitView
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.ComposeUIViewController
 import com.liftric.kvault.KVault
-import com.usmonie.word.features.dashboard.ui.DASHBOARD_GRAPH_ID
 import com.usmonie.word.features.dashboard.data.api.WordApi
 import com.usmonie.word.features.dashboard.data.di.DashboardDataComponent
 import com.usmonie.word.features.dashboard.data.repository.UserRepositoryImpl
 import com.usmonie.word.features.dashboard.domain.usecase.CurrentThemeUseCaseImpl
+import com.usmonie.word.features.dashboard.ui.DASHBOARD_GRAPH_ID
 import com.usmonie.word.features.dashboard.ui.getDashboardGraph
+import com.usmonie.word.features.dashboard.ui.ui.AdMob
 import com.usmonie.word.features.onboarding.ui.getWelcomeGraph
 import com.usmonie.word.features.subscription.data.Billing
 import com.usmonie.word.features.subscription.data.getSubscriptionRepository
 import com.usmonie.word.features.subscription.domain.models.SubscriptionStatus
 import com.usmonie.word.features.subscription.domain.usecase.SubscriptionStatusUseCaseImpl
-import com.usmonie.word.features.dashboard.ui.ui.AdMob
+import dev.gitlive.firebase.auth.auth
+import dev.gitlive.firebase.firestore.firestore
 import kotlinx.cinterop.ExperimentalForeignApi
 import platform.UIKit.UIView
 import platform.UIKit.UIViewController
@@ -35,14 +37,18 @@ import wtf.word.core.domain.Analytics
 
 @OptIn(ExperimentalForeignApi::class)
 fun MainViewController(
-    onViewDidLoad: () -> Unit,
     bannerUiView: () -> UIView,
     rewardedInterstitialView: () -> Unit,
     nativeAnalytics: Analytics,
 ): UIViewController {
     val subscriptionRepository = getSubscriptionRepository(Billing())
-    val userRepository = UserRepositoryImpl(KVault())
+    val userRepository = UserRepositoryImpl(
+        KVault(),
+        dev.gitlive.firebase.Firebase.firestore,
+        dev.gitlive.firebase.Firebase.auth
+    )
     val subscriptionStatusUseCase = SubscriptionStatusUseCaseImpl(subscriptionRepository)
+//    GoogleAuthProvider.create(credentials = GoogleAuthCredentials(serverId = AppKeys.SERVER_CLIENT_ID))
 
     val logger = DefaultLogger(nativeAnalytics)
     val admob = AdMob(
@@ -58,8 +64,10 @@ fun MainViewController(
     )
 
     val theme = CurrentThemeUseCaseImpl(userRepository).invoke(Unit)
-    var currentTheme by mutableStateOf(theme.colorsName?.let { WordColors.valueOf(it) } ?: WordColors.RICH_MAROON)
-    var currentFonts by mutableStateOf(theme.fonts?.let { WordTypography.valueOf(it) } ?: ModernChic)
+    var currentTheme by mutableStateOf(theme.colorsName?.let { WordColors.valueOf(it) }
+        ?: WordColors.RICH_MAROON)
+    var currentFonts by mutableStateOf(theme.fonts?.let { WordTypography.valueOf(it) }
+        ?: ModernChic)
     val wordRepository =
         DashboardDataComponent.getWordsRepository(WordApi("http://16.170.6.0"))
 

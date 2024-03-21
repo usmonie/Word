@@ -23,9 +23,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.dashboard.domain.models.NotificationTime
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
+import word.features.onboarding.ui.generated.resources.Res
+import word.features.onboarding.ui.generated.resources.choose_reminder_time_description
+import word.features.onboarding.ui.generated.resources.choose_reminder_time_title
 import wtf.speech.core.ui.BaseCard
 import wtf.word.core.domain.tools.fastForEach
 
+@ExperimentalResourceApi
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChooseReminderTimePage(
@@ -43,12 +49,7 @@ fun ChooseReminderTimePage(
     Scaffold(
         topBar = {
             LargeTopAppBar(
-                title = {
-                    Text(
-                        "[C]hoose reminder time",
-                        style = MaterialTheme.typography.headlineMedium,
-                    )
-                },
+                title = { Text(stringResource(Res.string.choose_reminder_time_title)) },
                 navigationIcon = {
                     IconButton(onBackClick) {
                         Icon(Icons.Default.ArrowBack, contentDescription = null)
@@ -68,7 +69,7 @@ fun ChooseReminderTimePage(
                     .padding(24.dp)
             ) {
                 Text(
-                    "To help you remember to repeat the words, we will send you reminders. You can choose what time you want to receive them.",
+                    stringResource(Res.string.choose_reminder_time_description),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.fillMaxWidth().padding(24.dp)

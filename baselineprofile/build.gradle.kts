@@ -26,7 +26,11 @@ android {
     }
 
     targetProjectPath = ":composeApp"
-
+    buildTypes {
+        getByName("debug") {
+            signingConfig = signingConfigs.getByName("debug")
+        }
+    }
 }
 
 // This is the configuration block for the Baseline Profile plugin.

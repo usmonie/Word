@@ -22,9 +22,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
+import word.features.onboarding.ui.generated.resources.Res
+import word.features.onboarding.ui.generated.resources.above_50_years
+import word.features.onboarding.ui.generated.resources.between_25_31_years
+import word.features.onboarding.ui.generated.resources.between_31_35_years
+import word.features.onboarding.ui.generated.resources.how_old_are_user_description
+import word.features.onboarding.ui.generated.resources.how_old_are_user_title
+import word.features.onboarding.ui.generated.resources.up_to_25_years
 import wtf.speech.core.ui.BaseCard
 import wtf.word.core.domain.tools.fastForEach
 
+@ExperimentalResourceApi
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HowOldAreUserPage(
@@ -32,17 +42,17 @@ fun HowOldAreUserPage(
     onBackClick: () -> Unit,
 ) {
     val words = remember {
-        listOf("Up to 25 years", "25-31 years", "35-50 years", "50+ years")
+        listOf(
+            Res.string.up_to_25_years,
+            Res.string.between_25_31_years,
+            Res.string.between_31_35_years,
+            Res.string.above_50_years
+        )
     }
     Scaffold(
         topBar = {
             LargeTopAppBar(
-                title = {
-                    Text(
-                        "[H]ow old are you?",
-                        style = MaterialTheme.typography.headlineMedium,
-                    )
-                },
+                title = { Text(stringResource(Res.string.how_old_are_user_title)) },
                 navigationIcon = {
                     IconButton(onBackClick) {
                         Icon(Icons.Default.ArrowBack, contentDescription = null)
@@ -55,23 +65,23 @@ fun HowOldAreUserPage(
         }
     ) {
         Box(Modifier.fillMaxSize().padding(it)) {
-
             BaseCard(
                 Modifier.fillMaxWidth()
                     .padding(24.dp)
             ) {
                 Text(
-                    "We will create an individual learning plan for you that will suit your age and learning style.",
+                    stringResource(Res.string.how_old_are_user_description),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.fillMaxWidth().padding(24.dp)
                 )
 
                 words.fastForEach { years ->
-                    Row(Modifier.fillMaxWidth().clickable { onSelectYearsCount(years) }) {
+                    val title = stringResource(years)
+                    Row(Modifier.fillMaxWidth().clickable { onSelectYearsCount(title) }) {
 //                    RadioButton(selected = selectedWords == count, { onSelectWordsCount(count) })
                         Text(
-                            years,
+                            title,
                             style = MaterialTheme.typography.titleLarge,
                             color = MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier.fillMaxWidth()

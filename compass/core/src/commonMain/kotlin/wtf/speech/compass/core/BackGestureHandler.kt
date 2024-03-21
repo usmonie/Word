@@ -40,7 +40,7 @@ fun BackGestureHandler(
             .pointerInput(Unit, remember {
                 {
                     val offset = getOffset()
-                    if (isGestureNavigationEnabled && current.backGestureEnabled) {
+                    if (isGestureNavigationEnabled) {
                         detectHorizontalDragGestures(
                             onDragEnd = {
                                 coroutineScope.launch {

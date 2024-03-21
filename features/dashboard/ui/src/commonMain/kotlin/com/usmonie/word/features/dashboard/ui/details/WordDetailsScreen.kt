@@ -28,13 +28,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.usmonie.word.features.dashboard.domain.repository.WordRepository
+import com.usmonie.word.features.dashboard.domain.usecase.UpdateFavouriteUseCaseImpl
 import com.usmonie.word.features.dashboard.ui.DetailsWordCardMedium
 import com.usmonie.word.features.dashboard.ui.FormsCard
 import com.usmonie.word.features.dashboard.ui.RelatedCard
 import com.usmonie.word.features.dashboard.ui.RelatedCardState
 import com.usmonie.word.features.dashboard.ui.SenseTreeCard
-import com.usmonie.word.features.dashboard.domain.repository.WordRepository
-import com.usmonie.word.features.dashboard.domain.usecase.UpdateFavouriteUseCaseImpl
 import com.usmonie.word.features.dashboard.ui.models.Forms
 import com.usmonie.word.features.dashboard.ui.models.WordCombinedUi
 import com.usmonie.word.features.dashboard.ui.models.WordUi
@@ -78,6 +78,7 @@ class WordDetailsScreen(
             modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
         ) { insets ->
 
+//            CompleteSentencePage(Exercise.CompleteSentence("id", state.word, "Hello, my dear _____!", "WO___"), adMob, Modifier.fillMaxSize().padding(insets))
             val effect by wordViewModel.effect.collectAsState(null)
 
             WordEffect(effect)

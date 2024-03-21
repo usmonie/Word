@@ -10,21 +10,23 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import com.usmonie.word.features.dashboard.domain.repository.UserRepository
 import com.usmonie.word.features.dashboard.domain.usecase.SetOnboardingWasShowedUseCaseImpl
+import com.usmonie.word.features.dashboard.domain.usecase.SetupLanguageLevelUseCaseImpl
 import com.usmonie.word.features.dashboard.domain.usecase.SetupNativeLanguageUseCaseImpl
 import com.usmonie.word.features.dashboard.domain.usecase.SetupRemindersTimeUseCaseImpl
 import com.usmonie.word.features.dashboard.domain.usecase.SetupWordsPerDayUseCaseImpl
+import org.jetbrains.compose.resources.ExperimentalResourceApi
 import wtf.speech.compass.core.Extra
 import wtf.speech.compass.core.LocalRouteManager
 import wtf.speech.compass.core.Screen
 import wtf.speech.compass.core.ScreenBuilder
 import wtf.word.core.domain.Analytics
 
+@ExperimentalResourceApi
 class OnboardingScreen internal constructor(
     private val onNextGraph: () -> Unit,
     private val onboardingViewModel: OnboardingViewModel
 ) : Screen(onboardingViewModel) {
     override val id: String = ID
-    override val backGestureEnabled: Boolean = false
 
     @OptIn(ExperimentalFoundationApi::class)
     @Composable
@@ -35,14 +37,15 @@ class OnboardingScreen internal constructor(
             when (state) {
                 is OnboardingState.SelectNativeLanguage -> 0
                 is OnboardingState.HowOldAreUser -> 1
-                is OnboardingState.SelectCountWordsPerDay -> 2
-                is OnboardingState.SelectReminderTime -> 3
+                is OnboardingState.SelectLanguageLevel -> 2
+                is OnboardingState.SelectCountWordsPerDay -> 3
+                is OnboardingState.SelectReminderTime -> 4
                 else -> 0
             }
         }
 
         val initialPage = remember { currentPage }
-        val pagerState = rememberPagerState(initialPage) { 4 }
+        val pagerState = rememberPagerState(initialPage) { 5 }
         val effect by onboardingViewModel.effect.collectAsState(null)
 
         LaunchedEffect(state) {
@@ -68,13 +71,17 @@ class OnboardingScreen internal constructor(
                     onboardingViewModel::onYearsSelected
                 ) { onboardingViewModel.onBackClicked(1) }
 
-                2 -> HowManyWordsPerDayPage(
-                    onboardingViewModel::onWordsSelected
-                ) { onboardingViewModel.onBackClicked(2) }
+                2 -> WhatAreUserLevelPage(onboardingViewModel::onLanguageLevel) {
+                    onboardingViewModel.onBackClicked(2)
+                }
 
-                3 -> ChooseReminderTimePage(
-                    onboardingViewModel::onNotificationTimeSelected
+                3 -> HowManyWordsPerDayPage(
+                    onboardingViewModel::onWordsSelected
                 ) { onboardingViewModel.onBackClicked(3) }
+
+                4 -> ChooseReminderTimePage(
+                    onboardingViewModel::onNotificationTimeSelected
+                ) { onboardingViewModel.onBackClicked(4) }
             }
         }
     }
@@ -98,6 +105,7 @@ class OnboardingScreen internal constructor(
                     SetupNativeLanguageUseCaseImpl(userRepository),
                     SetupRemindersTimeUseCaseImpl(userRepository),
                     SetOnboardingWasShowedUseCaseImpl(userRepository),
+                    SetupLanguageLevelUseCaseImpl(userRepository),
                     analytics
                 )
             )

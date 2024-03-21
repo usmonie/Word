@@ -25,3 +25,4 @@ commonDependencies {
     api(libs.coroutines.core)
     api(libs.kmlogging)
 }
+task("testClasses")

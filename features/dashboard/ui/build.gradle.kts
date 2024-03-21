@@ -6,7 +6,6 @@ plugins {
     alias(libs.plugins.compose)
     id(libs.plugins.speech.multiplatform.ui.get().pluginId)
     id("dev.shreyaspatil.compose-compiler-report-generator") version "1.1.0"
-
 }
 
 android.namespace = "com.usmonie.word.features.dashboard.ui"
@@ -23,11 +22,17 @@ commonDependencies {
     implementation(libs.compose.material3.jetbrains)
     implementation(compose.dependencies.materialIconsExtended)
     implementation(libs.kvault)
-
-
 }
+
 androidDependencies {
     implementation(libs.compose.ui)
+    implementation("com.google.firebase:firebase-auth:22.3.1")
+
+    // Also add the dependency for the Google Play services library and specify its version
+    implementation("com.google.android.gms:play-services-auth:21.0.0")
+    api("androidx.credentials:credentials:1.3.0-alpha01")
+    api("androidx.credentials:credentials-play-services-auth:1.3.0-alpha01")
+    api("com.google.android.libraries.identity.googleid:googleid:1.1.0")
 }
 
 kotlin {
@@ -72,3 +77,5 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 }
+
+task("testClasses")

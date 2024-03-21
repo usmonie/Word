@@ -39,3 +39,4 @@ kotlin {
         implementation(libs.android.billing.ktx)
     }
 }
+task("testClasses")

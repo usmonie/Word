@@ -1,5 +1,6 @@
 package com.usmonie.word.features.onboarding.ui.analytics
 
+import com.usmonie.word.features.dashboard.domain.models.LanguageLevel
 import com.usmonie.word.features.dashboard.domain.models.NotificationTime
 import wtf.word.core.domain.models.AnalyticsEvent
 
@@ -20,6 +21,10 @@ sealed class OnboardingAnalyticsEvent(key: String, data: EventData) : AnalyticsE
     data class SelectedReminderTime(
         val notificationTime: NotificationTime
     ) : OnboardingAnalyticsEvent("USER_REMINDER_TIME", Data(notificationTime))
+
+    data class SelectedLanguageLevel(
+        val languageLevel: LanguageLevel
+    ) : OnboardingAnalyticsEvent("USER_LANGUAGE_LEVEL", Data(languageLevel))
 
 }
 

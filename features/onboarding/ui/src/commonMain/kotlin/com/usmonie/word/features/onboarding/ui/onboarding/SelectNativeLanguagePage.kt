@@ -15,12 +15,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -36,7 +32,18 @@ import com.usmonie.word.features.dashboard.domain.models.Language
 import com.usmonie.word.features.onboarding.ui.models.LanguageType
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
+import word.features.onboarding.ui.generated.resources.Res
+import word.features.onboarding.ui.generated.resources.lang_de_title
+import word.features.onboarding.ui.generated.resources.lang_es_title
+import word.features.onboarding.ui.generated.resources.lang_fr_title
+import word.features.onboarding.ui.generated.resources.lang_it_title
+import word.features.onboarding.ui.generated.resources.lang_pt_title
+import word.features.onboarding.ui.generated.resources.lang_ru_title
+import word.features.onboarding.ui.generated.resources.lang_ua_title
+import word.features.onboarding.ui.generated.resources.select_your_native_language_title
 import wtf.speech.core.ui.BaseCard
+import wtf.word.core.design.themes.Resources
 import wtf.word.core.domain.tools.fastForEachIndexed
 
 
@@ -46,68 +53,37 @@ fun SelectNativeLanguagePage(
     onSelectLanguage: (Language) -> Unit,
     onBackClick: () -> Unit,
 ) {
-    val flagDe = painterResource("drawable/de.xml")
-    val flagIt = painterResource("drawable/it.xml")
-    val flagPt = painterResource("drawable/pt.xml")
-    val flagFr = painterResource("drawable/fr.xml")
-    val flagEs = painterResource("drawable/es.xml")
-    val flagRu = painterResource("drawable/ru.xml")
-    val flagUa = painterResource("drawable/ua.xml")
-
+    val flagDe = painterResource(Resources.de)
+    val flagIt = painterResource(Resources.it)
+    val flagPt = painterResource(Resources.pt)
+    val flagFr = painterResource(Resources.fr)
+    val flagEs = painterResource(Resources.es)
+    val flagRu = painterResource(Resources.ru)
+    val flagUa = painterResource(Resources.ua)
+    val langDeTitle = stringResource(Res.string.lang_de_title)
+    val langItTitle = stringResource(Res.string.lang_it_title)
+    val langPtTitle = stringResource(Res.string.lang_pt_title)
+    val langFrTitle = stringResource(Res.string.lang_fr_title)
+    val langEsTitle = stringResource(Res.string.lang_es_title)
+    val langRuTitle = stringResource(Res.string.lang_ru_title)
+    val langUaTitle = stringResource(Res.string.lang_ua_title)
 
     val languages = remember {
         listOf(
-            LanguageType(
-                Language.DE,
-                "Deutsch",
-                flagDe
-            ),
-            LanguageType(
-                Language.IT,
-                "Italiano",
-                flagIt
-            ),
-            LanguageType(
-                Language.PT,
-                "Português",
-                flagPt
-            ),
-            LanguageType(
-                Language.FR,
-                "Français",
-                flagFr
-            ),
-            LanguageType(
-                Language.ES,
-                "Español",
-                flagEs
-            ),
-            LanguageType(
-                Language.RU,
-                "Русский",
-                flagRu
-            ),
-            LanguageType(
-                Language.UA,
-                "Український",
-                flagUa
-            ),
+            LanguageType(Language.DE, langDeTitle, flagDe),
+            LanguageType(Language.IT, langItTitle, flagIt),
+            LanguageType(Language.PT, langPtTitle, flagPt),
+            LanguageType(Language.FR, langFrTitle, flagFr),
+            LanguageType(Language.ES, langEsTitle, flagEs),
+            LanguageType(Language.UA, langUaTitle, flagUa),
+            LanguageType(Language.RU, langRuTitle, flagRu),
         )
     }
+
     Scaffold(
         topBar = {
             LargeTopAppBar(
-                title = {
-                    Text(
-                        "[S]elect your native language",
-                        style = MaterialTheme.typography.headlineMedium,
-                    )
-                },
-                navigationIcon = {
-                    IconButton(onBackClick) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = null)
-                    }
-                },
+                title = { Text(stringResource(Res.string.select_your_native_language_title)) },
                 colors = TopAppBarDefaults.largeTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.background
                 ),
@@ -123,7 +99,7 @@ fun SelectNativeLanguagePage(
                 languages.fastForEachIndexed { index, lang ->
                     Column {
                         if (index > 0) {
-                            Divider(Modifier.fillMaxWidth().padding(horizontal = 32.dp))
+                            HorizontalDivider(Modifier.fillMaxWidth().padding(horizontal = 32.dp))
                         }
                         LanguageItem({ lang }, onSelectLanguage)
                     }

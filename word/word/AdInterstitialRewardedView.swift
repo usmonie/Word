@@ -1,7 +1,6 @@
 import UIKit
 import SwiftUI
 import GoogleMobileAds
-import FirebaseCore
 import FirebaseAnalytics
 import AppTrackingTransparency
 import AdSupport

@@ -2,16 +2,16 @@ package com.usmonie.word.features.dashboard.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import com.usmonie.word.features.dashboard.ui.dashboard.DashboardScreen
 import com.usmonie.word.features.dashboard.domain.repository.UserRepository
 import com.usmonie.word.features.dashboard.domain.repository.WordRepository
+import com.usmonie.word.features.dashboard.ui.dashboard.DashboardScreen
 import com.usmonie.word.features.dashboard.ui.details.WordDetailsScreen
 import com.usmonie.word.features.dashboard.ui.favorites.FavoritesScreen
 import com.usmonie.word.features.dashboard.ui.games.GamesScreen
 import com.usmonie.word.features.dashboard.ui.games.hangman.HangmanGameScreen
 import com.usmonie.word.features.dashboard.ui.settings.SettingsScreen
-import com.usmonie.word.features.subscription.domain.repository.SubscriptionRepository
 import com.usmonie.word.features.dashboard.ui.ui.AdMob
+import com.usmonie.word.features.subscription.domain.repository.SubscriptionRepository
 import wtf.speech.compass.core.NavigationGraph
 import wtf.speech.compass.core.Route
 import wtf.word.core.design.themes.WordColors
@@ -37,7 +37,7 @@ fun rememberDashboardGraph(
     }
 
     return remember {
-        NavigationGraph("DASHBOARD_GRAPH", dashboardScreen).apply {
+        NavigationGraph("DASHBOARD_GRAPH", Route(DashboardScreen.ID, dashboardScreen)).apply {
             register(
                 Route(
                     FavoritesScreen.ID,
@@ -83,7 +83,7 @@ fun getDashboardGraph(
         analytics
     )
 
-    return NavigationGraph(DASHBOARD_GRAPH_ID, dashboardScreen).apply {
+    return NavigationGraph(DASHBOARD_GRAPH_ID, Route(DashboardScreen.ID, dashboardScreen)).apply {
         register(
             Route(
                 FavoritesScreen.ID,

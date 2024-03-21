@@ -26,7 +26,6 @@ struct ComposeView: UIViewControllerRepresentable {
         ))
         #endif
         controller = MainViewControllerKt.MainViewController(
-            onViewDidLoad: {},
             bannerUiView: {
                 SwiftUIInUIView(content: Banner(bannerID: "ca-app-pub-2198867984469198/3121295852"))
             },
@@ -57,9 +56,9 @@ struct ContentView: View {
                     .edgesIgnoringSafeArea(.bottom)
 
         }
-                .onAppear {
-                    interstitialVC = interstitialAd.viewController
-                }
+            .onAppear {
+                interstitialVC = interstitialAd.viewController
+            }
     }
 }
 

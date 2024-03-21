@@ -19,6 +19,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 
@@ -99,7 +100,8 @@ fun WordLargeResizableTitle(
 fun WordMediumResizableTitle(
     word: String,
     modifier: Modifier = Modifier,
-    color: Color = MaterialTheme.colorScheme.onSurfaceVariant
+    color: Color = MaterialTheme.colorScheme.onSurfaceVariant,
+    textAlign: TextAlign = TextAlign.Start
 ) {
     val defaultTextStyle = MaterialTheme.typography.headlineMedium
     var readyToDraw by remember(word) { mutableStateOf(false) }
@@ -109,7 +111,7 @@ fun WordMediumResizableTitle(
     Text(
         word,
         style = defaultTextStyle,
-        textAlign = TextAlign.Start,
+        textAlign = textAlign,
         fontSize = defaultTextSize,
         color = color,
         modifier = modifier.drawWithContent { if (readyToDraw) drawContent() },
@@ -158,7 +160,7 @@ fun ShareButton(
 ) {
     IconButton(onShare, modifier = modifier) {
         Icon(
-            painterResource("ic_upload.xml"),
+            painterResource(DrawableResource("ic_upload.xml")),
             contentDescription = "share button",
             modifier = Modifier.size(24.dp),
             tint = tint

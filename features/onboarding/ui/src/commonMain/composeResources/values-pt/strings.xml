@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="in_memory_of_alina">Para Alina</string>
+    <string name="welcome_title">Palavra</string>
+    <string name="welcome_description">Amplie seu vocabulário, aprenda novas palavras e melhore suas habilidades em inglês</string>
+    <string name="sign_in_with_google">Entrar com o Google</string>
+    <string name="sign_in_with_apple">Entrar com o Apple</string>
+
+    <string name="select_your_native_language_title">Selecione seu idioma nativo</string>
+
+    <string name="how_old_are_user_title">Quantos anos você tem?</string>
+    <string name="how_old_are_user_description">Criaremos um plano de aprendizagem personalizado para você, que se adapte à sua idade e estilo de aprendizagem.</string>
+    <string name="up_to_25_years">Até 25 anos</string>
+    <string name="between_25_31_years">25-31 anos</string>
+    <string name="between_31_35_years">31-35 anos</string>
+    <string name="between_35_50_years">35-50 anos</string>
+    <string name="above_50_years">50+ anos</string>
+
+    <string name="how_many_words_title">Quantas palavras você quer aprender por dia?</string>
+    <string name="how_many_words_description">Criaremos um plano de aprendizagem personalizado para você, que coincidirá com seu nível e objetivos. Você pode escolher quantas palavras você quer aprender por dia.</string>
+    <string name="words_count">%1$d palavras</string>
+
+
+    <string name="what_is_user_english_level_title">Qual é o seu nível de inglês?</string>
+
+    <string name="choose_reminder_time_title">Em que horário você prefere estudar?</string>
+    <string name="choose_reminder_time_description">Para ajudá-lo a lembrar de revisar as palavras, enviaremos lembretes. Você pode escolher quando quer recebê-los.</string>
+
+
+</resources>

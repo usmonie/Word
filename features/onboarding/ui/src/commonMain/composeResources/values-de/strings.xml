@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="in_memory_of_alina">Für Alina</string>
+    <string name="welcome_description">Erweitern Sie Ihren Wortschatz, lernen Sie neue Wörter und verbessern Sie Ihre Englischkenntnisse</string>
+    <string name="sign_in_with_google">Mit Google anmelden</string>
+    <string name="sign_in_with_apple">Mit Apple anmelden</string>
+
+    <string name="select_your_native_language_title">Wählen Sie Ihre Muttersprache</string>
+
+    <string name="how_old_are_user_title">Wie alt sind Sie?</string>
+    <string name="how_old_are_user_description">Wir erstellen einen individuellen Lernplan für Sie, der Ihrem Alter und Lernstil entspricht.</string>
+    <string name="up_to_25_years">Bis zu 25 Jahre</string>
+    <string name="between_25_31_years">25-31 Jahre</string>
+    <string name="between_31_35_years">31-35 Jahre</string>
+    <string name="between_35_50_years">35-50 Jahre</string>
+    <string name="above_50_years">50+ Jahre</string>
+
+    <string name="how_many_words_title">Wie viele Wörter möchten Sie pro Tag lernen?</string>
+    <string name="how_many_words_description">Wir erstellen für Sie einen personalisierten Lernplan, der Ihrem Niveau und Ihren Zielen entspricht. Sie können wählen, wie viele Wörter Sie pro Tag lernen möchten.</string>
+    <string name="words_count">%1$d Wörter</string>
+
+    <string name="what_is_user_english_level_title">Wie ist Ihr Englischniveau?</string>
+
+    <string name="choose_reminder_time_title">Wann passt es Ihnen am besten zu lernen?</string>
+    <string name="choose_reminder_time_description">Damit Sie sich an das Wiederholen der Wörter erinnern, senden wir Ihnen Erinnerungen. Sie können wählen, wann Sie diese erhalten möchten.</string>
+
+
+</resources>

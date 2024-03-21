@@ -39,8 +39,8 @@ actual class Billing(private val billingClientBuilder: BillingClient.Builder) {
     }
 
     actual fun subscribeSubscriptionState(onSubscriptionChanged: (SubscriptionStatus) -> Unit) {
+        onSubscriptionChanged(SubscriptionStatus.NONE)
         subscribers.add(onSubscriptionChanged)
-        onSubscriptionChanged(SubscriptionStatus.PURCHASED)
     }
 
     actual fun unsubscribeSubscriptionState(onSubscriptionChanged: (SubscriptionStatus) -> Unit) {

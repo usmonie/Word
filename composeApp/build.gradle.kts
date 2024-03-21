@@ -1,11 +1,7 @@
 @file:Suppress("OPT_IN_USAGE")
 
-import org.jetbrains.compose.ExperimentalComposeLibrary
 import org.jetbrains.kotlin.gradle.plugin.mpp.Framework
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
-import org.jetbrains.kotlin.gradle.tasks.FatFrameworkTask
-import org.jetbrains.kotlin.gradle.tasks.KotlinNativeLink
-import org.jetbrains.kotlin.konan.target.CompilerOutputKind
 
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
@@ -25,7 +21,6 @@ kotlin {
             }
         }
     }
-    
     listOf(
         iosX64(),
         iosArm64(),
@@ -67,7 +62,6 @@ kotlin {
                 implementation(compose.foundation)
                 implementation(compose.material)
 
-                @OptIn(ExperimentalComposeLibrary::class)
                 implementation(compose.components.resources)
             }
         }
@@ -79,7 +73,8 @@ kotlin {
                 implementation(libs.compose.activity)
                 implementation(libs.firebase.analytics)
                 implementation(libs.android.billing.ktx)
-                implementation("com.amplitude:analytics-android:1.+")
+                implementation(libs.yandex.admob)
+                implementation(libs.analytics.android)
             }
         }
     }
@@ -96,6 +91,20 @@ kotlin {
 }
 
 android {
+    signingConfigs {
+        getByName("debug") {
+            storeFile = file("/Users/usmanakhmedov/Documents/word_new_new")
+            storePassword = "usmanakhmedov"
+            keyAlias = "usmonie"
+            keyPassword = "usmonie"
+        }
+        create("debug_new") {
+            storeFile = file("/Users/usmanakhmedov/Documents/word_new_new")
+            storePassword = "usmanakhmedov"
+            keyAlias = "usmonie"
+            keyPassword = "usmonie"
+        }
+    }
     namespace = "com.usmonie.word"
     compileSdk = 34 // config.versions.android.compileSdk.get().toInt()
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
@@ -125,13 +134,19 @@ android {
         getByName("release") {
             isMinifyEnabled = true
             isShrinkResources = true
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = signingConfigs.getByName("debug_new")
+
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
 
         getByName("debug") {
             applicationIdSuffix = ".debug"
             isMinifyEnabled = false
             versionNameSuffix = ".debug"
+            signingConfig = signingConfigs.getByName("debug")
         }
         create("benchmark") {
             initWith(buildTypes.getByName("release"))
@@ -144,9 +159,10 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
     dependencies {
-
-        implementation("org.slf4j:slf4j-api:1.7.30")
-        implementation("org.slf4j:slf4j-simple:1.7.30")
+        implementation(libs.play.services.auth)
+        implementation(libs.firebase.auth)
+        implementation(libs.slf4j.api)
+        implementation(libs.slf4j.simple)
         debugImplementation(libs.compose.ui.tooling)
 
         implementation(libs.androidx.profileinstaller)
@@ -162,3 +178,4 @@ dependencies {
     debugImplementation(libs.androidx.tracing.perfetto.binary)
     debugImplementation(libs.compose.ui.tooling)
 }
+task("testClasses")

@@ -2,8 +2,10 @@ package com.usmonie.word.features.onboarding.ui.onboarding
 
 import androidx.compose.runtime.Immutable
 import com.usmonie.word.features.dashboard.domain.models.Language
+import com.usmonie.word.features.dashboard.domain.models.LanguageLevel
 import com.usmonie.word.features.dashboard.domain.models.NotificationTime
 import com.usmonie.word.features.dashboard.domain.usecase.SetOnboardingWasShowedUseCase
+import com.usmonie.word.features.dashboard.domain.usecase.SetupLanguageLevelUseCase
 import com.usmonie.word.features.dashboard.domain.usecase.SetupNativeLanguageUseCase
 import com.usmonie.word.features.dashboard.domain.usecase.SetupRemindersTimeUseCase
 import com.usmonie.word.features.dashboard.domain.usecase.SetupWordsPerDayUseCase
@@ -17,6 +19,7 @@ internal class OnboardingViewModel(
     private val setupNativeLanguageUseCase: SetupNativeLanguageUseCase,
     private val setupRemindersTimeUseCase: SetupRemindersTimeUseCase,
     private val setupOnboardingWasShowedUseCase: SetOnboardingWasShowedUseCase,
+    private val setupLanguageLevelUseCase: SetupLanguageLevelUseCase,
     private val analytics: Analytics
 ) : BaseViewModel<OnboardingState, OnboardingAction, OnboardingEvent, OnboardingEffect>(
     OnboardingState.SelectNativeLanguage
@@ -24,6 +27,7 @@ internal class OnboardingViewModel(
     override fun OnboardingState.reduce(event: OnboardingEvent) = when (event) {
         OnboardingEvent.SelectNativeLanguage -> OnboardingState.SelectNativeLanguage
         OnboardingEvent.SelectYears -> OnboardingState.HowOldAreUser
+        OnboardingEvent.SelectLanguageLevel -> OnboardingState.SelectLanguageLevel
         OnboardingEvent.SelectCountWordsPerDay -> OnboardingState.SelectCountWordsPerDay
         OnboardingEvent.SelectReminderTime -> OnboardingState.SelectReminderTime
         OnboardingEvent.SelectedReminderTime -> this
@@ -39,7 +43,7 @@ internal class OnboardingViewModel(
 
         is OnboardingAction.SelectedYears -> {
             analytics.log(OnboardingAnalyticsEvent.SelectedYears(action.years))
-            OnboardingEvent.SelectCountWordsPerDay
+            OnboardingEvent.SelectLanguageLevel
         }
 
         is OnboardingAction.SelectedWordsCountPerDay -> {
@@ -60,7 +64,14 @@ internal class OnboardingViewModel(
         is OnboardingAction.OnBackSelected -> when (action.page) {
             1 -> OnboardingEvent.SelectNativeLanguage
             2 -> OnboardingEvent.SelectYears
+            3 -> OnboardingEvent.SelectLanguageLevel
             else -> OnboardingEvent.SelectCountWordsPerDay
+        }
+
+        is OnboardingAction.SelectedLanguageLevel -> {
+            analytics.log(OnboardingAnalyticsEvent.SelectedLanguageLevel(action.languageLevel))
+            setupLanguageLevelUseCase(action.languageLevel)
+            OnboardingEvent.SelectCountWordsPerDay
         }
     }
 
@@ -75,6 +86,10 @@ internal class OnboardingViewModel(
 
     fun onYearsSelected(years: String) {
         handleAction(OnboardingAction.SelectedYears(years))
+    }
+
+    fun onLanguageLevel(languageLevel: LanguageLevel) {
+        handleAction(OnboardingAction.SelectedLanguageLevel(languageLevel))
     }
 
     fun onWordsSelected(words: Int) {

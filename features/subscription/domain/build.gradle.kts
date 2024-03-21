@@ -20,3 +20,4 @@ kotlin {
         api(projects.core.domain)
     }
 }
+task("testClasses")

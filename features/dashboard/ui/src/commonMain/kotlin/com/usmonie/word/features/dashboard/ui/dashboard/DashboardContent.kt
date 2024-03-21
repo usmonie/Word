@@ -1,6 +1,5 @@
 package com.usmonie.word.features.dashboard.ui.dashboard
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,8 +17,10 @@ import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -42,8 +43,11 @@ import com.usmonie.word.features.dashboard.ui.ui.PrimaryStatusCard
 import com.usmonie.word.features.dashboard.ui.ui.StatusCard
 import com.usmonie.word.features.dashboard.ui.ui.WordButtons
 import com.usmonie.word.features.dashboard.ui.ui.WordLargeResizableTitle
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import wtf.speech.core.ui.AppKeys
 import wtf.speech.core.ui.BaseCard
 import wtf.speech.core.ui.ContentState
+import wtf.word.core.design.themes.Resources
 
 @ExperimentalMaterial3Api
 @Composable
@@ -55,7 +59,6 @@ internal fun DashboardContent(
 ) {
     Box(
         Modifier
-            .background(MaterialTheme.colorScheme.background)
             .fillMaxSize()
             .padding(
                 PaddingValues(
@@ -65,7 +68,6 @@ internal fun DashboardContent(
                 )
             )
     ) {
-
         val state by dashboardViewModel.state.collectAsState()
 
         when (val s = state) {
@@ -78,11 +80,12 @@ internal fun DashboardContent(
             }
 
             is DashboardState.Loading -> {
-//                LinearProgressIndicator(
-//                    Modifier.align(Alignment.Center)
-//                        .fillMaxWidth()
-//                        .padding(horizontal = 24.dp)
-//                )
+                CircularProgressIndicator(
+                    Modifier.align(Alignment.Center)
+                        .fillMaxWidth()
+                        .height(48.dp)
+                        .padding(horizontal = 24.dp)
+                )
             }
 
             is DashboardState.Success -> {
@@ -121,7 +124,13 @@ internal fun DashboardContent(
                     streak,
                     wordOfTheDay,
                     randomWord,
-                    foundWords
+                    foundWords,
+                    adMob
+                )
+
+                adMob.Banner(
+                    AppKeys.BANNER_ID,
+                    Modifier.fillMaxWidth().height(56.dp).align(Alignment.BottomCenter)
                 )
             }
         }
@@ -132,6 +141,7 @@ private val fillMaxWidthModifier = Modifier.fillMaxWidth()
 private val fillMaxWidthModifierHorizontalPadding =
     fillMaxWidthModifier.padding(horizontal = 24.dp)
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 private fun DashboardItemsList(
     listState: LazyGridState,
@@ -152,6 +162,7 @@ private fun DashboardItemsList(
     wordOfTheDay: ContentState<Pair<WordUi, WordCombinedUi>>,
     randomWord: ContentState<Pair<WordUi, WordCombinedUi>>,
     foundWords: ContentState<List<WordCombinedUi>>,
+    adMob: AdMob
 ) {
     val columns = GridCells.Fixed(5)
 
@@ -166,51 +177,68 @@ private fun DashboardItemsList(
     ) {
 
         if (!showSearchItems) {
+            if (false) {
+                item(span = { GridItemSpan(5) }) {
+                    DashboardSubtitle(
+                        "Learning status",
+                        fillMaxWidthModifier
+                    )
+                }
+
+                item(span = { GridItemSpan(2) }) {
+                    StatusCard(
+                        {},
+                        { learnedWords.title },
+                        { learnedWords.status.toString() },
+                        { learnedWords.description },
+                        fillMaxWidthModifier
+                    )
+                }
+                item(span = { GridItemSpan(3) }) {
+                    StatusCard(
+                        {},
+                        { practiceWords.title },
+                        { practiceWords.status.toString() },
+                        { practiceWords.description },
+                        fillMaxWidthModifier
+                    )
+                }
+                item(span = { GridItemSpan(3) }) {
+                    PrimaryStatusCard(
+                        {},
+                        { newWords.title },
+                        { newWords.status.toString() },
+                        { newWords.description },
+                        fillMaxWidthModifier
+                    )
+                }
+                item(span = { GridItemSpan(2) }) {
+                    StatusCard(
+                        {},
+                        { streak.title },
+                        { streak.status.toString() },
+                        { streak.description },
+                        fillMaxWidthModifier
+                    )
+                }
+                item(span = { GridItemSpan(5) }) {
+                    Button({}) {
+                        Icon(
+                            Resources.ic_rocket_launch_outline,
+                            contentDescription = null,
+                            modifier = Modifier.size(18.dp)
+                        )
+
+                        Text(
+                            "Continue learning",
+                            style = MaterialTheme.typography.titleMedium,
+                            modifier = Modifier.padding(vertical = 12.dp, horizontal = 8.dp)
+                        )
+                    }
+                }
+            }
+
             item(span = { GridItemSpan(5) }) {
-                DashboardSubtitle(
-                    "Discover new words",
-                    fillMaxWidthModifier
-                )
-            }
-
-            item(span = { GridItemSpan(2) }) {
-                StatusCard(
-                    {},
-                    { learnedWords.title },
-                    { learnedWords.status.toString() },
-                    { learnedWords.description },
-                    fillMaxWidthModifier
-                )
-            }
-            item(span = { GridItemSpan(3) }) {
-                StatusCard(
-                    {},
-                    { practiceWords.title },
-                    { practiceWords.status.toString() },
-                    { practiceWords.description },
-                    fillMaxWidthModifier
-                )
-            }
-            item(span = { GridItemSpan(3) }) {
-                PrimaryStatusCard(
-                    {},
-                    { newWords.title },
-                    { newWords.status.toString() },
-                    { newWords.description },
-                    fillMaxWidthModifier
-                )
-            }
-            item(span = { GridItemSpan(2) }) {
-                StatusCard(
-                    {},
-                    { streak.title },
-                    { streak.status.toString() },
-                    { streak.description },
-                    fillMaxWidthModifier
-                )
-            }
-
-            item(span = { GridItemSpan(3) }) {
                 DashboardSubtitle(
                     "Vocabulary",
                     fillMaxWidthModifier
@@ -259,6 +287,7 @@ private fun DashboardItemsList(
                     fillMaxWidthModifier.clickable(onClick = onSettingsClick)
                 )
             }
+
 //            item(span = { GridItemSpan(5) }) {
 //                DashboardMenuItem(
 //                    "[A]bout",

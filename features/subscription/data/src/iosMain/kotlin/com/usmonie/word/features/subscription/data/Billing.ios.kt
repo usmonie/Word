@@ -7,9 +7,8 @@ actual class Billing {
     private val subscribers: MutableList<(SubscriptionStatus) -> Unit> = mutableListOf()
 
     actual fun subscribeSubscriptionState(onSubscriptionChanged: (SubscriptionStatus) -> Unit) {
+        onSubscriptionChanged(SubscriptionStatus.NONE)
         subscribers.add(onSubscriptionChanged)
-
-        onSubscriptionChanged(SubscriptionStatus.PURCHASED)
     }
 
     actual fun unsubscribeSubscriptionState(onSubscriptionChanged: (SubscriptionStatus) -> Unit) {

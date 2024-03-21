@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalResourceApi::class)
+
 package wtf.word.core.design.themes.typographies
 
 import androidx.compose.material3.MaterialTheme
@@ -7,12 +9,13 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.FontResource
 
 sealed class WordTypography(val name: String) {
     sealed class FontFamilyData {
         data class CustomFont(
-            val name: String,
-            val res: String,
+            val font: FontResource,
             val weight: FontWeight,
             val style: FontStyle
         ) : FontFamilyData()
@@ -107,9 +110,8 @@ sealed class WordTypography(val name: String) {
     fun getFont(fontFamilyData: FontFamilyData): FontFamily {
         return when (fontFamilyData) {
             is FontFamilyData.CustomFont -> FontFamily(
-                font(
-                    fontFamilyData.name,
-                    fontFamilyData.res,
+                org.jetbrains.compose.resources.Font(
+                    fontFamilyData.font,
                     fontFamilyData.weight,
                     fontFamilyData.style
                 )

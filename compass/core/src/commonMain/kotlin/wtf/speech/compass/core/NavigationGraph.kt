@@ -24,24 +24,31 @@ internal data class NavigationEntry(
 @Immutable
 data class NavigationGraph(
     val id: String,
-    val initialScreenBuilder: ScreenBuilder,
+    val initialRoute: Route,
     val extra: Extra? = null,
     val parameters: Map<String, String> = emptyMap(),
     val storeInBackStack: Boolean = true
 ) {
     internal val routes = mutableMapOf<String, ScreenBuilder>()
-    private val backStack by lazy {
-        mutableListOf(
-            NavigationEntry(
-                initialScreenBuilder.build(parameters, extra),
-                parameters,
-                extra
-            )
+
+    private val initialEntry by lazy {
+        NavigationEntry(
+            initialRoute.screenBuilder.build(parameters, extra),
+            parameters,
+            extra
         )
     }
 
+    private val backStack by lazy {
+        mutableListOf<NavigationEntry>().apply {
+            if (initialEntry.screen.storeInBackStack) {
+                add(initialEntry)
+            }
+        }
+    }
+
     internal val currentScreen: MutableState<NavigationEntry>
-        get() = mutableStateOf(backStack.last())
+        get() = mutableStateOf(if (backStack.size > 0) backStack.last() else initialEntry)
 
     internal val previousScreen: MutableState<NavigationEntry?>
         get() = mutableStateOf(backStack.getOrNull(backStack.lastIndex - 1))

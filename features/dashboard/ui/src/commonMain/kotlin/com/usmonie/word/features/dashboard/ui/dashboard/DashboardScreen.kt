@@ -1,35 +1,16 @@
 package com.usmonie.word.features.dashboard.ui.dashboard
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowForwardIos
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.dashboard.domain.repository.WordRepository
 import com.usmonie.word.features.dashboard.domain.usecase.GetSearchHistoryUseCaseImpl
 import com.usmonie.word.features.dashboard.domain.usecase.GetWordOfTheDayUseCaseImpl
@@ -60,16 +41,14 @@ class DashboardScreen private constructor(
         Scaffold(
             modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
             topBar = { DashboardTopBar(dashboardViewModel) { scrollBehavior } },
-            floatingActionButton = {
-                val expand by remember(listState.firstVisibleItemIndex) {
-                    derivedStateOf {
-                        listState.firstVisibleItemIndex < 1
-                    }
-                }
-                val state by dashboardViewModel.state.collectAsState()
-                StartLearningButton(dashboardViewModel::onBackClick, state, expand)
-            },
-            content = { insets -> DashboardContent(listState, dashboardViewModel, adMob, insets) }
+            content = { insets ->
+                DashboardContent(
+                    listState,
+                    dashboardViewModel,
+                    adMob,
+                    insets
+                )
+            }
         )
     }
 
@@ -94,42 +73,6 @@ class DashboardScreen private constructor(
                 analytics
             ), adMob
         )
-    }
-}
-
-@Composable
-private fun StartLearningButton(onClick: () -> Unit, state: DashboardState, expand: Boolean) {
-    val showButton by remember(state) {
-        mutableStateOf(
-            state is DashboardState.Success
-        )
-    }
-
-    if (showButton) {
-        FloatingActionButton(onClick, shape = RoundedCornerShape(160.dp)) {
-            Row(
-                Modifier.padding(horizontal = if (expand) 24.dp else 0.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
-            ) {
-                AnimatedVisibility(expand) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Text(
-                            "Start Training",
-                            style = MaterialTheme.typography.titleMedium,
-                        )
-                        Spacer(Modifier.width(8.dp))
-                    }
-                }
-                Icon(
-                    Icons.Default.ArrowForwardIos,
-                    contentDescription = null,
-                    modifier = Modifier.size(18.dp)
-                )
-            }
-        }
     }
 }
 

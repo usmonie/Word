@@ -2,82 +2,85 @@ package wtf.word.core.design.themes.typographies
 
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import word.core.design.generated.resources.Res
+import word.core.design.generated.resources.lato_bold
+import word.core.design.generated.resources.lato_medium
+import word.core.design.generated.resources.lato_regular
+import word.core.design.generated.resources.opensans_light
+import word.core.design.generated.resources.opensans_light_italic
+import word.core.design.generated.resources.opensans_regular
+import word.core.design.generated.resources.raleway_black
+import word.core.design.generated.resources.raleway_bold
+import word.core.design.generated.resources.raleway_light
+import word.core.design.generated.resources.raleway_regular
+import word.core.design.generated.resources.raleway_semibold
 
+@OptIn(ExperimentalResourceApi::class)
 data object ModernChic : WordTypography("Modern Chic") {
 
     private val ralewayBlack = FontFamilyData.CustomFont(
-        "Raleway Black",
-        "raleway_black",
+        Res.font.raleway_black,
         FontWeight.Black,
         FontStyle.Normal
     )
 
     private val ralewayBold = FontFamilyData.CustomFont(
-        "Raleway Bold",
-        "raleway_bold",
+        Res.font.raleway_bold,
         FontWeight.Bold,
         FontStyle.Normal
     )
 
     private val ralewayRegular = FontFamilyData.CustomFont(
-        "Raleway Regular",
-        "raleway_regular",
+        Res.font.raleway_regular,
         FontWeight.SemiBold,
         FontStyle.Normal
     )
 
     private val ralewaySemibold = FontFamilyData.CustomFont(
-        "Raleway Semibold",
-        "raleway_semibold",
+        Res.font.raleway_semibold,
         FontWeight.SemiBold,
         FontStyle.Normal
     )
 
     private val ralewayLight = FontFamilyData.CustomFont(
-        "Raleway Light",
-        "raleway_light",
+        Res.font.raleway_light,
         FontWeight.Light,
         FontStyle.Normal
     )
 
     private val latoBold = FontFamilyData.CustomFont(
-        "Lato Bold",
-        "lato_bold",
+        Res.font.lato_bold,
         FontWeight.Bold,
         FontStyle.Normal
     )
 
     private val latoMedium = FontFamilyData.CustomFont(
-        "Lato Medium",
-        "lato_medium",
+        Res.font.lato_medium,
         FontWeight.SemiBold,
         FontStyle.Normal
     )
 
     private val latoRegular = FontFamilyData.CustomFont(
-        "Lato Regular",
-        "lato_regular",
+        Res.font.lato_regular,
         FontWeight.Normal,
         FontStyle.Normal
     )
 
     private val openSansRegular = FontFamilyData.CustomFont(
-        "Open Sans Regular",
-        "opensans_regular",
+        Res.font.opensans_regular,
         FontWeight.Normal,
         FontStyle.Normal
     )
 
     private val openSansLight = FontFamilyData.CustomFont(
-        "Open Sans Light",
-        "opensans_light",
+        Res.font.opensans_light,
         FontWeight.Light,
         FontStyle.Normal
     )
 
     private val openSansLightItalic = FontFamilyData.CustomFont(
-        "Open Sans Light Italic",
-        "opensans_light_italic",
+        Res.font.opensans_light_italic,
         FontWeight.Light,
         FontStyle.Italic
     )

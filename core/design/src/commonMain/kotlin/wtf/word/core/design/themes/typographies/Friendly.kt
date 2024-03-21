@@ -1,82 +1,87 @@
+@file:OptIn(ExperimentalResourceApi::class)
+
 package wtf.word.core.design.themes.typographies
 
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import word.core.design.generated.resources.Res
+import word.core.design.generated.resources.sourcecodepro_light
+import word.core.design.generated.resources.sourcecodepro_medium
+import word.core.design.generated.resources.sourcecodepro_regular
+import word.core.design.generated.resources.sourcecodepro_semibold
+import word.core.design.generated.resources.sourcesans_light
+import word.core.design.generated.resources.sourcesans_light_italic
+import word.core.design.generated.resources.sourcesans_regular
+import word.core.design.generated.resources.sourceserif_black
+import word.core.design.generated.resources.sourceserif_bold
+import word.core.design.generated.resources.sourceserif_light
+import word.core.design.generated.resources.sourceserif_regular
 
 data object Friendly : WordTypography("Friendly") {
     private val sourceSerifBlack = FontFamilyData.CustomFont(
-        "Source Serif 4 Black",
-        "sourceserif_black",
+        Res.font.sourceserif_black,
         FontWeight.Black,
         FontStyle.Normal
     )
 
     private val sourceSerifBold = FontFamilyData.CustomFont(
-        "Source Serif 4 Bold",
-        "sourceserif_bold",
+        Res.font.sourceserif_bold,
         FontWeight.Bold,
         FontStyle.Normal
     )
 
     private val sourceSerifRegular = FontFamilyData.CustomFont(
-        "Source Serif 4 Regular",
-        "sourceserif_regular",
+        Res.font.sourceserif_regular,
         FontWeight.Normal,
         FontStyle.Normal
     )
 
     private val sourceSerifLight = FontFamilyData.CustomFont(
-        "Source Serif 4 Light",
-        "sourceserif_light",
+        Res.font.sourceserif_light,
         FontWeight.Light,
         FontStyle.Normal
     )
 
     private val sourceSansRegular = FontFamilyData.CustomFont(
-        "Source Sans Regular",
-        "sourcesans_regular",
+        Res.font.sourcesans_regular,
         FontWeight.Normal,
         FontStyle.Normal
     )
 
     private val sourceSansLightItalic = FontFamilyData.CustomFont(
-        "Source Sans Light Italic",
-        "sourcesans_light_italic",
+        Res.font.sourcesans_light_italic,
         FontWeight.Light,
         FontStyle.Italic
     )
 
     private val sourceSansLight = FontFamilyData.CustomFont(
-        "Source Sans Light",
-        "sourcesans_light",
+        Res.font.sourcesans_light,
         FontWeight.Light,
         FontStyle.Normal
     )
 
     private val sourceCodeSemibold = FontFamilyData.CustomFont(
-        "Source Code Semibold",
-        "sourcecodepro_semibold",
+        Res.font.sourcecodepro_semibold,
         FontWeight.SemiBold,
         FontStyle.Normal
     )
 
     private val sourceCodeMedium = FontFamilyData.CustomFont(
-        "Source Code Medium",
-        "sourcecodepro_medium",
+        Res.font.sourcecodepro_medium,
         FontWeight.Medium,
         FontStyle.Normal
     )
 
     private val sourceCodeRegular = FontFamilyData.CustomFont(
-        "Source Code Regular",
-        "sourcecodepro_regular",
+        Res.font.sourcecodepro_regular,
         FontWeight.Normal,
         FontStyle.Normal
     )
 
+    @OptIn(ExperimentalResourceApi::class)
     private val sourceCodeLight = FontFamilyData.CustomFont(
-        "Source Code Light",
-        "sourcecodepro_light",
+        Res.font.sourcecodepro_light,
         FontWeight.Light,
         FontStyle.Normal
     )

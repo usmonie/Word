@@ -22,9 +22,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.stringResource
+import word.features.onboarding.ui.generated.resources.Res
+import word.features.onboarding.ui.generated.resources.how_many_words_description
+import word.features.onboarding.ui.generated.resources.how_many_words_title
+import word.features.onboarding.ui.generated.resources.words_count
 import wtf.speech.core.ui.BaseCard
 import wtf.word.core.domain.tools.fastForEach
 
+@ExperimentalResourceApi
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HowManyWordsPerDayPage(
@@ -37,12 +44,7 @@ fun HowManyWordsPerDayPage(
     Scaffold(
         topBar = {
             LargeTopAppBar(
-                title = {
-                    Text(
-                        "[H]ow many words do you want to learn per day?",
-                        style = MaterialTheme.typography.headlineMedium,
-                    )
-                },
+                title = { Text(stringResource(Res.string.how_many_words_title)) },
                 navigationIcon = {
                     IconButton(onBackClick) {
                         Icon(Icons.Default.ArrowBack, contentDescription = null)
@@ -61,7 +63,7 @@ fun HowManyWordsPerDayPage(
                     .padding(24.dp)
             ) {
                 Text(
-                    "We will create a personalized learning plan for you, which will match your level and goals. You can choose how many words you want to learn per day.",
+                    stringResource(Res.string.how_many_words_description),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.fillMaxWidth().padding(24.dp)
@@ -71,7 +73,7 @@ fun HowManyWordsPerDayPage(
                     Row(Modifier.fillMaxWidth().clickable { onSelectWordsCount(count) }) {
 //                    RadioButton(selected = selectedWords == count, { onSelectWordsCount(count) })
                         Text(
-                            "$count Words",
+                            stringResource(Res.string.words_count, count),
                             style = MaterialTheme.typography.titleLarge,
                             color = MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier.fillMaxWidth()

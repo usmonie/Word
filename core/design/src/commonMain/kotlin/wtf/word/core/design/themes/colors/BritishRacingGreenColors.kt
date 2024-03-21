@@ -65,6 +65,5 @@ object BritishRacingGreenColors: Colors() {
     override val dark_surfaceVariant = Color(0xFF4D4639)
     override val dark_onSurfaceVariant = Color(0xFFD0C5B4)
 
-
     override val seed = Color(0xFF004225)
 }

@@ -4,6 +4,7 @@ import extensions.commonDependencies
 
 plugins {
     id(libs.plugins.speech.multiplatform.core.get().pluginId)
+    alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.compose)
 }
 
@@ -17,6 +18,14 @@ kotlin {
         iosArm64(),
         iosSimulatorArm64()
     )
+
+    sourceSets {
+        val commonMain by getting {
+            dependencies {
+                implementation(compose.components.resources)
+            }
+        }
+    }
 
     commonDependencies {
         api(compose.runtime)
@@ -37,3 +46,4 @@ kotlin {
 android {
     sourceSets["main"].resources.srcDirs("src/commonMain/resources")
 }
+task("testClasses")

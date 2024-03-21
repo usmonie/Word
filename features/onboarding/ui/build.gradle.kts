@@ -5,6 +5,7 @@ import extensions.commonDependencies
 plugins {
     id(libs.plugins.speech.multiplatform.core.get().pluginId)
     alias(libs.plugins.compose)
+    alias(libs.plugins.kotlin.multiplatform)
     id(libs.plugins.speech.multiplatform.ui.get().pluginId)
 }
 
@@ -13,6 +14,7 @@ android.namespace = "com.usmonie.word.features.onboarding.ui"
 commonDependencies {
     implementation(projects.compass.core)
     implementation(projects.core.ui)
+    implementation(projects.core.design)
     implementation(projects.features.dashboard.domain)
     implementation(projects.features.onboarding.domain)
     @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
@@ -22,6 +24,13 @@ commonDependencies {
 androidDependencies {
     implementation(libs.compose.ui)
     implementation(libs.google.admob)
+    implementation("com.google.firebase:firebase-auth:22.3.1")
+
+    // Also add the dependency for the Google Play services library and specify its version
+    implementation("com.google.android.gms:play-services-auth:21.0.0")
+    api("androidx.credentials:credentials:1.3.0-alpha01")
+    api("androidx.credentials:credentials-play-services-auth:1.3.0-alpha01")
+    api("com.google.android.libraries.identity.googleid:googleid:1.1.0")
 }
 
 kotlin {
@@ -36,6 +45,17 @@ kotlin {
         getByName("androidUnitTest") {
             dependencies {
                 implementation(libs.junit)
+            }
+        }
+
+        val commonMain by getting {
+            dependencies {
+                implementation(compose.components.resources)
+
+//                api(libs.kmpauth.core) //Google One Tap Sign-In
+//                api(libs.kmpauth.google) //Google One Tap Sign-In
+//                api(libs.kmpauth.firebase) //Integrated Authentications with Firebase
+//                implementation(libs.kmpauth.uihelper)
             }
         }
     }
@@ -66,3 +86,5 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 }
+
+task("testClasses")
