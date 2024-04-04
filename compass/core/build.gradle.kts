@@ -25,8 +25,8 @@ kotlin {
 }
 
 commonDependencies {
-    api(projects.core.domain)
-    api(projects.core.design)
+    api(projects.shared.core.domain)
+    api(projects.shared.core.design)
     implementation("io.github.theapache64:rebugger:1.0.0-rc02")
 
 }

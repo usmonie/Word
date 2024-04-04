@@ -23,8 +23,6 @@ import com.usmonie.word.features.subscription.data.Billing
 import com.usmonie.word.features.subscription.data.getSubscriptionRepository
 import com.usmonie.word.features.subscription.domain.models.SubscriptionStatus
 import com.usmonie.word.features.subscription.domain.usecase.SubscriptionStatusUseCaseImpl
-import dev.gitlive.firebase.auth.auth
-import dev.gitlive.firebase.firestore.firestore
 import kotlinx.cinterop.ExperimentalForeignApi
 import platform.UIKit.UIView
 import platform.UIKit.UIViewController
@@ -44,8 +42,8 @@ fun MainViewController(
     val subscriptionRepository = getSubscriptionRepository(Billing())
     val userRepository = UserRepositoryImpl(
         KVault(),
-        dev.gitlive.firebase.Firebase.firestore,
-        dev.gitlive.firebase.Firebase.auth
+//        dev.gitlive.firebase.Firebase.firestore,
+//        dev.gitlive.firebase.Firebase.auth
     )
     val subscriptionStatusUseCase = SubscriptionStatusUseCaseImpl(subscriptionRepository)
 //    GoogleAuthProvider.create(credentials = GoogleAuthCredentials(serverId = AppKeys.SERVER_CLIENT_ID))

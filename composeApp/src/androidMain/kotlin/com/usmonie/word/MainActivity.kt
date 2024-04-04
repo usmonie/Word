@@ -56,8 +56,6 @@ import com.usmonie.word.features.subscription.data.Billing
 import com.usmonie.word.features.subscription.data.getSubscriptionRepository
 import com.usmonie.word.features.subscription.domain.models.SubscriptionStatus
 import com.usmonie.word.features.subscription.domain.usecase.SubscriptionStatusUseCaseImpl
-import dev.gitlive.firebase.auth.auth
-import dev.gitlive.firebase.firestore.firestore
 import wtf.speech.compass.core.RouteManager
 import wtf.speech.compass.core.rememberRouteManager
 import wtf.speech.core.ui.AppKeys
@@ -112,8 +110,8 @@ class MainActivity : ComponentActivity() {
         val subscriptionStatusUseCase = SubscriptionStatusUseCaseImpl(subscriptionRepository)
         val userRepository = UserRepositoryImpl(
             KVault(this@MainActivity),
-            dev.gitlive.firebase.Firebase.firestore,
-            dev.gitlive.firebase.Firebase.auth
+//            dev.gitlive.firebase.Firebase.firestore,
+//            dev.gitlive.firebase.Firebase.auth
         )
 
         val adMob = AdMob(
@@ -197,6 +195,7 @@ class MainActivity : ComponentActivity() {
             if (welcomeGraph != null) {
                 routeManager.registerGraph(dashboardGraph)
             }
+
             App(AppConfiguration(routeManager, currentTheme, currentFonts))
             ReportDrawn()
         }

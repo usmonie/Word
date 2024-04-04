@@ -1,10 +1,5 @@
 import org.gradle.api.internal.FeaturePreviews
 
-include(":benchmark")
-
-
-include(":baselineprofile")
-
 
 rootProject.name = "Word"
 enableFeaturePreview(FeaturePreviews.Feature.TYPESAFE_PROJECT_ACCESSORS.name)
@@ -19,10 +14,6 @@ pluginManagement {
         gradlePluginPortal()
         mavenCentral()
     }
-
-    plugins {
-        id("dev.icerock.moko.resources-generator") version "0.23.0" apply false
-    }
 }
 
 dependencyResolutionManagement {
@@ -35,25 +26,28 @@ dependencyResolutionManagement {
 
 include(":composeApp")
 
-include(":core:domain")
-include(":core:ui")
-include(":core:design")
+include(":benchmark")
+include(":baselineprofile")
+
+include(":shared:core:domain")
+include(":shared:core:ui")
+include(":shared:core:design")
 
 include(":compass:core")
 
-include(":features:dashboard:ui")
-include(":features:dashboard:domain")
-include(":features:dashboard:data")
+include(":shared:features:dashboard:ui")
+include(":shared:features:dashboard:domain")
+include(":shared:features:dashboard:data")
 
-include(":features:admob:ui")
-include(":features:admob:domain")
-include(":features:admob:data")
+include(":shared:features:admob:ui")
+include(":shared:features:admob:domain")
+include(":shared:features:admob:data")
 
-include(":features:onboarding:ui")
-include(":features:onboarding:domain")
-include(":features:onboarding:data")
+include(":shared:features:onboarding:ui")
+include(":shared:features:onboarding:domain")
+include(":shared:features:onboarding:data")
 
-include(":features:subscription:domain")
-include(":features:subscription:data")
+include(":shared:features:subscription:domain")
+include(":shared:features:subscription:data")
 
-include(":features:word:ui")
+include(":shared:features:word:ui")

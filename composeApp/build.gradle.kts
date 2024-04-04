@@ -32,9 +32,9 @@ kotlin {
             version = "1.2.0"
 
             dependencies {
-                implementation(projects.core.design)
-                implementation(projects.features.dashboard.domain)
-                implementation(projects.features.dashboard.ui)
+                implementation(projects.shared.core.design)
+                implementation(projects.shared.features.dashboard.domain)
+                implementation(projects.shared.features.dashboard.ui)
             }
         }
     }
@@ -42,21 +42,21 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation(projects.features.dashboard.ui)
-                implementation(projects.features.dashboard.domain)
-                implementation(projects.features.dashboard.data)
+                implementation(projects.shared.features.dashboard.ui)
+                implementation(projects.shared.features.dashboard.domain)
+                implementation(projects.shared.features.dashboard.data)
 
-                implementation(projects.features.onboarding.ui)
-                implementation(projects.features.onboarding.domain)
-                implementation(projects.features.onboarding.data)
+                implementation(projects.shared.features.onboarding.ui)
+                implementation(projects.shared.features.onboarding.domain)
+                implementation(projects.shared.features.onboarding.data)
 
-                implementation(projects.features.subscription.domain)
-                implementation(projects.features.subscription.data)
+                implementation(projects.shared.features.subscription.domain)
+                implementation(projects.shared.features.subscription.data)
 
                 implementation(projects.compass.core)
-                implementation(projects.core.design)
-                implementation(projects.core.domain)
-                implementation(projects.core.ui)
+                implementation(projects.shared.core.design)
+                implementation(projects.shared.core.domain)
+                implementation(projects.shared.core.ui)
 
                 implementation(compose.runtime)
                 implementation(compose.foundation)
@@ -84,7 +84,7 @@ kotlin {
             isStatic = false
             linkerOpts.add("-lsqlite3")
 
-//            export(projects.core.design)
+//            export(projects.shared.core.design)
             transitiveExport = true
         }
     }

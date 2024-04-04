@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Dashboard Screen-->
+    <string name="dashboard_title">Dashboard</string>
+    <string name="continue_learning_title">Continue</string>
+
+    <!--Learning status-->
+    <string name="learning_status_subtitle">Learning status</string>
+    <string name="learned_status_title">Learned</string>
+    <string name="learned_status_description">Review</string>
+    <string name="pending_status_title">Pending</string>
+    <string name="pending_status_description">Practice words</string>
+    <string name="new_status_title">New</string>
+    <string name="new_status_description">Learn new words</string>
+    <string name="streak_status_title">Streak</string>
+    <string name="streak_status_description">Days</string>
+
+    <!--Dictionary Screen-->
+    <string name="dictionary_title">Dictionary</string>
+    <string name="search_title">Search</string>
+    <string name="favorites_subtitle">Favorites</string>
+
+    <!--Vocabulary-->
+    <string name="vocabulary_title">Vocabulary</string>
+    <string name="vocabulary_word_of_the_day_title">Word of the day</string>
+    <string name="vocabulary_random_word_title">Random word</string>
+    <string name="vocabulary_random_word_add_to_favorites">Next</string>
+    <string name="vocabulary_word_add_to_favorites">Add to favorites</string>
+    <string name="vocabulary_word_etymology">Etymology</string>
+    <string name="vocabulary_word_pronunciation">Pronunciation</string>
+    <string name="vocabulary_word_root">Root %1$d</string>
+    <string name="vocabulary_word_senses">Senses</string>
+    <string name="vocabulary_word_senses_collapse">Collapse</string>
+    <string name="vocabulary_word_senses_expand">Expand</string>
+    <string name="vocabulary_word_thesaurus">Thesaurus</string>
+    <string name="vocabulary_word_thesaurus_forms">Forms</string>
+    <string name="vocabulary_word_thesaurus_synonyms">Synonyms</string>
+    <string name="vocabulary_word_thesaurus_hypernyms">Hypernyms</string>
+    <string name="vocabulary_word_thesaurus_hyponyms">Hyponyms</string>
+    <string name="vocabulary_word_thesaurus_meronyms">Meronyms</string>
+    <string name="vocabulary_word_thesaurus_hyphenations">Hyphenations</string>
+    <string name="vocabulary_word_thesaurus_hyphenations">Hyphenations</string>
+    <string name="vocabulary_word_thesaurus_derived">Derived</string>
+    <string name="vocabulary_word_thesaurus_holonyms">Holonyms</string>
+    <string name="vocabulary_word_thesaurus_related">Related</string>
+
+
+    <!-- Games Screen -->
+    <string name="games_hangman_game">[H]angman</string>
+    <string name="games_cryptogramma_game">[C]ryptogramma</string>
+</resources>

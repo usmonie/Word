@@ -44,7 +44,7 @@ class MultiPlatformDomainConventionPlugin : Plugin<Project> {
             }
 
             commonDependencies {
-                implementation(project(":core:domain"))
+                implementation(project(":shared:core:domain"))
             }
         }
     }

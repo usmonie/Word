@@ -10,8 +10,8 @@
 .cxx
 local.properties
 /iosApp/iosApp/GoogleService-Info.plist
-
-
+composeApp/src/androidMain/res/values/string-key.xml
+shared/core/ui/src/commonMain/kotlin/wtf/speech/core/ui/AppKeys.kt
 # Compiled class file
 *.class
 

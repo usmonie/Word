@@ -1,9 +1,11 @@
 package com.usmonie.baselineprofile
 
+import androidx.benchmark.macro.MacrobenchmarkScope
 import androidx.benchmark.macro.junit4.BaselineProfileRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.uiautomator.By
+import androidx.test.uiautomator.Direction
 import androidx.test.uiautomator.Until
 import org.junit.Rule
 import org.junit.Test
@@ -49,7 +51,11 @@ class BaselineProfileGenerator {
             startActivityAndWait()
 
             device.wait(Until.hasObject(By.pkg("com.usmonie.word").depth(0)), 15_000)
-
+            searchWord()
+            openDetails("random_word_card")
+            openFavorites()
+            openGames()
+            openSettings()
 
             // Example: Tap on a specific item, such as a word card
 //            val wordCard = device.findObject(By.desc("Word Card Description")) // Replace with actual content-desc
@@ -64,5 +70,80 @@ class BaselineProfileGenerator {
             // Check UiAutomator documentation for more information how to interact with the app.
             // https://d.android.com/training/testing/other-components/ui-automator
         }
+    }
+
+    private fun MacrobenchmarkScope.openSettings() {
+        val settings = device.findObject(By.text("[S]ettings"))
+        settings.click()
+        device.waitForIdle(400L)
+        val themeBritishRacingGreen = device.findObject(By.text("British Racing Green"))
+        val themeRichMaroon = device.findObject(By.text("Rich Maroon"))
+        val themeDeepIndigo = device.findObject(By.text("Deep Indigo"))
+        themeBritishRacingGreen.click()
+        device.waitForIdle(200L)
+        themeRichMaroon.click()
+        device.waitForIdle(200L)
+        themeDeepIndigo.click()
+        device.waitForIdle(200L)
+        device.pressBack()
+    }
+
+    private fun MacrobenchmarkScope.openFavorites() {
+        val favorites = device.findObject(By.text("[F]avorites"))
+        favorites.click()
+        device.waitForIdle(200L)
+        device.pressBack()
+    }
+
+    private fun MacrobenchmarkScope.openGames() {
+        val games = device.findObject(By.text("[G]ames"))
+        games.click()
+        device.waitForIdle(200L)
+        val hangman = device.findObject(By.text("[H]angman"))
+        hangman.click()
+        device.waitForIdle(200L)
+
+        device.pressBack()
+    }
+
+    private fun MacrobenchmarkScope.searchWord() {
+        val searchBar = device.findObject(By.desc("search_bar"))
+        searchBar.click()
+        searchBar.text = "w"
+        device.wait(Until.hasObject(By.desc("search_card")), 500L)
+        searchBar.text = "wo"
+        device.wait(Until.hasObject(By.desc("search_card")), 500L)
+
+        searchBar.text = "wor"
+        device.wait(Until.hasObject(By.desc("search_card")), 500L)
+
+        searchBar.text = "word"
+        device.wait(Until.hasObject(By.desc("search_card")), 1500L)
+        openDetails("search_card")
+        searchBar.fling(Direction.LEFT)
+    }
+
+    private fun MacrobenchmarkScope.openDetails(wordCardTag: String) {
+        val wordCard = device.findObject(By.desc(wordCardTag))
+        wordCard.click()
+        device.waitForIdle(500L)
+
+        val details = device.findObject(By.desc("BASE_LAZY_COLUMN"))
+        details.setGestureMargin(device.displayWidth / 5)
+        details.fling(Direction.DOWN)
+        details.fling(Direction.DOWN)
+        details.fling(Direction.UP)
+        details.fling(Direction.UP)
+        details.fling(Direction.DOWN)
+        details.fling(Direction.DOWN)
+        details.fling(Direction.DOWN)
+        details.fling(Direction.DOWN)
+        details.fling(Direction.UP)
+        details.fling(Direction.UP)
+        details.fling(Direction.UP)
+        details.fling(Direction.UP)
+        device.waitForIdle()
+
+        device.pressBack()
     }
 }
