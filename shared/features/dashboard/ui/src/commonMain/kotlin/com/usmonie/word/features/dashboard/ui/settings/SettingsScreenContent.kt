@@ -29,13 +29,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
-import com.usmonie.word.features.subscription.domain.models.SubscriptionStatus
 import com.usmonie.word.features.dashboard.ui.ui.AdMob
 import com.usmonie.word.features.dashboard.ui.ui.BaseLazyColumn
 import com.usmonie.word.features.dashboard.ui.ui.MenuItemText
 import com.usmonie.word.features.dashboard.ui.ui.WordTopBar
+import com.usmonie.word.features.subscription.domain.models.SubscriptionStatus
 import wtf.speech.compass.core.LocalRouteManager
-import wtf.speech.core.ui.AppKeys
 import wtf.word.core.design.themes.WordColors
 import wtf.word.core.design.themes.typographies.Friendly
 import wtf.word.core.design.themes.typographies.ModernChic
@@ -138,7 +137,6 @@ internal fun SettingsScreenContent(
             }
 
             adMob.Banner(
-                AppKeys.BANNER_ID,
                 Modifier.fillMaxWidth().align(Alignment.BottomCenter)
             )
         }

@@ -1,5 +1,5 @@
 {
-  "originHash" : "3696412dc275e8f912df844f2e30a4fdde7153a61e4c3e9bae2112aee010217b",
+  "originHash" : "d5445af7e3695aea78839c59c1a7a8ab1a67f657717db6d286cb82f261766894",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -35,6 +35,15 @@
       "state" : {
         "revision" : "5746b2d35c91c50581590ed97abe4c06b5037274",
         "version" : "10.18.0"
+      }
+    },
+    {
+      "identity" : "divkit-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/divkit/divkit-ios",
+      "state" : {
+        "revision" : "8e44e1266f4325b382d18725c00d851d3143dafd",
+        "version" : "28.13.0"
       }
     },
     {
@@ -110,6 +119,15 @@
       }
     },
     {
+      "identity" : "metrica-sdk-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/yandexmobile/metrica-sdk-ios",
+      "state" : {
+        "revision" : "13d8b11181a33938ef42759d49466a621df5e7db",
+        "version" : "4.5.2"
+      }
+    },
+    {
       "identity" : "nanopb",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/firebase/nanopb.git",
@@ -152,6 +170,24 @@
       "state" : {
         "revision" : "65e8f29b2d63c4e38e736b25c27b83e012159be8",
         "version" : "1.25.2"
+      }
+    },
+    {
+      "identity" : "vgsl",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/yandex/vgsl.git",
+      "state" : {
+        "revision" : "714e915e99764be5940b4da7e30ccf9aea931eb4",
+        "version" : "2.4.1"
+      }
+    },
+    {
+      "identity" : "yandex-ads-sdk-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/yandexmobile/yandex-ads-sdk-ios",
+      "state" : {
+        "revision" : "677882f1966e83f0592c5c825c38de4d34fffad4",
+        "version" : "7.0.0"
       }
     }
   ],

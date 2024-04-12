@@ -44,8 +44,7 @@
     <string name="vocabulary_word_thesaurus_holonyms">Holonyms</string>
     <string name="vocabulary_word_thesaurus_related">Related</string>
 
-
     <!-- Games Screen -->
     <string name="games_hangman_game">[H]angman</string>
-    <string name="games_cryptogramma_game">[C]ryptogramma</string>
+    <string name="games_enigma_game">[E]nigma</string>
 </resources>

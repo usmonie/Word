@@ -26,28 +26,26 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.dashboard.domain.repository.WordRepository
 import com.usmonie.word.features.dashboard.domain.usecase.UpdateFavouriteUseCaseImpl
-import com.usmonie.word.features.dashboard.ui.DetailsWordCardMedium
-import com.usmonie.word.features.dashboard.ui.FormsCard
-import com.usmonie.word.features.dashboard.ui.RelatedCard
-import com.usmonie.word.features.dashboard.ui.RelatedCardState
-import com.usmonie.word.features.dashboard.ui.SenseTreeCard
 import com.usmonie.word.features.dashboard.ui.models.Forms
 import com.usmonie.word.features.dashboard.ui.models.WordCombinedUi
 import com.usmonie.word.features.dashboard.ui.models.WordUi
 import com.usmonie.word.features.dashboard.ui.ui.AdMob
 import com.usmonie.word.features.dashboard.ui.ui.BaseLazyColumn
+import com.usmonie.word.features.dashboard.ui.ui.DetailsWordCardMedium
+import com.usmonie.word.features.dashboard.ui.ui.FormsCard
+import com.usmonie.word.features.dashboard.ui.ui.RelatedCard
+import com.usmonie.word.features.dashboard.ui.ui.RelatedCardState
+import com.usmonie.word.features.dashboard.ui.ui.SenseTreeCard
 import com.usmonie.word.features.dashboard.ui.ui.SubtitleItemText
 import com.usmonie.word.features.dashboard.ui.ui.WordTopBar
 import wtf.speech.compass.core.Extra
 import wtf.speech.compass.core.LocalRouteManager
 import wtf.speech.compass.core.Screen
 import wtf.speech.compass.core.ScreenBuilder
-import wtf.speech.core.ui.AppKeys
 import wtf.word.core.domain.Analytics
 import wtf.word.core.domain.tools.fastForEachIndexed
 
@@ -170,7 +168,7 @@ private fun WordDetailsContent(
     Box(Modifier.padding(insets)) {
         BaseLazyColumn(
             contentPadding = PaddingValues(bottom = insets.calculateBottomPadding() + 80.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
             listState = listState(),
         ) {
 
@@ -198,7 +196,7 @@ private fun WordDetailsContent(
                     remember { {} },
                     remember { {} },
                     remember { { wordViewModel.onUpdateFavouritePressed(wordCombined) } },
-                    modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
+                    modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp),
                     getWord = { selectedPos },
                     getBookmarked = { wordCombined.isFavorite }
                 )
@@ -242,7 +240,7 @@ private fun WordDetailsContent(
                     { sense },
                     { wordCombined.word },
                     { Forms(selectedPos.forms) },
-                    modifier = Modifier.padding(horizontal = 20.dp).animateItemPlacement()
+                    modifier = Modifier.padding(horizontal = 24.dp)
                 )
             }
 
@@ -261,7 +259,6 @@ private fun WordDetailsContent(
         }
 
         adMob.Banner(
-            AppKeys.BANNER_ID,
             Modifier.fillMaxWidth()
                 .align(Alignment.BottomCenter)
         )
@@ -315,13 +312,13 @@ private fun SensesTitle(
     Row(verticalAlignment = Alignment.CenterVertically) {
         SubtitleItemText("Senses", Modifier.weight(1f))
         if (sensesExpandable()) {
-            TextButton(onExpandSenses) {
+            TextButton(
+                onExpandSenses,
+                contentPadding = PaddingValues(horizontal = 8.dp),
+                modifier = Modifier.padding(horizontal = 16.dp)
+            ) {
                 Text(
                     text = if (sensesExpanded()) "Collapse" else "Expand",
-                    modifier = Modifier.padding(
-                        vertical = 10.dp,
-                        horizontal = 20.dp
-                    ),
                     color = MaterialTheme.colorScheme.onBackground,
                     style = MaterialTheme.typography.titleMedium
                 )
@@ -333,7 +330,6 @@ private fun SensesTitle(
 @Composable
 private fun WordEffect(effect: WordEffect?) {
     val routeManager = LocalRouteManager.current
-
 
     LaunchedEffect(effect) {
         when (effect) {

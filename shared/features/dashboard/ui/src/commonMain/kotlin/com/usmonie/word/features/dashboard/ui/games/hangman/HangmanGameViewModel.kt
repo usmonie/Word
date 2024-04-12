@@ -8,7 +8,7 @@ import wtf.speech.core.ui.BaseViewModel
 
 @Stable
 class HangmanGameViewModel(
-    private val randomWordUseCase: RandomWordUseCase
+    private val randomWordUseCase: RandomWordUseCase,
 ) : BaseViewModel<HangmanState, HangmanAction, HangmanEvent, HangmanEffect>(HangmanState.Loading()) {
 
     init {
@@ -19,41 +19,47 @@ class HangmanGameViewModel(
     fun onUpdatePressed() = handleAction(HangmanAction.UpdateWord)
     fun onShowHintPressed() = handleAction(HangmanAction.ShowHint)
     fun onOpenWordPressed(word: WordCombinedUi) = handleAction(HangmanAction.OpenWord(word))
+    fun onRewardGranted(amount: Int) = handleAction(HangmanAction.ReviveClicked)
+    fun onReviveClick() = handleAction(HangmanAction.ReviveClicked)
 
     override fun HangmanState.reduce(event: HangmanEvent): HangmanState {
-        val guessedLetter = this.guessedLetters.toMutableSet()
+        val guessedLetter = this.guessedLetters.letters.toMutableSet()
         return when (event) {
             is HangmanEvent.Loading -> HangmanState.Loading()
             is HangmanEvent.RightLetterGuessed -> HangmanState.Playing.Input(
                 this.word,
-                guessedLetter.apply { add(event.letter) },
-                this.incorrectGuesses
+                GuessedLetters(guessedLetter.apply { add(event.letter) }),
+                this.lives
             )
 
             is HangmanEvent.WrongLetterGuessed -> {
-                val newIncorrectGuesses = incorrectGuesses + 1
+                val newLives = lives - 1
+                val newIncorrectGuesses = maxLives - newLives
                 if (newIncorrectGuesses == 6) {
                     HangmanState.Lost(
                         this.word,
-                        guessedLetter.apply { add(event.letter) },
+                        GuessedLetters(guessedLetter.apply { add(event.letter) }),
+                        hintsCount
                     )
                 } else {
                     HangmanState.Playing.Input(
                         this.word,
-                        guessedLetter.apply { add(event.letter) },
-                        newIncorrectGuesses
+                        GuessedLetters(guessedLetter.apply { add(event.letter) }),
+                        newLives
                     )
                 }
             }
 
             is HangmanEvent.Lost -> HangmanState.Lost(
                 this.word,
-                guessedLetter.apply { add(event.letter) },
+                GuessedLetters(guessedLetter.apply { add(event.letter) }),
+                hintsCount
             )
 
             is HangmanEvent.Won -> HangmanState.Won(
                 word,
-                guessedLetter.apply { add(event.letter) },
+                GuessedLetters(guessedLetter.apply { add(event.letter) }),
+                lives
             )
 
             is HangmanEvent.UpdateWord -> HangmanState.Playing.Input(event.word)
@@ -64,13 +70,13 @@ class HangmanGameViewModel(
                 is HangmanState.Playing.Information -> HangmanState.Playing.Input(
                     word,
                     guessedLetters,
-                    incorrectGuesses
+                    lives
                 )
 
                 is HangmanState.Playing.Input -> HangmanState.Playing.Information(
                     word,
                     guessedLetters,
-                    incorrectGuesses
+                    lives
                 )
 
                 else -> this
@@ -81,22 +87,19 @@ class HangmanGameViewModel(
     }
 
     override suspend fun processAction(action: HangmanAction): HangmanEvent {
-        val word = state.value.word
+        val state = state.value
+        val word = state.word
         return when (action) {
             is HangmanAction.GuessLetter -> {
                 val letter = action.letter.lowercaseChar()
-                val guessedLetter = state.value.guessedLetters + letter
+                val guessedLetter = state.guessedLetters.letters + letter
 
-                if (state.value.incorrectGuesses > 5) {
-                    return HangmanEvent.Lost(letter)
-                }
+                if (state.maxLives - state.lives > 5) return HangmanEvent.Lost(letter)
 
-                if (
-                    word.word.filter { it.isLetterOrDigit() }
+                val isUserWon = word.word.filter { it.isLetterOrDigit() }
                         .all { it.lowercaseChar() in guessedLetter }
-                ) {
-                    return HangmanEvent.Won(letter)
-                }
+
+                if (isUserWon) return HangmanEvent.Won(letter)
 
                 if (letter !in word.word.lowercase()) {
                     return HangmanEvent.WrongLetterGuessed(letter = letter)
@@ -106,18 +109,17 @@ class HangmanGameViewModel(
 
             is HangmanAction.OpenWord -> HangmanEvent.OpenWord(action.word)
 
-            HangmanAction.UpdateWord -> HangmanEvent.UpdateWord(
-                randomWordUseCase(RandomWordUseCase.Param(9)).toUi()
-            )
+            HangmanAction.UpdateWord -> HangmanEvent.UpdateWord(nextRandomWord())
 
             HangmanAction.ShowHint -> HangmanEvent.UpdateHint
-            HangmanAction.StartGame -> {
-                HangmanEvent.StartGame(
-                    randomWordUseCase(RandomWordUseCase.Param(9)).toUi()
-                )
-            }
+            HangmanAction.StartGame -> HangmanEvent.StartGame(nextRandomWord())
+
+            HangmanAction.ReviveClicked -> HangmanEvent.ReviveClicked
+            HangmanAction.ReviveGranted -> HangmanEvent.ReviveGranted
         }
     }
+
+    private suspend fun nextRandomWord() = randomWordUseCase(RandomWordUseCase.Param(10)).toUi()
 
     override suspend fun handleEvent(event: HangmanEvent) = when (event) {
         is HangmanEvent.Won -> HangmanEffect.Won()
@@ -125,6 +127,7 @@ class HangmanGameViewModel(
         is HangmanEvent.UpdateWord -> HangmanEffect.RestartGame()
         is HangmanEvent.OpenWord -> HangmanEffect.OpenWord(event.word)
         is HangmanEvent.StartGame -> HangmanEffect.StartGame()
+        is HangmanEvent.ReviveClicked -> HangmanEffect.ShowRewardedAd()
         else -> null
     }
 }

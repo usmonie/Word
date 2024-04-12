@@ -36,8 +36,11 @@ import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.OnUserEarnedRewardListener
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
+import com.google.android.gms.ads.rewarded.RewardedAd
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.auth.api.identity.SignInCredential
 import com.google.firebase.analytics.ktx.analytics
@@ -50,6 +53,7 @@ import com.usmonie.word.features.dashboard.domain.usecase.CurrentThemeUseCaseImp
 import com.usmonie.word.features.dashboard.ui.DASHBOARD_GRAPH_ID
 import com.usmonie.word.features.dashboard.ui.getDashboardGraph
 import com.usmonie.word.features.dashboard.ui.ui.AdMob
+import com.usmonie.word.features.dashboard.ui.ui.AdMobState
 import com.usmonie.word.features.onboarding.ui.FirebaseAuthenticationUtils
 import com.usmonie.word.features.onboarding.ui.getWelcomeGraph
 import com.usmonie.word.features.subscription.data.Billing
@@ -64,7 +68,8 @@ import wtf.word.core.design.themes.typographies.ModernChic
 import wtf.word.core.design.themes.typographies.WordTypography
 
 class MainActivity : ComponentActivity() {
-    private var mInterstitialAd: InterstitialAd? = null
+    private var interstitialAd: InterstitialAd? = null
+    private var rewardedAd: RewardedAd? = null
     private val appOpenAdManager: AppOpenAdManager by lazy(LazyThreadSafetyMode.NONE) {
         AppOpenAdManager()
     }
@@ -76,6 +81,15 @@ class MainActivity : ComponentActivity() {
         Identity.getSignInClient(this)
     }
 
+    private val admobState = AdMobState()
+
+    private val appKeys by lazy {
+        if (packageName.contains("debug")) {
+            AppKeys.Debug
+        } else {
+            AppKeys.Release
+        }
+    }
     private val launcher = registerForActivityResult(
         ActivityResultContracts.StartIntentSenderForResult()
     ) { result ->
@@ -93,11 +107,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         val amplitude = Amplitude(
             Configuration(
-                apiKey = if (packageName.contains("debug")) {
-                    AppKeys.AMPLITUDE_DEBUG_KEY
-                } else {
-                    AppKeys.AMPLITUDE_KEY
-                },
+                apiKey = appKeys.amplitudeKey,
                 context = applicationContext,
                 defaultTracking = DefaultTrackingOptions.ALL,
             )
@@ -114,23 +124,7 @@ class MainActivity : ComponentActivity() {
 //            dev.gitlive.firebase.Firebase.auth
         )
 
-        val adMob = AdMob(
-            { adKey, modifier ->
-                AndroidView(
-                    modifier = modifier,
-                    factory = { context ->
-                        AdView(context).apply {
-                            adUnitId = adKey
-                            setAdSize(AdSize.FULL_BANNER)
-                            loadAd(AdRequest.Builder().build())
-                        }
-                    },
-                )
-            },
-            { onAddDismissed -> showInterstitial(this, onAddDismissed) },
-            { _, _ -> },
-            subscriptionStatusUseCase
-        )
+        val adMob = getAdMob(subscriptionStatusUseCase)
 //        GoogleAuthProvider.create(credentials = GoogleAuthCredentials(serverId = AppKeys.SERVER_CLIENT_ID))
 
         loadInterstitial(this)
@@ -150,8 +144,8 @@ class MainActivity : ComponentActivity() {
                 val insets = WindowCompat.getInsetsController(window, view)
                 window.statusBarColor = Color.Transparent.toArgb()
                 window.navigationBarColor = Color.Transparent.toArgb()
-                insets.isAppearanceLightStatusBars = isDark
-                insets.isAppearanceLightNavigationBars = isDark
+                insets.isAppearanceLightStatusBars = !isDark
+                insets.isAppearanceLightNavigationBars = !isDark
             }
 
             val (currentColors, currentTypography) = rememberTheme(userRepository)
@@ -201,6 +195,32 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    private fun getAdMob(subscriptionStatusUseCase: SubscriptionStatusUseCaseImpl) =
+        AdMob(
+            { modifier ->
+                AndroidView(
+                    modifier = modifier,
+                    factory = { context ->
+                        AdView(context).apply {
+                            adUnitId = appKeys.bannerId
+                            setAdSize(AdSize.FULL_BANNER)
+                            loadAd(AdRequest.Builder().build())
+                        }
+                    },
+                )
+            },
+            { onAddDismissed, onRewardGranted ->
+                showRewarded(
+                    this,
+                    onAddDismissed,
+                    onRewardGranted
+                )
+            },
+            { showInterstitial(this) },
+            subscriptionStatusUseCase,
+            admobState
+        )
+
     @Composable
     private fun rememberTheme(userRepository: UserRepositoryImpl) =
         remember {
@@ -224,52 +244,111 @@ class MainActivity : ComponentActivity() {
     override fun onStart() {
         super.onStart()
         if (!appOpenAdManager.isShowingAd && !isSubscribed) {
-            appOpenAdManager.showAdIfAvailable(this)
+            appOpenAdManager.showAdIfAvailable(this, appKeys.startupId)
         }
     }
 
     override fun onDestroy() {
         removeInterstitial()
+        removeRewarded()
         super.onDestroy()
     }
 
     private fun loadInterstitial(context: Context) {
-        InterstitialAd.load(context, AppKeys.REWARDED_LIFE_ID,
-            AdRequest.Builder().build(), object : InterstitialAdLoadCallback() {
+        InterstitialAd.load(
+            context,
+            appKeys.interstitialId,
+            AdRequest.Builder().build(),
+            object : InterstitialAdLoadCallback() {
                 override fun onAdFailedToLoad(adError: LoadAdError) {
-                    mInterstitialAd = null
+                    interstitialAd = null
+                    admobState.isInterstitialReady = false
                 }
 
                 override fun onAdLoaded(interstitialAd: InterstitialAd) {
-                    mInterstitialAd = interstitialAd
+                    this@MainActivity.interstitialAd = interstitialAd
+                    admobState.isInterstitialReady = true
                 }
             }
         )
     }
 
-    private fun showInterstitial(context: Context, onAdDismissed: () -> Unit) {
-        val activity = context.findActivity()
+    private fun loadRewarded(context: Context) {
+        RewardedAd.load(context, appKeys.rewardedNewGameId,
+            AdRequest.Builder().build(), object : RewardedAdLoadCallback() {
+                override fun onAdFailedToLoad(adError: LoadAdError) {
+                    rewardedAd = null
+                    admobState.isRewardReady = false
+                }
 
-        if (mInterstitialAd != null && activity != null) {
-            mInterstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
+                override fun onAdLoaded(rewardedAd: RewardedAd) {
+                    this@MainActivity.rewardedAd = rewardedAd
+                    admobState.isRewardReady = true
+                }
+            }
+        )
+    }
+
+    private fun showInterstitial(context: Context) {
+        val activity = context.findActivity()
+        val ad = interstitialAd
+        if (ad != null && activity != null) {
+            ad.fullScreenContentCallback = object : FullScreenContentCallback() {
                 override fun onAdFailedToShowFullScreenContent(e: AdError) {
-                    mInterstitialAd = null
+                    interstitialAd = null
+
                 }
 
                 override fun onAdDismissedFullScreenContent() {
-                    mInterstitialAd = null
+                    interstitialAd = null
 
                     loadInterstitial(context)
+                }
+            }
+
+            ad.show(activity)
+        }
+    }
+
+    private fun showRewarded(
+        context: Context,
+        onAdDismissed: () -> Unit,
+        onUserEarnedRewardListener: (Int) -> Unit
+    ) {
+        val activity = context.findActivity()
+        val ad = rewardedAd
+        if (ad != null && activity != null) {
+            ad.fullScreenContentCallback = object : FullScreenContentCallback() {
+                override fun onAdFailedToShowFullScreenContent(e: AdError) {
+                    rewardedAd = null
+                }
+
+                override fun onAdDismissedFullScreenContent() {
+                    rewardedAd = null
+
+                    loadRewarded(context)
                     onAdDismissed()
                 }
             }
-            mInterstitialAd?.show(activity)
+
+            ad.show(
+                activity,
+                OnUserEarnedRewardListener {
+                    val rewardedAmount = it.amount
+                    onUserEarnedRewardListener(rewardedAmount)
+                }
+            )
         }
     }
 
     private fun removeInterstitial() {
-        mInterstitialAd?.fullScreenContentCallback = null
-        mInterstitialAd = null
+        interstitialAd?.fullScreenContentCallback = null
+        interstitialAd = null
+    }
+
+    private fun removeRewarded() {
+        rewardedAd?.fullScreenContentCallback = null
+        rewardedAd = null
     }
 
     private fun Context.findActivity(): Activity? = when (this) {

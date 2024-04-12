@@ -1,5 +1,6 @@
 package com.usmonie.word.features.dashboard.ui.games.enigma
 
+import com.usmonie.word.features.dashboard.ui.games.hangman.GuessedLetters
 import wtf.speech.core.ui.ScreenAction
 import wtf.speech.core.ui.ScreenEffect
 import wtf.speech.core.ui.ScreenEvent
@@ -9,24 +10,41 @@ sealed class EnigmaState(
     open val phrase: EnigmaEncryptedPhrase,
     open val lives: Int,
     open val currentSelectedCellPosition: Pair<Int, Int>? = null,
-    open val foundLetters: Set<Char> = setOf()
+    open val foundLetters: Set<Char> = setOf(),
+    open val hintsCount: Int,
+    open val guessedLetters: GuessedLetters
 ) : ScreenState {
-    data object Loading : EnigmaState(EnigmaEncryptedPhrase(listOf(), 0), MAX_LIVES_COUNT)
+    val maxLives: Int = MAX_LIVES_COUNT
+
+    data object Loading : EnigmaState(
+        EnigmaEncryptedPhrase(listOf(), "", "",0, mapOf()),
+        MAX_LIVES_COUNT,
+        hintsCount = 0,
+        guessedLetters = GuessedLetters(setOf())
+    )
+
     data class Playing(
         override val phrase: EnigmaEncryptedPhrase,
         override val lives: Int,
         override val currentSelectedCellPosition: Pair<Int, Int>? = null,
-        override val foundLetters: Set<Char> = setOf()
-    ) : EnigmaState(phrase, lives, currentSelectedCellPosition, foundLetters)
+        override val foundLetters: Set<Char> = setOf(),
+        override val hintsCount: Int,
+        override val guessedLetters: GuessedLetters
+    ) : EnigmaState(phrase, lives, currentSelectedCellPosition, foundLetters, hintsCount, guessedLetters)
 
     data class Lost(
         override val phrase: EnigmaEncryptedPhrase,
-    ) : EnigmaState(phrase, MIN_LIVES_COUNT, null)
+        override val foundLetters: Set<Char> = setOf(),
+        override val hintsCount: Int,
+        override val guessedLetters: GuessedLetters
+    ) : EnigmaState(phrase, MIN_LIVES_COUNT, null, foundLetters, hintsCount, guessedLetters)
 
     data class Won(
         override val phrase: EnigmaEncryptedPhrase,
         override val lives: Int,
-    ) : EnigmaState(phrase, lives, null)
+        override val hintsCount: Int,
+        override val guessedLetters: GuessedLetters
+    ) : EnigmaState(phrase, lives, null, hintsCount = hintsCount, guessedLetters = guessedLetters)
 
     companion object {
         const val MAX_LIVES_COUNT = 3
@@ -44,20 +62,44 @@ sealed class EnigmaAction : ScreenAction {
         val wordPosition: Int
     ) : EnigmaAction()
 
+    data class AddHints(val count: Int) : EnigmaAction()
+
     data object NextPhrase : EnigmaAction()
+    data object ReviveClicked : EnigmaAction()
+    data object ReviveGranted : EnigmaAction()
+    data object UseHint : EnigmaAction()
+    data object AdTime : EnigmaAction()
+    data object Won: EnigmaAction()
+
 }
 
 sealed class EnigmaEvent : ScreenEvent {
-    data class Correct(val cells: List<List<Cell>>) : EnigmaEvent()
+    data object Won : EnigmaEvent()
+    data class Correct(val phrase: EnigmaEncryptedPhrase) : EnigmaEvent()
     data object Incorrect : EnigmaEvent()
+    data object Lost : EnigmaEvent()
     data class UpdateSelectedCell(
         val wordPosition: Int,
         val cellPositionInWord: Int
     ) : EnigmaEvent()
-
     data object ClearSelectionCell : EnigmaEvent()
-
-    data class NextPhrase(val phrase: EnigmaEncryptedPhrase) : EnigmaEvent()
+    data class NextPhrase(val phrase: EnigmaEncryptedPhrase, val hintsCount: Int) : EnigmaEvent()
+    data object ReviveClicked : EnigmaEvent()
+    data object ReviveGranted : EnigmaEvent()
+    data class UseHint(val phrase: EnigmaEncryptedPhrase, val hintsLeft: Int) : EnigmaEvent()
+    data class UpdateHints(val hintsCount: Int) : EnigmaEvent()
+    data object NoHints : EnigmaEvent()
+    data object ShowMiddleGameAd: EnigmaEvent()
 }
 
-sealed class EnigmaEffect : ScreenEffect
+@Suppress("CanSealedSubClassBeObject")
+sealed class EnigmaEffect : ScreenEffect {
+    class ShowMiddleGameAd : EnigmaEffect()
+
+    class ShowRewardedAd : EnigmaEffect()
+
+    sealed class InputEffect : EnigmaEffect() {
+        class Incorrect : InputEffect()
+        class Correct : InputEffect()
+    }
+}

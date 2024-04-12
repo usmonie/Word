@@ -20,4 +20,7 @@ interface UserRepository {
     var languageLevel: LanguageLevel
 
     val learningStatusFlow: StateFlow<UserLearningStatus>
+
+    var hintsCount: Int
+    var livesCount: Int
 }

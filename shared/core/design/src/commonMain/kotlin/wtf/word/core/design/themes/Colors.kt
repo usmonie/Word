@@ -37,6 +37,13 @@ abstract class Colors {
     protected abstract val light_surfaceTint: Color
     protected abstract val light_outlineVariant: Color
     protected abstract val light_scrim: Color
+    protected abstract val light_surfaceBright: Color
+    protected abstract val light_surfaceDim: Color
+    protected abstract val light_surfaceContainer: Color
+    protected abstract val light_surfaceContainerHighest: Color
+    protected abstract val light_surfaceContainerHigh: Color
+    protected abstract val light_surfaceContainerLow: Color
+    protected abstract val light_surfaceContainerLowest: Color
 
     protected abstract val dark_primary: Color
     protected abstract val dark_onPrimary: Color
@@ -67,6 +74,13 @@ abstract class Colors {
     protected abstract val dark_surfaceTint: Color
     protected abstract val dark_outlineVariant: Color
     protected abstract val dark_scrim: Color
+    protected abstract val dark_surfaceBright: Color
+    protected abstract val dark_surfaceDim: Color
+    protected abstract val dark_surfaceContainer: Color
+    protected abstract val dark_surfaceContainerHighest: Color
+    protected abstract val dark_surfaceContainerHigh: Color
+    protected abstract val dark_surfaceContainerLow: Color
+    protected abstract val dark_surfaceContainerLowest: Color
 
 
     protected abstract val seed: Color
@@ -103,6 +117,13 @@ abstract class Colors {
             surfaceTint = light_surfaceTint,
             outlineVariant = light_outlineVariant,
             scrim = light_scrim,
+            surfaceBright = light_surfaceBright,
+            surfaceDim = light_surfaceDim,
+            surfaceContainer = light_surfaceContainer,
+            surfaceContainerHighest = light_surfaceContainerHighest,
+            surfaceContainerHigh = light_surfaceContainerHigh,
+            surfaceContainerLow = light_surfaceContainerLow,
+            surfaceContainerLowest = light_surfaceContainerLowest
         )
     }
 
@@ -138,6 +159,13 @@ abstract class Colors {
             surfaceTint = dark_surfaceTint,
             outlineVariant = dark_outlineVariant,
             scrim = dark_scrim,
+            surfaceBright = dark_surfaceBright,
+            surfaceDim = dark_surfaceDim,
+            surfaceContainer = dark_surfaceContainer,
+            surfaceContainerHighest = dark_surfaceContainerHighest,
+            surfaceContainerHigh = dark_surfaceContainerHigh,
+            surfaceContainerLow = dark_surfaceContainerLow,
+            surfaceContainerLowest = dark_surfaceContainerLowest
         )
     }
 }

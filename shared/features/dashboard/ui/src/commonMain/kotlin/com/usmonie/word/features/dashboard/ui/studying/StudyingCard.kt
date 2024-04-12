@@ -12,11 +12,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.usmonie.word.features.dashboard.ui.ExampleItem
 import com.usmonie.word.features.dashboard.ui.models.ExampleUi
 import com.usmonie.word.features.dashboard.ui.models.Forms
 import com.usmonie.word.features.dashboard.ui.models.WordUi
 import com.usmonie.word.features.dashboard.ui.ui.CardFace
+import com.usmonie.word.features.dashboard.ui.ui.ExampleItem
 import com.usmonie.word.features.dashboard.ui.ui.FlipBaseCard
 import com.usmonie.word.features.dashboard.ui.ui.WordLargeResizableTitle
 import wtf.speech.core.ui.BaseCard

@@ -75,10 +75,20 @@ class UserRepositoryImpl(
 
     override val learningStatusFlow: StateFlow<UserLearningStatus> by lazy {
 //        val userStatus = firestore.collection("users").document(currentUser.uid)
-        val state  = MutableStateFlow<UserLearningStatus>(UserLearningStatus.NotStarted)
+        val state = MutableStateFlow<UserLearningStatus>(UserLearningStatus.NotStarted)
 
         state
     }
+    override var hintsCount: Int
+        get() = kVault.int(CURRENT_USER_HINTS_COUNT_KEY) ?: 5
+        set(value) {
+            if (value >= 0) kVault.set(CURRENT_USER_HINTS_COUNT_KEY, value)
+        }
+    override var livesCount: Int
+        get() = kVault.int(CURRENT_USER_LIVES_COUNT_KEY) ?: 3
+        set(value) {
+            kVault.set(CURRENT_USER_LIVES_COUNT_KEY, value)
+        }
 //
 //    private val currentUser: FirebaseUser by lazy {
 //        authentication.currentUser ?: throw IllegalStateException("User is not authenticated")
@@ -87,6 +97,8 @@ class UserRepositoryImpl(
     companion object {
         private const val CURRENT_USER_THEME_COLORS_KEY: String = "CURRENT_USER_THEME_COLORS"
         private const val CURRENT_USER_THEME_FONTS_KEY: String = "CURRENT_USER_THEME_FONTS"
+        private const val CURRENT_USER_HINTS_COUNT_KEY: String = "CURRENT_USER_HINTS_COUNT"
+        private const val CURRENT_USER_LIVES_COUNT_KEY: String = "CURRENT_USER_LIVES_COUNT"
 
         private const val WORDS_PER_DAY_COUNT = "WORDS_PER_DAY_COUNT"
         private const val NATIVE_LANGUAGE = "NATIVE_LANGUAGE"

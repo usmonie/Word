@@ -38,7 +38,10 @@ fun rememberDashboardGraph(
     }
 
     return remember {
-        NavigationGraph("DASHBOARD_GRAPH", Route(DashboardScreen.ID, dashboardScreen)).apply {
+        NavigationGraph(
+            "DASHBOARD_GRAPH",
+            Route(DashboardScreen.ID, dashboardScreen)
+        ).apply {
             register(
                 Route(
                     FavoritesScreen.ID,
@@ -100,11 +103,11 @@ fun getDashboardGraph(
         register(
             Route(
                 GamesScreen.ID,
-                GamesScreen
+                GamesScreen.Builder(adMob)
             )
         )
         register(Route(HangmanGameScreen.ID, HangmanGameScreen.Builder(wordRepository, adMob)))
-        register(Route(EnigmaGameScreen.ID, EnigmaGameScreen.Builder(wordRepository, adMob)))
+        register(Route(EnigmaGameScreen.ID, EnigmaGameScreen.Builder(wordRepository, userRepository, adMob)))
         register(
             Route(
                 SettingsScreen.ID,

@@ -35,6 +35,14 @@ data object PastelSunsetColors : Colors() {
     override val light_outlineVariant = Color(0xFF880E4F)
     override val light_scrim = Color(0xFF1A237E)
 
+    override val light_surfaceBright = Color(0xFFFDFDFD)
+    override val light_surfaceDim = Color(0xFFEAEAE9)
+    override val light_surfaceContainer = Color(0xFFFAFAFC)
+    override val light_surfaceContainerHighest = Color(0xFFFFFFFF)
+    override val light_surfaceContainerHigh = Color(0xFFF5F5F7)
+    override val light_surfaceContainerLow = Color(0xFFE6E6E8)
+    override val light_surfaceContainerLowest = Color(0xFFDADADB)
+
     override val dark_primary = Color(0xFFFFB4A8)
     override val dark_onPrimary = Color(0xFF690000)
     override val dark_primaryContainer = Color(0xFF8F0F07)
@@ -64,6 +72,14 @@ data object PastelSunsetColors : Colors() {
     override val dark_surfaceTint = Color(0xFFFFB4A8)
     override val dark_outlineVariant = Color(0xFF534341)
     override val dark_scrim = Color(0xFF000000)
+
+    override val dark_surfaceBright = Color(0xFFFAFAFC)
+    override val dark_surfaceDim = Color(0xFFFAFAFC)
+    override val dark_surfaceContainer = Color(0xFFFAFAFC)
+    override val dark_surfaceContainerHighest = Color(0xFFFFFFFF)
+    override val dark_surfaceContainerHigh = Color(0xFFF5F5F7)
+    override val dark_surfaceContainerLow = Color(0xFFE6E6E8)
+    override val dark_surfaceContainerLowest = Color(0xFFDADADB)
 
     override val seed = Color(0xFF800000)
 }

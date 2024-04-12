@@ -23,9 +23,9 @@ object DeepIndigoColors: Colors() {
     override val light_onErrorContainer = Color(0xFF410002)
     override val light_background = Color(0xFFFFFFFF)
     override val light_onBackground = Color(0xFF1A1C1E)
-    override val light_surface = Color(0xFFE1E2EC)
+    override val light_surface = Color( 0xFFFAFAFC)
     override val light_onSurface = Color(0xFF1A1C1E)
-    override val light_surfaceVariant = Color(0xFFECE1CF)
+    override val light_surfaceVariant = Color(0xFFF0F0F9)
     override val light_onSurfaceVariant = Color(0xFF4D4639)
     override val light_outline = Color(0xFF72777F)
     override val light_inverseOnSurface = Color(0xFFF1F0F4)
@@ -34,6 +34,13 @@ object DeepIndigoColors: Colors() {
     override val light_surfaceTint = Color(0xFF00629D)
     override val light_outlineVariant = Color(0xFFC2C7CF)
     override val light_scrim = Color(0xFF000000)
+    override val light_surfaceBright = Color(0xFFFDFDFD)
+    override val light_surfaceDim = Color(0xFFEAEAE9)
+    override val light_surfaceContainer = Color(0xFFFAFAFC)
+    override val light_surfaceContainerHighest = Color(0xFFFFFFFF)
+    override val light_surfaceContainerHigh = Color(0xFFF5F5F7)
+    override val light_surfaceContainerLow = Color(0xFFE6E6E8)
+    override val light_surfaceContainerLowest = Color(0xFFDADADB)
 
     override val dark_primary = Color(0xFF99CBFF)
     override val dark_onPrimary = Color(0xFF003354)
@@ -65,6 +72,14 @@ object DeepIndigoColors: Colors() {
     override val dark_outlineVariant = Color(0xFF42474E)
     override val dark_scrim = Color(0xFF000000)
 
+
+    override val dark_surfaceBright = Color(0xFFFAFAFC)
+    override val dark_surfaceDim = Color(0xFFFAFAFC)
+    override val dark_surfaceContainer = Color(0xFFFAFAFC)
+    override val dark_surfaceContainerHighest = Color(0xFFFFFFFF)
+    override val dark_surfaceContainerHigh = Color(0xFFF5F5F7)
+    override val dark_surfaceContainerLow = Color(0xFFE6E6E8)
+    override val dark_surfaceContainerLowest = Color(0xFFDADADB)
 
     override val seed = Color(0xFF00416A)
 

@@ -3,7 +3,7 @@ package com.usmonie.word.features.dashboard.ui.favorites
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.ui.Modifier
-import com.usmonie.word.features.dashboard.ui.SearchWordCard
+import com.usmonie.word.features.dashboard.ui.ui.SearchWordCard
 import com.usmonie.word.features.dashboard.ui.models.WordCombinedUi
 
 

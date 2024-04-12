@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.usmonie.word.features.dashboard.ui.Sense
+import com.usmonie.word.features.dashboard.ui.ui.Sense
 import com.usmonie.word.features.dashboard.ui.models.WordCombinedUi
 import com.usmonie.word.features.dashboard.ui.ui.WordMediumResizableTitle
 import com.usmonie.word.features.learning.ui.models.Exercise

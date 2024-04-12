@@ -9,7 +9,6 @@ import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.appopen.AppOpenAd
 import com.google.android.gms.ads.appopen.AppOpenAd.AppOpenAdLoadCallback
-import wtf.speech.core.ui.AppKeys
 
 class WordApplication : Application() {
     override fun onCreate() {
@@ -24,7 +23,7 @@ internal class AppOpenAdManager {
     private var isLoadingAd = false
     var isShowingAd = false
 
-    fun showAdIfAvailable(activity: Activity) {
+    fun showAdIfAvailable(activity: Activity, startupId: String) {
         // If the app open ad is already showing, do not show the ad again.
         if (isShowingAd) {
             Log.d(LOG_TAG, "The app open ad is already showing.")
@@ -35,7 +34,7 @@ internal class AppOpenAdManager {
         if (!isAdAvailable) {
             Log.d(LOG_TAG, "The app open ad is not ready yet.")
 //            onShowAdCompleteListener.onShowAdComplete();
-            loadAd(activity)
+            loadAd(activity, startupId)
             return
         }
 
@@ -44,7 +43,7 @@ internal class AppOpenAdManager {
     }
 
     /** Request an ad.  */
-    private fun loadAd(context: Context) {
+    private fun loadAd(context: Context, startupId: String) {
         // Do not load ad if there is an unused ad or one is already loading.
         // Do not load ad if there is an unused ad or one is already loading.
         if (isLoadingAd || isAdAvailable) {
@@ -55,7 +54,7 @@ internal class AppOpenAdManager {
         val request: AdRequest = AdRequest.Builder().build()
         AppOpenAd.load(
             context,
-            AD_UNIT_ID,
+            startupId,
             request,
             object : AppOpenAdLoadCallback() {
                 override fun onAdLoaded(ad: AppOpenAd) {
@@ -63,6 +62,7 @@ internal class AppOpenAdManager {
                     Log.d(LOG_TAG, "Ad was loaded.")
                     appOpenAd = ad
                     isLoadingAd = false
+
                 }
 
                 override fun onAdFailedToLoad(loadAdError: LoadAdError) {
@@ -81,6 +81,5 @@ internal class AppOpenAdManager {
 
     companion object {
         private const val LOG_TAG = "AppOpenAdManager"
-        private const val AD_UNIT_ID = AppKeys.STARTUP_ID
     }
 }

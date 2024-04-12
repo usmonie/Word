@@ -4,7 +4,6 @@ import android.content.IntentSender
 import android.content.IntentSender.SendIntentException
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.SignInClient
-import wtf.speech.core.ui.AppKeys
 import wtf.speech.core.ui.firebase.GoogleAuthUiProvider
 
 
@@ -17,7 +16,7 @@ class GoogleAuthUiProviderImpl(
         .setGoogleIdTokenRequestOptions(
             BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
                 .setSupported(true)
-                .setServerClientId(AppKeys.SERVER_CLIENT_ID)
+                .setServerClientId("AppKeys.SERVER_CLIENT_ID")
                 .setFilterByAuthorizedAccounts(false)
                 .build()
         )

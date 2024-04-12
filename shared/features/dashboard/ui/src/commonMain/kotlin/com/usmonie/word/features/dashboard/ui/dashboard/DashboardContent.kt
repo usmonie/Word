@@ -17,6 +17,8 @@ import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Badge
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -29,6 +31,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.contentDescription
@@ -36,7 +39,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import com.usmonie.word.features.dashboard.ui.SearchWordCard
+import com.usmonie.word.features.dashboard.ui.ui.SearchWordCard
 import com.usmonie.word.features.dashboard.ui.models.LearningStatus
 import com.usmonie.word.features.dashboard.ui.models.WordCombinedUi
 import com.usmonie.word.features.dashboard.ui.models.WordUi
@@ -46,13 +49,11 @@ import com.usmonie.word.features.dashboard.ui.ui.PrimaryStatusCard
 import com.usmonie.word.features.dashboard.ui.ui.StatusCard
 import com.usmonie.word.features.dashboard.ui.ui.WordButtons
 import com.usmonie.word.features.dashboard.ui.ui.WordLargeResizableTitle
-import org.jetbrains.compose.resources.ExperimentalResourceApi
-import wtf.speech.core.ui.AppKeys
-import wtf.word.core.design.themes.icons.myiconpack.IcRocketLaunchOutline
 import wtf.speech.core.ui.BaseCard
 import wtf.speech.core.ui.ContentState
 import wtf.speech.core.ui.testDesc
 import wtf.word.core.design.themes.icons.MyIconPack
+import wtf.word.core.design.themes.icons.myiconpack.IcRocketLaunchOutline
 
 @ExperimentalMaterial3Api
 @Composable
@@ -87,8 +88,7 @@ internal fun DashboardContent(
             is DashboardState.Loading -> {
                 CircularProgressIndicator(
                     Modifier.align(Alignment.Center)
-                        .fillMaxWidth()
-                        .height(48.dp)
+                        .size(64.dp)
                         .padding(horizontal = 24.dp)
                 )
             }
@@ -133,13 +133,7 @@ internal fun DashboardContent(
                     adMob
                 )
 
-                adMob.Banner(
-                    AppKeys.BANNER_ID,
-                    Modifier
-                        .fillMaxWidth()
-                        .height(56.dp)
-                        .align(Alignment.BottomCenter)
-                )
+                adMob.Banner(Modifier.fillMaxWidth().align(Alignment.BottomCenter))
             }
         }
     }
@@ -149,7 +143,6 @@ private val fillMaxWidthModifier = Modifier.fillMaxWidth()
 private val fillMaxWidthModifierHorizontalPadding =
     fillMaxWidthModifier.padding(horizontal = 24.dp)
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 private fun DashboardItemsList(
     listState: LazyGridState,
@@ -194,7 +187,7 @@ private fun DashboardItemsList(
                     StatusCard({}, { learnedWords }, fillMaxWidthModifier)
                 }
                 item(span = { GridItemSpan(3) }) {
-                    StatusCard({}, { practiceWords}, fillMaxWidthModifier)
+                    StatusCard({}, { practiceWords }, fillMaxWidthModifier)
                 }
                 item(span = { GridItemSpan(3) }) {
                     PrimaryStatusCard(
@@ -265,8 +258,8 @@ private fun DashboardItemsList(
             item(span = { GridItemSpan(5) }) {
                 DashboardMenuItem(
                     "[G]ames",
-                    fillMaxWidthModifier.clickable(onClick = onGamesClick)
-
+                    fillMaxWidthModifier.clickable(onClick = onGamesClick),
+                    badgeEnable = true
                 )
             }
             item(span = { GridItemSpan(5) }) {
@@ -316,15 +309,22 @@ fun DashboardSubtitle(
 fun DashboardMenuItem(
     title: String,
     modifier: Modifier,
-    color: Color = MaterialTheme.colorScheme.onBackground
+    color: Color = MaterialTheme.colorScheme.onBackground,
+    badgeEnable: Boolean = false
 ) {
-    Box(modifier) {
-        Text(
-            text = title,
-            style = MaterialTheme.typography.titleLarge,
-            color = color,
-            modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)
-        )
+    Box(Modifier.clip(RoundedCornerShape(12.dp))) {
+        Box(modifier) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleLarge,
+                color = color,
+                modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp)
+            )
+
+            if (badgeEnable) {
+                Badge(Modifier.align(Alignment.CenterEnd).size(12.dp))
+            }
+        }
     }
 }
 
@@ -418,6 +418,7 @@ fun RandomWordCard(
                 fillMaxWidthModifierHorizontalPadding,
                 TextAlign.Start
             )
+
             WordButtons(
                 remember { { onLearnClick(w.data.second) } },
                 { onUpdateFavoriteClick(w.data.second) },
@@ -426,6 +427,7 @@ fun RandomWordCard(
                 nextEnabled = true,
                 modifier = fillMaxWidthModifierHorizontalPadding,
             )
+
             Spacer(Modifier.height(24.dp))
         }
     }

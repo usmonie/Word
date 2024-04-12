@@ -1,19 +1,18 @@
-package com.usmonie.word.features.dashboard.ui
+package com.usmonie.word.features.dashboard.ui.ui
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.IntrinsicSize
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DividerDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -21,19 +20,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TileMode
-import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
@@ -42,7 +39,7 @@ import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.dashboard.ui.models.ExampleUi
 import com.usmonie.word.features.dashboard.ui.models.Forms
 import com.usmonie.word.features.dashboard.ui.models.SenseCombinedUi
-import wtf.speech.core.ui.BaseCard
+import wtf.speech.core.ui.BaseCardDefaults
 import wtf.word.core.domain.tools.fastForEach
 
 @Composable
@@ -52,43 +49,92 @@ fun SenseTreeCard(
     forms: () -> Forms,
     modifier: Modifier = Modifier,
 ) {
-    BaseCard(modifier) {
-        Spacer(Modifier.height(20.dp))
-        SenseTreeItem(sense, word, forms)
-        Spacer(Modifier.height(20.dp))
-    }
+    SenseTreeItem(sense, word, forms, modifier = modifier)
 }
 
 @Composable
-private fun ColumnScope.SenseTreeItem(
+private fun SenseTreeItem(
     getSense: () -> SenseCombinedUi,
     getWord: () -> String,
     getForms: () -> Forms,
-    deep: Int = 1
+    deep: Int = 1,
+    containerColor: Color = MaterialTheme.colorScheme.surface,
+    modifier: Modifier = Modifier
 ) {
-    val sense = remember {
-        getSense()
-    }
-    val gloss = remember(sense) {
-        sense.gloss
-    }
-    Sense(gloss, modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp))
-
-    sense.examples.fastForEach { example ->
-        Spacer(Modifier.height(8.dp))
-        ExampleItem({ example }, getWord, getForms)
-    }
-
-    val deepWidth = deep / 5f
-    sense.children.fastForEach { senseCombined ->
-        Divider(
-            Modifier.fillMaxWidth(deepWidth)
-                .padding(vertical = 20.dp)
-                .clip(RoundedCornerShape(bottomEnd = 10.dp, topEnd = 10.dp)),
-            thickness = 4.dp,
+    var examplesExpanded by remember { mutableStateOf(false) }
+    Card(
+        shape = BaseCardDefaults.shape,
+        colors = CardDefaults.cardColors(containerColor = containerColor),
+        modifier = modifier
+    ) {
+        val sense = getSense()
+        Spacer(Modifier.height(24.dp))
+        Sense(
+            sense.gloss,
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp)
         )
 
-        SenseTreeItem({ senseCombined }, getWord, getForms, deep + 1)
+        if (sense.examples.isNotEmpty()) {
+            Spacer(Modifier.height(16.dp))
+            AnimatedContent(examplesExpanded) { expanded ->
+                Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                    if (expanded || sense.examples.size == 1) {
+                        if (sense.examples.size > 1) {
+                            QuoteCardCollapse(
+                                "Collapse examples",
+                                { examplesExpanded = false },
+                                Modifier.fillMaxWidth().padding(horizontal = 24.dp)
+                            )
+                        }
+
+                        sense.examples.fastForEach { example ->
+                            ExampleItem(
+                                { example },
+                                getWord,
+                                getForms,
+                                modifier = Modifier.padding(horizontal = 24.dp)
+                            )
+                        }
+                    } else {
+                        QuoteCardExpand(
+                            "Expand examples",
+                            { examplesExpanded = true },
+                            Modifier.fillMaxWidth().padding(horizontal = 24.dp)
+                        )
+                    }
+                }
+
+            }
+        }
+
+        val deepWidth = deep / 5f
+        sense.children.fastForEach { senseCombined ->
+            Divider(
+                Modifier.fillMaxWidth(deepWidth)
+                    .padding(vertical = 16.dp)
+                    .align(Alignment.CenterHorizontally)
+                    .clip(RoundedCornerShape(12.dp)),
+                thickness = 2.dp,
+            )
+
+            val newDeep = deep + 1
+
+            SenseTreeItem(
+                { senseCombined },
+                getWord,
+                getForms,
+                newDeep,
+                when (newDeep) {
+                    2 -> MaterialTheme.colorScheme.surfaceContainer
+                    3 -> MaterialTheme.colorScheme.surfaceContainerHigh
+                    4 -> MaterialTheme.colorScheme.surfaceContainerHighest
+                    5 -> MaterialTheme.colorScheme.surfaceContainerLow
+                    else -> MaterialTheme.colorScheme.surfaceContainerLowest
+                },
+                Modifier.fillMaxWidth().padding(horizontal = 16.dp * deep)
+            )
+        }
+        Spacer(Modifier.height(24.dp))
     }
 }
 
@@ -113,12 +159,11 @@ fun Sense(
 @Composable
 fun Sense(gloss: String, modifier: Modifier = Modifier, maxLines: Int) {
     SelectionContainer {
-        LocalHapticFeedback.current.performHapticFeedback(HapticFeedbackType.LongPress)
         Text(
             text = gloss,
             textAlign = TextAlign.Justify,
             style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            color = MaterialTheme.colorScheme.onSurface,
             modifier = modifier,
             maxLines = maxLines,
             overflow = TextOverflow.Ellipsis
@@ -170,42 +215,7 @@ fun ExampleItem(
         }
     }
 
-    Column(modifier) {
-        Row(
-            Modifier.fillMaxWidth()
-                .height(IntrinsicSize.Min)
-                .padding(start = 32.dp, end = 20.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Text(
-                text = text,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                textAlign = TextAlign.Justify,
-                fontStyle = FontStyle.Italic,
-                modifier = Modifier.weight(1f).padding(vertical = 8.dp)
-            )
-
-            Spacer(Modifier.width(12.dp))
-            Divider(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .width(4.dp)
-                    .clip(RoundedCornerShape(20.dp))
-            )
-        }
-
-        if (example.ref != null) {
-            Spacer(Modifier.height(4.dp))
-            Text(
-                text = example.ref,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                textAlign = TextAlign.End,
-                modifier = Modifier.fillMaxWidth().padding(start = 32.dp, end = 20.dp)
-            )
-        }
-    }
+    QuoteCard(text, example.ref, modifier)
 }
 
 private fun AnnotatedString.Builder.setSpan(

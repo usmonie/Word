@@ -19,7 +19,6 @@ import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.dashboard.ui.ui.AdMob
 import com.usmonie.word.features.learning.ui.LetterButtons
 import com.usmonie.word.features.learning.ui.models.Exercise
-import wtf.speech.core.ui.AppKeys
 
 @Composable
 fun CompleteSentencePage(
@@ -75,7 +74,6 @@ fun CompleteSentencePage(
         }
 
         adMob.Banner(
-            AppKeys.BANNER_ID,
             Modifier.fillMaxWidth()
         )
     }

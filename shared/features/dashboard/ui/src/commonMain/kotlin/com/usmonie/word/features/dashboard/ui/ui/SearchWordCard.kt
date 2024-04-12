@@ -1,4 +1,4 @@
-package com.usmonie.word.features.dashboard.ui
+package com.usmonie.word.features.dashboard.ui.ui
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,8 +17,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.dashboard.ui.models.SoundUi
 import com.usmonie.word.features.dashboard.ui.models.WordCombinedUi
-import com.usmonie.word.features.dashboard.ui.ui.WordButtons
-import com.usmonie.word.features.dashboard.ui.ui.WordMediumResizableTitle
 import wtf.speech.core.ui.BaseCard
 import wtf.word.core.domain.tools.fastForEach
 import wtf.word.core.domain.tools.fastForEachIndexed

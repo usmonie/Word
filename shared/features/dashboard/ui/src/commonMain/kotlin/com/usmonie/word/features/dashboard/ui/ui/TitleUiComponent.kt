@@ -1,4 +1,4 @@
-package com.usmonie.word.features.dashboard.ui
+package com.usmonie.word.features.dashboard.ui.ui
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text

@@ -1,7 +1,9 @@
 package com.usmonie.word.features.dashboard.ui.games.enigma
 
+import androidx.compose.runtime.Immutable
 import wtf.word.core.domain.tools.fastMap
 
+@Immutable
 sealed class CellState {
     data object Empty : CellState()
     data class Incorrect(val guessedLetter: Char) : CellState()
@@ -9,6 +11,7 @@ sealed class CellState {
     data object Found : CellState()
 }
 
+@Immutable
 data class Cell(
     val letter: Char,
     val number: Int,
@@ -16,12 +19,21 @@ data class Cell(
     val state: CellState = CellState.Empty,
 )
 
+@Immutable
 data class EnigmaEncryptedPhrase(
-    val phrase: List<List<Cell>>,
+    val encryptedPhrase: List<Word>,
+    val phrase: String,
+    val author: String,
     val encryptedPositionsCount: Int,
+    val charsCount: Map<Char, Int>
 )
 
-fun encryptPhrase(phrase: String): EnigmaEncryptedPhrase {
+@Immutable
+data class Word(val cells: List<Cell>) {
+    val size: Int = cells.size
+}
+
+fun encryptPhrase(phrase: String, author: String): EnigmaEncryptedPhrase {
     var encryptedPositionsCount = 0
     val alphabet = alphabet
         .asSequence()
@@ -36,6 +48,8 @@ fun encryptPhrase(phrase: String): EnigmaEncryptedPhrase {
         .filter { char -> char.isLetter() }
         .toList()
 
+    val charsCount = mutableMapOf<Char, Int>()
+
     val randomCharFirst = charsShuffled.first().uppercaseChar()
     val randomCharSecond = charsShuffled[1].uppercaseChar()
     val randomCharThird = charsShuffled[2].uppercaseChar()
@@ -45,6 +59,7 @@ fun encryptPhrase(phrase: String): EnigmaEncryptedPhrase {
             val cells = it.toList().fastMap { char ->
                 val charUppercase = char.uppercaseChar()
                 val index = alphabet.getOrElse(charUppercase) { -1 }
+                charsCount[charUppercase] = charsCount.getOrElse(charUppercase) { 0 } + 1
 
                 val cell = Cell(
                     char,
@@ -59,11 +74,14 @@ fun encryptPhrase(phrase: String): EnigmaEncryptedPhrase {
 
                 cell
             }
-            cells
+            Word(cells)
         }
     return EnigmaEncryptedPhrase(
         encryptedPhrase,
-        encryptedPositionsCount
+        phrase,
+        author,
+        encryptedPositionsCount,
+        charsCount
     )
 }
 

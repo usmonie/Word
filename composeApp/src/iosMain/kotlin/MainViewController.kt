@@ -18,6 +18,7 @@ import com.usmonie.word.features.dashboard.domain.usecase.CurrentThemeUseCaseImp
 import com.usmonie.word.features.dashboard.ui.DASHBOARD_GRAPH_ID
 import com.usmonie.word.features.dashboard.ui.getDashboardGraph
 import com.usmonie.word.features.dashboard.ui.ui.AdMob
+import com.usmonie.word.features.dashboard.ui.ui.AdMobState
 import com.usmonie.word.features.onboarding.ui.getWelcomeGraph
 import com.usmonie.word.features.subscription.data.Billing
 import com.usmonie.word.features.subscription.data.getSubscriptionRepository
@@ -50,15 +51,16 @@ fun MainViewController(
 
     val logger = DefaultLogger(nativeAnalytics)
     val admob = AdMob(
-        { _, modifier ->
+        { modifier ->
             UIKitView(
                 modifier = modifier.heightIn(max = 54.dp),
                 factory = bannerUiView
             )
         },
-        { rewardedInterstitialView() },
-        { _, _ -> },
-        subscriptionStatusUseCase
+        { _, _ -> rewardedInterstitialView() },
+        { -> },
+        subscriptionStatusUseCase,
+        AdMobState(isInterstitialReady = true, isRewardReady = true, isBannerReady = true)
     )
 
     val theme = CurrentThemeUseCaseImpl(userRepository).invoke(Unit)

@@ -30,7 +30,7 @@ fun MenuItemText(title: String, modifier: Modifier = Modifier) {
 fun SubtitleItemText(title: String, modifier: Modifier = Modifier) {
     Text(
         title,
-        modifier = modifier.padding(vertical = 10.dp, horizontal = 20.dp),
+        modifier = modifier.padding(vertical = 10.dp, horizontal = 24.dp),
         color = MaterialTheme.colorScheme.onBackground,
         style = MaterialTheme.typography.titleMedium
     )

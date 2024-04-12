@@ -1,4 +1,4 @@
-package com.usmonie.word.features.dashboard.ui
+package com.usmonie.word.features.dashboard.ui.ui
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
@@ -21,9 +21,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.dashboard.ui.models.WordUi
-import com.usmonie.word.features.dashboard.ui.ui.WordButtons
-import com.usmonie.word.features.dashboard.ui.ui.WordLargeResizableTitle
-import com.usmonie.word.features.dashboard.ui.ui.WordMediumResizableTitle
 import wtf.speech.core.ui.BaseCard
 import wtf.word.core.domain.tools.fastForEachIndexed
 

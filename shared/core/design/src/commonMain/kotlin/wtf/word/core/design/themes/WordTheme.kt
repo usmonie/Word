@@ -38,6 +38,7 @@ fun WordTheme(
     } else {
         wordColors.colors.lightColorScheme()
     }
+
     MaterialTheme(
         theme,
         typography = typography.typography(),
