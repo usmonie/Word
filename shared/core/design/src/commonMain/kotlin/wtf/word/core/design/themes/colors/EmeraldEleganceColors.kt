@@ -37,11 +37,11 @@ object EmeraldEleganceColors: Colors() {
 
     override val light_surfaceBright = Color(0xFFFDFDFD)
     override val light_surfaceDim = Color(0xFFEAEAE9)
-    override val light_surfaceContainer = Color(0xFFFAFAFC)
-    override val light_surfaceContainerHighest = Color(0xFFFFFFFF)
-    override val light_surfaceContainerHigh = Color(0xFFF5F5F7)
-    override val light_surfaceContainerLow = Color(0xFFE6E6E8)
-    override val light_surfaceContainerLowest = Color(0xFFDADADB)
+    override val light_surfaceContainer = Color(0xFF04453a)
+    override val light_surfaceContainerHighest = Color(0xFF0a6656)
+    override val light_surfaceContainerHigh = Color(0xFF07594b)
+    override val light_surfaceContainerLow = Color(0xFF02362d)
+    override val light_surfaceContainerLowest = Color(0xFF01241d)
 
     override val dark_primary: Color = Color(0xFF80CBC4)
     override val dark_onPrimary: Color = Color(0xFF003D33)
@@ -75,11 +75,11 @@ object EmeraldEleganceColors: Colors() {
 
     override val dark_surfaceBright = Color(0xFFFAFAFC)
     override val dark_surfaceDim = Color(0xFFFAFAFC)
-    override val dark_surfaceContainer = Color(0xFFFAFAFC)
-    override val dark_surfaceContainerHighest = Color(0xFFFFFFFF)
-    override val dark_surfaceContainerHigh = Color(0xFFF5F5F7)
-    override val dark_surfaceContainerLow = Color(0xFFE6E6E8)
-    override val dark_surfaceContainerLowest = Color(0xFFDADADB)
+    override val dark_surfaceContainer = Color(0xFF04453a)
+    override val dark_surfaceContainerHighest = Color(0xFF0a6656)
+    override val dark_surfaceContainerHigh = Color(0xFF07594b)
+    override val dark_surfaceContainerLow = Color(0xFF02362d)
+    override val dark_surfaceContainerLowest = Color(0xFF01241d)
 
     override val seed: Color = light_primary
 }

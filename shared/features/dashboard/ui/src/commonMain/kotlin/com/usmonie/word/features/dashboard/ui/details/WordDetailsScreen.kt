@@ -36,6 +36,7 @@ import com.usmonie.word.features.dashboard.ui.models.WordUi
 import com.usmonie.word.features.dashboard.ui.ui.AdMob
 import com.usmonie.word.features.dashboard.ui.ui.BaseLazyColumn
 import com.usmonie.word.features.dashboard.ui.ui.DetailsWordCardMedium
+import com.usmonie.word.features.dashboard.ui.ui.EtymologyTitle
 import com.usmonie.word.features.dashboard.ui.ui.FormsCard
 import com.usmonie.word.features.dashboard.ui.ui.RelatedCard
 import com.usmonie.word.features.dashboard.ui.ui.RelatedCardState
@@ -174,18 +175,23 @@ private fun WordDetailsContent(
 
             if (wordCombined.wordEtymology.size > 1) {
                 item {
-                    ScrollableTabRow(
-                        selectedEtymologyIndex,
-                        modifier = Modifier.fillMaxWidth(),
-                        containerColor = Color.Transparent,
-                        contentColor = MaterialTheme.colorScheme.onBackground,
-                    ) {
-                        wordCombined.wordEtymology.fastForEachIndexed { index, word ->
-                            TabItem(
-                                { selectedEtymologyIndex == index },
-                                remember { { wordViewModel.selectEtymology(index) } },
-                                "Root ${index + 1}"
-                            )
+                    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                        EtymologyTitle()
+
+                        ScrollableTabRow(
+                            selectedEtymologyIndex,
+                            modifier = Modifier.fillMaxWidth(),
+                            containerColor = Color.Transparent,
+                            edgePadding = 0.dp,
+                            contentColor = MaterialTheme.colorScheme.onBackground,
+                        ) {
+                            wordCombined.wordEtymology.fastForEachIndexed { index, word ->
+                                TabItem(
+                                    { selectedEtymologyIndex == index },
+                                    remember { { wordViewModel.selectEtymology(index) } },
+                                    "Root ${index + 1}"
+                                )
+                            }
                         }
                     }
                 }
@@ -278,7 +284,7 @@ private fun TabItem(
         Text(
             title,
             style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.padding(top = 10.dp, bottom = 20.dp)
+            modifier = Modifier.padding(top = 10.dp, bottom = 10.dp)
         )
     }
 }

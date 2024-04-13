@@ -45,7 +45,7 @@ fun DetailsWordCardLarge(
             Text(
                 word.etymologyText,
                 textAlign = TextAlign.Justify,
-                style = MaterialTheme.typography.bodyLarge,
+                style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(horizontal = 20.dp),
                 overflow = TextOverflow.Ellipsis
@@ -100,16 +100,16 @@ fun DetailsWordCardMedium(
                 .clickable { expanded = !expanded }
             ) {
                 EtymologyTitle()
-                Spacer(Modifier.height(4.dp))
+                Spacer(Modifier.height(8.dp))
                 Text(
                     word.etymologyText.orEmpty(),
                     maxLines = maxLines,
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.padding(horizontal = 24.dp),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    textAlign = TextAlign.Justify,
+                    modifier = Modifier.padding(horizontal = 24.dp).padding(top = 8.dp),
                     overflow = TextOverflow.Ellipsis
                 )
-                Spacer(Modifier.height(16.dp))
             }
 
         }
@@ -141,8 +141,9 @@ fun Pronunciations(
         }
     }
     if (word.sounds.isNotEmpty()) {
+        Spacer(Modifier.height(16.dp))
         PronunciationTitle()
-        Spacer(Modifier.height(4.dp))
+        Spacer(Modifier.height(8.dp))
         sounds.fastForEachIndexed { i, sound ->
             PronunciationItem(
                 { },

@@ -36,8 +36,8 @@ object RichMaroonColors: Colors() {
 
     override val light_surfaceBright = Color(0xFFFEF9FE)
     override val light_surfaceDim = Color(0xFFEDE4ED)
-    override val light_surfaceContainer = Color(0xFFD8BFD8)
-    override val light_surfaceContainerHighest = Color(0xFF7A4E7A)
+    override val light_surfaceContainer = Color(0xFFebe1eb)
+    override val light_surfaceContainerHighest = Color(0xFFe6d8e6)
     override val light_surfaceContainerHigh = Color(0xFFCDA2CD)
     override val light_surfaceContainerLow = Color(0xFFE6CBE6)
     override val light_surfaceContainerLowest = Color(0xFF5ECF5)
@@ -72,12 +72,11 @@ object RichMaroonColors: Colors() {
     override val dark_outlineVariant = Color(0xFF534341)
     override val dark_scrim = Color(0xFF000000)
 
-
-    override val dark_surfaceBright = Color(0xFFFAFAFC)
-    override val dark_surfaceDim = Color(0xFFFAFAFC)
-    override val dark_surfaceContainer = Color(0xFFFAFAFC)
-    override val dark_surfaceContainerHighest = Color(0xFFFFFFFF)
-    override val dark_surfaceContainerHigh = Color(0xFFF5F5F7)
+    override val dark_surfaceBright = Color(0xff3f3433)
+    override val dark_surfaceDim = Color(0xff3f3433)
+    override val dark_surfaceContainer = Color(0xFF594d4c)
+    override val dark_surfaceContainerHighest = Color(0xFF877674)
+    override val dark_surfaceContainerHigh = Color(0xFF70615f)
     override val dark_surfaceContainerLow = Color(0xFFE6E6E8)
     override val dark_surfaceContainerLowest = Color(0xFFDADADB)
 

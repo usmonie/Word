@@ -25,7 +25,7 @@ object GentleBreezeColors : Colors() {
     override val light_onBackground: Color = Color(0xFF1E1E1E)
     override val light_surface: Color = Color(0xfff6f1f1)
     override val light_onSurface: Color = Color(0xFF1E1E1E)
-    override val light_surfaceVariant = Color(0xFFECE1CF)
+    override val light_surfaceVariant = Color(0xFFf0e6e6)
     override val light_onSurfaceVariant = Color(0xFF4D4639)
     override val light_inverseSurface: Color = Color(0xFF303030)
     override val light_inverseOnSurface: Color = Color(0xFFF5F5F5)
@@ -43,7 +43,7 @@ object GentleBreezeColors : Colors() {
     override val light_surfaceContainerLow = Color(0xFFE6E6E8)
     override val light_surfaceContainerLowest = Color(0xFFDADADB)
 
-    override val dark_primary: Color = Color(0xFF3949AB)
+    override val dark_primary: Color = Color(0xFF2336b0)
     override val dark_onPrimary: Color = Color(0xFFFFFFFF)
     override val dark_primaryContainer: Color = dark_primary
     override val dark_onPrimaryContainer: Color = dark_onPrimary
@@ -63,8 +63,8 @@ object GentleBreezeColors : Colors() {
     override val dark_onBackground: Color = Color(0xFFFFFFFF)
     override val dark_surface: Color = Color(0xff252222)
     override val dark_onSurface: Color = Color(0xFFFFFFFF)
-    override val dark_surfaceVariant: Color = Color(0xFF121212)
-    override val dark_onSurfaceVariant: Color = Color(0xFFEDE7F6)
+    override val dark_surfaceVariant: Color = Color(0xFF736a6a)
+    override val dark_onSurfaceVariant: Color = Color(0xFF87828f)
     override val dark_inverseSurface: Color =
         Color(0xFFF1F1F1) // Светло-серый цвет для контрастных поверхностей в темной теме
     override val dark_inverseOnSurface: Color =
@@ -81,11 +81,11 @@ object GentleBreezeColors : Colors() {
 
     override val dark_surfaceBright = Color(0xFFFAFAFC)
     override val dark_surfaceDim = Color(0xFFFAFAFC)
-    override val dark_surfaceContainer = Color(0xFFFAFAFC)
-    override val dark_surfaceContainerHighest = Color(0xFFFFFFFF)
-    override val dark_surfaceContainerHigh = Color(0xFFF5F5F7)
-    override val dark_surfaceContainerLow = Color(0xFFE6E6E8)
-    override val dark_surfaceContainerLowest = Color(0xFFDADADB)
+    override val dark_surfaceContainer = Color(0xFF473d3d)
+    override val dark_surfaceContainerHighest = Color(0xFF574848)
+    override val dark_surfaceContainerHigh = Color(0xFF423838)
+    override val dark_surfaceContainerLow = Color(0xFF332727)
+    override val dark_surfaceContainerLowest = Color(0xFF2b2020)
 
     override val seed = Color(0xFF800000)
 

@@ -36,9 +36,9 @@ object DeepIndigoColors: Colors() {
     override val light_scrim = Color(0xFF000000)
     override val light_surfaceBright = Color(0xFFFDFDFD)
     override val light_surfaceDim = Color(0xFFEAEAE9)
-    override val light_surfaceContainer = Color(0xFFFAFAFC)
-    override val light_surfaceContainerHighest = Color(0xFFFFFFFF)
-    override val light_surfaceContainerHigh = Color(0xFFF5F5F7)
+    override val light_surfaceContainer = Color(0xFFe6e6ed)
+    override val light_surfaceContainerHighest = Color(0xFFbcbcd1)
+    override val light_surfaceContainerHigh = Color(0xFFccccdb)
     override val light_surfaceContainerLow = Color(0xFFE6E6E8)
     override val light_surfaceContainerLowest = Color(0xFFDADADB)
 
@@ -72,14 +72,13 @@ object DeepIndigoColors: Colors() {
     override val dark_outlineVariant = Color(0xFF42474E)
     override val dark_scrim = Color(0xFF000000)
 
-
     override val dark_surfaceBright = Color(0xFFFAFAFC)
     override val dark_surfaceDim = Color(0xFFFAFAFC)
-    override val dark_surfaceContainer = Color(0xFFFAFAFC)
-    override val dark_surfaceContainerHighest = Color(0xFFFFFFFF)
-    override val dark_surfaceContainerHigh = Color(0xFFF5F5F7)
-    override val dark_surfaceContainerLow = Color(0xFFE6E6E8)
-    override val dark_surfaceContainerLowest = Color(0xFFDADADB)
+    override val dark_surfaceContainer = Color(0xFF373e45)
+    override val dark_surfaceContainerHighest = Color(0xFF68727a)
+    override val dark_surfaceContainerHigh = Color(0xFF535c63)
+    override val dark_surfaceContainerLow = Color(0xFF323a40)
+    override val dark_surfaceContainerLowest = Color(0xFF262d33)
 
     override val seed = Color(0xFF00416A)
 

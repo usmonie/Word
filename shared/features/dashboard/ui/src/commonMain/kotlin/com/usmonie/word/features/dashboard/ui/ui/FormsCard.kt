@@ -18,7 +18,7 @@ import com.usmonie.word.features.dashboard.ui.models.FormUi
 import wtf.speech.core.ui.BaseCard
 import wtf.word.core.domain.tools.fastForEach
 
-private val formsModifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp)
+private val formsModifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp)
 
 @Composable
 fun FormsCard(getFormsState: () -> List<FormUi>) {
@@ -58,19 +58,19 @@ fun FormsCard(getFormsState: () -> List<FormUi>) {
 fun FormsItem(tag: String?, forms: String) {
     val titleSmall = MaterialTheme.typography.titleMedium
     val labelLarge = MaterialTheme.typography.bodyLarge
-    val onSurfaceVariantColor = MaterialTheme.colorScheme.onSurfaceVariant
+    val onSurfaceColor = MaterialTheme.colorScheme.onSurface
     val text = remember(tag, forms) {
         buildAnnotatedString {
             val titleSmallSpan = titleSmall.toSpanStyle()
             val labelLargeSpan = labelLarge.toSpanStyle()
             if (!tag.isNullOrBlank()) {
-                withStyle(titleSmallSpan.copy(onSurfaceVariantColor)) {
+                withStyle(titleSmallSpan.copy(onSurfaceColor)) {
                     append(tag)
                     append(": ")
                 }
             }
 
-            withStyle(labelLargeSpan.copy(onSurfaceVariantColor)) {
+            withStyle(labelLargeSpan.copy(onSurfaceColor)) {
                 append(forms)
             }
         }
@@ -78,6 +78,7 @@ fun FormsItem(tag: String?, forms: String) {
     Text(
         text = text,
         style = MaterialTheme.typography.titleMedium,
+        color = onSurfaceColor,
         modifier = Modifier.fillMaxWidth().padding(top = 8.dp).padding(horizontal = 24.dp)
     )
 }

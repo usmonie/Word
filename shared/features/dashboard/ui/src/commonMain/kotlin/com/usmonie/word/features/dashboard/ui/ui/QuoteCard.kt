@@ -93,6 +93,7 @@ fun QuoteCardExpand(title: String, onClick: () -> Unit, modifier: Modifier = Mod
                 text = title,
                 style = MaterialTheme.typography.titleMedium,
                 textAlign = TextAlign.Center,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.fillMaxWidth()
             )
         }
@@ -112,6 +113,7 @@ fun QuoteCardCollapse(title: String, onClick: () -> Unit, modifier: Modifier = M
                 text = title,
                 style = MaterialTheme.typography.titleMedium,
                 textAlign = TextAlign.Center,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.fillMaxWidth()
             )
         }

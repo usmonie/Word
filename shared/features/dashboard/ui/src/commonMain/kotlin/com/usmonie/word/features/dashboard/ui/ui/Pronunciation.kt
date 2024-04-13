@@ -36,7 +36,7 @@ fun PronunciationItem(
     audio: String?
 ) {
     val titleMediumStyle = MaterialTheme.typography.titleMedium.toSpanStyle()
-    val onSurfaceColor = MaterialTheme.colorScheme.onSurfaceVariant
+    val onSurfaceColor = MaterialTheme.colorScheme.onSurface
     val labelLargeStyle = MaterialTheme.typography.labelLarge.toSpanStyle()
     val text = remember(pronunciation, phonetic) {
         buildAnnotatedString {
@@ -70,7 +70,7 @@ fun PronunciationItem(
             ) {
                 Icon(
                     Icons.Default.PlayArrow,
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    tint = MaterialTheme.colorScheme.onSurface,
                     contentDescription = null
                 )
             }

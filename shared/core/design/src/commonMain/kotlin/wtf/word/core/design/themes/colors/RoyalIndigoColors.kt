@@ -24,8 +24,8 @@ object RoyalIndigoColors: Colors() {
     override val light_onBackground: Color = Color(0xFF1A237E)
     override val light_surface: Color = Color(0xffd6d9e8)
     override val light_onSurface: Color = Color(0xFF1A237E)
-    override val light_surfaceVariant = Color(0xFFECE1CF)
-    override val light_onSurfaceVariant = Color(0xFF4D4639)
+    override val light_surfaceVariant = Color(0xFFcacde3)
+    override val light_onSurfaceVariant = Color(0xFF1A237E)
     override val light_outline: Color = Color(0xFFB0BEC5)
     override val light_inverseSurface: Color = Color(0xFF303F9F)
     override val light_inverseOnSurface: Color = Color(0xFFEDE7F6)
@@ -36,9 +36,9 @@ object RoyalIndigoColors: Colors() {
 
     override val light_surfaceBright = Color(0xFFFDFDFD)
     override val light_surfaceDim = Color(0xFFEAEAE9)
-    override val light_surfaceContainer = Color(0xFFFAFAFC)
-    override val light_surfaceContainerHighest = Color(0xFFFFFFFF)
-    override val light_surfaceContainerHigh = Color(0xFFF5F5F7)
+    override val light_surfaceContainer = Color(0xFFe9e9f0)
+    override val light_surfaceContainerHighest = Color(0xFFd1d1de)
+    override val light_surfaceContainerHigh = Color(0xFFb9b9c9)
     override val light_surfaceContainerLow = Color(0xFFE6E6E8)
     override val light_surfaceContainerLowest = Color(0xFFDADADB)
 
@@ -74,9 +74,9 @@ object RoyalIndigoColors: Colors() {
 
     override val dark_surfaceBright = Color(0xFFFAFAFC)
     override val dark_surfaceDim = Color(0xFFFAFAFC)
-    override val dark_surfaceContainer = Color(0xFFFAFAFC)
-    override val dark_surfaceContainerHighest = Color(0xFFFFFFFF)
-    override val dark_surfaceContainerHigh = Color(0xFFF5F5F7)
+    override val dark_surfaceContainer = Color(0xFF243291)
+    override val dark_surfaceContainerHighest = Color(0xFF424fa8)
+    override val dark_surfaceContainerHigh = Color(0xFF303e9c)
     override val dark_surfaceContainerLow = Color(0xFFE6E6E8)
     override val dark_surfaceContainerLowest = Color(0xFFDADADB)
 

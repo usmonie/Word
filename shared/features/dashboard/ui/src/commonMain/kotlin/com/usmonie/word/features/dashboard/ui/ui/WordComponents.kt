@@ -19,9 +19,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import wtf.word.core.design.themes.icons.myiconpack.IcUpload
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import wtf.word.core.design.themes.icons.MyIconPack
+import wtf.word.core.design.themes.icons.myiconpack.IcUpload
 
 @Composable
 fun LargeResizableTitle(word: String, modifier: Modifier = Modifier, color: Color) {
@@ -100,7 +100,7 @@ fun WordLargeResizableTitle(
 fun WordMediumResizableTitle(
     word: String,
     modifier: Modifier = Modifier,
-    color: Color = MaterialTheme.colorScheme.onSurfaceVariant,
+    color: Color = MaterialTheme.colorScheme.onSurface,
     textAlign: TextAlign = TextAlign.Start
 ) {
     val defaultTextStyle = MaterialTheme.typography.headlineMedium

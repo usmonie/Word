@@ -19,12 +19,14 @@ object BaseCardDefaults {
 @Composable
 fun BaseCard(
     modifier: Modifier = Modifier,
+    containerColor: Color = MaterialTheme.colorScheme.surface,
     content: @Composable ColumnScope.() -> Unit
 ) {
     BaseCard(
         onClick = {},
         enabled = false,
         modifier = modifier,
+        containerColor = containerColor,
         content = content
     )
 }
