@@ -1,10 +1,12 @@
 package com.usmonie.word.features.dashboard.ui.games.enigma
 
+import androidx.compose.runtime.Immutable
 import com.usmonie.word.features.dashboard.ui.games.hangman.GuessedLetters
 import wtf.speech.core.ui.ScreenAction
 import wtf.speech.core.ui.ScreenEffect
 import wtf.speech.core.ui.ScreenEvent
 import wtf.speech.core.ui.ScreenState
+
 
 sealed class EnigmaState(
     open val phrase: EnigmaEncryptedPhrase,
@@ -16,22 +18,67 @@ sealed class EnigmaState(
 ) : ScreenState {
     val maxLives: Int = MAX_LIVES_COUNT
 
-    data object Loading : EnigmaState(
-        EnigmaEncryptedPhrase(listOf(), "", "",0, mapOf()),
+    @Immutable
+    class Loading : EnigmaState(
+        EnigmaEncryptedPhrase(listOf(), "", "", 0, mapOf()),
         MAX_LIVES_COUNT,
         hintsCount = 0,
         guessedLetters = GuessedLetters(setOf())
     )
 
-    data class Playing(
+
+    sealed class Game(
         override val phrase: EnigmaEncryptedPhrase,
         override val lives: Int,
         override val currentSelectedCellPosition: Pair<Int, Int>? = null,
         override val foundLetters: Set<Char> = setOf(),
         override val hintsCount: Int,
         override val guessedLetters: GuessedLetters
-    ) : EnigmaState(phrase, lives, currentSelectedCellPosition, foundLetters, hintsCount, guessedLetters)
+    ) : EnigmaState(
+        phrase,
+        lives,
+        currentSelectedCellPosition,
+        foundLetters,
+        hintsCount,
+        guessedLetters
+    ) {
 
+        @Immutable
+        data class Playing(
+            override val phrase: EnigmaEncryptedPhrase,
+            override val lives: Int,
+            override val currentSelectedCellPosition: Pair<Int, Int>? = null,
+            override val foundLetters: Set<Char> = setOf(),
+            override val hintsCount: Int,
+            override val guessedLetters: GuessedLetters
+        ) : Game(
+            phrase,
+            lives,
+            currentSelectedCellPosition,
+            foundLetters,
+            hintsCount,
+            guessedLetters
+        )
+
+        @Immutable
+        data class HintSelection(
+            override val phrase: EnigmaEncryptedPhrase,
+            override val lives: Int,
+            override val currentSelectedCellPosition: Pair<Int, Int>? = null,
+            override val foundLetters: Set<Char> = setOf(),
+            override val hintsCount: Int,
+            override val guessedLetters: GuessedLetters
+        ) : Game(
+            phrase,
+            lives,
+            currentSelectedCellPosition,
+            foundLetters,
+            hintsCount,
+            guessedLetters
+        )
+    }
+
+    @Immutable
     data class Lost(
         override val phrase: EnigmaEncryptedPhrase,
         override val foundLetters: Set<Char> = setOf(),
@@ -39,6 +86,7 @@ sealed class EnigmaState(
         override val guessedLetters: GuessedLetters
     ) : EnigmaState(phrase, MIN_LIVES_COUNT, null, foundLetters, hintsCount, guessedLetters)
 
+    @Immutable
     data class Won(
         override val phrase: EnigmaEncryptedPhrase,
         override val lives: Int,
@@ -69,7 +117,7 @@ sealed class EnigmaAction : ScreenAction {
     data object ReviveGranted : EnigmaAction()
     data object UseHint : EnigmaAction()
     data object AdTime : EnigmaAction()
-    data object Won: EnigmaAction()
+    data object Won : EnigmaAction()
 
 }
 
@@ -82,6 +130,7 @@ sealed class EnigmaEvent : ScreenEvent {
         val wordPosition: Int,
         val cellPositionInWord: Int
     ) : EnigmaEvent()
+
     data object ClearSelectionCell : EnigmaEvent()
     data class NextPhrase(val phrase: EnigmaEncryptedPhrase, val hintsCount: Int) : EnigmaEvent()
     data object ReviveClicked : EnigmaEvent()
@@ -89,7 +138,7 @@ sealed class EnigmaEvent : ScreenEvent {
     data class UseHint(val phrase: EnigmaEncryptedPhrase, val hintsLeft: Int) : EnigmaEvent()
     data class UpdateHints(val hintsCount: Int) : EnigmaEvent()
     data object NoHints : EnigmaEvent()
-    data object ShowMiddleGameAd: EnigmaEvent()
+    data object ShowMiddleGameAd : EnigmaEvent()
 }
 
 @Suppress("CanSealedSubClassBeObject")

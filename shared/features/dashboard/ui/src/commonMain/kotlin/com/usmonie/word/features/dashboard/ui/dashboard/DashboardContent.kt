@@ -39,13 +39,13 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import com.usmonie.word.features.dashboard.ui.ui.SearchWordCard
 import com.usmonie.word.features.dashboard.ui.models.LearningStatus
 import com.usmonie.word.features.dashboard.ui.models.WordCombinedUi
 import com.usmonie.word.features.dashboard.ui.models.WordUi
 import com.usmonie.word.features.dashboard.ui.ui.AdMob
 import com.usmonie.word.features.dashboard.ui.ui.BaseTextButton
 import com.usmonie.word.features.dashboard.ui.ui.PrimaryStatusCard
+import com.usmonie.word.features.dashboard.ui.ui.SearchWordCard
 import com.usmonie.word.features.dashboard.ui.ui.StatusCard
 import com.usmonie.word.features.dashboard.ui.ui.WordButtons
 import com.usmonie.word.features.dashboard.ui.ui.WordLargeResizableTitle
@@ -76,6 +76,14 @@ internal fun DashboardContent(
     ) {
         val state by dashboardViewModel.state.collectAsState()
 
+        val contentPadding = remember {
+            PaddingValues(
+                top = 12.dp,
+                start = 24.dp,
+                end = 24.dp,
+                bottom = insets.calculateBottomPadding() + 80.dp
+            )
+        }
         when (val s = state) {
             is DashboardState.Error -> {
                 Column(Modifier.align(Alignment.Center)) {
@@ -111,17 +119,8 @@ internal fun DashboardContent(
                     dashboardViewModel::onLearnClick,
                     dashboardViewModel::onOpenWord,
                     dashboardViewModel::onUpdateFavorite,
-                    remember { { dashboardViewModel.onNextRandomWord(s) } },
-                    remember {
-                        {
-                            PaddingValues(
-                                top = 12.dp,
-                                start = 24.dp,
-                                end = 24.dp,
-                                bottom = insets.calculateBottomPadding() + 80.dp
-                            )
-                        }
-                    },
+                    { dashboardViewModel.onNextRandomWord(s) },
+                    { contentPadding },
                     s.query.text::isNotBlank,
                     learnedWords,
                     practiceWords,
@@ -350,7 +349,7 @@ fun WordOfTheDayCard(
         }
 
         is ContentState.Success -> BaseCard(
-            onClick = remember { { onClick(w.data.second) } },
+            onClick = { onClick(w.data.second) },
             modifier = modifier
         ) {
             Spacer(Modifier.height(24.dp))

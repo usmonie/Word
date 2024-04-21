@@ -56,6 +56,7 @@ class FavoritesScreen(
     ) : ScreenBuilder {
         override val id: String = ID
 
+        @OptIn(ExperimentalMaterial3Api::class)
         override fun build(params: Map<String, String>?, extra: Extra?): Screen = FavoritesScreen(
             FavouritesViewModel(
                 UpdateFavouriteUseCaseImpl(wordRepository),
@@ -106,17 +107,15 @@ private fun FavoritesContent(
     val listState = getListState()
     Box(
         Modifier.fillMaxSize()
-            .padding(
-                PaddingValues(
-                    start = insets.calculateLeftPadding(LayoutDirection.Ltr),
-                    end = insets.calculateRightPadding(LayoutDirection.Ltr),
-                    top = insets.calculateTopPadding()
-                )
-            )
     ) {
         BaseLazyColumn(
             listState,
-            contentPadding = PaddingValues(bottom = insets.calculateBottomPadding() + 80.dp),
+            contentPadding = PaddingValues(
+                start = insets.calculateLeftPadding(LayoutDirection.Ltr),
+                end = insets.calculateRightPadding(LayoutDirection.Ltr),
+                top = insets.calculateTopPadding() + 16.dp,
+                bottom = insets.calculateBottomPadding() + 80.dp
+            ),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
 

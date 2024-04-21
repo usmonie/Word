@@ -2,7 +2,13 @@ package wtf.speech.compass.core
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 
 internal data class NavigationEntry(
     val screen: Screen,
@@ -47,11 +53,16 @@ data class NavigationGraph(
         }
     }
 
-    internal val currentScreen: MutableState<NavigationEntry>
-        get() = mutableStateOf(if (backStack.size > 0) backStack.last() else initialEntry)
+    private val currentNavigationEntryState: MutableStateFlow<NavigationEntry> =
+        MutableStateFlow(if (backStack.isNotEmpty()) backStack.last() else initialEntry)
 
-    internal val previousScreen: MutableState<NavigationEntry?>
-        get() = mutableStateOf(backStack.getOrNull(backStack.lastIndex - 1))
+    internal val currentScreen: StateFlow<NavigationEntry> = currentNavigationEntryState
+
+    internal val previousNavigationEntryState: MutableStateFlow<NavigationEntry?> =
+        MutableStateFlow(backStack.getOrNull(backStack.lastIndex - 1))
+
+    internal val previousScreen: StateFlow<NavigationEntry?> = previousNavigationEntryState
+
 
     fun register(route: Route) {
         routes[route.id] = route.screenBuilder
@@ -63,7 +74,7 @@ data class NavigationGraph(
     }
 
     fun navigateTo(screen: Screen, params: Map<String, String>?, extras: Extra?): Boolean {
-        previousScreen.value = backStack.lastOrNull()
+        previousNavigationEntryState.value = backStack.lastOrNull()
         backStack.add(NavigationEntry(screen, params, extras))
         updateCurrentScreen()
         return true
@@ -72,7 +83,7 @@ data class NavigationGraph(
     fun navigateTo(screenId: String, params: Map<String, String>?, extras: Extra?): Boolean {
         val screen = findScreen(screenId, params, extras)
         if (screen != null) {
-            previousScreen.value = backStack.lastOrNull()
+            previousNavigationEntryState.value = backStack.lastOrNull()
             backStack.add(NavigationEntry(screen, params, extras))
             updateCurrentScreen()
             return true
@@ -83,7 +94,6 @@ data class NavigationGraph(
     fun navigateBack(): Boolean {
         if (backStack.size > 1) {
             backStack.removeLast().onClear()
-            previousScreen.value = backStack.getOrNull(backStack.lastIndex - 1)
             updateCurrentScreen()
             return true
         }
@@ -91,6 +101,7 @@ data class NavigationGraph(
     }
 
     private fun updateCurrentScreen() {
-        currentScreen.value = backStack.last()
+        currentNavigationEntryState.value = backStack.last()
+        previousNavigationEntryState.value = backStack.getOrNull(backStack.lastIndex - 1)
     }
 }

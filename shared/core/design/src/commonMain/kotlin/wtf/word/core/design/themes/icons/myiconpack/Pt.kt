@@ -19,38 +19,48 @@ public val MyIconPack.Pt: ImageVector
         if (_pt != null) {
             return _pt!!
         }
-        _pt = Builder(name = "Pt", defaultWidth = 128.0.dp, defaultHeight = 128.0.dp, viewportWidth
-                = 512.0f, viewportHeight = 512.0f).apply {
-            path(fill = SolidColor(Color(0xFFff0000)), stroke = null, strokeLineWidth = 0.0f,
-                    strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
-                    pathFillType = NonZero) {
+        _pt = Builder(
+            name = "Pt", defaultWidth = 128.0.dp, defaultHeight = 128.0.dp, viewportWidth
+            = 512.0f, viewportHeight = 512.0f
+        ).apply {
+            path(
+                fill = SolidColor(Color(0xFFff0000)), stroke = null, strokeLineWidth = 0.0f,
+                strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
+                pathFillType = NonZero
+            ) {
                 moveTo(204.8f, 0.0f)
                 horizontalLineTo(512.0f)
                 verticalLineToRelative(512.0f)
                 horizontalLineTo(204.7f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
-                    strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
-                    pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
+                strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
+                pathFillType = NonZero
+            ) {
                 moveTo(0.0f, 0.0f)
                 horizontalLineToRelative(204.8f)
                 verticalLineToRelative(512.0f)
                 horizontalLineTo(-0.1f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
-                    strokeLineWidth = 0.7f, strokeLineCap = Round, strokeLineJoin =
-                    StrokeJoin.Companion.Round, strokeLineMiter = 4.0f, pathFillType = EvenOdd) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
+                strokeLineWidth = 0.7f, strokeLineCap = Round, strokeLineJoin =
+                StrokeJoin.Companion.Round, strokeLineMiter = 4.0f, pathFillType = EvenOdd
+            ) {
                 moveTo(293.8f, 326.6f)
                 curveToRelative(-34.4f, -1.0f, -192.0f, -99.4f, -193.0f, -115.1f)
                 lineToRelative(8.6f, -14.5f)
                 curveTo(125.0f, 219.7f, 286.2f, 315.4f, 302.0f, 312.0f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
-                    strokeLineWidth = 0.7f, strokeLineCap = Round, strokeLineJoin =
-                    StrokeJoin.Companion.Round, strokeLineMiter = 4.0f, pathFillType = EvenOdd) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
+                strokeLineWidth = 0.7f, strokeLineCap = Round, strokeLineJoin =
+                StrokeJoin.Companion.Round, strokeLineMiter = 4.0f, pathFillType = EvenOdd
+            ) {
                 moveTo(107.6f, 195.0f)
                 curveToRelative(-3.1f, 8.3f, 41.1f, 35.6f, 94.3f, 68.0f)
                 curveToRelative(53.2f, 32.3f, 99.0f, 52.3f, 102.5f, 49.5f)
@@ -72,9 +82,11 @@ public val MyIconPack.Pt: ImageVector
                 curveToRelative(53.1f, 33.0f, 98.0f, 52.2f, 102.0f, 47.2f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
-                    strokeLineWidth = 0.7f, strokeLineCap = Round, strokeLineJoin =
-                    StrokeJoin.Companion.Round, strokeLineMiter = 4.0f, pathFillType = EvenOdd) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
+                strokeLineWidth = 0.7f, strokeLineCap = Round, strokeLineJoin =
+                StrokeJoin.Companion.Round, strokeLineMiter = 4.0f, pathFillType = EvenOdd
+            ) {
                 moveTo(205.0f, 221.0f)
                 curveToRelative(34.3f, -0.3f, 76.8f, -4.7f, 101.2f, -14.4f)
                 lineTo(301.0f, 198.0f)
@@ -83,9 +95,11 @@ public val MyIconPack.Pt: ImageVector
                 lineToRelative(-5.0f, 9.1f)
                 curveToRelative(30.2f, 12.7f, 61.0f, 15.5f, 100.8f, 15.6f)
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
-                    strokeLineWidth = 0.7f, strokeLineCap = Round, strokeLineJoin =
-                    StrokeJoin.Companion.Round, strokeLineMiter = 4.0f, pathFillType = EvenOdd) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
+                strokeLineWidth = 0.7f, strokeLineCap = Round, strokeLineJoin =
+                StrokeJoin.Companion.Round, strokeLineMiter = 4.0f, pathFillType = EvenOdd
+            ) {
                 moveTo(307.7f, 206.8f)
                 curveToRelative(-0.9f, 1.3f, -16.8f, 6.8f, -40.3f, 10.8f)
                 arcToRelative(416.0f, 416.0f, 0.0f, false, true, -62.6f, 4.6f)
@@ -116,9 +130,11 @@ public val MyIconPack.Pt: ImageVector
                 curveToRelative(-50.2f, -0.4f, -96.8f, -8.2f, -112.3f, -18.2f)
                 verticalLineToRelative(10.2f)
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
-                    strokeLineWidth = 0.7f, strokeLineCap = Round, strokeLineJoin =
-                    StrokeJoin.Companion.Round, strokeLineMiter = 4.0f, pathFillType = EvenOdd) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
+                strokeLineWidth = 0.7f, strokeLineCap = Round, strokeLineJoin =
+                StrokeJoin.Companion.Round, strokeLineMiter = 4.0f, pathFillType = EvenOdd
+            ) {
                 moveTo(318.7f, 260.8f)
                 verticalLineToRelative(2.7f)
                 curveToRelative(-3.0f, 3.6f, -21.6f, 9.0f, -44.9f, 12.7f)
@@ -149,9 +165,11 @@ public val MyIconPack.Pt: ImageVector
                 lineToRelative(6.6f, -10.5f)
                 curveToRelative(-15.5f, 7.3f, -68.3f, 15.6f, -99.0f, 15.6f)
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
-                    strokeLineWidth = 0.6f, strokeLineCap = Round, strokeLineJoin =
-                    StrokeJoin.Companion.Round, strokeLineMiter = 4.0f, pathFillType = EvenOdd) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
+                strokeLineWidth = 0.6f, strokeLineCap = Round, strokeLineJoin =
+                StrokeJoin.Companion.Round, strokeLineMiter = 4.0f, pathFillType = EvenOdd
+            ) {
                 moveTo(299.5f, 317.1f)
                 arcToRelative(152.6f, 152.6f, 0.0f, false, true, -3.0f, 4.4f)
                 arcToRelative(258.9f, 258.9f, 0.0f, false, true, -34.7f, 8.9f)
@@ -177,9 +195,11 @@ public val MyIconPack.Pt: ImageVector
                 arcToRelative(3.0f, 3.0f, 0.0f, false, false, -0.1f, -0.2f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
-                    strokeLineWidth = 0.7f, strokeLineCap = Round, strokeLineJoin =
-                    StrokeJoin.Companion.Round, strokeLineMiter = 4.0f, pathFillType = EvenOdd) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
+                strokeLineWidth = 0.7f, strokeLineCap = Round, strokeLineJoin =
+                StrokeJoin.Companion.Round, strokeLineMiter = 4.0f, pathFillType = EvenOdd
+            ) {
                 moveTo(305.8f, 253.4f)
                 curveToRelative(0.2f, 32.0f, -16.2f, 60.8f, -29.4f, 73.5f)
                 arcToRelative(106.0f, 106.0f, 0.0f, false, true, -72.3f, 30.0f)
@@ -196,9 +216,11 @@ public val MyIconPack.Pt: ImageVector
                 curveToRelative(-62.0f, 0.0f, -112.6f, -50.4f, -112.6f, -112.3f)
                 reflectiveCurveToRelative(50.6f, -112.3f, 112.6f, -112.3f)
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
-                    strokeLineWidth = 0.7f, strokeLineCap = Round, strokeLineJoin =
-                    StrokeJoin.Companion.Round, strokeLineMiter = 4.0f, pathFillType = EvenOdd) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
+                strokeLineWidth = 0.7f, strokeLineCap = Round, strokeLineJoin =
+                StrokeJoin.Companion.Round, strokeLineMiter = 4.0f, pathFillType = EvenOdd
+            ) {
                 moveTo(204.7f, 143.4f)
                 curveToRelative(62.0f, 0.0f, 112.6f, 50.7f, 112.6f, 112.7f)
                 reflectiveCurveToRelative(-50.6f, 112.7f, -112.6f, 112.7f)
@@ -211,9 +233,11 @@ public val MyIconPack.Pt: ImageVector
                 reflectiveCurveTo(265.1f, 146.0f, 204.7f, 146.0f)
                 arcTo(110.6f, 110.6f, 0.0f, false, false, 94.5f, 256.1f)
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
-                    strokeLineWidth = 0.7f, strokeLineCap = Round, strokeLineJoin =
-                    StrokeJoin.Companion.Round, strokeLineMiter = 4.0f, pathFillType = EvenOdd) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
+                strokeLineWidth = 0.7f, strokeLineCap = Round, strokeLineJoin =
+                StrokeJoin.Companion.Round, strokeLineMiter = 4.0f, pathFillType = EvenOdd
+            ) {
                 moveTo(204.8f, 152.8f)
                 curveToRelative(56.5f, 0.0f, 103.1f, 46.5f, 103.1f, 103.2f)
                 curveToRelative(0.0f, 56.8f, -46.6f, 103.2f, -103.1f, 103.2f)
@@ -226,18 +250,22 @@ public val MyIconPack.Pt: ImageVector
                 curveToRelative(0.0f, -55.4f, -45.5f, -100.7f, -100.8f, -100.7f)
                 reflectiveCurveTo(104.0f, 200.6f, 104.0f, 256.0f)
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
-                    strokeLineWidth = 0.7f, strokeLineCap = Round, strokeLineJoin =
-                    StrokeJoin.Companion.Round, strokeLineMiter = 4.0f, pathFillType = EvenOdd) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
+                strokeLineWidth = 0.7f, strokeLineCap = Round, strokeLineJoin =
+                StrokeJoin.Companion.Round, strokeLineMiter = 4.0f, pathFillType = EvenOdd
+            ) {
                 moveTo(209.3f, 143.0f)
                 horizontalLineToRelative(-9.7f)
                 verticalLineToRelative(226.4f)
                 horizontalLineToRelative(9.7f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
-                    strokeLineWidth = 0.7f, strokeLineCap = Round, strokeLineJoin =
-                    StrokeJoin.Companion.Round, strokeLineMiter = 4.0f, pathFillType = EvenOdd) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
+                strokeLineWidth = 0.7f, strokeLineCap = Round, strokeLineJoin =
+                StrokeJoin.Companion.Round, strokeLineMiter = 4.0f, pathFillType = EvenOdd
+            ) {
                 moveTo(208.3f, 141.7f)
                 horizontalLineToRelative(2.5f)
                 verticalLineToRelative(229.0f)
@@ -249,9 +277,11 @@ public val MyIconPack.Pt: ImageVector
                 horizontalLineToRelative(-2.5f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
-                    strokeLineWidth = 0.7f, strokeLineCap = Round, strokeLineJoin =
-                    StrokeJoin.Companion.Round, strokeLineMiter = 4.0f, pathFillType = EvenOdd) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
+                strokeLineWidth = 0.7f, strokeLineCap = Round, strokeLineJoin =
+                StrokeJoin.Companion.Round, strokeLineMiter = 4.0f, pathFillType = EvenOdd
+            ) {
                 moveTo(317.4f, 260.5f)
                 verticalLineTo(252.0f)
                 lineToRelative(-6.8f, -6.3f)
@@ -268,9 +298,11 @@ public val MyIconPack.Pt: ImageVector
                 lineToRelative(28.4f, 6.9f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
-                    strokeLineWidth = 0.7f, strokeLineCap = Round, strokeLineJoin =
-                    StrokeJoin.Companion.Round, strokeLineMiter = 4.0f, pathFillType = EvenOdd) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
+                strokeLineWidth = 0.7f, strokeLineCap = Round, strokeLineJoin =
+                StrokeJoin.Companion.Round, strokeLineMiter = 4.0f, pathFillType = EvenOdd
+            ) {
                 moveTo(204.7f, 238.7f)
                 arcToRelative(394.0f, 394.0f, 0.0f, false, true, 72.9f, 6.5f)
                 curveToRelative(21.1f, 4.2f, 36.0f, 9.5f, 41.0f, 15.4f)
@@ -301,9 +333,11 @@ public val MyIconPack.Pt: ImageVector
                 lineToRelative(7.3f, -12.2f)
                 curveToRelative(17.0f, -8.8f, 57.0f, -13.2f, 93.0f, -13.3f)
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
-                    strokeLineWidth = 0.7f, strokeLineCap = Round, strokeLineJoin =
-                    StrokeJoin.Companion.Round, strokeLineMiter = 4.0f, pathFillType = EvenOdd) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
+                strokeLineWidth = 0.7f, strokeLineCap = Round, strokeLineJoin =
+                StrokeJoin.Companion.Round, strokeLineMiter = 4.0f, pathFillType = EvenOdd
+            ) {
                 moveTo(204.7f, 188.4f)
                 curveToRelative(24.0f, 0.0f, 47.0f, 1.3f, 65.4f, 4.6f)
                 curveToRelative(17.1f, 3.2f, 33.5f, 8.0f, 35.8f, 10.6f)
@@ -334,9 +368,11 @@ public val MyIconPack.Pt: ImageVector
                 curveToRelative(23.3f, 0.4f, 43.4f, 2.0f, 60.4f, 5.2f)
                 lineToRelative(-4.8f, 8.5f)
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
-                    strokeLineWidth = 0.6f, strokeLineCap = Round, strokeLineJoin =
-                    StrokeJoin.Companion.Round, strokeLineMiter = 4.0f, pathFillType = EvenOdd) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
+                strokeLineWidth = 0.6f, strokeLineCap = Round, strokeLineJoin =
+                StrokeJoin.Companion.Round, strokeLineMiter = 4.0f, pathFillType = EvenOdd
+            ) {
                 moveTo(204.3f, 297.5f)
                 curveToRelative(19.4f, 0.3f, 38.5f, 1.0f, 57.0f, 4.5f)
                 lineToRelative(-1.4f, 2.4f)
@@ -357,9 +393,11 @@ public val MyIconPack.Pt: ImageVector
                 curveToRelative(0.3f, -3.6f, 12.3f, -8.4f, 23.2f, -11.6f)
                 arcToRelative(285.0f, 285.0f, 0.0f, false, true, 78.7f, -9.2f)
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
-                    strokeLineWidth = 0.7f, strokeLineCap = Round, strokeLineJoin =
-                    StrokeJoin.Companion.Round, strokeLineMiter = 4.0f, pathFillType = EvenOdd) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
+                strokeLineWidth = 0.7f, strokeLineCap = Round, strokeLineJoin =
+                StrokeJoin.Companion.Round, strokeLineMiter = 4.0f, pathFillType = EvenOdd
+            ) {
                 moveToRelative(304.4f, 309.9f)
                 lineToRelative(-8.4f, 13.0f)
                 lineToRelative(-24.1f, -21.4f)
@@ -375,9 +413,11 @@ public val MyIconPack.Pt: ImageVector
                 lineToRelative(14.8f, 17.1f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
-                    strokeLineWidth = 0.7f, strokeLineCap = Round, strokeLineJoin =
-                    StrokeJoin.Companion.Round, strokeLineMiter = 4.0f, pathFillType = EvenOdd) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
+                strokeLineWidth = 0.7f, strokeLineCap = Round, strokeLineJoin =
+                StrokeJoin.Companion.Round, strokeLineMiter = 4.0f, pathFillType = EvenOdd
+            ) {
                 moveTo(100.8f, 208.5f)
                 curveToRelative(6.5f, -4.3f, 53.7f, 16.7f, 103.0f, 46.5f)
                 curveToRelative(49.3f, 29.9f, 96.4f, 63.6f, 92.2f, 70.0f)
@@ -398,9 +438,11 @@ public val MyIconPack.Pt: ImageVector
                 curveToRelative(0.0f, 1.1f, 0.1f, 1.3f, -0.3f, 1.9f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
-                    strokeLineWidth = 0.8f, strokeLineCap = Butt, strokeLineJoin = Miter,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
+                strokeLineWidth = 0.8f, strokeLineCap = Butt, strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f, pathFillType = NonZero
+            ) {
                 moveTo(137.18f, 268.47f)
                 arcToRelative(66.79f, 66.79f, 45.0f, false, false, 19.91f, 47.45f)
                 arcToRelative(67.13f, 67.13f, 102.4f, false, false, 47.56f, 20.02f)
@@ -410,9 +452,11 @@ public val MyIconPack.Pt: ImageVector
                 lineToRelative(-135.05f, -0.23f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFFff0000)), stroke = SolidColor(Color(0xFF000000)),
-                    strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFFff0000)), stroke = SolidColor(Color(0xFF000000)),
+                strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f, pathFillType = NonZero
+            ) {
                 moveTo(139.91f, 268.59f)
                 arcToRelative(64.17f, 64.17f, 45.0f, false, false, 19.11f, 45.51f)
                 arcToRelative(64.85f, 64.85f, 0.0f, false, false, 45.74f, 19.11f)
@@ -431,17 +475,21 @@ public val MyIconPack.Pt: ImageVector
                 lineToRelative(0.0f, -61.44f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0x00000000)),
-                    strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0x00000000)),
+                strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f, pathFillType = NonZero
+            ) {
                 moveTo(148.11f, 204.07f)
                 curveToRelative(0.11f, -6.26f, 4.55f, -7.74f, 4.55f, -7.74f)
                 curveToRelative(0.11f, 0.0f, 4.89f, 1.59f, 4.89f, 7.85f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
-                    strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
+                strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f, pathFillType = NonZero
+            ) {
                 moveToRelative(144.24f, 196.45f)
                 lineToRelative(-0.8f, 7.17f)
                 lineToRelative(4.78f, 0.0f)
@@ -459,9 +507,11 @@ public val MyIconPack.Pt: ImageVector
                 curveToRelative(0.0f, -0.46f, 0.34f, -0.8f, 0.8f, -0.8f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
-                    strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
+                strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f, pathFillType = NonZero
+            ) {
                 moveTo(150.15f, 203.62f)
                 curveToRelative(0.0f, -3.75f, 2.62f, -4.78f, 2.62f, -4.78f)
                 reflectiveCurveToRelative(2.62f, 1.14f, 2.62f, 4.78f)
@@ -503,27 +553,33 @@ public val MyIconPack.Pt: ImageVector
                 lineToRelative(0.34f, -7.4f)
                 lineToRelative(4.21f, 0.0f)
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
-                    strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
+                strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f, pathFillType = NonZero
+            ) {
                 moveTo(149.02f, 189.51f)
                 lineToRelative(0.0f, 3.87f)
                 lineToRelative(-4.55f, 0.0f)
                 lineToRelative(0.0f, -3.87f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
-                    strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
+                strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f, pathFillType = NonZero
+            ) {
                 moveTo(161.08f, 189.51f)
                 lineToRelative(0.0f, 3.87f)
                 lineToRelative(-4.55f, 0.0f)
                 lineToRelative(0.0f, -3.87f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
-                    strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
+                strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f, pathFillType = NonZero
+            ) {
                 moveTo(143.67f, 186.55f)
                 lineToRelative(1.37f, 0.0f)
                 lineToRelative(0.0f, 1.14f)
@@ -540,9 +596,11 @@ public val MyIconPack.Pt: ImageVector
                 arcToRelative(0.68f, 0.68f, 0.0f, false, true, -0.68f, -0.68f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
-                    strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
+                strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f, pathFillType = NonZero
+            ) {
                 moveTo(155.73f, 186.55f)
                 lineToRelative(1.37f, 0.0f)
                 lineToRelative(0.0f, 1.14f)
@@ -559,44 +617,54 @@ public val MyIconPack.Pt: ImageVector
                 arcToRelative(0.68f, 0.68f, 0.0f, false, true, -0.68f, -0.68f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000001)), stroke = SolidColor(Color(0x00000000)),
-                    strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000001)), stroke = SolidColor(Color(0x00000000)),
+                strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f, pathFillType = NonZero
+            ) {
                 moveTo(152.32f, 188.37f)
                 curveToRelative(0.0f, -0.68f, 1.02f, -0.68f, 1.02f, 0.0f)
                 lineToRelative(0.0f, 1.82f)
                 lineToRelative(-1.02f, 0.0f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000001)), stroke = SolidColor(Color(0x00000000)),
-                    strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000001)), stroke = SolidColor(Color(0x00000000)),
+                strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f, pathFillType = NonZero
+            ) {
                 moveTo(146.29f, 190.87f)
                 curveToRelative(0.0f, -0.68f, 0.91f, -0.68f, 0.91f, 0.0f)
                 lineToRelative(0.0f, 1.37f)
                 lineToRelative(-0.91f, 0.0f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
-                    strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
+                strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f, pathFillType = NonZero
+            ) {
                 moveTo(158.35f, 190.87f)
                 curveToRelative(0.0f, -0.68f, 0.91f, -0.68f, 0.91f, 0.0f)
                 lineToRelative(0.0f, 1.37f)
                 lineToRelative(-0.91f, 0.0f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0x00000000)),
-                    strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0x00000000)),
+                strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f, pathFillType = NonZero
+            ) {
                 moveTo(148.11f, 256.75f)
                 curveToRelative(0.11f, -6.26f, 4.55f, -7.74f, 4.55f, -7.74f)
                 curveToRelative(0.11f, 0.0f, 4.89f, 1.59f, 4.89f, 7.85f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
-                    strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
+                strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f, pathFillType = NonZero
+            ) {
                 moveToRelative(144.24f, 249.13f)
                 lineToRelative(-0.8f, 7.17f)
                 lineToRelative(4.78f, 0.0f)
@@ -614,9 +682,11 @@ public val MyIconPack.Pt: ImageVector
                 curveToRelative(0.0f, -0.46f, 0.34f, -0.8f, 0.8f, -0.8f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
-                    strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
+                strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f, pathFillType = NonZero
+            ) {
                 moveTo(150.15f, 256.3f)
                 curveToRelative(0.0f, -3.75f, 2.62f, -4.78f, 2.62f, -4.78f)
                 reflectiveCurveToRelative(2.62f, 1.14f, 2.62f, 4.78f)
@@ -658,18 +728,22 @@ public val MyIconPack.Pt: ImageVector
                 lineToRelative(0.34f, -7.4f)
                 lineToRelative(4.21f, 0.0f)
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
-                    strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
+                strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f, pathFillType = NonZero
+            ) {
                 moveTo(149.02f, 242.19f)
                 lineToRelative(0.0f, 3.87f)
                 lineToRelative(-4.55f, 0.0f)
                 lineToRelative(0.0f, -3.87f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
-                    strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
+                strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f, pathFillType = NonZero
+            ) {
                 moveTo(143.67f, 239.23f)
                 lineToRelative(1.37f, 0.0f)
                 lineToRelative(0.0f, 1.14f)
@@ -686,9 +760,11 @@ public val MyIconPack.Pt: ImageVector
                 arcToRelative(0.68f, 0.68f, 0.0f, false, true, -0.68f, -0.68f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
-                    strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
+                strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f, pathFillType = NonZero
+            ) {
                 moveTo(155.73f, 239.23f)
                 lineToRelative(1.37f, 0.0f)
                 lineToRelative(0.0f, 1.14f)
@@ -705,44 +781,54 @@ public val MyIconPack.Pt: ImageVector
                 arcToRelative(0.68f, 0.68f, 0.0f, false, true, -0.68f, -0.68f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000001)), stroke = SolidColor(Color(0x00000000)),
-                    strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000001)), stroke = SolidColor(Color(0x00000000)),
+                strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f, pathFillType = NonZero
+            ) {
                 moveTo(152.32f, 241.05f)
                 curveToRelative(0.0f, -0.68f, 1.02f, -0.68f, 1.02f, 0.0f)
                 lineToRelative(0.0f, 1.82f)
                 lineToRelative(-1.02f, 0.0f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000001)), stroke = SolidColor(Color(0x00000000)),
-                    strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000001)), stroke = SolidColor(Color(0x00000000)),
+                strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f, pathFillType = NonZero
+            ) {
                 moveTo(146.29f, 243.55f)
                 curveToRelative(0.0f, -0.68f, 0.91f, -0.68f, 0.91f, 0.0f)
                 lineToRelative(0.0f, 1.37f)
                 lineToRelative(-0.91f, 0.0f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000001)), stroke = SolidColor(Color(0x00000000)),
-                    strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000001)), stroke = SolidColor(Color(0x00000000)),
+                strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f, pathFillType = NonZero
+            ) {
                 moveTo(158.35f, 243.55f)
                 curveToRelative(0.0f, -0.68f, 0.91f, -0.68f, 0.91f, 0.0f)
                 lineToRelative(0.0f, 1.37f)
                 lineToRelative(-0.91f, 0.0f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0x00000000)),
-                    strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0x00000000)),
+                strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f, pathFillType = NonZero
+            ) {
                 moveTo(168.64f, 311.66f)
                 curveToRelative(-4.36f, -4.49f, -2.28f, -8.68f, -2.28f, -8.68f)
                 curveToRelative(0.08f, -0.08f, 4.58f, -2.35f, 9.02f, 2.06f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
-                    strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
+                strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f, pathFillType = NonZero
+            ) {
                 moveToRelative(160.5f, 309.03f)
                 lineToRelative(4.53f, 5.62f)
                 lineToRelative(3.37f, -3.39f)
@@ -760,9 +846,11 @@ public val MyIconPack.Pt: ImageVector
                 curveToRelative(-0.32f, -0.32f, -0.32f, -0.8f, -0.0f, -1.13f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
-                    strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
+                strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f, pathFillType = NonZero
+            ) {
                 moveTo(169.76f, 309.88f)
                 curveToRelative(-2.66f, -2.65f, -1.55f, -5.22f, -1.55f, -5.22f)
                 reflectiveCurveToRelative(2.65f, -1.06f, 5.23f, 1.51f)
@@ -804,18 +892,22 @@ public val MyIconPack.Pt: ImageVector
                 lineToRelative(-5.01f, -5.45f)
                 lineToRelative(2.97f, -2.99f)
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
-                    strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
+                strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f, pathFillType = NonZero
+            ) {
                 moveTo(158.95f, 300.75f)
                 lineToRelative(2.74f, 2.73f)
                 lineToRelative(-3.21f, 3.23f)
                 lineToRelative(-2.74f, -2.73f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
-                    strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
+                strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f, pathFillType = NonZero
+            ) {
                 moveTo(153.08f, 302.46f)
                 lineToRelative(0.96f, -0.97f)
                 lineToRelative(0.81f, 0.8f)
@@ -832,9 +924,11 @@ public val MyIconPack.Pt: ImageVector
                 arcToRelative(0.68f, 0.68f, 89.8f, false, true, -0.97f, 0.0f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
-                    strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
+                strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f, pathFillType = NonZero
+            ) {
                 moveTo(161.58f, 293.9f)
                 lineToRelative(0.96f, -0.97f)
                 lineToRelative(0.81f, 0.8f)
@@ -851,44 +945,54 @@ public val MyIconPack.Pt: ImageVector
                 arcToRelative(0.68f, 0.68f, 89.8f, false, true, -0.97f, 0.0f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000001)), stroke = SolidColor(Color(0x00000000)),
-                    strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000001)), stroke = SolidColor(Color(0x00000000)),
+                strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f, pathFillType = NonZero
+            ) {
                 moveTo(160.46f, 297.6f)
                 curveToRelative(-0.48f, -0.48f, 0.24f, -1.21f, 0.72f, -0.73f)
                 lineToRelative(1.29f, 1.28f)
                 lineToRelative(-0.72f, 0.73f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000001)), stroke = SolidColor(Color(0x00000000)),
-                    strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000001)), stroke = SolidColor(Color(0x00000000)),
+                strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f, pathFillType = NonZero
+            ) {
                 moveTo(157.99f, 303.65f)
                 curveToRelative(-0.48f, -0.48f, 0.16f, -1.13f, 0.64f, -0.65f)
                 lineToRelative(0.97f, 0.96f)
                 lineToRelative(-0.64f, 0.65f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000001)), stroke = SolidColor(Color(0x00000000)),
-                    strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000001)), stroke = SolidColor(Color(0x00000000)),
+                strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f, pathFillType = NonZero
+            ) {
                 moveTo(166.49f, 295.09f)
                 curveToRelative(-0.48f, -0.48f, 0.16f, -1.13f, 0.64f, -0.65f)
                 lineToRelative(0.97f, 0.96f)
                 lineToRelative(-0.64f, 0.65f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0x00000000)),
-                    strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0x00000000)),
+                strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f, pathFillType = NonZero
+            ) {
                 moveTo(200.1f, 204.07f)
                 curveToRelative(0.11f, -6.26f, 4.55f, -7.74f, 4.55f, -7.74f)
                 curveToRelative(0.11f, 0.0f, 4.89f, 1.59f, 4.89f, 7.85f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
-                    strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
+                strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f, pathFillType = NonZero
+            ) {
                 moveToRelative(196.23f, 196.45f)
                 lineToRelative(-0.8f, 7.17f)
                 lineToRelative(4.78f, 0.0f)
@@ -906,9 +1010,11 @@ public val MyIconPack.Pt: ImageVector
                 curveToRelative(0.0f, -0.46f, 0.34f, -0.8f, 0.8f, -0.8f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
-                    strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
+                strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f, pathFillType = NonZero
+            ) {
                 moveTo(202.15f, 203.62f)
                 curveToRelative(0.0f, -3.75f, 2.62f, -4.78f, 2.62f, -4.78f)
                 reflectiveCurveToRelative(2.62f, 1.14f, 2.62f, 4.78f)
@@ -950,27 +1056,33 @@ public val MyIconPack.Pt: ImageVector
                 lineToRelative(0.34f, -7.4f)
                 lineToRelative(4.21f, 0.0f)
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
-                    strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
+                strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f, pathFillType = NonZero
+            ) {
                 moveTo(201.01f, 189.51f)
                 lineToRelative(0.0f, 3.87f)
                 lineToRelative(-4.55f, 0.0f)
                 lineToRelative(0.0f, -3.87f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
-                    strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
+                strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f, pathFillType = NonZero
+            ) {
                 moveTo(213.07f, 189.51f)
                 lineToRelative(0.0f, 3.87f)
                 lineToRelative(-4.55f, 0.0f)
                 lineToRelative(0.0f, -3.87f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
-                    strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
+                strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f, pathFillType = NonZero
+            ) {
                 moveTo(195.66f, 186.55f)
                 lineToRelative(1.37f, 0.0f)
                 lineToRelative(0.0f, 1.14f)
@@ -987,9 +1099,11 @@ public val MyIconPack.Pt: ImageVector
                 arcToRelative(0.68f, 0.68f, 45.0f, false, true, -0.68f, -0.68f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
-                    strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
+                strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f, pathFillType = NonZero
+            ) {
                 moveTo(207.73f, 186.55f)
                 lineToRelative(1.37f, 0.0f)
                 lineToRelative(0.0f, 1.14f)
@@ -1006,44 +1120,54 @@ public val MyIconPack.Pt: ImageVector
                 arcToRelative(0.68f, 0.68f, 45.0f, false, true, -0.68f, -0.68f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000001)), stroke = SolidColor(Color(0x00000000)),
-                    strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000001)), stroke = SolidColor(Color(0x00000000)),
+                strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f, pathFillType = NonZero
+            ) {
                 moveTo(204.31f, 188.37f)
                 curveToRelative(0.0f, -0.68f, 1.02f, -0.68f, 1.02f, 0.0f)
                 lineToRelative(0.0f, 1.82f)
                 lineToRelative(-1.02f, 0.0f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000001)), stroke = SolidColor(Color(0x00000000)),
-                    strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000001)), stroke = SolidColor(Color(0x00000000)),
+                strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f, pathFillType = NonZero
+            ) {
                 moveTo(198.28f, 190.87f)
                 curveToRelative(0.0f, -0.68f, 0.91f, -0.68f, 0.91f, 0.0f)
                 lineToRelative(0.0f, 1.37f)
                 lineToRelative(-0.91f, 0.0f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000001)), stroke = SolidColor(Color(0x00000000)),
-                    strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000001)), stroke = SolidColor(Color(0x00000000)),
+                strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f, pathFillType = NonZero
+            ) {
                 moveTo(210.34f, 190.87f)
                 curveToRelative(0.0f, -0.68f, 0.91f, -0.68f, 0.91f, 0.0f)
                 lineToRelative(0.0f, 1.37f)
                 lineToRelative(-0.91f, 0.0f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0x00000000)),
-                    strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0x00000000)),
+                strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f, pathFillType = NonZero
+            ) {
                 moveTo(261.2f, 204.07f)
                 curveToRelative(-0.11f, -6.26f, -4.55f, -7.74f, -4.55f, -7.74f)
                 curveToRelative(-0.11f, 0.0f, -4.89f, 1.59f, -4.89f, 7.85f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
-                    strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
+                strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f, pathFillType = NonZero
+            ) {
                 moveToRelative(265.07f, 196.45f)
                 lineToRelative(0.8f, 7.17f)
                 lineToRelative(-4.78f, 0.0f)
@@ -1061,9 +1185,11 @@ public val MyIconPack.Pt: ImageVector
                 curveToRelative(-0.0f, -0.46f, -0.34f, -0.8f, -0.8f, -0.8f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
-                    strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
+                strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f, pathFillType = NonZero
+            ) {
                 moveTo(259.15f, 203.62f)
                 curveToRelative(-0.0f, -3.75f, -2.62f, -4.78f, -2.62f, -4.78f)
                 reflectiveCurveToRelative(-2.62f, 1.14f, -2.62f, 4.78f)
@@ -1105,18 +1231,22 @@ public val MyIconPack.Pt: ImageVector
                 lineToRelative(-0.34f, -7.4f)
                 lineToRelative(-4.21f, 0.0f)
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
-                    strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
+                strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f, pathFillType = NonZero
+            ) {
                 moveTo(260.29f, 189.51f)
                 lineToRelative(-0.0f, 3.87f)
                 lineToRelative(4.55f, 0.0f)
                 lineToRelative(-0.0f, -3.87f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
-                    strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
+                strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f, pathFillType = NonZero
+            ) {
                 moveTo(265.64f, 186.55f)
                 lineToRelative(-1.37f, 0.0f)
                 lineToRelative(-0.0f, 1.14f)
@@ -1133,9 +1263,11 @@ public val MyIconPack.Pt: ImageVector
                 arcToRelative(0.68f, 0.68f, 45.0f, false, false, 0.68f, -0.68f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
-                    strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
+                strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f, pathFillType = NonZero
+            ) {
                 moveTo(253.58f, 186.55f)
                 lineToRelative(-1.37f, 0.0f)
                 lineToRelative(-0.0f, 1.14f)
@@ -1152,44 +1284,54 @@ public val MyIconPack.Pt: ImageVector
                 arcToRelative(0.68f, 0.68f, 0.0f, false, false, 0.68f, -0.68f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000001)), stroke = SolidColor(Color(0x00000000)),
-                    strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000001)), stroke = SolidColor(Color(0x00000000)),
+                strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f, pathFillType = NonZero
+            ) {
                 moveTo(256.99f, 188.37f)
                 curveToRelative(-0.0f, -0.68f, -1.02f, -0.68f, -1.02f, 0.0f)
                 lineToRelative(-0.0f, 1.82f)
                 lineToRelative(1.02f, 0.0f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000001)), stroke = SolidColor(Color(0x00000000)),
-                    strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000001)), stroke = SolidColor(Color(0x00000000)),
+                strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f, pathFillType = NonZero
+            ) {
                 moveTo(263.02f, 190.87f)
                 curveToRelative(-0.0f, -0.68f, -0.91f, -0.68f, -0.91f, 0.0f)
                 lineToRelative(-0.0f, 1.37f)
                 lineToRelative(0.91f, 0.0f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000001)), stroke = SolidColor(Color(0x00000000)),
-                    strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000001)), stroke = SolidColor(Color(0x00000000)),
+                strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f, pathFillType = NonZero
+            ) {
                 moveTo(250.96f, 190.87f)
                 curveToRelative(-0.0f, -0.68f, -0.91f, -0.68f, -0.91f, 0.0f)
                 lineToRelative(-0.0f, 1.37f)
                 lineToRelative(0.91f, 0.0f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0x00000000)),
-                    strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0x00000000)),
+                strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f, pathFillType = NonZero
+            ) {
                 moveTo(261.2f, 256.75f)
                 curveToRelative(-0.11f, -6.26f, -4.55f, -7.74f, -4.55f, -7.74f)
                 curveToRelative(-0.11f, 0.0f, -4.89f, 1.59f, -4.89f, 7.85f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
-                    strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
+                strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f, pathFillType = NonZero
+            ) {
                 moveToRelative(265.07f, 249.13f)
                 lineToRelative(0.8f, 7.17f)
                 lineToRelative(-4.78f, 0.0f)
@@ -1207,9 +1349,11 @@ public val MyIconPack.Pt: ImageVector
                 curveToRelative(-0.0f, -0.46f, -0.34f, -0.8f, -0.8f, -0.8f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
-                    strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
+                strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f, pathFillType = NonZero
+            ) {
                 moveTo(259.15f, 256.3f)
                 curveToRelative(-0.0f, -3.75f, -2.62f, -4.78f, -2.62f, -4.78f)
                 reflectiveCurveToRelative(-2.62f, 1.14f, -2.62f, 4.78f)
@@ -1251,18 +1395,22 @@ public val MyIconPack.Pt: ImageVector
                 lineToRelative(-0.34f, -7.4f)
                 lineToRelative(-4.21f, 0.0f)
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
-                    strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
+                strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f, pathFillType = NonZero
+            ) {
                 moveTo(260.29f, 242.19f)
                 lineToRelative(-0.0f, 3.87f)
                 lineToRelative(4.55f, 0.0f)
                 lineToRelative(-0.0f, -3.87f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
-                    strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
+                strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f, pathFillType = NonZero
+            ) {
                 moveTo(265.64f, 239.23f)
                 lineToRelative(-1.37f, 0.0f)
                 lineToRelative(-0.0f, 1.14f)
@@ -1279,9 +1427,11 @@ public val MyIconPack.Pt: ImageVector
                 arcToRelative(0.68f, 0.68f, 45.0f, false, false, 0.68f, -0.68f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
-                    strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = SolidColor(Color(0xFF000000)),
+                strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f, pathFillType = NonZero
+            ) {
                 moveTo(253.58f, 239.23f)
                 lineToRelative(-1.37f, 0.0f)
                 lineToRelative(-0.0f, 1.14f)
@@ -1298,36 +1448,44 @@ public val MyIconPack.Pt: ImageVector
                 arcToRelative(0.68f, 0.68f, 0.0f, false, false, 0.68f, -0.68f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000001)), stroke = SolidColor(Color(0x00000000)),
-                    strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000001)), stroke = SolidColor(Color(0x00000000)),
+                strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f, pathFillType = NonZero
+            ) {
                 moveTo(256.99f, 241.05f)
                 curveToRelative(-0.0f, -0.68f, -1.02f, -0.68f, -1.02f, 0.0f)
                 lineToRelative(-0.0f, 1.82f)
                 lineToRelative(1.02f, 0.0f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000001)), stroke = SolidColor(Color(0x00000000)),
-                    strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000001)), stroke = SolidColor(Color(0x00000000)),
+                strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f, pathFillType = NonZero
+            ) {
                 moveTo(263.02f, 243.55f)
                 curveToRelative(-0.0f, -0.68f, -0.91f, -0.68f, -0.91f, 0.0f)
                 lineToRelative(-0.0f, 1.37f)
                 lineToRelative(0.91f, 0.0f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000001)), stroke = SolidColor(Color(0x00000000)),
-                    strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
-                    strokeLineMiter = 4.0f, pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000001)), stroke = SolidColor(Color(0x00000000)),
+                strokeLineWidth = 0.57f, strokeLineCap = Butt, strokeLineJoin = Miter,
+                strokeLineMiter = 4.0f, pathFillType = NonZero
+            ) {
                 moveTo(250.96f, 243.55f)
                 curveToRelative(-0.0f, -0.68f, -0.91f, -0.68f, -0.91f, 0.0f)
                 lineToRelative(-0.0f, 1.37f)
                 lineToRelative(0.91f, 0.0f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
-                    strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
-                    pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
+                strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
+                pathFillType = NonZero
+            ) {
                 moveTo(196.35f, 258.69f)
                 arcToRelative(9.44f, 9.44f, 0.0f, false, false, 2.5f, 6.49f)
                 arcToRelative(8.19f, 8.19f, 0.0f, false, false, 6.03f, 2.73f)
@@ -1337,49 +1495,61 @@ public val MyIconPack.Pt: ImageVector
                 lineToRelative(-17.07f, 0.0f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
-                    strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
-                    pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
+                strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
+                pathFillType = NonZero
+            ) {
                 moveTo(200.33f, 251.06f)
                 moveToRelative(-1.71f, 0.0f)
                 arcToRelative(1.71f, 1.71f, 0.0f, true, true, 3.41f, 0.0f)
                 arcToRelative(1.71f, 1.71f, 0.0f, true, true, -3.41f, 0.0f)
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
-                    strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
-                    pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
+                strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
+                pathFillType = NonZero
+            ) {
                 moveTo(209.77f, 251.06f)
                 moveToRelative(-1.71f, 0.0f)
                 arcToRelative(1.71f, 1.71f, 0.0f, true, true, 3.41f, 0.0f)
                 arcToRelative(1.71f, 1.71f, 0.0f, true, true, -3.41f, 0.0f)
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
-                    strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
-                    pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
+                strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
+                pathFillType = NonZero
+            ) {
                 moveTo(204.99f, 255.61f)
                 moveToRelative(-1.71f, 0.0f)
                 arcToRelative(1.71f, 1.71f, 0.0f, true, true, 3.41f, 0.0f)
                 arcToRelative(1.71f, 1.71f, 0.0f, true, true, -3.41f, 0.0f)
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
-                    strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
-                    pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
+                strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
+                pathFillType = NonZero
+            ) {
                 moveTo(200.33f, 260.39f)
                 moveToRelative(-1.71f, 0.0f)
                 arcToRelative(1.71f, 1.71f, 0.0f, true, true, 3.41f, 0.0f)
                 arcToRelative(1.71f, 1.71f, 0.0f, true, true, -3.41f, 0.0f)
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
-                    strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
-                    pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
+                strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
+                pathFillType = NonZero
+            ) {
                 moveTo(209.77f, 260.39f)
                 moveToRelative(-1.71f, 0.0f)
                 arcToRelative(1.71f, 1.71f, 0.0f, true, true, 3.41f, 0.0f)
                 arcToRelative(1.71f, 1.71f, 0.0f, true, true, -3.41f, 0.0f)
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
-                    strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
-                    pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
+                strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
+                pathFillType = NonZero
+            ) {
                 moveTo(196.35f, 229.1f)
                 arcToRelative(9.44f, 9.44f, 0.0f, false, false, 2.5f, 6.49f)
                 arcToRelative(8.19f, 8.19f, 0.0f, false, false, 6.03f, 2.73f)
@@ -1389,49 +1559,61 @@ public val MyIconPack.Pt: ImageVector
                 lineToRelative(-17.07f, 0.0f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
-                    strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
-                    pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
+                strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
+                pathFillType = NonZero
+            ) {
                 moveTo(200.33f, 221.48f)
                 moveToRelative(-1.71f, 0.0f)
                 arcToRelative(1.71f, 1.71f, 0.0f, true, true, 3.41f, 0.0f)
                 arcToRelative(1.71f, 1.71f, 0.0f, true, true, -3.41f, 0.0f)
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
-                    strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
-                    pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
+                strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
+                pathFillType = NonZero
+            ) {
                 moveTo(209.77f, 221.48f)
                 moveToRelative(-1.71f, 0.0f)
                 arcToRelative(1.71f, 1.71f, 0.0f, true, true, 3.41f, 0.0f)
                 arcToRelative(1.71f, 1.71f, 0.0f, true, true, -3.41f, 0.0f)
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
-                    strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
-                    pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
+                strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
+                pathFillType = NonZero
+            ) {
                 moveTo(204.99f, 226.03f)
                 moveToRelative(-1.71f, 0.0f)
                 arcToRelative(1.71f, 1.71f, 0.0f, true, true, 3.41f, 0.0f)
                 arcToRelative(1.71f, 1.71f, 0.0f, true, true, -3.41f, 0.0f)
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
-                    strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
-                    pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
+                strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
+                pathFillType = NonZero
+            ) {
                 moveTo(200.33f, 230.81f)
                 moveToRelative(-1.71f, 0.0f)
                 arcToRelative(1.71f, 1.71f, 0.0f, true, true, 3.41f, 0.0f)
                 arcToRelative(1.71f, 1.71f, 0.0f, true, true, -3.41f, 0.0f)
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
-                    strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
-                    pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
+                strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
+                pathFillType = NonZero
+            ) {
                 moveTo(209.77f, 230.81f)
                 moveToRelative(-1.71f, 0.0f)
                 arcToRelative(1.71f, 1.71f, 0.0f, true, true, 3.41f, 0.0f)
                 arcToRelative(1.71f, 1.71f, 0.0f, true, true, -3.41f, 0.0f)
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
-                    strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
-                    pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
+                strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
+                pathFillType = NonZero
+            ) {
                 moveTo(172.68f, 258.69f)
                 arcToRelative(9.44f, 9.44f, 135.0f, false, false, 2.5f, 6.49f)
                 arcToRelative(8.19f, 8.19f, 0.0f, false, false, 6.03f, 2.73f)
@@ -1441,49 +1623,61 @@ public val MyIconPack.Pt: ImageVector
                 lineToRelative(-17.07f, 0.0f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
-                    strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
-                    pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
+                strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
+                pathFillType = NonZero
+            ) {
                 moveTo(176.66f, 251.06f)
                 moveToRelative(-1.71f, 0.0f)
                 arcToRelative(1.71f, 1.71f, 0.0f, true, true, 3.41f, 0.0f)
                 arcToRelative(1.71f, 1.71f, 0.0f, true, true, -3.41f, 0.0f)
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
-                    strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
-                    pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
+                strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
+                pathFillType = NonZero
+            ) {
                 moveTo(186.11f, 251.06f)
                 moveToRelative(-1.71f, 0.0f)
                 arcToRelative(1.71f, 1.71f, 0.0f, true, true, 3.41f, 0.0f)
                 arcToRelative(1.71f, 1.71f, 0.0f, true, true, -3.41f, 0.0f)
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
-                    strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
-                    pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
+                strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
+                pathFillType = NonZero
+            ) {
                 moveTo(181.33f, 255.61f)
                 moveToRelative(-1.71f, 0.0f)
                 arcToRelative(1.71f, 1.71f, 0.0f, true, true, 3.41f, 0.0f)
                 arcToRelative(1.71f, 1.71f, 0.0f, true, true, -3.41f, 0.0f)
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
-                    strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
-                    pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
+                strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
+                pathFillType = NonZero
+            ) {
                 moveTo(176.66f, 260.39f)
                 moveToRelative(-1.71f, 0.0f)
                 arcToRelative(1.71f, 1.71f, 0.0f, true, true, 3.41f, 0.0f)
                 arcToRelative(1.71f, 1.71f, 0.0f, true, true, -3.41f, 0.0f)
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
-                    strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
-                    pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
+                strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
+                pathFillType = NonZero
+            ) {
                 moveTo(186.11f, 260.39f)
                 moveToRelative(-1.71f, 0.0f)
                 arcToRelative(1.71f, 1.71f, 0.0f, true, true, 3.41f, 0.0f)
                 arcToRelative(1.71f, 1.71f, 0.0f, true, true, -3.41f, 0.0f)
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
-                    strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
-                    pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
+                strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
+                pathFillType = NonZero
+            ) {
                 moveTo(220.01f, 258.69f)
                 arcToRelative(9.44f, 9.44f, 0.0f, false, false, 2.5f, 6.49f)
                 arcToRelative(8.19f, 8.19f, 0.0f, false, false, 6.03f, 2.73f)
@@ -1493,49 +1687,61 @@ public val MyIconPack.Pt: ImageVector
                 lineToRelative(-17.07f, 0.0f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
-                    strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
-                    pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
+                strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
+                pathFillType = NonZero
+            ) {
                 moveTo(224.0f, 251.06f)
                 moveToRelative(-1.71f, 0.0f)
                 arcToRelative(1.71f, 1.71f, 0.0f, true, true, 3.41f, 0.0f)
                 arcToRelative(1.71f, 1.71f, 0.0f, true, true, -3.41f, 0.0f)
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
-                    strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
-                    pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
+                strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
+                pathFillType = NonZero
+            ) {
                 moveTo(233.44f, 251.06f)
                 moveToRelative(-1.71f, 0.0f)
                 arcToRelative(1.71f, 1.71f, 0.0f, true, true, 3.41f, 0.0f)
                 arcToRelative(1.71f, 1.71f, 0.0f, true, true, -3.41f, 0.0f)
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
-                    strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
-                    pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
+                strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
+                pathFillType = NonZero
+            ) {
                 moveTo(228.66f, 255.61f)
                 moveToRelative(-1.71f, 0.0f)
                 arcToRelative(1.71f, 1.71f, 0.0f, true, true, 3.41f, 0.0f)
                 arcToRelative(1.71f, 1.71f, 0.0f, true, true, -3.41f, 0.0f)
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
-                    strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
-                    pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
+                strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
+                pathFillType = NonZero
+            ) {
                 moveTo(224.0f, 260.39f)
                 moveToRelative(-1.71f, 0.0f)
                 arcToRelative(1.71f, 1.71f, 0.0f, true, true, 3.41f, 0.0f)
                 arcToRelative(1.71f, 1.71f, 0.0f, true, true, -3.41f, 0.0f)
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
-                    strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
-                    pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
+                strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
+                pathFillType = NonZero
+            ) {
                 moveTo(233.44f, 260.39f)
                 moveToRelative(-1.71f, 0.0f)
                 arcToRelative(1.71f, 1.71f, 0.0f, true, true, 3.41f, 0.0f)
                 arcToRelative(1.71f, 1.71f, 0.0f, true, true, -3.41f, 0.0f)
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
-                    strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
-                    pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
+                strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
+                pathFillType = NonZero
+            ) {
                 moveTo(196.35f, 288.04f)
                 arcToRelative(9.44f, 9.44f, 0.0f, false, false, 2.5f, 6.49f)
                 arcToRelative(8.19f, 8.19f, 0.0f, false, false, 6.03f, 2.73f)
@@ -1545,48 +1751,58 @@ public val MyIconPack.Pt: ImageVector
                 lineToRelative(-17.07f, 0.0f)
                 close()
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
-                    strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
-                    pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
+                strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
+                pathFillType = NonZero
+            ) {
                 moveTo(200.33f, 280.42f)
                 moveToRelative(-1.71f, 0.0f)
                 arcToRelative(1.71f, 1.71f, 0.0f, true, true, 3.41f, 0.0f)
                 arcToRelative(1.71f, 1.71f, 0.0f, true, true, -3.41f, 0.0f)
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
-                    strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
-                    pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
+                strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
+                pathFillType = NonZero
+            ) {
                 moveTo(209.77f, 280.42f)
                 moveToRelative(-1.71f, 0.0f)
                 arcToRelative(1.71f, 1.71f, 0.0f, true, true, 3.41f, 0.0f)
                 arcToRelative(1.71f, 1.71f, 0.0f, true, true, -3.41f, 0.0f)
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
-                    strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
-                    pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
+                strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
+                pathFillType = NonZero
+            ) {
                 moveTo(204.99f, 284.97f)
                 moveToRelative(-1.71f, 0.0f)
                 arcToRelative(1.71f, 1.71f, 0.0f, true, true, 3.41f, 0.0f)
                 arcToRelative(1.71f, 1.71f, 0.0f, true, true, -3.41f, 0.0f)
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
-                    strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
-                    pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
+                strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
+                pathFillType = NonZero
+            ) {
                 moveTo(200.33f, 289.75f)
                 moveToRelative(-1.71f, 0.0f)
                 arcToRelative(1.71f, 1.71f, 0.0f, true, true, 3.41f, 0.0f)
                 arcToRelative(1.71f, 1.71f, 0.0f, true, true, -3.41f, 0.0f)
             }
-            path(fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
-                    strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
-                    pathFillType = NonZero) {
+            path(
+                fill = SolidColor(Color(0xFF000000)), stroke = null, strokeLineWidth = 0.0f,
+                strokeLineCap = Butt, strokeLineJoin = Miter, strokeLineMiter = 4.0f,
+                pathFillType = NonZero
+            ) {
                 moveTo(209.77f, 289.75f)
                 moveToRelative(-1.71f, 0.0f)
                 arcToRelative(1.71f, 1.71f, 0.0f, true, true, 3.41f, 0.0f)
                 arcToRelative(1.71f, 1.71f, 0.0f, true, true, -3.41f, 0.0f)
             }
         }
-        .build()
+            .build()
         return _pt!!
     }
 

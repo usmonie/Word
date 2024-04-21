@@ -1,5 +1,6 @@
 package com.usmonie.word.features.dashboard.ui.games.hangman
 
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import com.usmonie.word.features.dashboard.ui.models.WordCombinedUi
 import wtf.speech.core.ui.ScreenAction
@@ -8,12 +9,12 @@ import wtf.speech.core.ui.ScreenEvent
 import wtf.speech.core.ui.ScreenState
 
 
-@Stable
+@Immutable
 sealed class HangmanState : ScreenState {
     abstract val word: WordCombinedUi
     abstract val guessedLetters: GuessedLetters
     abstract val lives: Int
-    open val hintsCount: Int = 2
+    open val hintsCount: Int = 0
     val maxLives = MAX_LIVE_COUNT
 
     class Loading : HangmanState() {
@@ -36,7 +37,8 @@ sealed class HangmanState : ScreenState {
         data class Input(
             override val word: WordCombinedUi,
             override val guessedLetters: GuessedLetters = GuessedLetters(setOf()),
-            override val lives: Int = MAX_LIVE_COUNT
+            override val lives: Int = MAX_LIVE_COUNT,
+            override val hintsCount: Int
         ) : Playing()
 
         data class Information(
@@ -58,6 +60,7 @@ sealed class HangmanState : ScreenState {
         override val word: WordCombinedUi,
         override val guessedLetters: GuessedLetters,
         override val lives: Int,
+        override val hintsCount: Int
     ) : HangmanState()
 
     companion object {
@@ -71,18 +74,21 @@ sealed class HangmanAction : ScreenAction {
     data class GuessLetter(val letter: Char) : HangmanAction()
     data class OpenWord(val word: WordCombinedUi) : HangmanAction()
     data object UpdateWord : HangmanAction()
-    data object ShowHint : HangmanAction()
+    data object ShowDescription : HangmanAction()
     data object ReviveClicked : HangmanAction()
     data object ReviveGranted : HangmanAction()
+    data object UseHint: HangmanAction()
 }
 
 sealed class HangmanEvent : ScreenEvent {
-    data class StartGame(val word: WordCombinedUi) : HangmanEvent()
-    data object UpdateHint : HangmanEvent()
+    data class StartGame(val word: WordCombinedUi, val hintsCount: Int) : HangmanEvent()
+    data object UpdateDescription : HangmanEvent()
     data object Loading : HangmanEvent()
     data class OpenWord(val word: WordCombinedUi) : HangmanEvent()
-    data class UpdateWord(val word: WordCombinedUi) : HangmanEvent()
-    data class RightLetterGuessed(val letter: Char) : HangmanEvent()
+    data class UpdateWord(val word: WordCombinedUi, val hintsCount: Int) : HangmanEvent()
+    data class UpdateHints(val hintsCount: Int): HangmanEvent()
+    data object CannotUseHints: HangmanEvent()
+    data class RightLetterGuessed(val letter: Char, val hintsCount: Int) : HangmanEvent()
     data class WrongLetterGuessed(val letter: Char) : HangmanEvent()
     data class Lost(val letter: Char) : HangmanEvent()
     data class Won(val letter: Char) : HangmanEvent()

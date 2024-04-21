@@ -2,6 +2,7 @@ package com.usmonie.word.features.dashboard.ui.ui
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -145,14 +146,22 @@ fun SearchWordCard(
                 Spacer(Modifier.height(8.dp))
 
                 AnimatedContent(selectedPos) {
-                    it.senses.take(2).fastForEach { sense ->
-                        BaseCard(
-                            Modifier.fillMaxWidth().padding(horizontal = 24.dp),
-                            containerColor = MaterialTheme.colorScheme.surfaceContainer
-                        ) {
-                            Sense(sense.gloss, Modifier.padding(24.dp))
+                    Column(
+                        Modifier.fillMaxWidth(),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        it.senses.take(2).fastForEach { sense ->
+                            BaseCard(
+                                Modifier.fillMaxWidth().padding(horizontal = 24.dp),
+                                containerColor = MaterialTheme.colorScheme.surfaceContainer
+                            ) {
+                                Sense(
+                                    sense.gloss,
+                                    Modifier.fillMaxWidth()
+                                        .padding(24.dp)
+                                )
+                            }
                         }
-                        Spacer(Modifier.height(8.dp))
                     }
                 }
             }

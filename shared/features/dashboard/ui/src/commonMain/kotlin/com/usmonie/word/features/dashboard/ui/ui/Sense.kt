@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -61,13 +62,13 @@ private fun SenseTreeItem(
     containerColor: Color = MaterialTheme.colorScheme.surface,
     modifier: Modifier = Modifier
 ) {
-    var examplesExpanded by remember { mutableStateOf(false) }
     Card(
         shape = BaseCardDefaults.shape,
         colors = CardDefaults.cardColors(containerColor = containerColor),
         modifier = modifier
     ) {
         val sense = getSense()
+
         Spacer(Modifier.height(24.dp))
         Sense(
             sense.gloss,
@@ -76,6 +77,8 @@ private fun SenseTreeItem(
 
         if (sense.examples.isNotEmpty()) {
             Spacer(Modifier.height(16.dp))
+            var examplesExpanded by rememberSaveable(sense) { mutableStateOf(false) }
+
             AnimatedContent(examplesExpanded) { expanded ->
                 Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                     if (expanded || sense.examples.size == 1) {
@@ -152,13 +155,14 @@ fun Sense(
     modifier: Modifier = Modifier,
     expanded: Boolean
 ) {
-    val maxLines by remember(expanded) { mutableStateOf(if (expanded) Int.MAX_VALUE else 6) }
-    Sense(sense, modifier = modifier, maxLines = maxLines)
+    SelectionContainer {
+        val maxLines by remember(expanded) { mutableStateOf(if (expanded) Int.MAX_VALUE else 6) }
+        Sense(sense, modifier = modifier, maxLines = maxLines)
+    }
 }
 
 @Composable
 fun Sense(gloss: String, modifier: Modifier = Modifier, maxLines: Int) {
-    SelectionContainer {
         Text(
             text = gloss,
             textAlign = TextAlign.Justify,
@@ -168,7 +172,7 @@ fun Sense(gloss: String, modifier: Modifier = Modifier, maxLines: Int) {
             maxLines = maxLines,
             overflow = TextOverflow.Ellipsis
         )
-    }
+
 }
 
 @Composable

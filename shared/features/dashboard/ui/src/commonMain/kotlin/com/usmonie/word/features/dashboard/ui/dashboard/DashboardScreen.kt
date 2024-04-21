@@ -8,6 +8,7 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.input.TextFieldValue
@@ -40,7 +41,7 @@ class DashboardScreen private constructor(
         DashboardEffects(dashboardViewModel)
         Scaffold(
             modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-            topBar = { DashboardTopBar(dashboardViewModel) { scrollBehavior } },
+            topBar = { DashboardTopBar(dashboardViewModel, remember { { scrollBehavior } }) },
             content = { insets ->
                 DashboardContent(
                     listState,

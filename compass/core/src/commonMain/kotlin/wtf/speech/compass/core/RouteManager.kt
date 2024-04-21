@@ -1,34 +1,31 @@
 package wtf.speech.compass.core
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.AnimationVector1D
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
 import androidx.compose.runtime.compositionLocalOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.flatMapConcat
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 
-/**
- * Interface defining the core functionalities of the navigation system.
- */
-@Immutable
+
 interface RouteManager {
+    val currentGraph: StateFlow<NavigationGraph>
 
-    /**
-     * The currently active [NavigationGraph].
-     */
-    val activeGraph: State<NavigationGraph>
+    val currentScreen: StateFlow<Screen>
+    val previousScreen: StateFlow<Screen?>
 
-    val currentState: StateFlow<NavigationState>
-    val lastEvent: State<NavigationEvent?>
+    val currentState: NavigationState?
+    val draggingOffset: Animatable<Float, AnimationVector1D>
 
-    /**
-     * The currently displayed screen.
-     */
-    val currentScreen: Screen
-    val previousScreen: Screen?
 
     /**
      * Registers a new [NavigationGraph] with the manager.
@@ -68,7 +65,6 @@ interface RouteManager {
 
     suspend fun gestureBackOffset(offset: Float, screenWidth: Int)
     suspend fun gestureBackEnded(offset: Float, screenWidth: Int)
-    suspend fun gestureBackAnimationEnded()
 
     /**
      * Closes the currently active navigation graph.
@@ -86,39 +82,47 @@ interface RouteManager {
     fun handleDeepLink(deepLink: String): Boolean
 }
 
-/**
- * Implementation of [RouteManager].
- *
- * @param initialGraph The initial navigation graph to start with.
- */
+@OptIn(ExperimentalCoroutinesApi::class)
 class RouteManagerImpl(initialGraph: NavigationGraph) : RouteManager {
+    private val coroutineScope = CoroutineScope(Dispatchers.Main)
     private val graphs =
         mutableMapOf<String, NavigationGraph>().apply { put(initialGraph.id, initialGraph) }
     private val graphStack = mutableListOf<NavigationGraph>().apply { add(initialGraph) }
 
-    override val activeGraph: MutableState<NavigationGraph> =
-        mutableStateOf(graphs.getValue(initialGraph.id))
-    override val currentScreen: Screen
-        get() = activeGraph.value.currentScreen.value.screen
-    override val previousScreen: Screen?
-        get() = activeGraph.value.previousScreen.value?.screen
+    private val currentGraphState: MutableStateFlow<NavigationGraph> =
+        MutableStateFlow(graphs.getValue(initialGraph.id))
 
-    override val lastEvent: MutableState<NavigationEvent?> = mutableStateOf(null)
+    override val currentGraph: StateFlow<NavigationGraph> = currentGraphState
 
+    override val draggingOffset: Animatable<Float, AnimationVector1D> = Animatable(0f)
 
-    override val currentState: MutableStateFlow<NavigationState> =
-        MutableStateFlow(
-            NavigationState(
-                activeGraph,
-                currentScreen,
-                previousScreen,
-                0f,
-                lastEvent
-            )
-        )
+    private val _currentScreen = MutableStateFlow(currentGraph.value.currentScreen.value.screen)
+    private val _previousScreen = MutableStateFlow(
+        currentGraph.value.previousScreen.value?.screen
+            ?: graphStack.getOrNull(graphStack.lastIndex - 1)?.previousScreen?.value?.screen
+    )
 
-    private val previousGraph: NavigationGraph?
-        get() = graphStack.getOrNull(graphStack.lastIndex - 1)
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override val currentScreen: StateFlow<Screen> = _currentScreen
+    override val previousScreen: StateFlow<Screen?> = _previousScreen
+
+    private var _currentState: NavigationState? = null
+    override val currentState: NavigationState?
+        get() = _currentState
+
+    init {
+        coroutineScope.launch {
+            currentGraph
+                .flatMapConcat { it.currentScreen.map { it.screen } }
+                .collect { _currentScreen.value = it }
+        }
+
+        coroutineScope.launch {
+            currentGraph.flatMapConcat { it.previousScreen.map { it?.screen } }.collect {
+                _previousScreen.value = it ?: graphStack.getOrNull(graphStack.lastIndex - 1)?.previousScreen?.value?.screen
+            }
+        }
+    }
 
     override fun registerGraph(graph: NavigationGraph) {
         graphs[graph.id] = graph
@@ -126,7 +130,6 @@ class RouteManagerImpl(initialGraph: NavigationGraph) : RouteManager {
 
     override fun switchToGraph(graphId: String): Boolean {
         val graph = graphs[graphId] ?: return false
-        lastEvent.value = NavigationEvent.Next(graph.currentScreen.value.screen)
 
         with(graphStack) {
             lastOrNull()?.let { if (!it.storeInBackStack) removeLastOrNull() }
@@ -142,54 +145,50 @@ class RouteManagerImpl(initialGraph: NavigationGraph) : RouteManager {
         params: Map<String, String>?,
         extras: Extra?
     ): Boolean {
-        val nextScreen = activeGraph.value.findScreen(screenId, params, extras)
+        val nextScreen = currentGraph.value.findScreen(screenId, params, extras)
         if (nextScreen != null) {
-            lastEvent.value = NavigationEvent.Next(nextScreen)
-            return activeGraph.value.navigateTo(nextScreen, params, extras)
+            _currentState = NavigationState.Next(nextScreen)
+            val navigated = currentGraph.value.navigateTo(nextScreen, params, extras)
+            return navigated
         }
 
         updateActiveGraph()
+
         return false
     }
 
     override fun navigateBack(): Boolean {
-        val previousScreen = activeGraph.value.previousScreen.value?.screen ?: return false
-        lastEvent.value = NavigationEvent.Back(previousScreen)
+        val previousScreen = previousScreen.value
+        if (previousScreen != null) _currentState = NavigationState.Back(previousScreen)
 
-        if (activeGraph.value.navigateBack()) return true
+        if (currentGraph.value.navigateBack()) return true
 
         return closeActiveGraph()
     }
 
     override suspend fun gestureBackOffset(offset: Float, screenWidth: Int) {
-        val previousScreen = activeGraph.value.previousScreen.value?.screen
-            ?: previousGraph?.currentScreen?.value?.screen
-            ?: return
-
-        lastEvent.value = NavigationEvent.BackGesture.Dragging(
-            previousScreen,
-            currentScreen,
-            offset,
-            screenWidth
-        )
-    }
-
-    override suspend fun gestureBackEnded(offset: Float, screenWidth: Int) {
-        val previousScreen = activeGraph.value.previousScreen.value?.screen ?: return
-        lastEvent.value = if (offset < screenWidth * .15) NavigationEvent.BackGesture.Ended.Cancel(
-            previousScreen,
-        ) else {
-            val currentScreen = currentScreen
-            activeGraph.value.navigateBack()
-            NavigationEvent.BackGesture.Ended.Success(
-                previousScreen,
-                currentScreen,
-                screenWidth
-            )
+        if (previousScreen.value != null) {
+            _currentState = null
+            draggingOffset.snapTo(offset)
         }
     }
 
-    override suspend fun gestureBackAnimationEnded() {
+    override suspend fun gestureBackEnded(offset: Float, screenWidth: Int) {
+        _currentState = null
+        val isDragCanceled = offset < screenWidth * .20
+        if (isDragCanceled) {
+            draggingOffset.animateTo(0f)
+        } else {
+            val result = draggingOffset.animateTo(screenWidth.toFloat())
+
+            if (result.endState.value == screenWidth.toFloat()) {
+                if (!currentGraph.value.navigateBack()) {
+                    closeActiveGraph()
+                }
+                draggingOffset.snapTo(0f)
+            }
+        }
+
         updateActiveGraph()
     }
 
@@ -199,7 +198,7 @@ class RouteManagerImpl(initialGraph: NavigationGraph) : RouteManager {
             currentStack.removeLast() // Remove current graph
 
             // Set the previous graph as the active graph
-            activeGraph.value = currentStack.last()
+            currentGraphState.value = currentStack.last()
 
             return true
         }
@@ -226,12 +225,10 @@ class RouteManagerImpl(initialGraph: NavigationGraph) : RouteManager {
      * Updates the currently active navigation graph.
      */
     private fun updateActiveGraph() {
-        activeGraph.value = graphStack.last()
-        val prevScreen = activeGraph.value.previousScreen.value?.screen
-            ?: previousGraph?.currentScreen?.value?.screen
-        lastEvent.value = null
+        currentGraphState.value = graphStack.last()
     }
 }
+
 
 @Composable
 fun rememberRouteManager(initialGraph: NavigationGraph): RouteManager {

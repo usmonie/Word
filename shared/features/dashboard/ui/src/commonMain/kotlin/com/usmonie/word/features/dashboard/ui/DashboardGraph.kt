@@ -54,7 +54,12 @@ fun rememberDashboardGraph(
                     WordDetailsScreen.Builder(wordRepository, analytics, adMob)
                 )
             )
-            register(Route(HangmanGameScreen.ID, HangmanGameScreen.Builder(wordRepository, adMob)))
+            register(
+                Route(
+                    HangmanGameScreen.ID,
+                    HangmanGameScreen.Builder(wordRepository, userRepository, adMob)
+                )
+            )
             register(
                 Route(
                     SettingsScreen.ID,
@@ -106,8 +111,18 @@ fun getDashboardGraph(
                 GamesScreen.Builder(adMob)
             )
         )
-        register(Route(HangmanGameScreen.ID, HangmanGameScreen.Builder(wordRepository, adMob)))
-        register(Route(EnigmaGameScreen.ID, EnigmaGameScreen.Builder(wordRepository, userRepository, adMob)))
+        register(
+            Route(
+                HangmanGameScreen.ID,
+                HangmanGameScreen.Builder(wordRepository, userRepository, adMob)
+            )
+        )
+        register(
+            Route(
+                EnigmaGameScreen.ID,
+                EnigmaGameScreen.Builder(wordRepository, userRepository, adMob)
+            )
+        )
         register(
             Route(
                 SettingsScreen.ID,

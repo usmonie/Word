@@ -76,6 +76,7 @@ fun encryptPhrase(phrase: String, author: String): EnigmaEncryptedPhrase {
             }
             Word(cells)
         }
+
     return EnigmaEncryptedPhrase(
         encryptedPhrase,
         phrase,

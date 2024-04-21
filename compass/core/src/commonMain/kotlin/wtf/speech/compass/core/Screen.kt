@@ -33,7 +33,7 @@ abstract class Screen(
     open val popExitTransition: (AnimatedContentTransitionScope<Screen>.() -> ExitTransition) = {
         slideOutOfContainer(
             AnimatedContentTransitionScope.SlideDirection.Right,
-            targetOffset = { 400 }
+            targetOffset = { 400 },
         )
     }
 

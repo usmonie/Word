@@ -7,19 +7,20 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -50,10 +51,10 @@ import com.usmonie.word.features.dashboard.domain.usecase.AddUserHintsCountUseCa
 import com.usmonie.word.features.dashboard.domain.usecase.GetNextPhraseUseCaseImpl
 import com.usmonie.word.features.dashboard.domain.usecase.GetUserHintsCountUseCaseImpl
 import com.usmonie.word.features.dashboard.domain.usecase.UseUserHintsCountUseCaseImpl
+import com.usmonie.word.features.dashboard.ui.games.EnigmaGameWon
 import com.usmonie.word.features.dashboard.ui.games.GameBoard
 import com.usmonie.word.features.dashboard.ui.games.HintButton
 import com.usmonie.word.features.dashboard.ui.games.LivesAmount
-import com.usmonie.word.features.dashboard.ui.games.QuoteGameWon
 import com.usmonie.word.features.dashboard.ui.games.ReviveLifeDialog
 import com.usmonie.word.features.dashboard.ui.games.hangman.HangmanGameScreen
 import com.usmonie.word.features.dashboard.ui.games.hangman.Keyboard
@@ -63,6 +64,7 @@ import wtf.speech.compass.core.LocalRouteManager
 import wtf.speech.compass.core.Screen
 import wtf.speech.compass.core.ScreenBuilder
 import wtf.speech.core.ui.ShakeConfig
+import wtf.speech.core.ui.ShakeController
 import wtf.speech.core.ui.rememberShakeController
 import wtf.speech.core.ui.shake
 import wtf.word.core.domain.tools.fastForEachIndexed
@@ -77,104 +79,126 @@ class EnigmaGameScreen(
     @Composable
     override fun Content() {
         val state by enigmaViewModel.state.collectAsState()
-        val effect by enigmaViewModel.effect.collectAsState(null)
+
+        EnigmaGameBoard({ state.lives }, { state.maxLives }, { state.hintsCount }) { insets ->
+            val shakeController = rememberShakeController()
+
+            EnigmaGameContent(state, shakeController, insets)
+        }
+    }
+
+    @Composable
+    private fun EnigmaGameContent(
+        state: EnigmaState,
+        shakeController: ShakeController,
+        insets: PaddingValues
+    ) {
         val phrase = state.phrase
+        GameStatusState()
+
+        EnigmaEffectListener(enigmaViewModel, shakeController)
+
+        Column(
+            Modifier
+                .fillMaxSize()
+                .padding(insets)
+                .shake(shakeController)
+        ) {
+            Phrase(
+                phrase,
+                state,
+                Modifier
+                    .weight(1.5f)
+                    .fillMaxWidth()
+            )
+
+            Keyboard(
+                enigmaViewModel::onLetterInput,
+                state.guessedLetters,
+                Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.surface)
+            )
+
+            adMob.Banner(Modifier.fillMaxWidth().height(54.dp))
+        }
+    }
+
+    @Composable
+    private fun GameStatusState() {
         val routerManager = LocalRouteManager.current
-        val hintsCount = state.hintsCount
+        val effect by enigmaViewModel.effect.collectAsState(null)
+        val state by enigmaViewModel.state.collectAsState()
+
+        AnimatedVisibility(
+            state is EnigmaState.Loading || effect is EnigmaEffect.ShowMiddleGameAd
+        ) {
+            adMob.Interstitial()
+        }
+
+        AnimatedVisibility(effect is EnigmaEffect.ShowRewardedAd) {
+            adMob.RewardedInterstitial({}, enigmaViewModel::onReviveGranted)
+        }
+
+        AnimatedVisibility(state is EnigmaState.Lost) {
+            ReviveLifeDialog(
+                routerManager::navigateBack,
+                enigmaViewModel::onAddLifeClick,
+                enigmaViewModel::onNextPhrase,
+                isReviveAvailable = { adMob.adMobState.isRewardReady },
+                nextTitle = "Next phrase"
+            )
+        }
+
+        AnimatedVisibility(state is EnigmaState.Won) {
+            EnigmaGameWon(
+                routerManager::navigateBack,
+                enigmaViewModel::onNextPhrase,
+                nextTitle = "Next phrase",
+                state.phrase.phrase,
+                state.phrase.author
+            )
+        }
+    }
+
+    @Composable
+    fun EnigmaGameBoard(
+        getLives: () -> Int,
+        getMaxLives: () -> Int,
+        getHintsCount: () -> Int,
+        content: @Composable (insets: PaddingValues) -> Unit
+    ) {
+        val routerManager = LocalRouteManager.current
 
         GameBoard(
             routerManager::navigateBack,
             {
                 Spacer(Modifier.width(24.dp))
-
-                LivesAmount(state.lives, state.maxLives, Modifier.weight(1f))
-                HintButton(enigmaViewModel::useHint, hintsCount)
-
-//                Spacer(Modifier.width(24.dp))
-//
-//                IconButton({}) {
-//                    Icon(Icons.Rounded.ShoppingCart, contentDescription = "Buy hint")
-//                }
+                LivesAmount(getLives(), getMaxLives(), Modifier.weight(1f))
+                HintButton(enigmaViewModel::useHint, getHintsCount())
                 Spacer(Modifier.width(24.dp))
-            }
-        ) { insets ->
-
-            AnimatedVisibility(
-                state is EnigmaState.Loading || effect is EnigmaEffect.ShowMiddleGameAd
-            ) {
-                adMob.Interstitial()
-            }
-
-            AnimatedVisibility(effect is EnigmaEffect.ShowRewardedAd) {
-                adMob.RewardedInterstitial({}, enigmaViewModel::onReviveGranted)
-            }
-
-            AnimatedVisibility(state is EnigmaState.Lost) {
-                ReviveLifeDialog(
-                    routerManager::navigateBack,
-                    enigmaViewModel::onAddLifeClick,
-                    enigmaViewModel::onNextPhrase,
-                    isReviveAvailable = { adMob.adMobState.isRewardReady },
-                    nextTitle = "Next phrase"
-                )
-            }
-
-            AnimatedVisibility(state is EnigmaState.Won) {
-                QuoteGameWon(
-                    routerManager::navigateBack,
-                    enigmaViewModel::onNextPhrase,
-                    nextTitle = "Next phrase",
-                    state.phrase.phrase,
-                    state.phrase.author
-                )
-            }
-
-            val shakeController = rememberShakeController()
-            val hapticFeedback = LocalHapticFeedback.current
-
-            LaunchedEffect(effect) {
-                when (effect) {
-                    is EnigmaEffect.InputEffect.Correct ->
-                        hapticFeedback.performHapticFeedback(HapticFeedbackType.TextHandleMove)
-
-                    is EnigmaEffect.InputEffect.Incorrect -> {
-                        hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
-                        shakeController.shake(ShakeConfig(4, translateX = 5f))
-                    }
-
-                    else -> Unit
-                }
-            }
-
-            Column(Modifier.fillMaxSize().padding(insets).shake(shakeController)) {
-                Phrase(phrase, state)
-
-                Keyboard(
-                    enigmaViewModel::onLetterInput,
-                    state.guessedLetters,
-                    Modifier.fillMaxWidth().weight(1f)
-                )
-
-                adMob.Banner(Modifier.fillMaxWidth())
-            }
-        }
+            },
+            content = content
+        )
     }
 
     @Composable
-    private fun ColumnScope.Phrase(
+    private fun Phrase(
         phrase: EnigmaEncryptedPhrase,
-        state: EnigmaState
+        state: EnigmaState,
+        modifier: Modifier
     ) {
         LazyVerticalGrid(
-            modifier = Modifier.fillMaxSize().weight(2f),
+            modifier = modifier,
             contentPadding = PaddingValues(24.dp),
-            horizontalArrangement = Arrangement.Center,
+            horizontalArrangement = Arrangement.spacedBy(20.dp),
             verticalArrangement = Arrangement.spacedBy(24.dp, Alignment.CenterVertically),
             columns = GridCells.Fixed(12),
         ) {
             itemsIndexed(
                 phrase.encryptedPhrase,
-                span = { _, word -> GridItemSpan(word.size) },
+                span = { _, word -> GridItemSpan(word.size + 1) },
                 itemContent = { position, cells -> Word(cells, state, position) }
             )
         }
@@ -203,21 +227,22 @@ class EnigmaGameScreen(
         position: Int
     ) {
         when {
-            cell.isLetter -> GuessedLetter(
-                cell,
-                {
-                    val (word, cellPosition) =
-                        state.currentSelectedCellPosition ?: return@GuessedLetter false
+            cell.isLetter -> {
+                GuessedLetter(
+                    cell,
+                    {
+                        val (word, cellPosition) = state.currentSelectedCellPosition
+                            ?: return@GuessedLetter false
 
-                    word == wordPosition && cellPosition == position
-                },
-                enabled = state is EnigmaState.Playing
-                        && cell.state != CellState.Correct
-                        && cell.state != CellState.Found,
-                onClick = { enigmaViewModel.onCellSelected(position, wordPosition) }
-            )
+                        word == wordPosition && cellPosition == position
+                    },
+                    enabled = state is EnigmaState.Game
+                            && cell.state != CellState.Correct
+                            && cell.state != CellState.Found,
+                    onClick = { enigmaViewModel.onCellSelected(position, wordPosition) }
+                )
+            }
 
-            cell.letter.isWhitespace() -> Space()
             else -> Symbol(cell.letter, Modifier.fillMaxHeight())
         }
     }
@@ -255,14 +280,15 @@ class EnigmaGameScreen(
                 )
             }
         }
+
         val backgroundAnimatedColor by animateColorAsState(
             backgroundColor,
-            animationSpec = tween(400)
+            animationSpec = tween(300)
         )
-        val letterAnimatedColor by animateColorAsState(letterColor, animationSpec = tween(400))
+
         Column(
             modifier = Modifier
-                .width(20.dp)
+                .width(24.dp)
                 .background(backgroundAnimatedColor, RoundedCornerShape(6.dp))
                 .clip(RoundedCornerShape(6.dp))
                 .clickable(
@@ -278,15 +304,16 @@ class EnigmaGameScreen(
             val dividerHorizontalPadding by animateDpAsState(if (pressed) 4.dp else 2.dp)
 
             val letterSize by animateFloatAsState(
-                if (cell.state == CellState.Empty) 0f else 1f,
+                if (cell.state == CellState.Empty) 0.1f else 1f,
                 label = "letter_size_cell_${cell.letter}"
             )
 
             Text(
                 text = letter.toString(),
-                fontSize = MaterialTheme.typography.titleMedium.fontSize * letterSize,
-                style = MaterialTheme.typography.titleMedium,
-                color = letterAnimatedColor,
+                fontSize = MaterialTheme.typography.titleLarge.fontSize * letterSize,
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.padding(top = 4.dp),
+                color = letterColor,
                 textAlign = TextAlign.Center
             )
 
@@ -294,20 +321,19 @@ class EnigmaGameScreen(
                 Modifier.padding(
                     horizontal = dividerHorizontalPadding,
                     vertical = 2.dp
-                )
+                ),
+                color = letterColor
             )
 
             Text(
                 text = if (cell.state != CellState.Found) cell.number.toString() else "",
                 style = MaterialTheme.typography.labelSmall,
+                modifier = Modifier.padding(bottom = 4.dp),
                 textAlign = TextAlign.Center,
-                color = letterAnimatedColor,
+                color = letterColor,
             )
         }
     }
-
-    @Composable
-    private fun Space() = Box(modifier = Modifier.width(20.dp))
 
     @Composable
     private fun Symbol(symbol: Char, modifier: Modifier) {
@@ -341,6 +367,29 @@ class EnigmaGameScreen(
                     AddUserHintsCountUseCaseImpl(userRepository)
                 ),
             )
+        }
+    }
+}
+
+@Composable
+private fun EnigmaEffectListener(
+    enigmaViewModel: EnigmaGameViewModel,
+    shakeController: ShakeController
+) {
+    val effect by enigmaViewModel.effect.collectAsState(null)
+    val hapticFeedback = LocalHapticFeedback.current
+
+    LaunchedEffect(effect) {
+        when (effect) {
+            is EnigmaEffect.InputEffect.Correct ->
+                hapticFeedback.performHapticFeedback(HapticFeedbackType.TextHandleMove)
+
+            is EnigmaEffect.InputEffect.Incorrect -> {
+                hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
+                shakeController.shake(ShakeConfig(4, translateX = 5f))
+            }
+
+            else -> Unit
         }
     }
 }

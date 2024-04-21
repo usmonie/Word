@@ -32,6 +32,5 @@ actual class AdMob(private val showInterstitialAd: (context: Context, onAddDismi
     }
 
     @Composable
-    actual fun Startup(adKey: String, modifier: Modifier) {
-    }
+    actual fun Startup(adKey: String, modifier: Modifier) = Unit
 }

@@ -5,13 +5,16 @@ import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldColors
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -46,6 +49,7 @@ fun TitleBar(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchBar(
     onQueryChanged: (TextFieldValue) -> Unit,
@@ -54,14 +58,31 @@ fun SearchBar(
     query: () -> TextFieldValue,
     hasFocus: () -> Boolean,
     modifier: Modifier = Modifier,
-    fontSize: () -> TextUnit,
+    getScrollBehavior: () -> TopAppBarScrollBehavior,
     enabled: Boolean = true
 ) {
     val focusRequester = remember { FocusRequester() }
 
     var textFieldSize = remember { IntSize.Zero }
     val threshold: Float = remember { textFieldSize.width * 0.5f }
-    val size = fontSize()
+    val searchBarFontSizeMax = MaterialTheme.typography.displayMedium.fontSize
+
+    val fontSize = derivedStateOf {
+        val fraction = getScrollBehavior().state.collapsedFraction
+
+        searchBarFontSizeMax * (1 - fraction).coerceIn(0.7f, 1f)
+    }
+//    Rebugger(
+//        trackMap = mapOf(
+//            "fontSize" to fontSize::class.toString(),
+//            "query" to query::class.toString(),
+//            "placeholder" to placeholder,
+//            "enabled" to enabled,
+//            "onQueryChanged" to onQueryChanged::class.toString(),
+//            "onFocusChanged" to onFocusChange::class.toString(),
+//            "hasFocus" to hasFocus::class.toString(),
+//        )
+//    )
     TextInputField(
         query(),
         onQueryChanged,
@@ -87,13 +108,13 @@ fun SearchBar(
             unfocusedBorderColor = Color.Transparent,
             disabledBorderColor = Color.Transparent,
         ),
-        textStyle = MaterialTheme.typography.displayLarge.copy(fontSize = size),
+        textStyle = MaterialTheme.typography.displayLarge.copy(fontSize = fontSize.value),
         placeholder = {
 //            val placeholderAlphaAnimation by animateFloatAsState(if (hasFocus) .5f else 1f)
             Text(
                 placeholder,
                 style = MaterialTheme.typography.displayLarge,
-                fontSize = size,
+                fontSize = fontSize.value,
                 color = MaterialTheme.colorScheme.onBackground.copy(alpha = if (hasFocus()) .5f else 1f)
             )
         },

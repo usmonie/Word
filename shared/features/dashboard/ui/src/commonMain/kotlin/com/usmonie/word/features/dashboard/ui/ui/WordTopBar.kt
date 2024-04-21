@@ -13,13 +13,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -38,18 +35,11 @@ fun WordTopBar(
 
     LargeTopAppBar(
         title = {
-            val searchBarFontSizeMax = MaterialTheme.typography.displayMedium.fontSize
-            val fontSize by remember(scrollBehavior.state.collapsedFraction) {
-                derivedStateOf {
-                    searchBarFontSizeMax * (1 - scrollBehavior.state.collapsedFraction)
-                        .coerceIn(0.7f, 1f)
-                }
-            }
             SearchTopBar(
                 query,
                 placeholder,
                 enabled,
-                { fontSize },
+                getScrollBehavior,
                 onQueryChanged,
                 onFocusChange,
                 hasFocus,
@@ -75,18 +65,12 @@ fun WordTopBar(
     LargeTopAppBar(
         title = {
             val query = remember { TextFieldValue() }
-            val searchBarFontSizeMax = MaterialTheme.typography.displayMedium.fontSize
-            val fontSize by remember(scrollBehavior.state.collapsedFraction) {
-                derivedStateOf {
-                    searchBarFontSizeMax * (1 - scrollBehavior.state.collapsedFraction)
-                        .coerceIn(0.7f, 1f)
-                }
-            }
+
             SearchTopBar(
-                { query },
+                remember { { query } },
                 placeholder,
                 false,
-                remember { { fontSize } },
+                getScrollBehavior,
                 remember { {} },
                 remember { {} },
                 remember { { false } }
@@ -101,12 +85,13 @@ fun WordTopBar(
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SearchTopBar(
     query: () -> TextFieldValue,
     placeholder: String,
     enabled: Boolean,
-    fontSize: () -> TextUnit,
+    getScrollBehavior: () -> TopAppBarScrollBehavior,
     onQueryChanged: (TextFieldValue) -> Unit,
     onFocusChange: (Boolean) -> Unit,
     hasFocus: () -> Boolean,
@@ -118,7 +103,7 @@ private fun SearchTopBar(
         modifier = Modifier.offset(x = (-12).dp).fillMaxWidth(),
         hasFocus = hasFocus,
         enabled = enabled,
-        fontSize = fontSize,
+        getScrollBehavior = getScrollBehavior,
         onFocusChange = onFocusChange,
     )
 }

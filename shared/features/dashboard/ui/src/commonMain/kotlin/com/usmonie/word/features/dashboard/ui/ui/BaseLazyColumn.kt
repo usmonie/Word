@@ -26,9 +26,7 @@ fun BaseLazyColumn(
         modifier = modifier
             .fillMaxSize()
             .imePadding()
-            .semantics {
-                contentDescription = "BASE_LAZY_COLUMN"
-            },
+            .semantics { contentDescription = "BASE_LAZY_COLUMN" },
         verticalArrangement = verticalArrangement,
         state = listState,
         contentPadding = contentPadding,

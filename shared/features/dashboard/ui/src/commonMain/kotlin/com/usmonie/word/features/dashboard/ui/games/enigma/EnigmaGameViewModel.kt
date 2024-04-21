@@ -20,21 +20,19 @@ class EnigmaGameViewModel(
     private val getUserHintsCountUseCase: GetUserHintsCountUseCase,
     private val useUserHintsCountUseCase: UseUserHintsCountUseCase,
     private val addUserHintsCountUseCase: AddUserHintsCountUseCase
-) : BaseViewModel<EnigmaState, EnigmaAction, EnigmaEvent, EnigmaEffect>(EnigmaState.Loading) {
+) : BaseViewModel<EnigmaState, EnigmaAction, EnigmaEvent, EnigmaEffect>(EnigmaState.Loading()) {
 
     private val timer = flow {
         while (currentCoroutineContext().isActive) {
             emit(Unit)
-            delay(2.minutes)
+            delay(4.minutes)
         }
     }
 
     init {
         handleAction(EnigmaAction.NextPhrase)
         viewModelScope.launchSafe {
-            timer.collect {
-                handleAction(EnigmaAction.AdTime)
-            }
+            timer.collect { handleAction(EnigmaAction.AdTime) }
         }
     }
 
@@ -51,7 +49,7 @@ class EnigmaGameViewModel(
                 } else {
                     null
                 }
-                EnigmaState.Playing(
+                EnigmaState.Game.Playing(
                     event.phrase,
                     lives,
                     nextPosition,
@@ -61,7 +59,7 @@ class EnigmaGameViewModel(
             }
 
             EnigmaEvent.Incorrect -> if (lives > MIN_LIVES_COUNT + 1) {
-                EnigmaState.Playing(
+                EnigmaState.Game.Playing(
                     phrase,
                     lives - 1,
                     currentSelectedCellPosition,
@@ -82,7 +80,7 @@ class EnigmaGameViewModel(
             is EnigmaEvent.UpdateSelectedCell -> {
                 if (this is EnigmaState.Lost) return this
 
-                EnigmaState.Playing(
+                EnigmaState.Game.Playing(
                     phrase,
                     lives,
                     event.wordPosition to event.cellPositionInWord,
@@ -91,21 +89,21 @@ class EnigmaGameViewModel(
                 )
             }
 
-            EnigmaEvent.ClearSelectionCell -> EnigmaState.Playing(
+            EnigmaEvent.ClearSelectionCell -> EnigmaState.Game.Playing(
                 phrase,
                 lives,
                 hintsCount = hintsCount,
                 guessedLetters = guessedLetters
             )
 
-            is EnigmaEvent.NextPhrase -> EnigmaState.Playing(
+            is EnigmaEvent.NextPhrase -> EnigmaState.Game.Playing(
                 event.phrase,
                 EnigmaState.MAX_LIVES_COUNT,
                 hintsCount = event.hintsCount,
                 guessedLetters = guessedLetters
             )
 
-            EnigmaEvent.ReviveGranted -> EnigmaState.Playing(
+            EnigmaEvent.ReviveGranted -> EnigmaState.Game.Playing(
                 phrase,
                 lives + 1,
                 currentSelectedCellPosition,
@@ -114,7 +112,7 @@ class EnigmaGameViewModel(
                 guessedLetters = guessedLetters
             )
 
-            is EnigmaEvent.UseHint -> EnigmaState.Playing(
+            is EnigmaEvent.UseHint -> EnigmaState.Game.Playing(
                 event.phrase,
                 lives,
                 currentSelectedCellPosition,
@@ -244,8 +242,14 @@ class EnigmaGameViewModel(
         is EnigmaEvent.Lost -> EnigmaEffect.ShowMiddleGameAd()
         is EnigmaEvent.ReviveClicked -> EnigmaEffect.ShowRewardedAd()
         is EnigmaEvent.Correct -> {
-            println("Encrypted ${event.phrase.encryptedPositionsCount}")
-            if (event.phrase.encryptedPositionsCount == 0) {
+            if (event.phrase.encryptedPositionsCount < 1) {
+                handleAction(EnigmaAction.Won)
+            }
+            EnigmaEffect.InputEffect.Correct()
+        }
+
+        is EnigmaEvent.UseHint -> {
+            if (event.phrase.encryptedPositionsCount < 1) {
                 handleAction(EnigmaAction.Won)
             }
             EnigmaEffect.InputEffect.Correct()

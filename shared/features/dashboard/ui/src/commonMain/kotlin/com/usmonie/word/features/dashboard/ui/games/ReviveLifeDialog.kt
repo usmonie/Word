@@ -53,7 +53,11 @@ fun ReviveLifeDialog(
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp)
             )
 
-            Button(onAddLifeClick, Modifier.padding(horizontal = 24.dp), enabled = isReviveAvailable()) {
+            Button(
+                onAddLifeClick,
+                Modifier.padding(horizontal = 24.dp),
+                enabled = isReviveAvailable()
+            ) {
                 Box {
                     Text(
                         text = reviveTitle,

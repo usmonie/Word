@@ -50,11 +50,13 @@ fun NextButton(onClick: () -> Unit) {
 
 @Composable
 fun BookmarkButton(onClick: () -> Unit, bookmarked: () -> Boolean) {
-    BaseTextButton({
-        if (bookmarked()) {
-            "Remove from Favorites"
-        } else {
-            "Add to Favorites"
-        }
-    }, onClick)
+    BaseTextButton(
+        {
+            if (bookmarked()) {
+                "Remove from Favorites"
+            } else {
+                "Add to Favorites"
+            }
+        }, onClick
+    )
 }

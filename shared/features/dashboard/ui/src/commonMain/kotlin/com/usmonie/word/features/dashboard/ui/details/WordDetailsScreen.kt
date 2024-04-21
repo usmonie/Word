@@ -1,6 +1,5 @@
 package com.usmonie.word.features.dashboard.ui.details
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -108,6 +107,7 @@ class WordDetailsScreen(
         }
     }
 
+    @Suppress("OPT_IN_USAGE_FUTURE_ERROR")
     class Builder(
         private val wordRepository: WordRepository,
         private val analytics: Analytics,
@@ -115,6 +115,7 @@ class WordDetailsScreen(
     ) : ScreenBuilder {
         override val id: String = ID
 
+        @OptIn(ExperimentalMaterial3Api::class)
         override fun build(params: Map<String, String>?, extra: Extra?): Screen {
             val wordExtra = requireNotNull(extra) as WordExtra
 
@@ -131,7 +132,6 @@ class WordDetailsScreen(
 }
 
 @Composable
-@OptIn(ExperimentalFoundationApi::class)
 private fun WordDetailsContent(
     insets: PaddingValues,
     listState: () -> LazyListState,
@@ -202,7 +202,7 @@ private fun WordDetailsContent(
                     remember { {} },
                     remember { {} },
                     remember { { wordViewModel.onUpdateFavouritePressed(wordCombined) } },
-                    modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp),
+                    modifier = Modifier.padding(horizontal = 24.dp),
                     getWord = { selectedPos },
                     getBookmarked = { wordCombined.isFavorite }
                 )

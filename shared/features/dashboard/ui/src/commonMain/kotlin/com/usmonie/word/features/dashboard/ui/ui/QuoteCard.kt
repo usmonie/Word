@@ -26,7 +26,7 @@ fun QuoteCard(quote: AnnotatedString, ref: String?, modifier: Modifier = Modifie
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
         modifier = modifier
     ) {
-        Column(Modifier.fillMaxSize().padding(24.dp)) {
+        Column(Modifier.fillMaxWidth().padding(24.dp)) {
             Text(
                 text = "✻ ✻ ✻",
                 modifier = Modifier.fillMaxWidth(),
@@ -87,7 +87,7 @@ fun QuoteCardExpand(title: String, onClick: () -> Unit, modifier: Modifier = Mod
                 color = MaterialTheme.colorScheme.primary
             )
 
-            Spacer(Modifier.height(16.dp))
+            Spacer(Modifier.height(8.dp))
 
             Text(
                 text = title,

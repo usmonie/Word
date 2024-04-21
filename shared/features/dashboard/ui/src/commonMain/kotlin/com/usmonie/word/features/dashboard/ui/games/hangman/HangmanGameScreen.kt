@@ -2,6 +2,7 @@ package com.usmonie.word.features.dashboard.ui.games.hangman
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.Arrangement
@@ -33,10 +34,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.usmonie.word.features.dashboard.domain.repository.UserRepository
 import com.usmonie.word.features.dashboard.domain.repository.WordRepository
+import com.usmonie.word.features.dashboard.domain.usecase.AddUserHintsCountUseCaseImpl
+import com.usmonie.word.features.dashboard.domain.usecase.GetUserHintsCountUseCaseImpl
 import com.usmonie.word.features.dashboard.domain.usecase.RandomWordUseCaseImpl
+import com.usmonie.word.features.dashboard.domain.usecase.UseUserHintsCountUseCaseImpl
 import com.usmonie.word.features.dashboard.ui.details.WordDetailsScreen
 import com.usmonie.word.features.dashboard.ui.games.GameBoard
+import com.usmonie.word.features.dashboard.ui.games.HangmanGameWon
 import com.usmonie.word.features.dashboard.ui.games.LivesAmount
 import com.usmonie.word.features.dashboard.ui.games.ReviveLifeDialog
 import com.usmonie.word.features.dashboard.ui.ui.AdMob
@@ -63,13 +69,19 @@ class HangmanGameScreen(
 
     class Builder(
         private val wordRepository: WordRepository,
+        private val userRepository: UserRepository,
         private val adMob: AdMob
     ) : ScreenBuilder {
         override val id: String = ID
 
         override fun build(params: Map<String, String>?, extra: Extra?): Screen {
             return HangmanGameScreen(
-                HangmanGameViewModel(RandomWordUseCaseImpl(wordRepository)),
+                HangmanGameViewModel(
+                    RandomWordUseCaseImpl(wordRepository),
+                    GetUserHintsCountUseCaseImpl(userRepository),
+                    UseUserHintsCountUseCaseImpl(userRepository),
+                    AddUserHintsCountUseCaseImpl(userRepository),
+                ),
                 adMob
             )
         }
@@ -91,12 +103,15 @@ private fun HangmanContent(
         routerManager::navigateBack,
         {
             if (state !is HangmanState.Loading && state !is HangmanState.Error) {
-                com.usmonie.word.features.dashboard.ui.games.HintButton({}, hintsCount)
                 Spacer(Modifier.width(24.dp))
 
                 LivesAmount(state.lives, state.maxLives, Modifier.weight(1f))
+                com.usmonie.word.features.dashboard.ui.games.HintButton(
+                    hangmanGameViewModel::useHint,
+                    hintsCount
+                )
 
-//                Spacer(Modifier.width(12.dp))
+//                Spacer(Modifier.width(24.dp))
 //
 //                IconButton({}) {
 //                    Icon(Icons.Rounded.ShoppingCart, contentDescription = "Buy hint")
@@ -114,6 +129,19 @@ private fun HangmanContent(
         }
 
         AnimatedVisibility(
+            state is HangmanState.Won,
+            enter = scaleIn(),
+            exit = scaleOut(tween(0))
+        ) {
+            HangmanGameWon(
+                routerManager::navigateBack,
+                hangmanGameViewModel::onUpdatePressed,
+                "Next word",
+                state.word
+            )
+        }
+
+        AnimatedVisibility(
             state is HangmanState.Lost,
             enter = scaleIn(),
             exit = scaleOut()
@@ -122,7 +150,7 @@ private fun HangmanContent(
                 routerManager::navigateBack,
                 hangmanGameViewModel::onReviveClick,
                 hangmanGameViewModel::onUpdatePressed,
-                isReviveAvailable = remember { { adMob.adMobState.isRewardReady } },
+                isReviveAvailable = { adMob.adMobState.isRewardReady },
                 nextTitle = "Next word"
             )
         }
@@ -168,7 +196,10 @@ private fun PlayBoard(
             .padding(insets),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        HangmanImage(state.maxLives - state.lives, Modifier.fillMaxWidth().weight(1f))
+        HangmanImage(
+            state.maxLives - state.lives,
+            Modifier.fillMaxWidth().weight(1f).padding(vertical = 24.dp)
+        )
         WordDisplay(state)
 
         Spacer(Modifier.height(8.dp))
@@ -198,14 +229,21 @@ private fun PlayBoard(
                 Keyboard(
                     hangmanGameViewModel::onLetterGuessed,
                     hangmanState.guessedLetters,
-                    Modifier.fillMaxWidth().weight(1f)
+                    Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .padding(bottom = 16.dp)
                 )
             } else {
                 Column(Modifier.fillMaxWidth()) {
                     Spacer(Modifier.height(32.dp))
+                    val text = remember(hangmanState.word.wordEtymology.first()) {
+                        hangmanState.word.wordEtymology.first().words.first().senses.first().gloss
+                    }
+
                     Text(
-                        modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp),
-                        text = hangmanState.word.wordEtymology.first().words.first().senses.first().gloss,
+                        modifier = Modifier.fillMaxWidth().padding(24.dp),
+                        text = text,
                         textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.bodyLarge
                     )
@@ -251,26 +289,28 @@ private fun HangmanEffect(effect: HangmanEffect?, routerManager: RouteManager) {
 
 @Composable
 fun WordDisplay(gameState: HangmanState, modifier: Modifier = Modifier) {
-    val displayWord = gameState.word
-        .word
-        .asSequence()
-        .map { letter ->
-            if (letter.lowercaseChar() in gameState.guessedLetters.letters || !letter.isLetterOrDigit()) {
-                letter.uppercaseChar()
-            } else {
-                '_'
+    val displayWord = remember(gameState.guessedLetters.letters.size) {
+        gameState.word
+            .word
+            .asSequence()
+            .map { letter ->
+                if (letter.lowercaseChar() in gameState.guessedLetters.letters || !letter.isLetterOrDigit()) {
+                    letter.uppercaseChar()
+                } else {
+                    '_'
+                }
             }
-        }
-        .joinToString(" ")
+            .joinToString(" ")
+    }
 
     Text(
         displayWord,
         modifier,
-        color = when (gameState) {
-            is HangmanState.Won -> MaterialTheme.colorScheme.tertiary
-            else -> MaterialTheme.colorScheme.onBackground
+        color = MaterialTheme.colorScheme.onBackground,
+        style = when (gameState) {
+            is HangmanState.Won -> MaterialTheme.typography.displayMedium
+            else -> MaterialTheme.typography.displaySmall
         },
-        style = MaterialTheme.typography.displaySmall,
         textAlign = TextAlign.Center
     )
 }
@@ -278,9 +318,10 @@ fun WordDisplay(gameState: HangmanState, modifier: Modifier = Modifier) {
 @Composable
 fun Keyboard(onLetterClick: (Char) -> Unit, guessedLetters: GuessedLetters, modifier: Modifier) {
     val alphabet = remember { ('A'..'Z').toList() }
+
     LazyVerticalGrid(
         GridCells.Fixed(7),
-        modifier = modifier,
+        modifier = modifier.padding(vertical = 8.dp),
         contentPadding = PaddingValues(horizontal = 24.dp),
         userScrollEnabled = false,
         verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
