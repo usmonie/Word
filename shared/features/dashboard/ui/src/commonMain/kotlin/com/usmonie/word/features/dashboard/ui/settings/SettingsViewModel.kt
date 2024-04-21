@@ -30,7 +30,6 @@ internal class SettingsViewModel(
         ModernChic,
         SubscriptionStatus.PURCHASED,
         LazyListState(0, 0),
-        TopAppBarState(-Float.MAX_VALUE, 0f, 0f),
     )
 ) {
 

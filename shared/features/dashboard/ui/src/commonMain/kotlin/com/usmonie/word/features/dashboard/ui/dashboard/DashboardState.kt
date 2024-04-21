@@ -1,5 +1,6 @@
 package com.usmonie.word.features.dashboard.ui.dashboard
 
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.text.input.TextFieldValue
 import com.usmonie.word.features.dashboard.ui.models.LearningStatus
 import com.usmonie.word.features.dashboard.ui.models.WordCombinedUi
@@ -12,6 +13,7 @@ import wtf.speech.core.ui.ScreenState
 
 internal sealed class DashboardState : ScreenState {
 
+    @Immutable
     data class Success(
         val hasFocus: Boolean = false,
         val query: TextFieldValue = TextFieldValue(),
@@ -23,14 +25,9 @@ internal sealed class DashboardState : ScreenState {
         val practiceWordsStatus: LearningStatus,
         val newWordsStatus: LearningStatus,
         val streakDaysStatus: LearningStatus
-    ) : DashboardState() {
-
-        val showIdleItems: Boolean
-            get() = query.text.isBlank()
-    }
+    ) : DashboardState()
 
     class Loading : DashboardState()
-
     class Error : DashboardState()
 }
 

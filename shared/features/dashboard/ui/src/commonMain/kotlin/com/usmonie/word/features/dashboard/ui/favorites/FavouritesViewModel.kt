@@ -26,10 +26,8 @@ class FavouritesViewModel(
     private val updateFavouriteUseCase: UpdateFavouriteUseCase,
     private val getAllFavouritesUseCase: GetAllFavouritesUseCase,
     private val analytics: Analytics,
-    listState: LazyListState = LazyListState(0, 0),
-    appBarState: TopAppBarState = TopAppBarState(-Float.MAX_VALUE, 0f, 0f),
 ) : BaseViewModel<FavoritesState, FavoritesAction, FavoritesEvent, FavoritesEffect>(
-    FavoritesState.Loading(listState, appBarState),
+    FavoritesState.Loading(),
 ) {
 
     private var favouritesJob: Job? = null
@@ -40,11 +38,8 @@ class FavouritesViewModel(
 
     override fun FavoritesState.reduce(event: FavoritesEvent) = when (event) {
         is FavoritesEvent.Next -> TODO()
-        is FavoritesEvent.Updated -> if (event.favourites.isEmpty()) FavoritesState.Empty(
-            listState,
-            appBarState
-        )
-        else FavoritesState.Items(event.favourites, listState, appBarState)
+        is FavoritesEvent.Updated -> if (event.favourites.isEmpty()) FavoritesState.Empty()
+        else FavoritesState.Items(event.favourites)
 
         is FavoritesEvent.UpdatedWord -> when (this) {
             is FavoritesState.Items -> this.updateFavourite(event.wordUi)
@@ -53,7 +48,7 @@ class FavouritesViewModel(
 
         FavoritesEvent.Loading -> when (this) {
             is FavoritesState.Items -> this
-            else -> FavoritesState.Loading(listState, appBarState)
+            else -> FavoritesState.Loading()
         }
 
         else -> this

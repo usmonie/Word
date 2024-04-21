@@ -1,8 +1,6 @@
 package com.usmonie.word.features.dashboard.ui.favorites
 
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.TopAppBarState
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import com.usmonie.word.features.dashboard.ui.models.WordCombinedUi
@@ -13,15 +11,15 @@ import wtf.speech.core.ui.ScreenState
 import wtf.word.core.domain.tools.fastMap
 
 @OptIn(ExperimentalMaterial3Api::class)
-sealed class FavoritesState(open val listState: LazyListState, open val appBarState: TopAppBarState) : ScreenState {
+sealed class FavoritesState() : ScreenState {
 
-    class Empty(listState: LazyListState, appBarState: TopAppBarState) : FavoritesState(listState, appBarState)
+    class Empty() : FavoritesState()
 
-    class Loading(listState: LazyListState, appBarState: TopAppBarState) : FavoritesState(listState, appBarState)
+    class Loading() : FavoritesState()
 
     @Stable
     @Immutable
-    data class Items(val favourites: List<WordCombinedUi>, override val listState: LazyListState, override val appBarState: TopAppBarState) : FavoritesState(listState, appBarState) {
+    data class Items(val favourites: List<WordCombinedUi>) : FavoritesState() {
 
         fun updateFavourite(updatedWord: WordCombinedUi): FavoritesState {
             val newWords = favourites.fastMap { mappedWord ->
@@ -63,6 +61,6 @@ sealed class FavoritesEvent : ScreenEvent {
 sealed class FavoritesEffect : ScreenEffect {
     class OnBack : FavoritesEffect()
 
-    data class OpenWord(val wordUi: WordCombinedUi): FavoritesEffect()
+    data class OpenWord(val wordUi: WordCombinedUi) : FavoritesEffect()
 }
 

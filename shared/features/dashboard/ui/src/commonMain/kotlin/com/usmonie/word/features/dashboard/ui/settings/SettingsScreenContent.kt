@@ -66,8 +66,7 @@ internal fun SettingsScreenContent(
     val routeManager = LocalRouteManager.current
 
     val listState = state.listState
-    val appBarState = state.appBarState
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(appBarState)
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
     Scaffold(
         topBar = {

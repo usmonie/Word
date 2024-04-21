@@ -5,10 +5,10 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.input.TextFieldValue
@@ -37,17 +37,15 @@ class DashboardScreen private constructor(
     override fun Content() {
         val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
-        val listState = rememberLazyGridState()
         DashboardEffects(dashboardViewModel)
         Scaffold(
             modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-            topBar = { DashboardTopBar(dashboardViewModel, remember { { scrollBehavior } }) },
+            topBar = { DashboardTopBar(dashboardViewModel, { scrollBehavior }) },
             content = { insets ->
-                DashboardContent(
-                    listState,
+                NewDashboardContent(
+                    { insets },
                     dashboardViewModel,
                     adMob,
-                    insets
                 )
             }
         )

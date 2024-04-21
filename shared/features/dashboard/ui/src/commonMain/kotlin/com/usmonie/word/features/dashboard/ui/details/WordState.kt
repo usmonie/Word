@@ -21,8 +21,6 @@ data class WordState(
     val selectedPosIndex: Int = 0,
     val sensesExpanded: Boolean = false,
     val similarWords: ContentState<List<WordCombinedUi>> = ContentState.Loading(),
-    val listState: LazyListState,
-    val appBarState: TopAppBarState
 ): ScreenState
 
 sealed class WordAction: ScreenAction {

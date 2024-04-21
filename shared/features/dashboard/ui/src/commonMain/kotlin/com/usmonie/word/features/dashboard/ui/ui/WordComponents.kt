@@ -19,6 +19,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.theapache64.rebugger.Rebugger
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import wtf.word.core.design.themes.icons.MyIconPack
 import wtf.word.core.design.themes.icons.myiconpack.IcUpload
@@ -66,9 +67,8 @@ fun WordLargeResizableTitle(
 ) {
     val defaultTextStyle = MaterialTheme.typography.displayMedium
     var readyToDraw by remember(word) { mutableStateOf(false) }
-    var defaultTextSize by remember { mutableStateOf(defaultTextStyle.fontSize) }
+    var defaultTextSize by remember(word) { mutableStateOf(defaultTextStyle.fontSize) }
     var maxLines by remember(word) { mutableStateOf(1) }
-
     Text(
         word,
         style = defaultTextStyle,
@@ -80,17 +80,9 @@ fun WordLargeResizableTitle(
         overflow = TextOverflow.Ellipsis,
         onTextLayout = {
             when {
-                it.hasVisualOverflow && defaultTextSize > 20.sp -> {
-                    defaultTextSize *= 0.8f
-                }
-
-                it.hasVisualOverflow && defaultTextSize <= 20.sp -> {
-                    maxLines++
-                }
-
-                else -> {
-                    readyToDraw = true
-                }
+                it.hasVisualOverflow && defaultTextSize > 20.sp -> defaultTextSize *= 0.8f
+                it.hasVisualOverflow && defaultTextSize <= 20.sp -> maxLines++
+                else -> readyToDraw = true
             }
         }
     )

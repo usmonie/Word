@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
@@ -26,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.dashboard.domain.repository.WordRepository
 import com.usmonie.word.features.dashboard.domain.usecase.UpdateFavouriteUseCaseImpl
@@ -63,8 +66,7 @@ class WordDetailsScreen(
     override fun Content() {
         val routeManager = LocalRouteManager.current
         val state by wordViewModel.state.collectAsState()
-        val appBarState = state.appBarState
-        val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(appBarState)
+        val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
         Scaffold(
             topBar = {
@@ -84,14 +86,11 @@ class WordDetailsScreen(
 
             WordDetailsContent(
                 insets,
-                { state.listState },
                 { state.word },
                 { state.selectedEtymologyIndex },
                 wordViewModel,
                 { state.selectedPosIndex },
                 { state.sensesExpanded },
-                wordViewModel::selectEtymology,
-                wordViewModel::selectPos,
                 wordViewModel::onSenseExpand,
                 adMob
             )
@@ -134,14 +133,11 @@ class WordDetailsScreen(
 @Composable
 private fun WordDetailsContent(
     insets: PaddingValues,
-    listState: () -> LazyListState,
     getWordCombined: () -> WordCombinedUi,
     getSelectedEtymologyTabIndex: () -> Int,
     wordViewModel: WordViewModel,
     getSelectedPosIndex: () -> Int,
     getSensesExpanded: () -> Boolean,
-    onEtymologySelected: (Int) -> Unit,
-    onPosSelected: (Int) -> Unit,
     onExpandSenses: () -> Unit,
     adMob: AdMob
 ) {
@@ -166,11 +162,18 @@ private fun WordDetailsContent(
             .toMutableList()
     }
 
-    Box(Modifier.padding(insets)) {
+    Box(Modifier) {
+        val contentPadding = remember(insets) {
+            PaddingValues(
+                top = insets.calculateTopPadding(),
+                bottom = insets.calculateBottomPadding() + 80.dp,
+                start = insets.calculateStartPadding(LayoutDirection.Ltr),
+                end = insets.calculateEndPadding(LayoutDirection.Ltr),
+            )
+        }
         BaseLazyColumn(
-            contentPadding = PaddingValues(bottom = insets.calculateBottomPadding() + 80.dp),
+            contentPadding = contentPadding,
             verticalArrangement = Arrangement.spacedBy(16.dp),
-            listState = listState(),
         ) {
 
             if (wordCombined.wordEtymology.size > 1) {
@@ -264,10 +267,9 @@ private fun WordDetailsContent(
             }
         }
 
-        adMob.Banner(
-            Modifier.fillMaxWidth()
-                .align(Alignment.BottomCenter)
-        )
+        Box(Modifier.fillMaxWidth().align(Alignment.BottomCenter)) {
+            adMob.Banner(Modifier.fillMaxWidth().padding(insets))
+        }
     }
 }
 

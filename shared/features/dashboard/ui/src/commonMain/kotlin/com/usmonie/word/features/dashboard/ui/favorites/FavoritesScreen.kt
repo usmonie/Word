@@ -79,7 +79,7 @@ private fun FavoritesContent(
 
     val state by favoritesViewModel.state.collectAsState()
 
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(state.appBarState)
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     Scaffold(
         topBar = {
             WordTopBar(
@@ -91,25 +91,20 @@ private fun FavoritesContent(
         },
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
     ) { insets ->
-        FavoritesContent({ insets }, { state.listState }, { state }, favoritesViewModel, adMob)
+        FavoritesContent({ insets }, { state }, favoritesViewModel, adMob)
     }
 }
 
 @Composable
 private fun FavoritesContent(
     getInsets: () -> PaddingValues,
-    getListState: () -> LazyListState,
     getState: () -> FavoritesState,
     favoritesViewModel: FavouritesViewModel,
     adMob: AdMob
 ) {
     val insets = getInsets()
-    val listState = getListState()
-    Box(
-        Modifier.fillMaxSize()
-    ) {
+    Box(Modifier.fillMaxSize()) {
         BaseLazyColumn(
-            listState,
             contentPadding = PaddingValues(
                 start = insets.calculateLeftPadding(LayoutDirection.Ltr),
                 end = insets.calculateRightPadding(LayoutDirection.Ltr),

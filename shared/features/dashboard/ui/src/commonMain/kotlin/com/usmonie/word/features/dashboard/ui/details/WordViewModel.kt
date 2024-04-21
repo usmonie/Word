@@ -17,14 +17,8 @@ class WordViewModel(
     extra: WordDetailsScreen.Companion.WordExtra,
     private val updateFavouriteUseCase: UpdateFavouriteUseCase,
     private val analytics: Analytics,
-    listState: LazyListState = LazyListState(0, 0),
-    appBarState: TopAppBarState = TopAppBarState(-Float.MAX_VALUE, 0f, 0f),
 ) : BaseViewModel<WordState, WordAction, WordEvent, WordEffect>(
-    WordState(
-        extra.word,
-        listState = listState,
-        appBarState = appBarState,
-    )
+    WordState(extra.word,)
 ) {
 
     init {

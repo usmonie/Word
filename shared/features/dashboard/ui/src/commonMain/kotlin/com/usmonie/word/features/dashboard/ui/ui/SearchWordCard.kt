@@ -94,6 +94,10 @@ fun SearchWordCard(
         AnimatedContent(selectedEtymology) {
             Column {
                 if (!it.etymologyText.isNullOrEmpty()) {
+                    if (wordCombined.wordEtymology.size == 1) {
+                        EtymologyTitle()
+                    }
+
                     Text(
                         it.etymologyText,
                         maxLines = 3,

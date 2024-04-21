@@ -19,7 +19,6 @@ data class SettingsState(
     val currentTypography: WordTypography,
     val subscriptionStatus: SubscriptionStatus,
     val listState: LazyListState,
-    val appBarState: TopAppBarState
 ) : ScreenState
 
 sealed class SettingsEvent: ScreenEvent {
