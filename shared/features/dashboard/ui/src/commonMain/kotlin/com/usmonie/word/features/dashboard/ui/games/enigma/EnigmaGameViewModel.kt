@@ -6,16 +6,17 @@ import com.usmonie.word.features.dashboard.domain.usecase.GetNextPhraseUseCase
 import com.usmonie.word.features.dashboard.domain.usecase.GetUserHintsCountUseCase
 import com.usmonie.word.features.dashboard.domain.usecase.UseUserHintsCountUseCase
 import com.usmonie.word.features.dashboard.ui.games.enigma.EnigmaState.Companion.MIN_LIVES_COUNT
-import kotlin.time.Duration.Companion.minutes
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.isActive
 import wtf.speech.core.ui.BaseViewModel
-import wtf.word.core.domain.tools.fastMap
+import wtf.word.core.domain.Analytics
+import kotlin.time.Duration.Companion.minutes
 
 @Stable
 class EnigmaGameViewModel(
+    private val analytics: Analytics,
     private val getNextPhraseUseCase: GetNextPhraseUseCase,
     private val getUserHintsCountUseCase: GetUserHintsCountUseCase,
     private val useUserHintsCountUseCase: UseUserHintsCountUseCase,
@@ -99,6 +100,11 @@ class EnigmaGameViewModel(
             is EnigmaEvent.NextPhrase -> EnigmaState.Game.Playing(
                 event.phrase,
                 EnigmaState.MAX_LIVES_COUNT,
+                currentSelectedCellPosition = getNextPosition(
+                    event.phrase.encryptedPhrase,
+                    0,
+                    0
+                ),
                 hintsCount = event.hintsCount,
                 guessedLetters = guessedLetters
             )
@@ -109,30 +115,60 @@ class EnigmaGameViewModel(
                 currentSelectedCellPosition,
                 foundLetters,
                 hintsCount,
-                guessedLetters = guessedLetters
+                guessedLetters
             )
 
-            is EnigmaEvent.UseHint -> EnigmaState.Game.Playing(
-                event.phrase,
-                lives,
-                currentSelectedCellPosition,
-                foundLetters,
-                event.hintsLeft,
-                guessedLetters = guessedLetters
-            )
+            is EnigmaEvent.UseHint -> if (this is EnigmaState.Game.HintSelection) {
+                EnigmaState.Game.Playing(
+                    phrase,
+                    lives,
+                    getNextPosition(phrase.encryptedPhrase, 0, 0),
+                    foundLetters,
+                    hintsCount,
+                    guessedLetters
+                )
+            } else {
+                EnigmaState.Game.HintSelection(
+                    phrase,
+                    lives,
+                    foundLetters,
+                    hintsCount,
+                    guessedLetters
+                )
+            }
 
             is EnigmaEvent.Won -> EnigmaState.Won(phrase, lives, hintsCount, guessedLetters)
+
+            is EnigmaEvent.UpdateCurrentPhrase -> EnigmaState.Game.Playing(
+                event.phrase,
+                lives,
+                getNextPosition(event.phrase.encryptedPhrase, 0, 0),
+                foundLetters,
+                event.hintsCount,
+                guessedLetters
+            )
 
             else -> this
         }
     }
 
     override suspend fun processAction(action: EnigmaAction) = when (action) {
-        is EnigmaAction.InputLetter -> inputLetter(action)
+        is EnigmaAction.InputLetter -> {
+            inputLetter(action)
+        }
 
-        is EnigmaAction.CellSelected -> EnigmaEvent.UpdateSelectedCell(
-            action.wordPosition, action.cellPositionInWord
-        )
+        is EnigmaAction.CellSelected -> {
+            if (state.value is EnigmaState.Game.HintSelection) {
+                val newPhrase =
+                    findLetter(action.cellPositionInWord, action.wordPosition, state.value.phrase)
+                val currentHintsCount = getUserHintsCountUseCase(Unit)
+                EnigmaEvent.UpdateCurrentPhrase(newPhrase, currentHintsCount)
+            } else {
+                EnigmaEvent.UpdateSelectedCell(
+                    action.wordPosition, action.cellPositionInWord
+                )
+            }
+        }
 
         EnigmaAction.NextPhrase -> {
             val phrase = getNextPhraseUseCase(Unit)
@@ -144,13 +180,7 @@ class EnigmaGameViewModel(
         EnigmaAction.ReviveGranted -> EnigmaEvent.ReviveGranted
         EnigmaAction.UseHint -> {
             val state = state.value
-            if (state.hintsCount > 0) {
-                val newPhrase = findRandomLetter(state.phrase)
-                val hintsLeft = getUserHintsCountUseCase(Unit)
-                EnigmaEvent.UseHint(newPhrase, hintsLeft)
-            } else {
-                EnigmaEvent.NoHints
-            }
+            if (state.hintsCount > 0) EnigmaEvent.UseHint else EnigmaEvent.NoHints
         }
 
         is EnigmaAction.AddHints -> {
@@ -163,6 +193,31 @@ class EnigmaGameViewModel(
         EnigmaAction.Won -> EnigmaEvent.Won
     }
 
+
+    override suspend fun handleEvent(event: EnigmaEvent) = when (event) {
+        is EnigmaEvent.Incorrect -> EnigmaEffect.InputEffect.Incorrect()
+        is EnigmaEvent.Lost -> EnigmaEffect.ShowMiddleGameAd()
+        is EnigmaEvent.NextPhrase -> EnigmaEffect.ShowMiddleGameAd()
+        is EnigmaEvent.ReviveClicked -> EnigmaEffect.ShowRewardedAd()
+        is EnigmaEvent.Correct -> {
+            if (event.phrase.encryptedPositionsCount < 1) {
+                handleAction(EnigmaAction.Won)
+            }
+            EnigmaEffect.InputEffect.Correct()
+        }
+
+        is EnigmaEvent.UpdateCurrentPhrase -> {
+            if (event.phrase.encryptedPositionsCount < 1) {
+                handleAction(EnigmaAction.Won)
+            }
+            EnigmaEffect.InputEffect.Correct()
+        }
+
+
+        is EnigmaEvent.ShowMiddleGameAd -> EnigmaEffect.ShowMiddleGameAd()
+        else -> null
+    }
+
     private fun inputLetter(action: EnigmaAction.InputLetter): EnigmaEvent {
         val state = state.value
         val phrase = state.phrase.encryptedPhrase.toMutableList()
@@ -171,7 +226,7 @@ class EnigmaGameViewModel(
         return if (currentPosition != null) {
             val word = phrase[currentPosition.first].cells.toMutableList()
             val cell = word[currentPosition.second]
-            if (cell.letter.uppercaseChar() == action.letter) {
+            if (cell.symbol.uppercaseChar() == action.letter) {
                 encryptedPositionsCount -= 1
                 word[currentPosition.second] = cell.copy(state = CellState.Correct)
             } else if (state.lives > MIN_LIVES_COUNT) {
@@ -192,25 +247,23 @@ class EnigmaGameViewModel(
         }
     }
 
-    private suspend fun findRandomLetter(phrase: EnigmaEncryptedPhrase): EnigmaEncryptedPhrase {
-        val randomCell = randomCell(phrase.encryptedPhrase) ?: return phrase
+    private suspend fun findLetter(
+        cellPositionInWord: Int,
+        wordPosition: Int,
+        phrase: EnigmaEncryptedPhrase
+    ): EnigmaEncryptedPhrase {
         var encryptedPositionsCount = phrase.encryptedPositionsCount
         val charsCount = phrase.charsCount.toMutableMap()
-        val newPhrase = phrase.encryptedPhrase.fastMap { word ->
-            word.copy(
-                cells = word.cells.fastMap { cell ->
-                    val letter = cell.letter.uppercaseChar()
-                    if (letter == randomCell.letter.uppercaseChar()) {
-                        encryptedPositionsCount--
-                        charsCount[letter] = charsCount.getOrPut(letter) { 1 } - 1
-                        cell.copy(state = CellState.Found)
-                    } else {
-                        cell
-                    }
-                }
-            )
-        }
+        val word = phrase.encryptedPhrase[wordPosition]
+        val newCell =
+            word.cells[cellPositionInWord].copy(state = CellState.Correct)
 
+        val newWord =
+            word.copy(cells = word.cells.toMutableList().apply { set(cellPositionInWord, newCell) })
+        charsCount[newCell.symbol] = charsCount.getOrPut(newCell.symbol) { 1 } - 1
+
+        val newPhrase = phrase.encryptedPhrase.toMutableList().apply { set(wordPosition, newWord) }
+        encryptedPositionsCount--
         if (encryptedPositionsCount < phrase.encryptedPositionsCount) {
             useUserHintsCountUseCase(Unit)
         }
@@ -221,43 +274,6 @@ class EnigmaGameViewModel(
             encryptedPositionsCount,
             charsCount
         )
-    }
-
-    private fun randomCell(phrase: List<Word>): Cell? {
-        val phraseWithEmptyStatesOnly = phrase
-            .asSequence()
-            .map { word -> Word(word.cells.filter { cell -> cell.state == CellState.Empty }) }
-            .filter { word -> word.cells.isNotEmpty() }
-            .toList()
-
-        val randomWord = phraseWithEmptyStatesOnly.randomOrNull()?.cells ?: return null
-
-        val randomCell = randomWord.randomOrNull() ?: randomCell(phraseWithEmptyStatesOnly)
-
-        return randomCell
-    }
-
-    override suspend fun handleEvent(event: EnigmaEvent) = when (event) {
-        is EnigmaEvent.Incorrect -> EnigmaEffect.InputEffect.Incorrect()
-        is EnigmaEvent.Lost -> EnigmaEffect.ShowMiddleGameAd()
-        is EnigmaEvent.ReviveClicked -> EnigmaEffect.ShowRewardedAd()
-        is EnigmaEvent.Correct -> {
-            if (event.phrase.encryptedPositionsCount < 1) {
-                handleAction(EnigmaAction.Won)
-            }
-            EnigmaEffect.InputEffect.Correct()
-        }
-
-        is EnigmaEvent.UseHint -> {
-            if (event.phrase.encryptedPositionsCount < 1) {
-                handleAction(EnigmaAction.Won)
-            }
-            EnigmaEffect.InputEffect.Correct()
-        }
-
-
-        is EnigmaEvent.ShowMiddleGameAd -> EnigmaEffect.ShowMiddleGameAd()
-        else -> null
     }
 
     fun onLetterInput(letter: Char) = handleAction(EnigmaAction.InputLetter(letter))

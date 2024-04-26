@@ -10,6 +10,9 @@ sealed class DashboardAnalyticsEvents(key: String, data: EventData) : AnalyticsE
     data class OpenWord(private val wordUi: WordCombinedUi) :
         DashboardAnalyticsEvents("View_Content", DashboardEventData.WordData(wordUi.word))
 
+    data class UpdateFavoriteWord(private val wordUi: WordCombinedUi) :
+        DashboardAnalyticsEvents("Word_Update_Favorite", DashboardEventData.WordData(wordUi.word))
+
     data object OpenFavourites :
         DashboardAnalyticsEvents("View_Favorites", DashboardEventData.Favourites)
 

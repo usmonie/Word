@@ -2,16 +2,20 @@ package com.usmonie.word.features.dashboard.ui.dashboard
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.text.input.TextFieldValue
-import com.usmonie.word.features.dashboard.ui.analytics.DashboardAnalyticsEvents
 import com.usmonie.word.features.dashboard.domain.usecase.GetSearchHistoryUseCase
 import com.usmonie.word.features.dashboard.domain.usecase.GetWordOfTheDayUseCase
 import com.usmonie.word.features.dashboard.domain.usecase.RandomWordUseCase
 import com.usmonie.word.features.dashboard.domain.usecase.SearchWordsUseCase
 import com.usmonie.word.features.dashboard.domain.usecase.UpdateFavouriteUseCase
+import com.usmonie.word.features.dashboard.ui.analytics.DashboardAnalyticsEvents
+import com.usmonie.word.features.dashboard.ui.dashboard.DashboardEvent.*
 import com.usmonie.word.features.dashboard.ui.models.LearningStatus
 import com.usmonie.word.features.dashboard.ui.models.WordCombinedUi
 import com.usmonie.word.features.dashboard.ui.models.WordUi
 import com.usmonie.word.features.dashboard.ui.models.toUi
+import com.usmonie.word.features.subscription.domain.models.SubscriptionStatus
+import com.usmonie.word.features.subscription.domain.models.SubscriptionStatus.*
+import com.usmonie.word.features.subscription.domain.usecase.SubscriptionStatusUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.Job
@@ -32,119 +36,121 @@ internal class DashboardViewModel(
     private val getWordOfTheDayUseCase: GetWordOfTheDayUseCase,
     private val updateFavouriteUseCase: UpdateFavouriteUseCase,
     private val getRandomWordUseCase: RandomWordUseCase,
+    private val subscriptionStatusUseCase: SubscriptionStatusUseCase,
     private val analytics: Analytics
-) :
-    BaseViewModel<DashboardState, DashboardAction, DashboardEvent, DashboardEffect>(
-        DashboardState.Loading()
-    ) {
+) : BaseViewModel<DashboardState, DashboardAction, DashboardEvent, DashboardEffect>(DashboardState.Loading()) {
 
     private var searchJob: Job? = null
 
     init {
         onTryAgain()
+
+        viewModelScope.launchSafe {
+            subscriptionStatusUseCase(Unit).collect {
+                processAction(DashboardAction.SubscriptionStatusUpdated(it))
+            }
+        }
     }
 
-    override fun DashboardState.reduce(event: DashboardEvent): DashboardState {
-        return when (event) {
-            DashboardEvent.ContentLoading -> DashboardState.Loading()
-            DashboardEvent.BackToMain -> when (this) {
-                is DashboardState.Error -> this
-                is DashboardState.Loading -> this
-                is DashboardState.Success -> copy(hasFocus = false, query = TextFieldValue())
-            }
-
-            is DashboardEvent.Content -> when (this) {
-                is DashboardState.Success -> copy(
-                    wordOfTheDay = event.wordOfTheDay,
-                    randomWord = event.randomWord,
-                    recentSearch = event.recentSearch,
-                    foundWords = event.foundWords,
-                    learnedWordsStatus = LearningStatus(
-                        title = "Learned",
-                        status = event.learnedWordsStatus,
-                        description = "Review"
-                    ),
-                    practiceWordsStatus = LearningStatus(
-                        title = "Pending",
-                        status = event.practiceWordsStatus,
-                        description = "Practice Words"
-                    ),
-                    newWordsStatus = LearningStatus(
-                        title = "New",
-                        status = event.newWordsStatus,
-                        description = "Learn New Words"
-                    ),
-                    streakDaysStatus = LearningStatus(
-                        title = "Streak",
-                        status = event.streakDaysStatus,
-                        description = "Days"
-                    ),
-                )
-
-                else -> DashboardState.Success(
-                    wordOfTheDay = event.wordOfTheDay,
-                    randomWord = event.randomWord,
-                    recentSearch = event.recentSearch,
-                    foundWords = event.foundWords,
-                    learnedWordsStatus = LearningStatus(
-                        title = "Learned",
-                        status = event.learnedWordsStatus,
-                        description = "Review"
-                    ),
-                    practiceWordsStatus = LearningStatus(
-                        title = "Pending",
-                        status = event.practiceWordsStatus,
-                        description = "Practice Words"
-                    ),
-                    newWordsStatus = LearningStatus(
-                        title = "New",
-                        status = event.newWordsStatus,
-                        description = "Learn New Words"
-                    ),
-                    streakDaysStatus = LearningStatus(
-                        title = "Streak",
-                        status = event.streakDaysStatus,
-                        description = "Days"
-                    ),
-                )
-
-            }
-
-            is DashboardEvent.InputQuery -> when (this) {
-                is DashboardState.Error -> this
-                is DashboardState.Loading -> this
-                is DashboardState.Success -> copy(
-                    query = event.query,
-                    foundWords = ContentState.Loading()
-                )
-            }
-
-            is DashboardEvent.QueryFocusChanged -> when (this) {
-                is DashboardState.Error -> this
-                is DashboardState.Loading -> this
-                is DashboardState.Success -> copy(hasFocus = event.hasFocus)
-            }
-
-            else -> this
+    override fun DashboardState.reduce(event: DashboardEvent) = when (event) {
+        ContentLoading -> DashboardState.Loading()
+        BackToMain -> when (this) {
+            is DashboardState.Error -> this
+            is DashboardState.Loading -> this
+            is DashboardState.Success -> copy(hasFocus = false, query = TextFieldValue())
         }
+
+        is Content -> when (this) {
+            is DashboardState.Success -> copy(
+                wordOfTheDay = event.wordOfTheDay,
+                randomWord = event.randomWord,
+                recentSearch = event.recentSearch,
+                foundWords = event.foundWords,
+                learnedWordsStatus = LearningStatus(
+                    title = "Learned",
+                    status = event.learnedWordsStatus,
+                    description = "Review"
+                ),
+                practiceWordsStatus = LearningStatus(
+                    title = "Pending",
+                    status = event.practiceWordsStatus,
+                    description = "Practice Words"
+                ),
+                newWordsStatus = LearningStatus(
+                    title = "New",
+                    status = event.newWordsStatus,
+                    description = "Learn New Words"
+                ),
+                streakDaysStatus = LearningStatus(
+                    title = "Streak",
+                    status = event.streakDaysStatus,
+                    description = "Days"
+                ),
+            )
+
+            else -> DashboardState.Success(
+                wordOfTheDay = event.wordOfTheDay,
+                randomWord = event.randomWord,
+                recentSearch = event.recentSearch,
+                foundWords = event.foundWords,
+                learnedWordsStatus = LearningStatus(
+                    title = "Learned",
+                    status = event.learnedWordsStatus,
+                    description = "Review"
+                ),
+                practiceWordsStatus = LearningStatus(
+                    title = "Pending",
+                    status = event.practiceWordsStatus,
+                    description = "Practice Words"
+                ),
+                newWordsStatus = LearningStatus(
+                    title = "New",
+                    status = event.newWordsStatus,
+                    description = "Learn New Words"
+                ),
+                streakDaysStatus = LearningStatus(
+                    title = "Streak",
+                    status = event.streakDaysStatus,
+                    description = "Days"
+                ),
+                subscriptionStatus = event.subscriptionStatus
+            )
+        }
+
+        is InputQuery -> when (this) {
+            is DashboardState.Error -> this
+            is DashboardState.Loading -> this
+            is DashboardState.Success -> copy(
+                query = event.query,
+                foundWords = ContentState.Loading()
+            )
+        }
+
+        is QueryFocusChanged -> when (this) {
+            is DashboardState.Error -> this
+            is DashboardState.Loading -> this
+            is DashboardState.Success -> copy(hasFocus = event.hasFocus)
+        }
+
+        else -> this
     }
 
     override suspend fun processAction(action: DashboardAction): DashboardEvent {
         return when (action) {
-            DashboardAction.ClearQuery -> DashboardEvent.BackToMain
+            DashboardAction.ClearQuery -> BackToMain
             DashboardAction.Initial -> {
                 loadData(0L)
-                DashboardEvent.ContentLoading
+                ContentLoading
             }
 
             is DashboardAction.InputQuery -> search(action.query, 0)
             is DashboardAction.NextRandomWord -> {
                 val currentState = state.value
 
-                if (currentState !is DashboardState.Success) return DashboardEvent.ContentLoading
+                if (currentState !is DashboardState.Success) return ContentLoading
                 val newRandomWord = newRandomWord(false, currentState)
 
-                DashboardEvent.Content(
+                Content(
                     currentState.recentSearch,
                     currentState.wordOfTheDay,
                     newRandomWord,
@@ -153,40 +159,44 @@ internal class DashboardViewModel(
                     currentState.practiceWordsStatus.status,
                     currentState.newWordsStatus.status,
                     currentState.streakDaysStatus.status,
-                    currentState.query
+                    currentState.query,
+                    Sale()
                 )
             }
 
-            is DashboardAction.OpenWord -> DashboardEvent.OpenWord(action.word)
+            is DashboardAction.OpenWord -> OpenWord(action.word)
 
             is DashboardAction.QueryFieldFocusChange ->
-                DashboardEvent.QueryFocusChanged(action.isFocus)
+                QueryFocusChanged(action.isFocus)
 
             DashboardAction.Refresh -> {
                 updateData()
-                DashboardEvent.ContentLoading
+                ContentLoading
             }
 
             is DashboardAction.UpdateFavorite -> {
                 val currentState = state.value
 
-                if (currentState !is DashboardState.Success) return DashboardEvent.ContentLoading
+                if (currentState !is DashboardState.Success) return ContentLoading
                 updateFavourite(action.word, currentState)
             }
 
-            DashboardAction.OnMenuItemClicked.About -> DashboardEvent.MenuItemOpen.About
-            DashboardAction.OnMenuItemClicked.Favorites -> DashboardEvent.MenuItemOpen.Favorites
-            DashboardAction.OnMenuItemClicked.Games -> DashboardEvent.MenuItemOpen.Games
-            DashboardAction.OnMenuItemClicked.Settings -> DashboardEvent.MenuItemOpen.Settings
+            DashboardAction.OnMenuItemClicked.About -> MenuItemOpen.About
+            DashboardAction.OnMenuItemClicked.Favorites -> MenuItemOpen.Favorites
+            DashboardAction.OnMenuItemClicked.Games -> MenuItemOpen.Games
+            DashboardAction.OnMenuItemClicked.Settings -> MenuItemOpen.Settings
+            is DashboardAction.SubscriptionStatusUpdated -> SubscriptionUpdated(action.subscriptionStatus)
+            DashboardAction.CollapseSubscriptionAd -> TODO()
+            DashboardAction.ExpandSubscriptionAd -> TODO()
         }
     }
 
     override suspend fun handleEvent(event: DashboardEvent) = when (event) {
-        is DashboardEvent.OpenWord -> DashboardEffect.OpenWord(event.word)
-        is DashboardEvent.MenuItemOpen.Favorites -> DashboardEffect.OpenFavorites()
-        is DashboardEvent.MenuItemOpen.Games -> DashboardEffect.OpenGames()
-        is DashboardEvent.MenuItemOpen.Settings -> DashboardEffect.OpenSettings()
-        is DashboardEvent.MenuItemOpen.About -> DashboardEffect.OpenAbout()
+        is OpenWord -> DashboardEffect.OpenWord(event.word)
+        is MenuItemOpen.Favorites -> DashboardEffect.OpenFavorites()
+        is MenuItemOpen.Games -> DashboardEffect.OpenGames()
+        is MenuItemOpen.Settings -> DashboardEffect.OpenSettings()
+        is MenuItemOpen.About -> DashboardEffect.OpenAbout()
         else -> null
     }
 
@@ -220,19 +230,19 @@ internal class DashboardViewModel(
 
     private suspend fun search(query: TextFieldValue, offset: Long = 0): DashboardEvent {
         val currentState = state.value
-        if (currentState !is DashboardState.Success) return DashboardEvent.BackToMain
+        if (currentState !is DashboardState.Success) return BackToMain
 
         if (query.text == currentState.query.text && query.text.isNotBlank()) {
-            return DashboardEvent.InputQuery(query)
+            return InputQuery(query)
         }
         searchJob?.cancel()
         if (query.text.isBlank()) {
             updateData()
-            return DashboardEvent.InputQuery(query)
+            return InputQuery(query)
         }
 
         launchSearch(currentState, query, offset)
-        return DashboardEvent.InputQuery(query)
+        return InputQuery(query)
     }
 
     private suspend fun launchSearch(
@@ -257,7 +267,7 @@ internal class DashboardViewModel(
                 ensureActive()
                 analytics.log(DashboardAnalyticsEvents.Search(query.text))
                 handleState(
-                    DashboardEvent.Content(
+                    Content(
                         state.recentSearch,
                         state.wordOfTheDay,
                         state.randomWord,
@@ -267,6 +277,7 @@ internal class DashboardViewModel(
                         state.newWordsStatus.status,
                         state.streakDaysStatus.status,
                         state.query,
+                        SubscriptionStatus.None()
                     )
                 )
             }
@@ -277,7 +288,6 @@ internal class DashboardViewModel(
 
     private suspend fun loadData(offset: Long, update: Boolean = false) {
         val currentState = state.value
-
         viewModelScope.launch(Dispatchers.IO) {
             val recentSearch = getSearchHistoryUseCase(
                 GetSearchHistoryUseCase.Param(
@@ -286,24 +296,28 @@ internal class DashboardViewModel(
                 )
             ).fastMap { it.toUi() }
 
-            val wordOfTheDay = if (update && currentState is DashboardState.Success) {
-                currentState.wordOfTheDay
-            } else {
-                try {
-                    val word = getWordOfTheDayUseCase(GetWordOfTheDayUseCase.Param).toUi()
-                    ContentState.Success(Pair(word.wordEtymology.random().words.random(), word))
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    ContentState.Error(ConnectionErrorState(e))
+            val wordOfTheDay: ContentState<Pair<WordUi, WordCombinedUi>> =
+                if (update && currentState is DashboardState.Success) {
+//                currentState.wordOfTheDay
+
+                    ContentState.Error(ConnectionErrorState(Exception()))
+                } else {
+                    try {
+
+                        ContentState.Error(ConnectionErrorState(Exception()))
+//                    val word = getWordOfTheDayUseCase(GetWordOfTheDayUseCase.Param).toUi()
+//                    ContentState.Success(Pair(word.wordEtymology.random().words.random(), word))
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        ContentState.Error(ConnectionErrorState(e))
+                    }
                 }
-            }
 
             val randomWord = newRandomWord(update, currentState)
 
-
             handleState(
                 if (currentState is DashboardState.Success) {
-                    DashboardEvent.Content(
+                    Content(
                         recentSearch = recentSearch,
                         wordOfTheDay = wordOfTheDay,
                         randomWord = randomWord,
@@ -312,10 +326,11 @@ internal class DashboardViewModel(
                         practiceWordsStatus = currentState.practiceWordsStatus.status,
                         newWordsStatus = currentState.newWordsStatus.status,
                         streakDaysStatus = currentState.streakDaysStatus.status,
-                        query = currentState.query
+                        query = currentState.query,
+                        SubscriptionStatus.Sale()
                     )
                 } else {
-                    DashboardEvent.Content(
+                    Content(
                         recentSearch = recentSearch,
                         wordOfTheDay = wordOfTheDay,
                         randomWord = randomWord,
@@ -324,7 +339,8 @@ internal class DashboardViewModel(
                         practiceWordsStatus = 24, // "currentState.practiceWordsStatus.status",
                         newWordsStatus = 8, //"currentState.learnedWordsStatus.status",
                         streakDaysStatus = 0, //"currentState.streakDaysStatus.status",
-                        query = TextFieldValue()
+                        query = TextFieldValue(),
+                        SubscriptionStatus.Sale()
                     )
                 }
             )
@@ -352,13 +368,13 @@ internal class DashboardViewModel(
     private suspend fun updateFavourite(
         word: WordCombinedUi,
         state: DashboardState.Success
-    ): DashboardEvent.Content {
+    ): Content {
         updateFavouriteUseCase(UpdateFavouriteUseCase.Param(word.word, word.isFavorite))
 
         return state.updateFavourite(word.copy(isFavorite = !word.isFavorite))
     }
 
-    private fun DashboardState.Success.updateFavourite(updatedWord: WordCombinedUi): DashboardEvent.Content {
+    private fun DashboardState.Success.updateFavourite(updatedWord: WordCombinedUi): Content {
         val newWordOfTheDay: ContentState<Pair<WordUi, WordCombinedUi>> = when (wordOfTheDay) {
             is ContentState.Error<*, *> -> wordOfTheDay
             is ContentState.Loading -> wordOfTheDay
@@ -397,7 +413,7 @@ internal class DashboardViewModel(
             mapNewWord(mappedWord, updatedWord)
         }
 
-        return DashboardEvent.Content(
+        return Content(
             wordOfTheDay = newWordOfTheDay,
             foundWords = newFoundWords,
             randomWord = newRandomWord,
@@ -407,6 +423,7 @@ internal class DashboardViewModel(
             newWordsStatus = this.newWordsStatus.status,
             streakDaysStatus = this.streakDaysStatus.status,
             query = this.query,
+            subscriptionStatus = SubscriptionStatus.Sale()
         )
     }
 

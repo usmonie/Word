@@ -72,17 +72,7 @@ fun SearchBar(
 
         searchBarFontSizeMax * (1 - fraction).coerceIn(0.7f, 1f)
     }
-//    Rebugger(
-//        trackMap = mapOf(
-//            "fontSize" to fontSize::class.toString(),
-//            "query" to query::class.toString(),
-//            "placeholder" to placeholder,
-//            "enabled" to enabled,
-//            "onQueryChanged" to onQueryChanged::class.toString(),
-//            "onFocusChanged" to onFocusChange::class.toString(),
-//            "hasFocus" to hasFocus::class.toString(),
-//        )
-//    )
+
     TextInputField(
         query(),
         onQueryChanged,

@@ -1,10 +1,7 @@
 package com.usmonie.word.features.dashboard.ui.details
 
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.TopAppBarState
 import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.Stable
 import com.usmonie.word.features.dashboard.ui.models.WordCombinedUi
 import wtf.speech.core.ui.ContentState
 import wtf.speech.core.ui.ScreenAction
@@ -13,10 +10,10 @@ import wtf.speech.core.ui.ScreenEvent
 import wtf.speech.core.ui.ScreenState
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Stable
 @Immutable
 data class WordState(
     val word: WordCombinedUi,
+    val isFavorite: Boolean = word.isFavorite,
     val selectedEtymologyIndex: Int = 0,
     val selectedPosIndex: Int = 0,
     val sensesExpanded: Boolean = false,

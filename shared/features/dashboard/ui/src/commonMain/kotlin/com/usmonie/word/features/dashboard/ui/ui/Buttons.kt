@@ -2,6 +2,8 @@ package com.usmonie.word.features.dashboard.ui.ui
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ButtonElevation
@@ -26,7 +28,7 @@ fun BaseTextButton(
 ) {
     TextButton(
         onClick,
-        modifier,
+        modifier.wrapContentSize(),
         enabled,
         shape,
         colors,

@@ -40,17 +40,13 @@ fun Modifier.shake(shakeController: ShakeController) = composed {
             .graphicsLayer {
                 rotationX = shake.value * shakeConfig.rotateX
                 rotationY = shake.value * shakeConfig.rotateY
+                translationY = shake.value * shakeConfig.translateY
+                translationX = shake.value * shakeConfig.translateX
             }
             .scale(
                 scaleX = 1f + (shake.value * shakeConfig.scaleX),
                 scaleY = 1f + (shake.value * shakeConfig.scaleY),
             )
-            .offset {
-                IntOffset(
-                    (shake.value * shakeConfig.translateX).roundToInt(),
-                    (shake.value * shakeConfig.translateY).roundToInt(),
-                )
-            }
     } ?: this
 }
   
@@ -73,4 +69,5 @@ class ShakeConfig(
     val scaleY: Float = 0f,
     val translateX: Float = 0f,
     val translateY: Float = 0f,
+    val enableHaptic: Boolean = true,
 )

@@ -1,21 +1,19 @@
 package com.usmonie.word.features.dashboard.ui.games.enigma
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,11 +21,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.GridItemSpan
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -40,7 +36,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.Fill
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.style.TextAlign
@@ -56,6 +57,7 @@ import com.usmonie.word.features.dashboard.ui.games.GameBoard
 import com.usmonie.word.features.dashboard.ui.games.HintButton
 import com.usmonie.word.features.dashboard.ui.games.LivesAmount
 import com.usmonie.word.features.dashboard.ui.games.ReviveLifeDialog
+import com.usmonie.word.features.dashboard.ui.games.hangman.GuessedLetters
 import com.usmonie.word.features.dashboard.ui.games.hangman.HangmanGameScreen
 import com.usmonie.word.features.dashboard.ui.games.hangman.Keyboard
 import com.usmonie.word.features.dashboard.ui.ui.AdMob
@@ -67,6 +69,7 @@ import wtf.speech.core.ui.ShakeConfig
 import wtf.speech.core.ui.ShakeController
 import wtf.speech.core.ui.rememberShakeController
 import wtf.speech.core.ui.shake
+import wtf.word.core.domain.Analytics
 import wtf.word.core.domain.tools.fastForEachIndexed
 
 class EnigmaGameScreen(
@@ -80,20 +83,48 @@ class EnigmaGameScreen(
     override fun Content() {
         val state by enigmaViewModel.state.collectAsState()
 
-        EnigmaGameBoard({ state.lives }, { state.maxLives }, { state.hintsCount }) { insets ->
+        EnigmaGameBoard(
+            remember { { state.lives } },
+            remember { { state.maxLives } },
+            remember { { state.hintsCount } },
+            modifier = Modifier.fillMaxSize()
+        ) { insets ->
             val shakeController = rememberShakeController()
 
-            EnigmaGameContent(state, shakeController, insets)
+            EnigmaGameContent(
+                remember { { state.phrase } },
+                remember {
+                    { state.currentSelectedCellPosition }
+                },
+                remember {
+                    { cellState ->
+                        state is EnigmaState.Game
+                                && cellState != CellState.Correct
+                                && cellState != CellState.Found
+                    }
+                },
+                {
+                    state is EnigmaState.Game.HintSelection
+                },
+                remember {
+                    { state.guessedLetters }
+                },
+                shakeController,
+                insets
+            )
         }
     }
 
     @Composable
     private fun EnigmaGameContent(
-        state: EnigmaState,
+        getPhrase: () -> EnigmaEncryptedPhrase,
+        getCurrentSelectedPosition: () -> Pair<Int, Int>?,
+        isEnabled: (CellState) -> Boolean,
+        hintSelectionState: () -> Boolean,
+        guessedLetters: () -> GuessedLetters,
         shakeController: ShakeController,
         insets: PaddingValues
     ) {
-        val phrase = state.phrase
         GameStatusState()
 
         EnigmaEffectListener(enigmaViewModel, shakeController)
@@ -105,16 +136,19 @@ class EnigmaGameScreen(
                 .shake(shakeController)
         ) {
             Phrase(
-                phrase,
-                state,
+                getPhrase(),
+                getCurrentSelectedPosition,
+                isEnabled,
+                hintSelectionState,
                 Modifier
                     .weight(1.5f)
                     .fillMaxWidth()
+                    .padding(horizontal = 48.dp)
             )
 
             Keyboard(
                 enigmaViewModel::onLetterInput,
-                state.guessedLetters,
+                guessedLetters(),
                 Modifier
                     .weight(1f)
                     .fillMaxWidth()
@@ -167,166 +201,182 @@ class EnigmaGameScreen(
         getLives: () -> Int,
         getMaxLives: () -> Int,
         getHintsCount: () -> Int,
+        modifier: Modifier,
         content: @Composable (insets: PaddingValues) -> Unit
     ) {
         val routerManager = LocalRouteManager.current
 
         GameBoard(
             routerManager::navigateBack,
-            {
+            actions = {
                 Spacer(Modifier.width(24.dp))
                 LivesAmount(getLives(), getMaxLives(), Modifier.weight(1f))
                 HintButton(enigmaViewModel::useHint, getHintsCount())
                 Spacer(Modifier.width(24.dp))
             },
-            content = content
+            content = content,
+            modifier = modifier,
         )
     }
 
+    @OptIn(ExperimentalLayoutApi::class)
     @Composable
     private fun Phrase(
         phrase: EnigmaEncryptedPhrase,
-        state: EnigmaState,
+        getCurrentSelectedPosition: () -> Pair<Int, Int>?,
+        isEnabled: (CellState) -> Boolean,
+        hintSelectionState: () -> Boolean,
         modifier: Modifier
     ) {
-        LazyVerticalGrid(
-            modifier = modifier,
-            contentPadding = PaddingValues(24.dp),
-            horizontalArrangement = Arrangement.spacedBy(20.dp),
-            verticalArrangement = Arrangement.spacedBy(24.dp, Alignment.CenterVertically),
-            columns = GridCells.Fixed(12),
+        val scrollState = rememberScrollState()
+        FlowRow(
+            modifier.verticalScroll(scrollState).padding(vertical = 52.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterHorizontally)
         ) {
-            itemsIndexed(
-                phrase.encryptedPhrase,
-                span = { _, word -> GridItemSpan(word.size + 1) },
-                itemContent = { position, cells -> Word(cells, state, position) }
-            )
-        }
-    }
-
-    @Composable
-    private fun Word(word: Word, state: EnigmaState, wordPosition: Int) {
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterHorizontally),
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxHeight()
-        ) {
-            word.cells.fastForEachIndexed { position, cell ->
-                key(cell, position) {
-                    CellItem(cell, state, wordPosition, position)
+            key(phrase.phrase) {
+                phrase.encryptedPhrase.fastForEachIndexed { index, word ->
+                    key(index) {
+                        Word(word, getCurrentSelectedPosition, isEnabled, hintSelectionState, index)
+                    }
                 }
             }
         }
     }
 
     @Composable
-    private fun EnigmaGameScreen.CellItem(
-        cell: Cell,
-        state: EnigmaState,
-        wordPosition: Int,
-        position: Int
+    private fun Word(
+        word: Word,
+        getCurrentSelectedPosition: () -> Pair<Int, Int>?,
+        isEnabled: (CellState) -> Boolean,
+        hintSelectionState: () -> Boolean,
+        wordPosition: Int
     ) {
-        when {
-            cell.isLetter -> {
-                GuessedLetter(
-                    cell,
-                    {
-                        val (word, cellPosition) = state.currentSelectedCellPosition
-                            ?: return@GuessedLetter false
-
-                        word == wordPosition && cellPosition == position
-                    },
-                    enabled = state is EnigmaState.Game
-                            && cell.state != CellState.Correct
-                            && cell.state != CellState.Found,
-                    onClick = { enigmaViewModel.onCellSelected(position, wordPosition) }
-                )
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            word.cells.fastForEachIndexed { position, cell ->
+                key(cell.symbol, position) {
+                    CellItem(
+                        cell,
+                        getCurrentSelectedPosition,
+                        isEnabled,
+                        hintSelectionState,
+                        wordPosition,
+                        position
+                    )
+                }
             }
-
-            else -> Symbol(cell.letter, Modifier.fillMaxHeight())
         }
     }
 
     @Composable
-    private fun GuessedLetter(
+    private fun RowScope.CellItem(
+        cell: Cell,
+        getCurrentSelectedPosition: () -> Pair<Int, Int>?,
+        isEnabled: (CellState) -> Boolean,
+        hintSelectionState: () -> Boolean,
+        wordPosition: Int,
+        position: Int
+    ) {
+        when {
+            cell.isLetter -> GuessedLetter(
+                cell,
+                {
+                    val (word, cellPosition) = getCurrentSelectedPosition()
+                        ?: return@GuessedLetter false
+
+                    word == wordPosition && cellPosition == position
+                },
+                enabled = isEnabled,
+                hintSelectionState = hintSelectionState,
+                onClick = { enigmaViewModel.onCellSelected(position, wordPosition) }
+            )
+
+            else -> Symbol(cell.symbol, Modifier.fillMaxHeight())
+        }
+    }
+
+    @Composable
+    private fun RowScope.GuessedLetter(
         cell: Cell,
         getIsSelected: () -> Boolean,
+        hintSelectionState: () -> Boolean,
         onClick: () -> Unit,
-        enabled: Boolean
+        enabled: (CellState) -> Boolean
     ) {
         val interactionSource = remember { MutableInteractionSource() }
-        val primaryColor = MaterialTheme.colorScheme.primary
-        val textColor = MaterialTheme.colorScheme.onBackground
-        val selectedTextColor = MaterialTheme.colorScheme.onPrimary
-        val errorColor = MaterialTheme.colorScheme.error
+
+        val hintSelection = hintSelectionState()
         val isSelected = getIsSelected()
-
-        val (letter, letterColor, backgroundColor) = remember(cell, isSelected) {
-            val state = cell.state
-            when {
-                state is CellState.Correct -> Triple(cell.letter, primaryColor, Color.Transparent)
-                state is CellState.Found -> Triple(cell.letter, textColor, Color.Transparent)
-                state is CellState.Incorrect -> Triple(
-                    state.guessedLetter,
-                    errorColor,
-                    Color.Transparent
-                )
-
-                isSelected -> Triple("", selectedTextColor, primaryColor)
-                else -> Triple(
-                    if (cell.isLetter) "" else cell.letter,
-                    textColor,
-                    Color.Transparent
-                )
-            }
-        }
-
-        val backgroundAnimatedColor by animateColorAsState(
-            backgroundColor,
-            animationSpec = tween(300)
+        Letter(
+            cell.backgroundColor(hintSelection, isSelected),
+            { enabled(cell.state) },
+            hintSelectionState = hintSelectionState,
+            cell.letter,
+            cell.textColor(hintSelection, isSelected),
+            if (cell.state != CellState.Found) cell.number.toString() else "",
+            interactionSource,
+            onClick,
         )
+    }
 
+    @Composable
+    fun Letter(
+        backgroundColor: Color,
+        enabled: () -> Boolean,
+        hintSelectionState: () -> Boolean,
+        letter: String,
+        letterColor: Color,
+        cellNumber: String,
+        interactionSource: MutableInteractionSource,
+        onClick: () -> Unit,
+        modifier: Modifier = Modifier,
+    ) {
         Column(
-            modifier = Modifier
-                .width(24.dp)
-                .background(backgroundAnimatedColor, RoundedCornerShape(6.dp))
+            modifier = modifier
+                .drawBehind {
+                    drawRoundRect(
+                        Color(backgroundColor.value),
+                        cornerRadius = CornerRadius(6.dp.toPx()),
+                        style = if (hintSelectionState()) Stroke(2.dp.toPx()) else Fill
+                    )
+                }
                 .clip(RoundedCornerShape(6.dp))
                 .clickable(
                     indication = LocalIndication.current,
                     interactionSource = interactionSource,
-                    enabled = enabled,
+                    enabled = enabled(),
                     onClick = onClick,
-                ),
+                )
+                .width(20.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
             val pressed by interactionSource.collectIsPressedAsState()
-            val dividerHorizontalPadding by animateDpAsState(if (pressed) 4.dp else 2.dp)
-
-            val letterSize by animateFloatAsState(
-                if (cell.state == CellState.Empty) 0.1f else 1f,
-                label = "letter_size_cell_${cell.letter}"
-            )
+            val dividerHorizontalPadding by animateFloatAsState(if (pressed) 0.7f else 1f)
 
             Text(
-                text = letter.toString(),
-                fontSize = MaterialTheme.typography.titleLarge.fontSize * letterSize,
-                style = MaterialTheme.typography.titleLarge,
+                text = letter,
+                style = MaterialTheme.typography.titleSmall,
                 modifier = Modifier.padding(top = 4.dp),
                 color = letterColor,
                 textAlign = TextAlign.Center
             )
 
             HorizontalDivider(
-                Modifier.padding(
-                    horizontal = dividerHorizontalPadding,
-                    vertical = 2.dp
-                ),
+                Modifier
+                    .graphicsLayer { scaleX = dividerHorizontalPadding }
+                    .padding(
+                        horizontal = 2.dp,
+                        vertical = 2.dp
+                    ),
                 color = letterColor
             )
 
             Text(
-                text = if (cell.state != CellState.Found) cell.number.toString() else "",
+                text = cellNumber,
                 style = MaterialTheme.typography.labelSmall,
                 modifier = Modifier.padding(bottom = 4.dp),
                 textAlign = TextAlign.Center,
@@ -351,6 +401,7 @@ class EnigmaGameScreen(
     }
 
     class Builder(
+        private val analytics: Analytics,
         private val wordRepository: WordRepository,
         private val userRepository: UserRepository,
         private val adMob: AdMob
@@ -361,6 +412,7 @@ class EnigmaGameScreen(
             return EnigmaGameScreen(
                 adMob,
                 EnigmaGameViewModel(
+                    analytics,
                     GetNextPhraseUseCaseImpl(),
                     GetUserHintsCountUseCaseImpl(userRepository),
                     UseUserHintsCountUseCaseImpl(userRepository),
@@ -386,7 +438,7 @@ private fun EnigmaEffectListener(
 
             is EnigmaEffect.InputEffect.Incorrect -> {
                 hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
-                shakeController.shake(ShakeConfig(4, translateX = 5f))
+                shakeController.shake(ShakeConfig(iterations = 4, translateX = 5f))
             }
 
             else -> Unit

@@ -64,14 +64,13 @@ sealed class EnigmaState(
         data class HintSelection(
             override val phrase: EnigmaEncryptedPhrase,
             override val lives: Int,
-            override val currentSelectedCellPosition: Pair<Int, Int>? = null,
             override val foundLetters: Set<Char> = setOf(),
             override val hintsCount: Int,
             override val guessedLetters: GuessedLetters
         ) : Game(
             phrase,
             lives,
-            currentSelectedCellPosition,
+            null,
             foundLetters,
             hintsCount,
             guessedLetters
@@ -130,13 +129,13 @@ sealed class EnigmaEvent : ScreenEvent {
         val wordPosition: Int,
         val cellPositionInWord: Int
     ) : EnigmaEvent()
-
+    data class UpdateHints(val hintsCount: Int) : EnigmaEvent()
     data object ClearSelectionCell : EnigmaEvent()
     data class NextPhrase(val phrase: EnigmaEncryptedPhrase, val hintsCount: Int) : EnigmaEvent()
+    data class UpdateCurrentPhrase(val phrase: EnigmaEncryptedPhrase, val hintsCount: Int) : EnigmaEvent()
     data object ReviveClicked : EnigmaEvent()
     data object ReviveGranted : EnigmaEvent()
-    data class UseHint(val phrase: EnigmaEncryptedPhrase, val hintsLeft: Int) : EnigmaEvent()
-    data class UpdateHints(val hintsCount: Int) : EnigmaEvent()
+    data object UseHint : EnigmaEvent()
     data object NoHints : EnigmaEvent()
     data object ShowMiddleGameAd : EnigmaEvent()
 }

@@ -8,30 +8,35 @@ import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.usmonie.word.features.dashboard.domain.repository.UserRepository
@@ -51,6 +56,7 @@ import wtf.speech.compass.core.LocalRouteManager
 import wtf.speech.compass.core.RouteManager
 import wtf.speech.compass.core.Screen
 import wtf.speech.compass.core.ScreenBuilder
+import wtf.word.core.domain.tools.fastForEach
 
 class HangmanGameScreen(
     private val hangmanGameViewModel: HangmanGameViewModel,
@@ -101,7 +107,7 @@ private fun HangmanContent(
     HangmanEffect(effect, routerManager)
     GameBoard(
         routerManager::navigateBack,
-        {
+        actions = {
             if (state !is HangmanState.Loading && state !is HangmanState.Error) {
                 Spacer(Modifier.width(24.dp))
 
@@ -130,8 +136,6 @@ private fun HangmanContent(
 
         AnimatedVisibility(
             state is HangmanState.Won,
-            enter = scaleIn(),
-            exit = scaleOut(tween(0))
         ) {
             HangmanGameWon(
                 routerManager::navigateBack,
@@ -143,8 +147,6 @@ private fun HangmanContent(
 
         AnimatedVisibility(
             state is HangmanState.Lost,
-            enter = scaleIn(),
-            exit = scaleOut()
         ) {
             ReviveLifeDialog(
                 routerManager::navigateBack,
@@ -157,16 +159,12 @@ private fun HangmanContent(
 
         AnimatedVisibility(
             effect is HangmanEffect.ShowRewardedAd,
-            enter = scaleIn(),
-            exit = scaleOut()
         ) { adMob.RewardedInterstitial({}, hangmanGameViewModel::onRewardGranted) }
 
         AnimatedVisibility(
             effect is HangmanEffect.StartGame
                     || effect is HangmanEffect.RestartGame
-                    || effect is HangmanEffect.ShowInterstitialAd,
-            enter = scaleIn(),
-            exit = scaleOut()
+                    || effect is HangmanEffect.ShowInterstitialAd
         ) { adMob.Interstitial() }
     }
 }
@@ -223,16 +221,17 @@ private fun PlayBoard(
 
         AnimatedContent(
             state,
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f)
+                .navigationBarsPadding(),
             contentKey = { hangmanState -> hangmanState::class::simpleName }
         ) { hangmanState ->
             if (hangmanState is HangmanState.Playing.Input) {
                 Keyboard(
                     hangmanGameViewModel::onLetterGuessed,
                     hangmanState.guessedLetters,
-                    Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
-                        .padding(bottom = 16.dp)
+                    Modifier.fillMaxSize(),
                 )
             } else {
                 Column(Modifier.fillMaxWidth()) {
@@ -315,24 +314,23 @@ fun WordDisplay(gameState: HangmanState, modifier: Modifier = Modifier) {
     )
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun Keyboard(onLetterClick: (Char) -> Unit, guessedLetters: GuessedLetters, modifier: Modifier) {
-    val alphabet = remember { ('A'..'Z').toList() }
-
-    LazyVerticalGrid(
-        GridCells.Fixed(7),
-        modifier = modifier.padding(vertical = 8.dp),
-        contentPadding = PaddingValues(horizontal = 24.dp),
-        userScrollEnabled = false,
-        verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically),
-        horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally)
+    FlowRow(
+        modifier.padding(vertical = 8.dp, horizontal = 8.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
+        verticalArrangement = Arrangement.SpaceEvenly,
     ) {
-        items(alphabet) { letter ->
+        val density = LocalDensity.current
+        val size  by remember(density) { derivedStateOf { 128.dp / density.density } }
+        val modifier = Modifier.size(size)
+        alphabet.fastForEach { letter ->
             val wasGuessed = remember(
                 guessedLetters,
                 letter
             ) { letter.lowercaseChar() in guessedLetters.letters }
-            KeyboardButton(onLetterClick, letter, wasGuessed)
+            KeyboardButton(onLetterClick, letter, modifier, wasGuessed)
         }
     }
 }
@@ -341,20 +339,53 @@ fun Keyboard(onLetterClick: (Char) -> Unit, guessedLetters: GuessedLetters, modi
 private fun KeyboardButton(
     onLetterClick: (Char) -> Unit,
     letter: Char,
+    modifier: Modifier,
     wasGuessed: Boolean
 ) {
-    Button(
+    ElevatedButton(
         onClick = { onLetterClick(letter) },
         enabled = !wasGuessed,
-        shape = RoundedCornerShape(12.dp),
-        contentPadding = PaddingValues(horizontal = 4.dp, vertical = 8.dp)
+        shape = RoundedCornerShape(16.dp),
+        modifier = modifier,
+        contentPadding = PaddingValues(horizontal = 0.dp, vertical = 0.dp)
     ) {
         Text(
             letter.toString(),
-            style = MaterialTheme.typography.titleLarge,
+            style = MaterialTheme.typography.titleMedium,
         )
     }
 }
 
 @Immutable
 data class GuessedLetters(val letters: Set<Char>)
+
+val qwerty = listOf(
+    'Q',
+    'W',
+    'E',
+    'R',
+    'T',
+    'Y',
+    'U',
+    'I',
+    'O',
+    'P',
+    'A',
+    'S',
+    'D',
+    'F',
+    'G',
+    'H',
+    'J',
+    'K',
+    'L',
+    'Z',
+    'X',
+    'C',
+    'V',
+    'B',
+    'N',
+    'M'
+)
+
+val alphabet = ('A'..'Z').toList()

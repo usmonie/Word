@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>52301218026-akkq4aklie2mpo3agsoglhnmo0o4nenk.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.52301218026-akkq4aklie2mpo3agsoglhnmo0o4nenk</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>52301218026-3qml674i1b3j494ucd7b4d6noc2ns0qd.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDe22nb4RKgpcN5h-UmEkwVkRJe8TT9XzU</string>
+	<key>GCM_SENDER_ID</key>
+	<string>52301218026</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.usmonie.word</string>
+	<key>PROJECT_ID</key>
+	<string>word-99126</string>
+	<key>STORAGE_BUCKET</key>
+	<string>word-99126.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<true/>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<true/>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true/>
+	<key>IS_GCM_ENABLED</key>
+	<true/>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true/>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:52301218026:ios:2ddc1b6ec4d29f41c1d793</string>
+	<key>ADMOB_APP_ID</key>
+	<string>ca-app-pub-2198867984469198~3378346530</string>
+</dict>
+</plist>

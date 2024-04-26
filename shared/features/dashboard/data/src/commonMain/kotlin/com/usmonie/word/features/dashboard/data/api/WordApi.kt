@@ -3,6 +3,7 @@ package com.usmonie.word.features.dashboard.data.api
 import com.usmonie.word.features.dashboard.data.api.models.WordDto
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.plugins.HttpRequestRetry
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
@@ -20,6 +21,10 @@ class WordApi(private val baseUrl: String) {
                 ignoreUnknownKeys = true
                 useAlternativeNames = false
             })
+        }
+        install(HttpRequestRetry) {
+            retryOnServerErrors(maxRetries = 5)
+            exponentialDelay()
         }
 
 //        install(JsonFeature) {

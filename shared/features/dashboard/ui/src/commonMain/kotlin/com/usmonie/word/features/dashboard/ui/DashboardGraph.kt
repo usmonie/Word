@@ -32,6 +32,7 @@ fun rememberDashboardGraph(
     val dashboardScreen = remember {
         DashboardScreen.Builder(
             wordRepository,
+            subscriptionRepository,
             adMob,
             analytics
         )
@@ -88,6 +89,7 @@ fun getDashboardGraph(
 ): NavigationGraph {
     val dashboardScreen = DashboardScreen.Builder(
         wordRepository,
+        subscriptionRepository,
         adMob,
         analytics
     )
@@ -120,7 +122,7 @@ fun getDashboardGraph(
         register(
             Route(
                 EnigmaGameScreen.ID,
-                EnigmaGameScreen.Builder(wordRepository, userRepository, adMob)
+                EnigmaGameScreen.Builder(analytics, wordRepository, userRepository, adMob)
             )
         )
         register(

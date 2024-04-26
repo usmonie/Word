@@ -89,7 +89,7 @@ fun SearchWordCard(
                 }
             }
         }
-        Spacer(Modifier.height(16.dp))
+//        Spacer(Modifier.height(16.dp))
 
         AnimatedContent(selectedEtymology) {
             Column {
@@ -107,10 +107,10 @@ fun SearchWordCard(
                         modifier = Modifier.padding(horizontal = 24.dp),
                         overflow = TextOverflow.Ellipsis
                     )
+                    Spacer(Modifier.height(16.dp))
                 }
 
                 Pronunciations({ selectedPos }, {})
-
                 Spacer(Modifier.height(16.dp))
 
                 if (it.words.size > 1) {

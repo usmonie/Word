@@ -81,7 +81,7 @@ fun EnigmaGameWon(
         Text(
             "You deciphered the quote",
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.titleLarge,
+            style = MaterialTheme.typography.headlineSmall,
             color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp)
         )

@@ -18,7 +18,7 @@ class WordViewModel(
     private val updateFavouriteUseCase: UpdateFavouriteUseCase,
     private val analytics: Analytics,
 ) : BaseViewModel<WordState, WordAction, WordEvent, WordEffect>(
-    WordState(extra.word,)
+    WordState(extra.word)
 ) {
 
     init {
@@ -36,7 +36,7 @@ class WordViewModel(
 
     override fun WordState.reduce(event: WordEvent) = when (event) {
         is WordEvent.OpenWord -> this
-        is WordEvent.UpdateWord -> this.copy(word = event.word)
+        is WordEvent.UpdateWord -> this.copy(word = event.word, isFavorite = event.word.isFavorite)
         is WordEvent.SimilarWords -> this.copy(similarWords = ContentState.Success(event.words))
         is WordEvent.SelectEtymology -> this.copy(
             selectedEtymologyIndex = event.index,
@@ -53,18 +53,19 @@ class WordViewModel(
             WordEvent.OpenWord(action.word)
         }
 
-        is WordAction.UpdateFavourite -> updateFavourite(action.word)
+        is WordAction.UpdateFavourite -> {
+            analytics.log(DashboardAnalyticsEvents.UpdateFavoriteWord(action.word))
+            updateFavourite(action.word)
+        }
         is WordAction.Initial -> loadSimilar(action.word)
         is WordAction.SelectEtymology -> WordEvent.SelectEtymology(action.index)
         is WordAction.SelectPos -> WordEvent.SelectPos(action.index)
         WordAction.OnExpandSense -> WordEvent.OnExpandSense
     }
 
-    override suspend fun handleEvent(event: WordEvent): WordEffect? {
-        return when (event) {
-            is WordEvent.OpenWord -> WordEffect.OpenWord(event.word)
-            else -> null
-        }
+    override suspend fun handleEvent(event: WordEvent): WordEffect? = when (event) {
+        is WordEvent.OpenWord -> WordEffect.OpenWord(event.word)
+        else -> null
     }
 
     private suspend fun updateFavourite(word: WordCombinedUi): WordEvent {

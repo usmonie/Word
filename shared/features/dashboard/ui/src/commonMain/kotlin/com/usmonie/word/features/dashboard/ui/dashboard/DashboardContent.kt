@@ -87,7 +87,8 @@ internal fun NewDashboardContent(
 
             is DashboardState.Loading -> CircularProgressIndicator(
                 Modifier.align(Alignment.Center)
-                    .size(64.dp)
+                    .size(48.dp),
+                strokeWidth = 4.dp
             )
 
             is DashboardState.Success -> DashboardContent(
@@ -418,7 +419,7 @@ fun RandomWordCard(
             Box(Modifier.fillMaxWidth().padding(vertical = 24.dp), Alignment.Center) {
                 CircularProgressIndicator(
                     Modifier.size(32.dp),
-                    MaterialTheme.colorScheme.onSurface
+                    MaterialTheme.colorScheme.onSurface,
                 )
             }
         }

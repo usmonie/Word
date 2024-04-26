@@ -6,7 +6,9 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 
-internal class SubscriptionRepositoryImpl(private val billing: Billing) : SubscriptionRepository {
+internal class SubscriptionRepositoryImpl(
+    private val billing: Billing
+) : SubscriptionRepository {
     override fun getSubscriptionState(): Flow<SubscriptionStatus> = callbackFlow {
         val callback: (SubscriptionStatus) -> Unit = {
             trySend(it)
@@ -19,5 +21,6 @@ internal class SubscriptionRepositoryImpl(private val billing: Billing) : Subscr
     }
 }
 
-fun getSubscriptionRepository(billing: Billing): SubscriptionRepository =
-    SubscriptionRepositoryImpl(billing)
+fun getSubscriptionRepository(
+    billing: Billing
+): SubscriptionRepository = SubscriptionRepositoryImpl(billing)

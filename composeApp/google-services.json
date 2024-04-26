@@ -12,7 +12,12 @@
           "package_name": "com.usmonie.word"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "52301218026-shtkp0akfvu831hdvdhnsual18m8u1e0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDMIBxuyZ6k6csXzu0xyTkk5xjQ52Mb87A"
@@ -20,9 +25,23 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "52301218026-shtkp0akfvu831hdvdhnsual18m8u1e0.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "52301218026-akkq4aklie2mpo3agsoglhnmo0o4nenk.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.usmonie.word",
+                "app_store_id": "6474263046"
+              }
+            }
+          ]
         }
-      }
+      },
+      "admob_app_id": "ca-app-pub-2198867984469198~3745942388"
     },
     {
       "client_info": {
@@ -31,7 +50,12 @@
           "package_name": "com.usmonie.word.debug"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "52301218026-shtkp0akfvu831hdvdhnsual18m8u1e0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDMIBxuyZ6k6csXzu0xyTkk5xjQ52Mb87A"
@@ -39,7 +63,20 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "52301218026-shtkp0akfvu831hdvdhnsual18m8u1e0.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "52301218026-akkq4aklie2mpo3agsoglhnmo0o4nenk.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.usmonie.word",
+                "app_store_id": "6474263046"
+              }
+            }
+          ]
         }
       }
     }

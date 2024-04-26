@@ -1,9 +1,13 @@
 package com.usmonie.word.features.subscription.domain.models
 
-enum class SubscriptionStatus {
-    PURCHASED,
-    REFUNDED,
-    CANCELED,
-    EXPIRED,
-    NONE
+import kotlin.time.Duration
+
+sealed class SubscriptionStatus {
+    class Purchased: SubscriptionStatus()
+    class Refunded: SubscriptionStatus()
+    class Canceled: SubscriptionStatus()
+    class Expired: SubscriptionStatus()
+    class None: SubscriptionStatus()
+
+    class Sale(): SubscriptionStatus()
 }

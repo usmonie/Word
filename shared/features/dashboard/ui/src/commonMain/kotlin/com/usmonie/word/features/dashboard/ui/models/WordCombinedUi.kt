@@ -1,15 +1,15 @@
 package com.usmonie.word.features.dashboard.ui.models
 
-import androidx.compose.runtime.Stable
+import androidx.compose.runtime.Immutable
 
-@Stable
+@Immutable
 data class WordCombinedUi(
     val word: String,
     val wordEtymology: List<WordEtymologyUi>,
     val isFavorite: Boolean,
 )
 
-@Stable
+@Immutable
 data class WordEtymologyUi(
     val etymologyText: String?,
     val etymologyNumber: Int?,

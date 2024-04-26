@@ -1,6 +1,9 @@
 @file:Suppress("FunctionName")
 
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -53,7 +56,7 @@ fun MainViewController(
     val admob = AdMob(
         { modifier ->
             UIKitView(
-                modifier = modifier.heightIn(max = 54.dp),
+                modifier = modifier.wrapContentHeight(),
                 factory = bannerUiView
             )
         },
@@ -94,10 +97,10 @@ fun MainViewController(
     val content: @Composable () -> Unit = {
         var isSubscribed by mutableStateOf(true)
 
-        val subscriptionStatus by subscriptionStatusUseCase(Unit).collectAsState(SubscriptionStatus.PURCHASED)
+        val subscriptionStatus by subscriptionStatusUseCase(Unit).collectAsState(SubscriptionStatus.Purchased())
 
         LaunchedEffect(subscriptionStatus) {
-            isSubscribed = subscriptionStatus == SubscriptionStatus.PURCHASED
+            isSubscribed = subscriptionStatus is SubscriptionStatus.Purchased
         }
 
         LaunchedEffect(isSubscribed) {

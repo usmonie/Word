@@ -1,6 +1,7 @@
 package com.usmonie.word.features.dashboard.ui.ui
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.material.icons.Icons
@@ -10,6 +11,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
@@ -50,6 +52,39 @@ fun WordTopBar(
             containerColor = MaterialTheme.colorScheme.background
         ),
         scrollBehavior = scrollBehavior
+    )
+}
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+fun SmallWordTopBar(
+    onBackClick: () -> Unit,
+    onQueryChanged: (TextFieldValue) -> Unit,
+    enabled: Boolean,
+    placeholder: String,
+    query: () -> TextFieldValue,
+    hasFocus: () -> Boolean,
+    onFocusChange: (Boolean) -> Unit,
+    getScrollBehavior: () -> TopAppBarScrollBehavior,
+    windowInsets: WindowInsets = TopAppBarDefaults.windowInsets,
+) {
+    TopAppBar(
+        title = {
+            SearchTopBar(
+                query,
+                placeholder,
+                enabled,
+                getScrollBehavior,
+                onQueryChanged,
+                onFocusChange,
+                hasFocus,
+            )
+        },
+        windowInsets = windowInsets,
+        navigationIcon = { NavigationBack({ query().text.isNotEmpty() }, onBackClick) },
+        colors = TopAppBarDefaults.largeTopAppBarColors(
+            containerColor = MaterialTheme.colorScheme.background
+        ),
     )
 }
 

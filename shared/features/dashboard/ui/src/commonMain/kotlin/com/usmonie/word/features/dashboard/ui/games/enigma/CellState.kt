@@ -1,6 +1,9 @@
 package com.usmonie.word.features.dashboard.ui.games.enigma
 
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.ui.graphics.Color
 import wtf.word.core.domain.tools.fastMap
 
 @Immutable
@@ -13,11 +16,32 @@ sealed class CellState {
 
 @Immutable
 data class Cell(
-    val letter: Char,
+    val symbol: Char,
     val number: Int,
-    val isLetter: Boolean,
     val state: CellState = CellState.Empty,
-)
+) {
+    val isLetter: Boolean = symbol.isLetter()
+
+    val letter: String = when (state) {
+        CellState.Correct -> symbol.toString()
+        CellState.Found -> symbol.toString()
+        else -> ""
+    }
+
+    @Composable
+    fun backgroundColor(hintSelection: Boolean, isSelected: Boolean): Color = when (state) {
+        CellState.Empty -> if (hintSelection || isSelected) MaterialTheme.colorScheme.primary else Color.Transparent
+        else -> Color.Transparent
+    }
+
+    @Composable
+    fun textColor(hintSelection: Boolean, isSelected: Boolean): Color = when (state) {
+        CellState.Correct -> MaterialTheme.colorScheme.primary
+        CellState.Empty -> if (hintSelection) MaterialTheme.colorScheme.onBackground else if (isSelected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onBackground
+        CellState.Found -> MaterialTheme.colorScheme.onBackground
+        is CellState.Incorrect -> MaterialTheme.colorScheme.error
+    }
+}
 
 @Immutable
 data class EnigmaEncryptedPhrase(
@@ -64,7 +88,6 @@ fun encryptPhrase(phrase: String, author: String): EnigmaEncryptedPhrase {
                 val cell = Cell(
                     char,
                     index + 1,
-                    char.isLetter(),
                     if (charUppercase == randomCharFirst || charUppercase == randomCharSecond || charUppercase == randomCharThird) CellState.Found else CellState.Empty
                 )
 

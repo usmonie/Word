@@ -19,24 +19,24 @@ class AdMob(
 ) {
     @Composable
     fun Banner(modifier: Modifier = Modifier) {
-        val subscriptionState by subscriptionUseCase(Unit).collectAsState(SubscriptionStatus.PURCHASED)
-        if (subscriptionState != SubscriptionStatus.PURCHASED && adMobState.isBannerReady) {
+        val subscriptionState by subscriptionUseCase(Unit).collectAsState(SubscriptionStatus.Purchased())
+        if (subscriptionState != SubscriptionStatus.Purchased() && adMobState.isBannerReady) {
             banner(modifier)
         }
     }
 
     @Composable
     fun RewardedInterstitial(onAddDismissed: () -> Unit, onRewardGranted: (Int) -> Unit) {
-        val subscriptionState by subscriptionUseCase(Unit).collectAsState(SubscriptionStatus.PURCHASED)
-        if (subscriptionState != SubscriptionStatus.PURCHASED && adMobState.isRewardReady) {
+        val subscriptionState by subscriptionUseCase(Unit).collectAsState(SubscriptionStatus.Purchased())
+        if (subscriptionState != SubscriptionStatus.Purchased() && adMobState.isRewardReady) {
             rewardedInterstitial(onAddDismissed, onRewardGranted)
         }
     }
 
     @Composable
     fun Interstitial() {
-        val subscriptionState by subscriptionUseCase(Unit).collectAsState(SubscriptionStatus.PURCHASED)
-        if (subscriptionState != SubscriptionStatus.PURCHASED && adMobState.isInterstitialReady) {
+        val subscriptionState by subscriptionUseCase(Unit).collectAsState(SubscriptionStatus.Purchased())
+        if (subscriptionState != SubscriptionStatus.Purchased() && adMobState.isInterstitialReady) {
             interstitial()
         }
     }

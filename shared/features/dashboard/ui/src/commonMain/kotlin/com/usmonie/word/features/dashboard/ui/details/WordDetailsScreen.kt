@@ -86,7 +86,8 @@ class WordDetailsScreen(
 
             WordDetailsContent(
                 insets,
-                { state.word },
+                remember { { state.word } },
+                remember { { state.word.isFavorite } },
                 { state.selectedEtymologyIndex },
                 wordViewModel,
                 { state.selectedPosIndex },
@@ -134,6 +135,7 @@ class WordDetailsScreen(
 private fun WordDetailsContent(
     insets: PaddingValues,
     getWordCombined: () -> WordCombinedUi,
+    getBookmarked: () -> Boolean,
     getSelectedEtymologyTabIndex: () -> Int,
     wordViewModel: WordViewModel,
     getSelectedPosIndex: () -> Int,
@@ -165,7 +167,7 @@ private fun WordDetailsContent(
     Box(Modifier) {
         val contentPadding = remember(insets) {
             PaddingValues(
-                top = insets.calculateTopPadding(),
+                top = insets.calculateTopPadding() + 16.dp,
                 bottom = insets.calculateBottomPadding() + 80.dp,
                 start = insets.calculateStartPadding(LayoutDirection.Ltr),
                 end = insets.calculateEndPadding(LayoutDirection.Ltr),
@@ -207,7 +209,7 @@ private fun WordDetailsContent(
                     remember { { wordViewModel.onUpdateFavouritePressed(wordCombined) } },
                     modifier = Modifier.padding(horizontal = 24.dp),
                     getWord = { selectedPos },
-                    getBookmarked = { wordCombined.isFavorite }
+                    getBookmarked = getBookmarked
                 )
             }
 

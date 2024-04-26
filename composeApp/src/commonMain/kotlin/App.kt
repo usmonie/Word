@@ -2,6 +2,7 @@
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.Modifier
 import wtf.speech.compass.core.NavigationHost
@@ -10,7 +11,7 @@ import wtf.word.core.design.themes.WordColors
 import wtf.word.core.design.themes.WordTheme
 import wtf.word.core.design.themes.typographies.WordTypography
 
-@Stable
+@Immutable
 data class AppConfiguration(
     val routeManager: RouteManager,
     val currentTheme: WordColors,
@@ -22,9 +23,7 @@ data class AppConfiguration(
 fun App(appConfiguration: AppConfiguration) {
 
     val routeManager = appConfiguration.routeManager
-    BackHandler {
-        routeManager.navigateBack()
-    }
+    BackHandler(routeManager::navigateBack)
 
     WordTheme(appConfiguration.currentTheme, appConfiguration.currentFonts) {
         NavigationHost(

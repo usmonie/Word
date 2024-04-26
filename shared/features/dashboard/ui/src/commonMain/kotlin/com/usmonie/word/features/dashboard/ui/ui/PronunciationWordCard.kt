@@ -3,6 +3,7 @@ package com.usmonie.word.features.dashboard.ui.ui
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -76,10 +77,8 @@ fun DetailsWordCardMedium(
     modifier: Modifier = Modifier
 ) {
     val word = getWord()
-    BaseCard(
-        modifier = modifier,
-    ) {
-        Spacer(Modifier.height(20.dp))
+    BaseCard(modifier = modifier) {
+        Spacer(Modifier.height(24.dp))
         WordMediumResizableTitle(word.word, Modifier.fillMaxWidth().padding(horizontal = 24.dp))
 
         WordButtons(
@@ -94,25 +93,26 @@ fun DetailsWordCardMedium(
             var expanded by remember(word) { mutableStateOf(false) }
             val maxLines by remember(expanded) { mutableStateOf(if (expanded) Int.MAX_VALUE else 3) }
 
-            Column(Modifier
-                .fillMaxWidth()
-                .animateContentSize()
-                .clickable { expanded = !expanded }
+            Column(
+                Modifier
+                    .fillMaxWidth()
+                    .animateContentSize()
+                    .clickable { expanded = !expanded },
+                verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 EtymologyTitle()
-                Spacer(Modifier.height(8.dp))
                 Text(
                     word.etymologyText.orEmpty(),
                     maxLines = maxLines,
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurface,
                     textAlign = TextAlign.Justify,
-                    modifier = Modifier.padding(horizontal = 24.dp).padding(top = 8.dp),
+                    modifier = Modifier.padding(horizontal = 24.dp),
                     overflow = TextOverflow.Ellipsis
                 )
             }
-
         }
+        Spacer(Modifier.height(16.dp))
 
         Pronunciations(getWord, onAudioPlayClicked)
         Spacer(Modifier.height(24.dp))
@@ -128,7 +128,11 @@ fun Pronunciations(
     val sounds by remember(word) {
         derivedStateOf {
             word.sounds
-                .groupBy { sound -> sound.tags.joinToString { tag -> tag.replaceFirstChar { it.uppercaseChar() } } }
+                .groupBy { sound ->
+                    sound.tags.joinToString { tag ->
+                        tag.replaceFirstChar { it.uppercaseChar() }
+                    }
+                }
                 .mapValues {
                     it.value.asSequence()
                         .map { pronunciation -> (pronunciation.ipa ?: pronunciation.enpr) }
@@ -140,8 +144,8 @@ fun Pronunciations(
                 .filter { it.second.isNotBlank() }
         }
     }
-    if (word.sounds.isNotEmpty()) {
-        Spacer(Modifier.height(16.dp))
+
+    if (sounds.isNotEmpty()) {
         PronunciationTitle()
         Spacer(Modifier.height(8.dp))
         sounds.fastForEachIndexed { i, sound ->

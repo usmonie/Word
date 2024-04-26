@@ -13,7 +13,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.runtime.Composable
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
@@ -46,6 +46,7 @@ import com.google.android.gms.auth.api.identity.SignInCredential
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.ktx.Firebase
 import com.liftric.kvault.KVault
+import com.theapache64.rebugger.Rebugger
 import com.usmonie.word.features.dashboard.data.api.WordApi
 import com.usmonie.word.features.dashboard.data.di.DashboardDataComponent
 import com.usmonie.word.features.dashboard.data.repository.UserRepositoryImpl
@@ -59,6 +60,7 @@ import com.usmonie.word.features.onboarding.ui.getWelcomeGraph
 import com.usmonie.word.features.subscription.data.Billing
 import com.usmonie.word.features.subscription.data.getSubscriptionRepository
 import com.usmonie.word.features.subscription.domain.models.SubscriptionStatus
+import com.usmonie.word.features.subscription.domain.models.SubscriptionStatus.Sale
 import com.usmonie.word.features.subscription.domain.usecase.SubscriptionStatusUseCaseImpl
 import wtf.speech.compass.core.RouteManager
 import wtf.speech.compass.core.rememberRouteManager
@@ -84,12 +86,9 @@ class MainActivity : ComponentActivity() {
     private val admobState = AdMobState()
 
     private val appKeys by lazy {
-        if (packageName.contains("debug")) {
-            AppKeys.Debug
-        } else {
-            AppKeys.Release
-        }
+        if (packageName.contains("debug")) AppKeys.Debug else AppKeys.Release
     }
+
     private val launcher = registerForActivityResult(
         ActivityResultContracts.StartIntentSenderForResult()
     ) { result ->
@@ -129,14 +128,36 @@ class MainActivity : ComponentActivity() {
 
         loadInterstitial(this)
         enableEdgeToEdge()
+        val (currentColors, currentTypography) = getTheme(userRepository)
+
+        var currentTheme by mutableStateOf(currentColors)
+
+        var currentFonts by mutableStateOf(currentTypography)
+        val wordRepository = DashboardDataComponent.getWordsRepository(WordApi("http://16.170.6.0"))
+
+        val dashboardGraph = getDashboardGraph(
+            { currentTheme = it },
+            { currentFonts = it },
+            subscriptionRepository,
+            userRepository,
+            wordRepository,
+            adMob,
+            logger
+        )
+
+        val welcomeGraph = getWelcomeGraph(
+            { routeManager.switchToGraph(DASHBOARD_GRAPH_ID) },
+            userRepository,
+            logger
+        )
+
         setContent {
             val view = LocalView.current
             val isDark = isSystemInDarkTheme()
-            val subscriptionStatus by subscriptionStatusUseCase(Unit)
-                .collectAsState(initial = SubscriptionStatus.PURCHASED)
+            val subscriptionStatus by subscriptionStatusUseCase(Unit).collectAsState(initial = SubscriptionStatus.Purchased())
 
             LaunchedEffect(subscriptionStatus) {
-                isSubscribed = subscriptionStatus == SubscriptionStatus.PURCHASED
+                isSubscribed = subscriptionStatus is SubscriptionStatus.Purchased
             }
 
             SideEffect {
@@ -144,53 +165,21 @@ class MainActivity : ComponentActivity() {
                 val insets = WindowCompat.getInsetsController(window, view)
                 window.statusBarColor = Color.Transparent.toArgb()
                 window.navigationBarColor = Color.Transparent.toArgb()
-                insets.isAppearanceLightStatusBars = !isDark
+                insets.isAppearanceLightStatusBars = !isDark //subscriptionStatus is Sale && primaryContainer.value
                 insets.isAppearanceLightNavigationBars = !isDark
             }
 
-            val (currentColors, currentTypography) = rememberTheme(userRepository)
-            val (currentTheme, onCurrentColorsChanged) = remember {
-                mutableStateOf(currentColors)
-            }
-            val (currentFonts, onCurrentFontsChanged) = remember {
-                mutableStateOf(currentTypography)
-            }
-            val wordRepository = remember {
-                DashboardDataComponent.getWordsRepository(WordApi("http://16.170.6.0"))
+            routeManager = rememberRouteManager(welcomeGraph ?: dashboardGraph).apply {
+                if (welcomeGraph != null) {
+                    routeManager.registerGraph(dashboardGraph)
+                }
             }
 
-            val dashboardGraph = remember(
-                onCurrentColorsChanged,
-                onCurrentColorsChanged,
-                subscriptionRepository,
-                userRepository,
-                wordRepository,
-                adMob,
-                logger
-            ) {
-                getDashboardGraph(
-                    onCurrentColorsChanged,
-                    onCurrentFontsChanged,
-                    subscriptionRepository,
-                    userRepository,
-                    wordRepository,
-                    adMob,
-                    logger
-                )
+            val appConfiguration = remember(routeManager, currentTheme, currentFonts) {
+                AppConfiguration(routeManager, currentTheme, currentFonts)
             }
 
-            val welcomeGraph = getWelcomeGraph(
-                { routeManager.switchToGraph(DASHBOARD_GRAPH_ID) },
-                userRepository,
-                logger
-            )
-
-            routeManager = rememberRouteManager(welcomeGraph ?: dashboardGraph)
-            if (welcomeGraph != null) {
-                routeManager.registerGraph(dashboardGraph)
-            }
-
-            App(AppConfiguration(routeManager, currentTheme, currentFonts))
+            App(appConfiguration)
             ReportDrawn()
         }
     }
@@ -220,26 +209,6 @@ class MainActivity : ComponentActivity() {
             subscriptionStatusUseCase,
             admobState
         )
-
-    @Composable
-    private fun rememberTheme(userRepository: UserRepositoryImpl) =
-        remember {
-            val theme = CurrentThemeUseCaseImpl(userRepository).invoke(Unit)
-            val userSelectedColor = theme.colorsName?.let { WordColors.valueOf(it) }
-                ?: WordColors.RICH_MAROON
-            val colors = when {
-                !isSubscribed && userSelectedColor.paid -> WordColors.RICH_MAROON
-                else -> userSelectedColor
-            }
-            val fonts = theme.fonts
-            val typography = if (isSubscribed && fonts != null) {
-                WordTypography.valueOf(fonts)
-            } else {
-                ModernChic
-            }
-
-            Pair(colors, typography)
-        }
 
     override fun onStart() {
         super.onStart()
@@ -356,4 +325,23 @@ class MainActivity : ComponentActivity() {
         is ContextWrapper -> baseContext.findActivity()
         else -> null
     }
+
+    private fun getTheme(userRepository: UserRepositoryImpl): Pair<WordColors, WordTypography> {
+        val theme = CurrentThemeUseCaseImpl(userRepository).invoke(Unit)
+        val userSelectedColor = theme.colorsName?.let { WordColors.valueOf(it) }
+            ?: WordColors.RICH_MAROON
+        val colors = when {
+            !isSubscribed && userSelectedColor.paid -> WordColors.RICH_MAROON
+            else -> userSelectedColor
+        }
+        val fonts = theme.fonts
+        val typography = if (isSubscribed && fonts != null) {
+            WordTypography.valueOf(fonts)
+        } else {
+            ModernChic
+        }
+
+        return Pair(colors, typography)
+    }
+
 }

@@ -55,7 +55,7 @@ internal fun SettingsScreenContent(
     SettingsScreenEffect(effect, changeTheme, changeFont)
 
     val isSubscribed by remember(state) {
-        derivedStateOf { state.subscriptionStatus == SubscriptionStatus.PURCHASED }
+        derivedStateOf { state.subscriptionStatus is SubscriptionStatus.Purchased }
     }
 
     val colors = remember { WordColors.entries.toList() }

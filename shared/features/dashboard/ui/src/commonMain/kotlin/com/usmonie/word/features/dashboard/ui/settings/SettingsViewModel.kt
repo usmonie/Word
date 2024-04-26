@@ -28,7 +28,7 @@ internal class SettingsViewModel(
     SettingsState(
         WordColors.RICH_MAROON,
         ModernChic,
-        SubscriptionStatus.PURCHASED,
+        SubscriptionStatus.Purchased(),
         LazyListState(0, 0),
     )
 ) {
@@ -64,7 +64,7 @@ internal class SettingsViewModel(
                 val userSelectedColor = colorsName?.let { WordColors.valueOf(it) }
                     ?: WordColors.RICH_MAROON
                 val colors = when {
-                    action.newSubscriptionStatus != SubscriptionStatus.PURCHASED && userSelectedColor.paid -> WordColors.RICH_MAROON
+                    action.newSubscriptionStatus !is SubscriptionStatus.Purchased && userSelectedColor.paid -> WordColors.RICH_MAROON
                     else -> userSelectedColor
                 }
                 val typography = fonts?.let { WordTypography.valueOf(it) } ?: ModernChic

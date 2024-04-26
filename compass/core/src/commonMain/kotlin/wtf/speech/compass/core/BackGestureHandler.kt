@@ -85,7 +85,7 @@ private fun PreviousScreen() {
 
     val showPrev by remember(previousScreen) {
         derivedStateOf {
-            routeManager.draggingOffset.value > 0 && previousScreen != null
+            previousScreen != null
         }
     }
 
