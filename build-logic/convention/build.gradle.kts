@@ -27,15 +27,15 @@ dependencies {
 gradlePlugin {
     plugins {
         register("multiplatform core module") {
-            id = "wtf.speech.multiplatform.core"
+            id = "com.usmonie.multiplatform.core"
             implementationClass = "MultiPlatformCoreConventionPlugin"
         }
         register("multiplatform ui module") {
-            id = "wtf.speech.multiplatform.ui"
+            id = "com.usmonie.multiplatform.ui"
             implementationClass = "MultiPlatformUiConventionPlugin"
         }
         register("multiplatform domain module") {
-            id = "wtf.speech.multiplatform.domain"
+            id = "com.usmonie.multiplatform.domain"
             implementationClass = "MultiPlatformDomainConventionPlugin"
         }
     }

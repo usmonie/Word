@@ -1,7 +1,7 @@
 import org.gradle.api.internal.FeaturePreviews
 
-
 rootProject.name = "Word"
+
 enableFeaturePreview(FeaturePreviews.Feature.TYPESAFE_PROJECT_ACCESSORS.name)
 enableFeaturePreview(FeaturePreviews.Feature.STABLE_CONFIGURATION_CACHE.name)
 
@@ -9,45 +9,58 @@ pluginManagement {
     includeBuild("build-logic")
 
     repositories {
+        google {
+            mavenContent {
+                includeGroupAndSubgroups("androidx")
+                includeGroupAndSubgroups("com.android")
+                includeGroupAndSubgroups("com.google")
+            }
+        }
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
-        google()
-        gradlePluginPortal()
+
         mavenCentral()
+        gradlePluginPortal()
     }
 }
 
 dependencyResolutionManagement {
     repositories {
-        google()
-        mavenCentral()
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+
+        google {
+            mavenContent {
+                includeGroupAndSubgroups("androidx")
+                includeGroupAndSubgroups("com.android")
+                includeGroupAndSubgroups("com.google")
+            }
+        }
+        mavenCentral()
     }
 }
 
 include(":composeApp")
 
-include(":benchmark")
-include(":baselineprofile")
-
-include(":shared:core:domain")
-include(":shared:core:ui")
-include(":shared:core:design")
-
 include(":compass:core")
+include(":compass:viewmodel")
 
-include(":shared:features:dashboard:ui")
-include(":shared:features:dashboard:domain")
-include(":shared:features:dashboard:data")
+include(":shared:core:analytics")
+include(":shared:core:domain")
+include(":shared:core:kit")
+include(":shared:core:tools")
 
-include(":shared:features:admob:ui")
-include(":shared:features:admob:domain")
-include(":shared:features:admob:data")
+// include(":shared:feature:ads:ui")
 
-include(":shared:features:onboarding:ui")
-include(":shared:features:onboarding:domain")
-include(":shared:features:onboarding:data")
+include(":shared:feature:dashboard:data")
+include(":shared:feature:dashboard:domain")
+include(":shared:feature:dashboard:ui")
 
-include(":shared:features:subscription:domain")
-include(":shared:features:subscription:data")
+// include(":shared:feature:dashboard:data")
+// include(":shared:feature:dashboard:domain")
+include(":shared:feature:details:ui")
 
-include(":shared:features:word:ui")
+include(":shared:feature:dictionary:data")
+include(":shared:feature:dictionary:domain")
+include(":shared:feature:dictionary:ui")
+
+// include(":shared:feature:subscriptions:data")
+include(":shared:feature:subscriptions:domain")

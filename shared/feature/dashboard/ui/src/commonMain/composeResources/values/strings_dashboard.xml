@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Dashboard Screen-->
+    <string name="dashboard_title">Dashboard</string>
+    <string name="continue_learning_title">Continue</string>
+
+    <!--Learning status-->
+    <string name="learning_status_subtitle">Learning status</string>
+    <string name="learned_status_title">Learned</string>
+    <string name="learned_status_description">Review</string>
+    <string name="pending_status_title">Pending</string>
+    <string name="pending_status_description">Practice words</string>
+    <string name="new_status_title">New</string>
+    <string name="new_status_description">Learn new words</string>
+    <string name="streak_status_title">Streak</string>
+    <string name="streak_status_description">Days</string>
+
+    <!--Dictionary Screen-->
+    <string name="dictionary_title">Dictionary</string>
+    <string name="search_title">[S]earch</string>
+    <string name="favorites_subtitle">[F]avorites</string>
+    <string name="games_subtitle">[G]ames</string>
+    <string name="settings_subtitle">[S]ettings</string>
+    <string name="dashboard_search_history_title">Recent search</string>
+
+    <!-- Games Screen -->
+    <string name="games_hangman_game">[H]angman</string>
+    <string name="games_enigma_game">[E]nigma</string>
+
+    <!--Network connection error-->
+    <string name="network_connection_error">Network connection error</string>
+    <string name="network_connection_description">You can view the words you have added to your favorites and play games</string>
+    <string name="network_connection_try_again">Try again</string>
+</resources>

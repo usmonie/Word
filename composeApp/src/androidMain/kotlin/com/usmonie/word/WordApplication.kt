@@ -1,85 +1,34 @@
 package com.usmonie.word
 
-import android.app.Activity
 import android.app.Application
-import android.content.Context
-import android.util.Log
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.LoadAdError
-import com.google.android.gms.ads.MobileAds
-import com.google.android.gms.ads.appopen.AppOpenAd
-import com.google.android.gms.ads.appopen.AppOpenAd.AppOpenAdLoadCallback
+import com.usmonie.word.di.appModule
+import com.usmonie.word.features.dashboard.data.di.dashboardDataModule
+import com.usmonie.word.features.dashboard.domain.di.dashboardDomainModule
+import com.usmonie.word.features.dashboard.ui.di.dashboardScreensModule
+import com.usmonie.word.features.details.ui.di.detailsModule
+import com.usmonie.word.features.dictionary.data.di.wordDataModule
+import com.usmonie.word.features.dictionary.domain.di.dictionaryDomainUseCase
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
+import org.koin.core.context.GlobalContext.startKoin
 
 class WordApplication : Application() {
+
     override fun onCreate() {
         super.onCreate()
 
-        MobileAds.initialize(this) { }
-    }
-}
-
-internal class AppOpenAdManager {
-    private var appOpenAd: AppOpenAd? = null
-    private var isLoadingAd = false
-    var isShowingAd = false
-
-    fun showAdIfAvailable(activity: Activity, startupId: String) {
-        // If the app open ad is already showing, do not show the ad again.
-        if (isShowingAd) {
-            Log.d(LOG_TAG, "The app open ad is already showing.")
-            return
+        startKoin {
+            androidContext(this@WordApplication)
+            androidLogger()
+            modules(
+                dictionaryDomainUseCase +
+                    wordDataModule +
+                    dashboardDataModule +
+                    dashboardDomainModule +
+                    dashboardScreensModule +
+                    detailsModule +
+                    appModule
+            )
         }
-
-        // If the app open ad is not available yet, invoke the callback then load the ad.
-        if (!isAdAvailable) {
-            Log.d(LOG_TAG, "The app open ad is not ready yet.")
-//            onShowAdCompleteListener.onShowAdComplete();
-            loadAd(activity, startupId)
-            return
-        }
-
-        isShowingAd = true
-        appOpenAd?.show(activity)
-    }
-
-    /** Request an ad.  */
-    private fun loadAd(context: Context, startupId: String) {
-        // Do not load ad if there is an unused ad or one is already loading.
-        // Do not load ad if there is an unused ad or one is already loading.
-        if (isLoadingAd || isAdAvailable) {
-            return
-        }
-
-        isLoadingAd = true
-        val request: AdRequest = AdRequest.Builder().build()
-        AppOpenAd.load(
-            context,
-            startupId,
-            request,
-            object : AppOpenAdLoadCallback() {
-                override fun onAdLoaded(ad: AppOpenAd) {
-                    // Called when an app open ad has loaded.
-                    Log.d(LOG_TAG, "Ad was loaded.")
-                    appOpenAd = ad
-                    isLoadingAd = false
-
-                }
-
-                override fun onAdFailedToLoad(loadAdError: LoadAdError) {
-                    // Called when an app open ad has failed to load.
-                    Log.d(LOG_TAG, loadAdError.message)
-                    isLoadingAd = false
-                }
-            }
-        )
-
-    }
-
-    private val isAdAvailable: Boolean
-        /** Check if ad exists and can be shown.  */
-        get() = appOpenAd != null
-
-    companion object {
-        private const val LOG_TAG = "AppOpenAdManager"
     }
 }

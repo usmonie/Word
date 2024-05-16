@@ -20,17 +20,18 @@ internal fun Project.configureDetekt(extension: DetektExtension) {
 
         // Define the detekt configuration(s) you want to use.
         // Defaults to the default detekt configuration.
-//        config.setFrom(
-//            "$rootDir/configs/detekt/comments.yml",
-//            "$rootDir/configs/detekt/complexity.yml",
-//            "$rootDir/configs/detekt/coroutines.yml",
-//            "$rootDir/configs/detekt/empty-blocks.yml",
-//            "$rootDir/configs/detekt/exceptions.yml",
-//            "$rootDir/configs/detekt/naming.yml",
-//            "$rootDir/configs/detekt/performance.yml",
-//            "$rootDir/configs/detekt/potential-bugs.yml",
-//            "$rootDir/configs/detekt/style.yml",
-//        )
+        config.setFrom(
+            "$rootDir/configs/detekt/comments.yml",
+            "$rootDir/configs/detekt/compose.yml",
+            "$rootDir/configs/detekt/complexity.yml",
+            "$rootDir/configs/detekt/coroutines.yml",
+            "$rootDir/configs/detekt/empty-blocks.yml",
+            "$rootDir/configs/detekt/exceptions.yml",
+            "$rootDir/configs/detekt/naming.yml",
+            "$rootDir/configs/detekt/performance.yml",
+            "$rootDir/configs/detekt/potential-bugs.yml",
+            "$rootDir/configs/detekt/style.yml",
+        )
         config.setFrom(fileTree("$rootDir/configs/detekt/"))
 
         // Applies the config files on top of detekt's default config file. `false` by default.

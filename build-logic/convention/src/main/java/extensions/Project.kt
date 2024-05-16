@@ -23,4 +23,4 @@ internal val Project.libs
 internal val Project.config
     get(): VersionCatalog = extensions
         .getByType<VersionCatalogsExtension>()
-        .named("config")
+        .named("config.versions.toml")

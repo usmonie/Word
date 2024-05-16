@@ -2,13 +2,13 @@ import extensions.androidDependencies
 import extensions.commonDependencies
 
 plugins {
-    id(libs.plugins.speech.multiplatform.core.get().pluginId)
-    alias(libs.plugins.kotlin.multiplatform)
-    alias(libs.plugins.android.library)
-    alias(libs.plugins.compose)
+    id(libs.plugins.usmonie.multiplatform.core.get().pluginId)
+    alias(libs.plugins.kotlinMultiplatform)
+    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.jetbrainsCompose)
 }
 
-android.namespace = "wtf.speech.compass.core"
+android.namespace = "com.usmonie.compass.core"
 
 kotlin {
     listOf(
@@ -25,19 +25,19 @@ kotlin {
 }
 
 commonDependencies {
-    api(projects.shared.core.domain)
-    api(projects.shared.core.design)
+    implementation(projects.shared.core.domain)
+    implementation(projects.shared.core.kit)
     implementation("io.github.theapache64:rebugger:1.0.0-rc02")
-
 }
 
 androidDependencies {
-    implementation("androidx.compose.ui:ui-test-junit4:1.5.4")
+    implementation(libs.androidx.activity.compose)
 }
 
 android {
     buildFeatures.compose = true
 
-    composeOptions.kotlinCompilerExtensionVersion = "1.5.8"
+    composeOptions.kotlinCompilerExtensionVersion = "1.5.12"
 }
+
 task("testClasses")

@@ -9,11 +9,11 @@ dependencyResolutionManagement {
         }
     }
 
-//    versionCatalogs {
-//        create("config") {
-//            from(files("../gradle/config.version.toml"))
-//        }
-//    }
+    versionCatalogs {
+        create("config") {
+            from(files("../gradle/config.versions.toml"))
+        }
+    }
 }
 
 rootProject.name = "build-logic"

@@ -1,10 +1,10 @@
 import extensions.commonDependencies
 
 plugins {
-    id(libs.plugins.speech.multiplatform.core.get().pluginId)
+    id(libs.plugins.usmonie.multiplatform.core.get().pluginId)
 }
 
-android.namespace = "wtf.speech.shared.core.domain"
+android.namespace = "com.usmonie.shared.core.domain"
 
 commonDependencies {
     api(libs.kotlinx.datetime)

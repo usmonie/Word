@@ -12,16 +12,16 @@ import org.gradle.api.Project
 internal fun Project.configureAndroid(extension: LibraryExtension) {
     with(extension) {
         // Set the compile SDK version based on the configured version in the project.
-        compileSdk = 34 /*config.findVersion("android-compileSdk")
+        compileSdk = libs.findVersion("android-compileSdk")
             .get()
-            .requiredVersion.toInt()*/
+            .requiredVersion.toInt()
 
         // Configure default settings for the Android application.
         defaultConfig {
             // Set the minimum SDK version based on the configured version in the project.
-            minSdk = 24 /*config.findVersion("android-minSdk")
+            minSdk = libs.findVersion("android-minSdk")
                 .get()
-                .requiredVersion.toInt()*/
+                .requiredVersion.toInt()
         }
 
         // Configure Java source compatibility to version 11.
@@ -32,7 +32,7 @@ internal fun Project.configureAndroid(extension: LibraryExtension) {
 
         // Configure Compose options with a specific Kotlin compiler extension version.
         composeOptions {
-            kotlinCompilerExtensionVersion = "1.5.8"
+            kotlinCompilerExtensionVersion = "1.5.12"
         }
 
         // Configure source sets for the Android module.

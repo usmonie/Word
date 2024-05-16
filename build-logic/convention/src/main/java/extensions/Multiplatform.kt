@@ -20,8 +20,10 @@ internal fun KotlinMultiplatformExtension.configureTarget() {
 }
 
 /**
- * Configures the JVM toolchain for a Kotlin Multiplatform project using the provided `KotlinMultiplatformExtension` extension.
+ * Configures the JVM toolchain for a Kotlin Multiplatform project
+ * using the provided `KotlinMultiplatformExtension` extension.
  */
+@Suppress("MagicNumber")
 internal fun KotlinMultiplatformExtension.configureJvmToolchain() {
     // Configure JVM toolchain with the specified Java version.
     jvmToolchain(17)

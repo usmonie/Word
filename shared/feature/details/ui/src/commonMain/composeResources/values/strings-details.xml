@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="details_title">[D]etails</string>
+    <string name="details_root_title">Root %1$d</string>
+
+    <!-- Thesaurus -->
+    <string name="details_abbreviations_title">Abbreviations</string>
+    <string name="details_antonyms_title">Antonyms</string>
+    <string name="details_alt_of_title">Alt of</string>
+    <string name="details_coordinate_terms_title">Coordinate Terms</string>
+    <string name="details_derived_title">Derived</string>
+    <string name="details_instances_title">Instances</string>
+    <string name="details_synonyms_title">Synonyms</string>
+    <string name="details_holonyms_title">Holonyms</string>
+    <string name="details_hypernyms_title">Hypernyms</string>
+    <string name="details_hyponyms_title">Hyponyms</string>
+    <string name="details_hyphenations_title">Hyphenations</string>
+    <string name="details_meronyms_title">Meronyms</string>
+    <string name="details_forms_of_title">Forms of</string>
+    <string name="details_related_title">Related</string>
+    <string name="details_proverbs_title">Proverbs</string>
+    <string name="details_translations_title">Translations</string>
+    <string name="details_troponyms_title">Troponyms</string>
+
+</resources>

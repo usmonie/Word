@@ -1,136 +1,96 @@
 [versions]
-agp = "8.4.0-rc02"
-analyticsAndroid = "1.14.0"
-androidx-test-ext-junit = "1.1.5"
-appcompat = "1.6.1"
-appyx = "2.0.0-alpha10"
+agp = "8.4.0"
+android-compileSdk = "34"
+android-minSdk = "24"
+android-targetSdk = "34"
+androidx-activityCompose = "1.9.0"
+androidx-appcompat = "1.6.1"
+androidx-constraintlayout = "2.1.4"
+androidx-core-ktx = "1.13.1"
+androidx-espresso-core = "3.5.1"
+androidx-material = "1.12.0"
+androidx-test-junit = "1.1.5"
+amplitudeAndroid = "1.14.0"
 billing = "6.2.1"
-compose_activity = "1.9.0"
-compose_base = "1.6.6"
-compose_plugin = "1.6.10-beta01"
-coreKtx = "1.13.0"
-kmpauthCore = "1.1.0"
-kotlin = "1.9.22"
+compose = "1.6.7"
+compose-plugin = "1.6.10-beta02"
+coroutines = "1.8.0"
+detekt = "1.23.1"
+detekt-twitter-compose = "0.0.26"
+junit = "4.13.2"
+kmlogging = "1.3.0"
+koin = "3.5.3"
+kotlin = "1.9.23"
 kotlinx-datetime = "0.5.0"
 kotlinx-serialization = "1.6.2"
-kmlogging = "1.3.0"
-coroutines = "1.8.0"
-junit = "4.13.2"
-espresso-core = "3.5.1"
-material = "1.11.0"
-playServicesAuth = "21.1.0"
-slf4jApi = "2.0.12"
-slf4jSimple = "1.7.30"
+ktor = "2.3.9"
+kvault = "1.12.0"
 tracingPerfetto = "1.0.0"
 tracingPerfettoBinary = "1.0.0"
-runtimeTracing = "1.0.0-beta01"
-voyager = "1.0.0-rc05"
-detekt = "1.23.1"
-sqldelight = "2.0.0"
-uiTooling = "1.5.4"
-uiautomator = "2.3.0"
-benchmarkMacroJunit4 = "1.2.4"
-androidx-baselineprofile = "1.2.4"
-profileinstaller = "1.3.1"
-kvault = "1.12.0"
-firebase = "22.3.1"
-firebase-analytics = "21.6.2"
-google-service = "4.4.1"
-google-admob = "23.0.0"
-ktor = "2.3.9"
 realm = "1.15.0"
-yandex-admob = "6.4.0.0"
-gitlive-firebase-common = "1.11.1"
+runtimeTracing = "1.0.0-beta01"
+voyager = "1.0.0"
 
 [libraries]
-analytics-android = { module = "com.amplitude:analytics-android", version.ref = "analyticsAndroid" }
-android-billing-ktx = { group = "com.android.billingclient", name = "billing-ktx", version.ref = "billing" }
+analytics-amplitude-android = { module = "com.amplitude:analytics-android", version.ref = "amplitudeAndroid" }
 
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidx-core-ktx" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidx-appcompat" }
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activityCompose" }
+android-billing-ktx = { group = "com.android.billingclient", name = "billing-ktx", version.ref = "billing" }
+androidx-material = { group = "com.google.android.material", name = "material", version.ref = "androidx-material" }
+androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "androidx-constraintlayout" }
 androidx-tracing-perfetto = { module = "androidx.tracing:tracing-perfetto", version.ref = "tracingPerfetto" }
 androidx-tracing-perfetto-binary = { module = "androidx.tracing:tracing-perfetto-binary", version.ref = "tracingPerfettoBinary" }
 androidx-runtime-tracing = { module = "androidx.compose.runtime:runtime-tracing", version.ref = "runtimeTracing" }
 
-kmpauth-core = { module = "io.github.mirzemehdi:kmpauth-core", version.ref = "kmpauthCore" }
-kmpauth-firebase = { module = "io.github.mirzemehdi:kmpauth-firebase", version.ref = "kmpauthCore" }
-kmpauth-google = { module = "io.github.mirzemehdi:kmpauth-google", version.ref = "kmpauthCore" }
-kmpauth-uihelper = { module = "io.github.mirzemehdi:kmpauth-uihelper", version.ref = "kmpauthCore" }
+compose-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
+compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
+compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
+compose-material3-jetbrains = { group = "org.jetbrains.compose.material3", name = "material3", version.ref = "compose" }
 
+coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
+
+realm-base = { group = "io.realm.kotlin", name = "library-base", version.ref = "realm" }
+realm-sync = { group = "io.realm.kotlin", name = "library-sync", version.ref = "realm" }
+
+kmlogging = { group = "org.lighthousegames", name = "logging", version.ref = "kmlogging" }
+koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
+koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
+kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinx-datetime" }
+kvault = { group = "com.liftric", name = "kvault", version.ref = "kvault" }
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
 ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
-
-kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinx-datetime" }
-
-compose-animation = { group = "androidx.compose.animation", name = "animation", version.ref = "compose_base" }
-compose-foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "compose_base" }
-compose-runtime = { group = "androidx.compose.runtime", name = "runtime", version.ref = "compose_base" }
-compose-ui = { module = "androidx.compose.ui:ui", version.ref = "compose_base" }
-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose_base" }
-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose_base" }
-compose-material3-jetbrains = { group = "org.jetbrains.compose.material3", name = "material3", version = "1.6.1" }
-compose-activity = { group = "androidx.activity", name = "activity-compose", version.ref = "compose_activity" }
-
-appCompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
-coreKtx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
-androidx-annotation = { group = "androidx.annotation", name = "annotation", version = "1.7.1" }
-
-appyx-navigation = { group = "com.bumble.appyx", name = "appyx-navigation", version.ref = "appyx" }
-appyx-interactions = { group = "com.bumble.appyx", name = "appyx-interactions", version.ref = "appyx" }
-appyx-backstack = { group = "com.bumble.appyx", name = "backstack", version.ref = "appyx" }
-
-kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test", version.ref = "kotlin" }
-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }
-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
-
-kmlogging = { group = "org.lighthousegames", name = "logging", version.ref = "kmlogging" }
-kvault = { group = "com.liftric", name = "kvault", version.ref = "kvault" }
+voyager-koin = { group = "cafe.adriel.voyager", name = "voyager-koin", version.ref = "voyager" }
+voyager-navigator = { group = "cafe.adriel.voyager", name = "voyager-navigator", version.ref = "voyager" }
+voyager-screenmodel = { group = "cafe.adriel.voyager", name = "voyager-screenmodel", version.ref = "voyager" }
+voyager-transitions = { group = "cafe.adriel.voyager", name = "voyager-transitions", version.ref = "voyager" }
+androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "androidx-espresso-core" }
+androidx-test-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-junit" }
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
+kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
 
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
+detekt-gradlePlugin = { group = "io.gitlab.arturbosch.detekt", name = "detekt-gradle-plugin", version.ref = "detekt" }
+compose-gradlePlugin = { group = "org.jetbrains.compose", name = "compose-gradle-plugin", version.ref = "compose-plugin" }
 kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlinx-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
-compose-gradlePlugin = { group = "org.jetbrains.compose", name = "compose-gradle-plugin", version.ref = "compose_plugin" }
-detekt-gradlePlugin = { group = "io.gitlab.arturbosch.detekt", name = "detekt-gradle-plugin", version.ref = "detekt" }
-junit = { group = "junit", name = "junit", version.ref = "junit" }
-androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
-androidx-uiautomator = { group = "androidx.test.uiautomator", name = "uiautomator", version.ref = "uiautomator" }
-androidx-benchmark-macro-junit4 = { group = "androidx.benchmark", name = "benchmark-macro-junit4", version.ref = "benchmarkMacroJunit4" }
-androidx-profileinstaller = { group = "androidx.profileinstaller", name = "profileinstaller", version.ref = "profileinstaller" }
 
-google-admob = { group = "com.google.android.gms", name = "play-services-ads", version.ref = "google-admob" }
-firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics", version.ref = "firebase-analytics" }
-firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebase" }
-
-play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
-realm-base = { group = "io.realm.kotlin", name = "library-base", version.ref = "realm" }
-realm-sync = { group = "io.realm.kotlin", name = "library-sync", version.ref = "realm" }
-
-slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4jApi" }
-slf4j-simple = { module = "org.slf4j:slf4j-simple", version.ref = "slf4jSimple" }
-yandex-admob = { group = "com.yandex.ads.adapter", name = "admob-mobileads", version.ref = "yandex-admob" }
-
-gitlive-firebase-auth = { group = "dev.gitlive", name = "firebase-auth", version.ref = "gitlive-firebase-common" }
-gitlive-firebase-common = { group = "dev.gitlive", name = "firebase-common", version.ref = "gitlive-firebase-common" }
-gitlive-firebase-firestore = { group = "dev.gitlive", name = "firebase-firestore", version.ref = "gitlive-firebase-common" }
+twitter-compose-detekt = { group = "com.twitter.compose.rules", name = "detekt", version.ref = "detekt-twitter-compose" }
 
 [plugins]
-android-application = { id = "com.android.application", version.ref = "agp" }
-google-services = { id = "com.google.gms.google-services", version.ref = "google-service" }
-android-library = { id = "com.android.library", version.ref = "agp" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-kotlin-cocoapods = { id = "org.jetbrains.kotlin.native.cocoapods", version.ref = "kotlin" }
-kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
-compose = { id = "org.jetbrains.compose", version.ref = "compose_plugin" }
+androidApplication = { id = "com.android.application", version.ref = "agp" }
+androidLibrary = { id = "com.android.library", version.ref = "agp" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
-sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
+jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
+kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 realm = { id = "io.realm.kotlin", version.ref = "realm" }
 
-speech-multiplatform-core = { id = "wtf.speech.multiplatform.core" }
-speech-multiplatform-ui = { id = "wtf.speech.multiplatform.ui" }
-speech-multiplatform-domain = { id = "wtf.speech.multiplatform.domain" }
-speech-githooks = { id = "githooks.gradle.kts" }
-androidTest = { id = "com.android.test", version.ref = "agp" }
-androidx-baselineprofile = { id = "androidx.baselineprofile", version.ref = "androidx-baselineprofile" }
+usmonie-multiplatform-core = { id = "com.usmonie.multiplatform.core" }
+usmonie-multiplatform-ui = { id = "com.usmonie.multiplatform.ui" }
+usmonie-multiplatform-domain = { id = "com.usmonie.multiplatform.domain" }
+usmonie-githooks = { id = "githooks.gradle.kts" }

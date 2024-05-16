@@ -6,7 +6,8 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.plugin.KotlinDependencyHandler
 
 /**
- * Configures common dependencies for a Kotlin Multiplatform project in the "commonMain" source set using the provided block.
+ * Configures common dependencies for a Kotlin Multiplatform project
+ * in the "commonMain" source set using the provided block.
  *
  * @param block The block that configures dependencies using the `KotlinDependencyHandler`.
  */
@@ -18,7 +19,8 @@ fun Project.commonDependencies(block: KotlinDependencyHandler.() -> Unit) {
 }
 
 /**
- * Configures Android-specific dependencies for a Kotlin Multiplatform project in the "androidMain" source set using the provided block.
+ * Configures Android-specific dependencies for a Kotlin Multiplatform
+ * project in the "androidMain" source set using the provided block.
  *
  * @param block The block that configures dependencies using the `KotlinDependencyHandler`.
  */
@@ -30,7 +32,8 @@ fun Project.androidDependencies(block: KotlinDependencyHandler.() -> Unit) {
 }
 
 /**
- * Configures iOS-specific dependencies for a Kotlin Multiplatform project in the "iosMain" source set using the provided block.
+ * Configures iOS-specific dependencies for a Kotlin Multiplatform project
+ * in the "iosMain" source set using the provided block.
  *
  * @param block The block that configures dependencies using the `KotlinDependencyHandler`.
  */
