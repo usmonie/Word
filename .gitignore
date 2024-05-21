@@ -43,5 +43,8 @@ Package.resolved
 .DS_Store
 
 ### Firebase ###
-/androidApp/google-services.json
+/composeApp/google-services.json
 iosApp/iosApp/GoogleService-Info.plist
+
+/Users/usmanakhmedov/Downloads/Word-3/shared/core/domain/src/commonMain/kotlin/com/usmonie/core/domain/AppConfig.kt
+/shared/core/domain/src/commonMain/kotlin/com/usmonie/core/domain/AppConfig.kt
