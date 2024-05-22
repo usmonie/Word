@@ -54,13 +54,14 @@ include(":shared:feature:dashboard:data")
 include(":shared:feature:dashboard:domain")
 include(":shared:feature:dashboard:ui")
 
-// include(":shared:feature:dashboard:data")
-// include(":shared:feature:dashboard:domain")
 include(":shared:feature:details:ui")
 
 include(":shared:feature:dictionary:data")
 include(":shared:feature:dictionary:domain")
 include(":shared:feature:dictionary:ui")
 
-// include(":shared:feature:subscriptions:data")
+include(":shared:feature:favorites:ui")
+
+include(":shared:feature:subscriptions:data")
 include(":shared:feature:subscriptions:domain")
+include(":shared:feature:subscriptions:ui")

@@ -6,16 +6,20 @@ import com.usmonie.compass.core.ui.Root
 import com.usmonie.core.kit.design.themes.WordTheme
 import com.usmonie.core.kit.design.themes.WordThemes
 import com.usmonie.core.kit.design.themes.typographies.Friendly
+import org.koin.compose.KoinContext
+import org.koin.compose.koinInject
 
 @Composable
 fun App(
-    routeManager: RouteManager,
+    routeManager: RouteManager = koinInject(),
     appState: AppState = AppState(WordThemes.DEEP_INDIGO, Friendly)
 ) {
-    WordTheme(appState.themes, appState.typography) {
-        Root(
-            routeManager,
-            isGestureNavigationEnabled = true
-        )
+    KoinContext {
+        WordTheme(appState.themes, appState.typography) {
+            Root(
+                routeManager,
+                isGestureNavigationEnabled = true
+            )
+        }
     }
 }

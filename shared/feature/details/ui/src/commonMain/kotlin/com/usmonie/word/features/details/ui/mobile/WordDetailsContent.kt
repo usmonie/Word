@@ -3,6 +3,7 @@ package com.usmonie.word.features.details.ui.mobile
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -23,12 +24,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.theapache64.rebugger.Rebugger
 import com.usmonie.core.kit.tools.add
 import com.usmonie.word.features.details.ui.word.WordDetailsViewModel
 import com.usmonie.word.features.details.ui.word.openPos
 import com.usmonie.word.features.dictionary.ui.Pronunciations
 import com.usmonie.word.features.dictionary.ui.Word
+import com.usmonie.word.features.dictionary.ui.WordDetailed
 
 private const val ETYMOLOGY_MAX_LINES = 2
 
@@ -43,36 +44,27 @@ internal fun WordDetailsContent(
 
     HorizontalPager(
         etymologiesPagerState,
-        key = { it },
         verticalAlignment = Alignment.Top
     ) {
-        val etymology = remember(state, it) { state.word.wordEtymology[it] }
-
+        val etymology = state.word.wordEtymology[it]
         val etymologyText = etymology.etymologyText
-        Rebugger(
-            trackMap = mapOf(
-                "viewModel" to viewModel,
-                "insets" to insets,
-                "etymologiesPagerState" to etymologiesPagerState,
-                "state" to state,
-                "Alignment.Top" to Alignment.Top,
-            ),
-        )
+
+        var expanded by remember(etymology) { mutableStateOf(false) }
+        val maxLines = remember(expanded, etymology) {
+            if (expanded) Int.MAX_VALUE else ETYMOLOGY_MAX_LINES
+        }
+
         LazyColumn(
             contentPadding = insets.add(16.dp),
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
             if (etymologyText != null) {
                 item {
-                    var expanded by remember(etymologyText) { mutableStateOf(false) }
-                    val maxLines by remember(expanded) {
-                        mutableStateOf(if (expanded) Int.MAX_VALUE else ETYMOLOGY_MAX_LINES)
-                    }
-
                     Surface(
                         onClick = { expanded = !expanded },
                         shape = MaterialTheme.shapes.small,
-                        modifier = Modifier.fillParentMaxWidth().animateContentSize()
+                        modifier = Modifier.fillParentMaxWidth()
+                            .animateContentSize()
                     ) {
                         Text(
                             etymologyText,
@@ -87,23 +79,50 @@ internal fun WordDetailsContent(
                 }
             }
 
-            item {
-                Pronunciations(
-                    { etymology },
-                    Modifier.fillParentMaxWidth()
-                        .padding(horizontal = 16.dp)
-                )
+            if (etymology.sounds.isNotEmpty()) {
+                item {
+                    Pronunciations(
+                        { etymology },
+                        Modifier.fillParentMaxWidth()
+                            .padding(horizontal = 16.dp)
+                    )
+                }
             }
 
-            items(etymology.words) {
-                Surface(
-                    { viewModel.openPos(it) },
-                    shape = MaterialTheme.shapes.large
-                ) {
-                    Word(
-                        remember(etymology) { { it } },
-                        Modifier.fillParentMaxWidth().padding(16.dp),
+            if (etymology.words.size > 1) {
+                items(etymology.words) {
+                    Surface(
+                        { viewModel.openPos(it) },
+                        shape = MaterialTheme.shapes.large
+                    ) {
+                        Word(
+                            remember(etymology) { { it } },
+                            Modifier.fillParentMaxWidth().padding(vertical = 16.dp),
+                        )
+                    }
+                }
+            } else {
+                val word = etymology.words.last()
+
+                item {
+                    WordDetailed(
+                        { word },
+                        Modifier.fillParentMaxWidth().padding(horizontal = 16.dp),
                     )
+                }
+
+                items(word.thesaurusFlatted) {
+                    Column(
+                        Modifier.fillParentMaxWidth().padding(horizontal = 16.dp),
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        Text(
+                            it.first,
+                            style = MaterialTheme.typography.titleSmall,
+                        )
+
+                        Text(it.second, style = MaterialTheme.typography.bodyLarge)
+                    }
                 }
             }
         }

@@ -12,6 +12,7 @@ import com.usmonie.compass.viewmodel.ScreenState
 import com.usmonie.compass.viewmodel.updateData
 import com.usmonie.core.domain.tools.fastMap
 import com.usmonie.word.features.dashboard.ui.models.SubscriptionSaleStateUi
+import com.usmonie.word.features.details.ui.notification.SubscriptionAdState
 import com.usmonie.word.features.dictionary.ui.models.WordCombinedUi
 import com.usmonie.word.features.subscription.domain.models.SubscriptionStatus
 
@@ -25,6 +26,7 @@ internal data class DashboardState(
     val randomWord: ContentState<WordCombinedUi> = ContentState.Loading(),
     val foundWords: ContentState<List<WordCombinedUi>> = ContentState.Success(listOf()),
     val recentSearch: List<WordCombinedUi> = listOf(),
+    val subscriptionAdState: SubscriptionAdState? = null
 ) : ScreenState {
 
     fun DashboardEvent.Content.toState() = this@DashboardState.copy(
@@ -33,7 +35,7 @@ internal data class DashboardState(
         wordOfTheDay = wordOfTheDay,
         randomWord = randomWord,
         foundWords = foundWords,
-        recentSearch = recentSearch
+        recentSearch = recentSearch,
     )
 }
 

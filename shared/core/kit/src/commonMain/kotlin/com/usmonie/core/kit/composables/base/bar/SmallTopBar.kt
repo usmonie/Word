@@ -1,6 +1,7 @@
 package com.usmonie.core.kit.composables.base.bar
 
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -38,10 +39,9 @@ fun SearchTopBar(
     onFocusChanged: (Boolean) -> Unit,
     getScrollBehavior: () -> TopAppBarScrollBehavior,
     modifier: Modifier = Modifier,
+    windowInsets: WindowInsets = TopAppBarDefaults.windowInsets,
     colors: TopAppBarColors = TopAppBarDefaults.largeTopAppBarColors()
 ) {
-    val scrollBehavior = derivedStateOf { getScrollBehavior() }
-
     val focusManager = LocalFocusManager.current
     val focusRequester = remember { FocusRequester() }
 
@@ -55,7 +55,6 @@ fun SearchTopBar(
 
     TopAppBar(
         modifier = modifier,
-        scrollBehavior = scrollBehavior.value,
         navigationIcon = { NavigationBack(getShowBackButton, onBackClicked) },
         title = {
             SearchFieldTopBar(
@@ -64,12 +63,14 @@ fun SearchTopBar(
                 onQueryChanged,
                 hasFocus,
                 onFocusChanged,
-                { scrollBehavior.value.state.collapsedFraction },
+                { 1f },
                 TopBarSearchFieldModifier,
-                focusRequester = focusRequester
+                focusRequester = focusRequester,
             )
         },
-        colors = colors
+        windowInsets = windowInsets,
+        colors = colors,
+        scrollBehavior = getScrollBehavior()
     )
 }
 
@@ -122,6 +123,7 @@ fun SearchTopBar(
 fun TextTopBar(
     onBackClicked: () -> Unit,
     placeholder: () -> String,
+    getScrollBehavior: () -> TopAppBarScrollBehavior,
     modifier: Modifier = Modifier,
     colors: TopAppBarColors = TopAppBarDefaults.largeTopAppBarColors(),
     textStyle: TextStyle = MaterialTheme.typography.displayMedium,
@@ -130,6 +132,7 @@ fun TextTopBar(
     TopAppBar(
         modifier = modifier,
         navigationIcon = { NavigationBack(onBackClicked) },
+        scrollBehavior = getScrollBehavior(),
         title = {
             Text(
                 placeholder(),

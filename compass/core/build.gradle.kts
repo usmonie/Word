@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.jetbrainsCompose)
+//    alias(libs.plugins.compose.compiler)
 }
 
 android.namespace = "com.usmonie.compass.core"
@@ -15,13 +16,7 @@ kotlin {
         iosX64(),
         iosArm64(),
         iosSimulatorArm64()
-    ).forEach { iosTarget ->
-        iosTarget.binaries.framework {
-            baseName = "Compass"
-            isStatic = true
-            version = "1.0.0"
-        }
-    }
+    )
 }
 
 commonDependencies {
@@ -37,7 +32,7 @@ androidDependencies {
 android {
     buildFeatures.compose = true
 
-    composeOptions.kotlinCompilerExtensionVersion = "1.5.12"
+    composeOptions.kotlinCompilerExtensionVersion = "1.5.14"
 }
 
 task("testClasses")

@@ -160,7 +160,6 @@ private fun PlaceholderTextField(
                     blendMode = BlendMode.SrcIn
                 )
             }
-
     )
 }
 

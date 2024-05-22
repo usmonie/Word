@@ -4,7 +4,6 @@ import extensions.commonDependencies
 plugins {
     id(libs.plugins.usmonie.multiplatform.domain.get().pluginId)
     kotlin("plugin.serialization") version "1.9.0"
-    id(libs.plugins.realm.get().pluginId)
 }
 
 android.namespace = "com.usmonie.word.features.subscription.data"
@@ -17,7 +16,10 @@ kotlin {
     )
 
     commonDependencies {
-        implementation(libs.kvault)
+        implementation(libs.datastore)
+        implementation(libs.datastore.core)
+        implementation(libs.datastore.preferences)
+
         implementation(projects.shared.core.domain)
         implementation(projects.shared.feature.subscriptions.domain)
     }

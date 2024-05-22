@@ -32,7 +32,7 @@ internal fun Project.configureAndroid(extension: LibraryExtension) {
 
         // Configure Compose options with a specific Kotlin compiler extension version.
         composeOptions {
-            kotlinCompilerExtensionVersion = "1.5.12"
+            kotlinCompilerExtensionVersion = "1.5.14"
         }
 
         // Configure source sets for the Android module.

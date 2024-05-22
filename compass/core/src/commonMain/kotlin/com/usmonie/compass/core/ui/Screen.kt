@@ -4,8 +4,11 @@ import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import com.usmonie.compass.core.gesture.ScreenGestureHandler
+import com.usmonie.compass.core.randomUUID
 
+@Immutable
 abstract class Screen(val storeInBackStack: Boolean = true) {
 
     open val enterTransition: (AnimatedContentTransitionScope<Screen>.() -> EnterTransition) = {
@@ -39,6 +42,8 @@ abstract class Screen(val storeInBackStack: Boolean = true) {
     open val screenGestureHandler: ScreenGestureHandler = ScreenGestureHandler.NoHandling
 
     abstract val id: ScreenId
+
+    internal val uuid = randomUUID()
 
     @Composable
     abstract fun Content()

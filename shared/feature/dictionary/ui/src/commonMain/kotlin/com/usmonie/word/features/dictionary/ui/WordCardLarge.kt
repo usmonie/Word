@@ -25,11 +25,18 @@ fun WordCardLarge(
         modifier = modifier,
         shape = MaterialTheme.shapes.medium,
     ) {
-        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            WordTitle(remember(wordCombined) { { wordCombined.word } })
+        Column(Modifier.padding(vertical = 16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            WordTitle(
+                remember(wordCombined) { { wordCombined.word } },
+                Modifier.padding(horizontal = 16.dp)
+            )
 
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(24.dp)) {
-                FavoriteButton({ wordCombined }, onFavoriteClick)
+                FavoriteButton(
+                    { wordCombined },
+                    onFavoriteClick,
+                    Modifier.padding(horizontal = 16.dp)
+                )
             }
 
             Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
@@ -38,7 +45,7 @@ fun WordCardLarge(
                 } ?: return@Surface
 
                 if (etymology.sounds.isNotEmpty()) {
-                    Pronunciations(remember { { etymology } })
+                    Pronunciations(remember { { etymology } }, Modifier.padding(horizontal = 16.dp))
                 }
 
                 Words({ etymology })

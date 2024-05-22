@@ -1,19 +1,14 @@
-
 import extensions.androidDependencies
-import extensions.commonDependencies
 
 plugins {
     id(libs.plugins.usmonie.multiplatform.domain.get().pluginId)
 }
 
-android.namespace = "com.usmonie.word.features.ads.ui"
-
-commonDependencies {
-//    implementation(projec)
-//    implementation(libs)
-}
+android.namespace = "com.usmonie.word.core.analytics.ui"
 
 androidDependencies {
+    implementation(libs.analytics.amplitude.android)
+    implementation(libs.firebase.analytics)
 }
 
 kotlin {
@@ -39,17 +34,18 @@ kotlin {
 }
 
 android {
-    compileSdk = 34 //config.versions.android.compileSdk.get().toInt()
-    namespace = "com.usmonie.word.features.ads.ui"
+    compileSdk = libs.versions.android.compileSdk.get().toInt()
+    namespace = "com.usmonie.word.features.analytics.ui"
 
     sourceSets["main"].resources.srcDirs("src/commonMain/resources")
 
     defaultConfig {
-        minSdk = 24 //config.versions.android.minSdk.get().toInt()
+        minSdk = libs.versions.android.minSdk.get().toInt()
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
 }
+
 task("testClasses")

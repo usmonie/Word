@@ -1,15 +1,15 @@
 package com.usmonie.core.kit.composables.word
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -18,6 +18,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.input.TextFieldValue
 import com.usmonie.core.kit.composables.base.bar.SearchLargeTopBar
 import com.usmonie.core.kit.composables.base.bar.SearchTopBar
+import com.usmonie.core.kit.composables.base.scaffold.BaseHeaderScaffold
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -85,50 +86,49 @@ fun HeaderWordScaffold(
     containerColor: Color = MaterialTheme.colorScheme.background,
     contentColor: Color = contentColorFor(containerColor),
     contentWindowInsets: WindowInsets = ScaffoldDefaults.contentWindowInsets,
+    topAppBarScrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(),
     content: @Composable (PaddingValues) -> Unit
 ) {
-    val topAppBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-
-    Scaffold(
-        modifier.nestedScroll(topAppBarScrollBehavior.nestedScrollConnection),
-        content = content,
-        snackbarHost = snackbarHost,
-        floatingActionButton = floatingActionButton,
-        floatingActionButtonPosition = floatingActionButtonPosition,
-        containerColor = containerColor,
-        contentColor = contentColor,
-        contentWindowInsets = contentWindowInsets,
-        bottomBar = bottomBar,
-        topBar = {
-            Column {
-                AnimatedVisibility(header != null) {
-                    header?.invoke()
-                }
-
-                if (header != null) {
-                    SearchTopBar(
-                        onBackClicked,
-                        getShowBackButton,
-                        placeholder,
-                        query,
-                        onQueryChanged,
-                        hasSearchFieldFocus,
-                        updateSearchFieldFocus,
-                        { topAppBarScrollBehavior },
-                    )
-                } else {
-                    SearchLargeTopBar(
-                        onBackClicked,
-                        getShowBackButton,
-                        placeholder,
-                        query,
-                        onQueryChanged,
-                        hasSearchFieldFocus,
-                        updateSearchFieldFocus,
-                        { topAppBarScrollBehavior },
-                    )
-                }
-            }
+    BaseHeaderScaffold(
+        header = header ?: {},
+        content = {
+            Scaffold(
+                modifier = modifier.padding(if (header != null) it else PaddingValues())
+                    .nestedScroll(topAppBarScrollBehavior.nestedScrollConnection),
+                topBar = {
+                    if (header != null) {
+                        SearchTopBar(
+                            onBackClicked = onBackClicked,
+                            getShowBackButton = getShowBackButton,
+                            placeholder = placeholder,
+                            query = query,
+                            onQueryChanged = onQueryChanged,
+                            hasFocus = hasSearchFieldFocus,
+                            onFocusChanged = updateSearchFieldFocus,
+                            getScrollBehavior = { topAppBarScrollBehavior }
+                        )
+                    } else {
+                        SearchLargeTopBar(
+                            onBackClicked,
+                            getShowBackButton,
+                            placeholder,
+                            query,
+                            onQueryChanged,
+                            hasSearchFieldFocus,
+                            updateSearchFieldFocus,
+                            { topAppBarScrollBehavior },
+                        )
+                    }
+                },
+                bottomBar = bottomBar,
+                snackbarHost = snackbarHost,
+                floatingActionButton = floatingActionButton,
+                floatingActionButtonPosition = floatingActionButtonPosition,
+                containerColor = containerColor,
+                contentColor = contentColor,
+                contentWindowInsets = contentWindowInsets,
+                content = content
+            )
         }
     )
 }

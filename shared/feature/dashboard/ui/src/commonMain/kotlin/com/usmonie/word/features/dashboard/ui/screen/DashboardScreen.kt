@@ -1,6 +1,8 @@
 package com.usmonie.word.features.dashboard.ui.screen
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,13 +16,13 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -30,8 +32,11 @@ import com.usmonie.compass.core.ui.ScreenId
 import com.usmonie.compass.viewmodel.ContentState
 import com.usmonie.compass.viewmodel.StateScreen
 import com.usmonie.core.kit.composables.base.buttons.TextButton
-import com.usmonie.core.kit.composables.word.LargeWordScaffold
+import com.usmonie.core.kit.composables.word.HeaderWordScaffold
 import com.usmonie.core.kit.tools.addVertical
+import com.usmonie.word.features.details.ui.notification.SubscriptionPage
+import com.usmonie.word.features.details.ui.notification.SubscriptionScreenState
+import com.usmonie.word.features.details.ui.notification.SubscriptionViewModel
 import com.usmonie.word.features.dictionary.ui.RandomWordCollapsedState
 import com.usmonie.word.features.dictionary.ui.RandomWordExpandedState
 import com.usmonie.word.features.dictionary.ui.WordCardLarge
@@ -51,36 +56,38 @@ import word.shared.feature.dashboard.ui.generated.resources.settings_subtitle
 
 internal class DashboardScreen(
     viewModel: DashboardViewModel,
+    private val subscriptionsViewModel: SubscriptionViewModel,
     private val onOpenWord: (wordCombined: WordCombinedUi) -> Unit,
+    private val openDashboardMenuItem: (DashboardMenuItem) -> Unit,
 ) : StateScreen<DashboardState, DashboardAction, DashboardEvent, DashboardEffect, DashboardViewModel>(
     viewModel
 ) {
     override val id: ScreenId = DashboardScreenFactory.ID
 
+    @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
         val state by viewModel.state.collectAsState()
+        val subscriptionState by subscriptionsViewModel.state.collectAsState()
         val searchPlaceholder = stringResource(Res.string.search_title)
 
-        DashboardEffect(onOpenWord, viewModel)
+        DashboardEffect(onOpenWord, openDashboardMenuItem, viewModel)
+        val lazyListState = rememberLazyListState()
 
-        LargeWordScaffold(
+        HeaderWordScaffold(
             query = { state.searchFieldState.searchFieldValue },
             onQueryChanged = viewModel::inputQuery,
             placeholder = { searchPlaceholder },
+            header = if (subscriptionState is SubscriptionScreenState.Empty) {
+                null
+            } else {
+                { SubscriptionPage(subscriptionsViewModel) }
+            },
             getShowBackButton = { state.searchFieldState.searchFieldValue.text.isNotEmpty() },
             onBackClicked = viewModel::backToMain,
             hasSearchFieldFocus = { state.searchFieldState.hasFocus },
             updateSearchFieldFocus = viewModel::queryFieldFocusChanged,
         ) { insets ->
-            val lazyListState = rememberLazyListState()
-            val isSearchEmpty by remember { derivedStateOf { state.recentSearch.isEmpty() } }
-            LaunchedEffect(isSearchEmpty) {
-                if (!isSearchEmpty) {
-                    lazyListState.scrollToItem(0)
-                }
-            }
-
             val newInsets = remember(insets) { insets.addVertical(16.dp) }
             LazyColumn(
                 state = lazyListState,
@@ -88,14 +95,15 @@ internal class DashboardScreen(
                 verticalArrangement = Arrangement.spacedBy(16.dp),
             ) {
                 when (val foundWordState = state.foundWords) {
-                    is ContentState.Error<*, *> -> defaultState(state)
+                    is ContentState.Error<*, *> -> defaultState(state, false)
+
                     is ContentState.Loading -> item {
                         LinearProgressIndicator(Modifier.fillParentMaxWidth().padding(32.dp))
                     }
 
                     is ContentState.Success -> {
                         if (state.searchFieldState.searchFieldValue.text.isBlank()) {
-                            defaultState(state)
+                            defaultState(state, false)
                         } else {
                             items(foundWordState.data) {
                                 WordCardLarge(
@@ -112,13 +120,15 @@ internal class DashboardScreen(
         }
     }
 
-    private fun LazyListScope.defaultState(state: DashboardState) {
+    private fun LazyListScope.defaultState(
+        state: DashboardState,
+        saleSubscriptionExpanded: Boolean
+    ) {
         if (state.recentSearch.isNotEmpty()) {
             item {
-                RecentSearchHistory(state)
+                RecentSearchHistory(state, saleSubscriptionExpanded)
             }
         }
-
 
         item(
             key = DashboardMenuItem.FAVORITES,
@@ -130,6 +140,7 @@ internal class DashboardScreen(
                 menuItemModifier
             )
         }
+
         item(key = DashboardMenuItem.GAMES, contentType = DashboardMenuItem::class) {
             MenuItem(
                 viewModel::openGames,
@@ -137,6 +148,7 @@ internal class DashboardScreen(
                 menuItemModifier
             )
         }
+
         item(key = DashboardMenuItem.SETTINGS, contentType = DashboardMenuItem::class) {
             MenuItem(
                 viewModel::openSettings,
@@ -182,29 +194,40 @@ internal class DashboardScreen(
                 state.wordOfTheDay is ContentState.Error<*, *> ||
                         state.wordOfTheDay is ContentState.Loading
             ) { wordOfTheDayLoadingState ->
-                if (wordOfTheDayLoadingState) {
-                    RandomWordExpandedState(
-                        { state.randomWord },
-                        viewModel::openWord,
-                        viewModel::favoriteWord,
-                        viewModel::nextRandomWord,
-                        Modifier.padding(horizontal = 16.dp)
-                    )
-                } else {
-                    RandomWordCollapsedState(
-                        { state.randomWord },
-                        viewModel::openWord,
-                        viewModel::favoriteWord,
-                        viewModel::nextRandomWord,
-                        Modifier.padding(horizontal = 16.dp)
-                    )
+                AnimatedContent(
+                    state.randomWord,
+                    contentKey = { it.item?.word },
+                    transitionSpec = {
+                        slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Start)
+                            .togetherWith(
+                                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Start)
+                            )
+                    }
+                ) {
+                    if (wordOfTheDayLoadingState) {
+                        RandomWordExpandedState(
+                            { it },
+                            viewModel::openWord,
+                            viewModel::favoriteWord,
+                            viewModel::nextRandomWord,
+                            Modifier.padding(horizontal = 16.dp)
+                        )
+                    } else {
+                        RandomWordCollapsedState(
+                            { it },
+                            viewModel::openWord,
+                            viewModel::favoriteWord,
+                            viewModel::nextRandomWord,
+                            Modifier.padding(horizontal = 16.dp)
+                        )
+                    }
                 }
             }
         }
     }
 
     @Composable
-    private fun RecentSearchHistory(state: DashboardState) {
+    private fun RecentSearchHistory(state: DashboardState, saleSubscriptionExpanded: Boolean) {
         Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Text(
                 stringResource(Res.string.dashboard_search_history_title),
@@ -214,6 +237,7 @@ internal class DashboardScreen(
 
             LazyRow(
                 contentPadding = PaddingValues(horizontal = 16.dp),
+                userScrollEnabled = !saleSubscriptionExpanded,
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 items(state.recentSearch) { historyWord ->
@@ -231,12 +255,13 @@ internal class DashboardScreen(
 @Composable
 internal fun DashboardEffect(
     onOpenWord: (wordCombined: WordCombinedUi) -> Unit,
+    openDashboardMenuItem: (DashboardMenuItem) -> Unit,
     viewModel: DashboardViewModel
 ) {
     val effect by viewModel.effect.collectAsState(null)
     LaunchedEffect(effect) {
         when (val e = effect) {
-            is DashboardEffect.OnMenuItemClicked -> TODO()
+            is DashboardEffect.OnMenuItemClicked -> openDashboardMenuItem(e.menuItem)
             is DashboardEffect.OpenWord -> onOpenWord(e.word)
             null -> Unit
         }

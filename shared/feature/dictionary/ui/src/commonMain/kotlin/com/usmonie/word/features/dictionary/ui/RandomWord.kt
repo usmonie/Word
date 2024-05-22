@@ -87,13 +87,12 @@ fun RandomWordExpanded(
             WordTitle({ word.word }, modifierWithPaddings)
 
             Column(
-                modifierWithPaddings,
                 verticalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 val etymology =
                     remember(word) { word.wordEtymology.firstOrNull() } ?: return@Surface
                 Row(
-                    Modifier.fillMaxWidth(),
+                    Modifier.fillMaxWidth().padding(horizontal = 16.dp),
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     FavoriteButton(wordCombined, onFavoriteClicked)
@@ -101,7 +100,10 @@ fun RandomWordExpanded(
                 }
 
                 if (etymology.sounds.isNotEmpty()) {
-                    Pronunciations({ etymology })
+                    Pronunciations(
+                        { etymology },
+                        Modifier.fillMaxWidth().padding(horizontal = 16.dp)
+                    )
                 }
 
                 Words({ etymology })
@@ -149,7 +151,7 @@ fun RandomWordCollapsed(
                     Pronunciations({ etymology })
                 }
 
-                Words({ etymology })
+                Words { etymology }
             }
         }
     }

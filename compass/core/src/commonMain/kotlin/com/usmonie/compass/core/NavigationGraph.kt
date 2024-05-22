@@ -75,10 +75,13 @@ class NavigationGraph(
         return backstack.pop()?.apply { onCleared() }
     }
 
-    fun popUntil(screenId: ScreenId): Boolean {
+    fun popUntil(screenId: ScreenId, onPopped: (Screen) -> Unit): Boolean {
         backstack.removeUntil {
             val predicate = it.id == screenId && it.storeInBackStack
-            if (!predicate) it.onCleared()
+            if (!predicate) {
+                it.onCleared()
+                onPopped(it)
+            }
             predicate
         }
 

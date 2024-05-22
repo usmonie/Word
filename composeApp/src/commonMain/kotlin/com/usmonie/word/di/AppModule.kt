@@ -3,10 +3,15 @@ package com.usmonie.word.di
 import com.usmonie.compass.core.GraphId
 import com.usmonie.compass.core.NavigationGraph
 import com.usmonie.compass.core.getRouteManager
+import com.usmonie.word.features.dashboard.ui.screen.DashboardMenuItem
+import com.usmonie.word.features.dashboard.ui.screen.DashboardMenuItem.FAVORITES
+import com.usmonie.word.features.dashboard.ui.screen.DashboardMenuItem.GAMES
+import com.usmonie.word.features.dashboard.ui.screen.DashboardMenuItem.SETTINGS
 import com.usmonie.word.features.dashboard.ui.screen.DashboardScreenFactory
 import com.usmonie.word.features.details.ui.pos.PosDetailsScreenFactory
 import com.usmonie.word.features.details.ui.word.WordDetailsScreenFactory
 import com.usmonie.word.features.dictionary.ui.models.WordCombinedUi
+import com.usmonie.word.features.favorites.ui.FavoritesScreenFactory
 import org.koin.core.parameter.parametersOf
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
@@ -14,8 +19,8 @@ import org.koin.dsl.module
 val mainGraphId = GraphId("MainGraph")
 
 val appModule = module {
-    factory(named(mainGraphId.id)) { dashboardFactory ->
-        mainGraph(dashboardFactory.get(), get(), get())
+    factory(named(mainGraphId.id)) { (dashboard: DashboardScreenFactory, favorites: FavoritesScreenFactory) ->
+        mainGraph(dashboard, get(), get(), favorites)
     }
 
     factory {
@@ -27,11 +32,22 @@ val appModule = module {
             )
         }
 
-        val factory: DashboardScreenFactory = get { parametersOf(openWord) }
+        val openMenuItems: (DashboardMenuItem) -> Unit = {
+            routeManager.navigateTo(
+                when (it) {
+                    FAVORITES -> FavoritesScreenFactory.ID
+                    SETTINGS -> TODO()
+                    GAMES -> TODO()
+                }
+            )
+        }
+
+        val dashboardFactory: DashboardScreenFactory = get { parametersOf(openWord, openMenuItems) }
+        val favoritesFactory: FavoritesScreenFactory = get { parametersOf(openWord) }
 
         routeManager.registerGraph(
-            get(qualifier = named(mainGraphId.id),) {
-                parametersOf(factory)
+            get(qualifier = named(mainGraphId.id)) {
+                parametersOf(dashboardFactory, favoritesFactory)
             }
         )
 
@@ -43,7 +59,9 @@ fun mainGraph(
     dashboardScreenFactory: DashboardScreenFactory,
     detailsScreenFactory: WordDetailsScreenFactory,
     posDetailsScreenFactory: PosDetailsScreenFactory,
+    favoritesScreenFactory: FavoritesScreenFactory,
 ) = NavigationGraph(mainGraphId, dashboardScreenFactory).apply {
     register(detailsScreenFactory)
     register(posDetailsScreenFactory)
+    register(favoritesScreenFactory)
 }

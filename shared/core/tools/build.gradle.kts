@@ -16,6 +16,8 @@ kotlin {
 
 commonDependencies {
     api(libs.koin.core)
+    api(libs.koin.compose)
+    api("co.touchlab:stately-common:2.0.6")
 }
 
 androidDependencies {

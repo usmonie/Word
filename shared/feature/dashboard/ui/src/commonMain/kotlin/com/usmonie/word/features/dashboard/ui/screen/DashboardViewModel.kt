@@ -15,6 +15,7 @@ import com.usmonie.word.features.dictionary.domain.usecases.UpdateSearchHistory
 import com.usmonie.word.features.dictionary.ui.models.WordCombinedUi
 import com.usmonie.word.features.dictionary.ui.models.toUi
 import com.usmonie.word.features.subscription.domain.models.SubscriptionStatus
+import com.usmonie.word.features.subscription.domain.usecase.SubscriptionStatusUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.Job
@@ -31,8 +32,8 @@ internal class DashboardViewModel(
     private val getRandomWordUseCase: GetRandomWordUseCase,
     private val updateSearchHistory: UpdateSearchHistory,
     private val wordOfTheDayUseCase: GetWordOfTheDayUseCase,
-    private val updateFavouriteUseCase: UpdateFavouriteUseCase
-//    private val subscriptionStatusUseCase: SubscriptionStatusUseCase,
+    private val updateFavouriteUseCase: UpdateFavouriteUseCase,
+    private val subscriptionStatusUseCase: SubscriptionStatusUseCase,
 //    private val analytics: Analytics
 ) : StateViewModel<DashboardState, DashboardAction, DashboardEvent, DashboardEffect>(DashboardState()) {
 
@@ -41,33 +42,27 @@ internal class DashboardViewModel(
     init {
         tryAgain()
 
-//        viewModelScope.launchSafe {
-//            subscriptionStatusUseCase(Unit).collect {
-//                processAction(DashboardAction.SubscriptionStatusUpdated(it))
-//            }
-//        }
+        viewModelScope.launchSafe {
+            subscriptionStatusUseCase(Unit).collect {
+
+            }
+        }
     }
 
     override fun DashboardState.reduce(event: DashboardEvent) = when (event) {
         DashboardEvent.BackToMain -> copy(searchFieldState = SearchFieldState())
         DashboardEvent.ContentLoading -> copy(randomWord = ContentState.Loading())
-        is DashboardEvent.Content -> {
-            event.toState()
-        }
+        is DashboardEvent.Content -> event.toState()
 
-        is DashboardEvent.InputQuery -> {
-            copy(
-                searchFieldState = searchFieldState.copy(searchFieldValue = event.query)
-            )
-        }
+        is DashboardEvent.InputQuery -> copy(
+            searchFieldState = searchFieldState.copy(searchFieldValue = event.query)
+        )
 
         is DashboardEvent.QueryFocusChanged -> copy(
             searchFieldState = searchFieldState.copy(hasFocus = event.hasFocus)
         )
 
-        is DashboardEvent.UpdateWord -> {
-            copy()
-        }
+        is DashboardEvent.UpdateWord -> copy()
         else -> this
     }
 

@@ -1,5 +1,5 @@
 [versions]
-agp = "8.4.0"
+agp = "8.4.1"
 android-compileSdk = "34"
 android-minSdk = "24"
 android-targetSdk = "34"
@@ -11,25 +11,36 @@ androidx-espresso-core = "3.5.1"
 androidx-material = "1.12.0"
 androidx-test-junit = "1.1.5"
 amplitudeAndroid = "1.14.0"
-billing = "6.2.1"
+billing = "7.0.0"
 compose = "1.6.7"
-compose-plugin = "1.6.10-beta02"
+compose-plugin = "1.6.10"
 coroutines = "1.8.0"
+datastore = "1.1.1"
 detekt = "1.23.1"
 detekt-twitter-compose = "0.0.26"
+firebase = "23.0.0"
+firebase-analytics = "22.0.0"
+firebase-crashlytics-plugin = "3.0.1"
+google-service = "4.4.1"
+google-admob = "23.1.0"
 junit = "4.13.2"
 kmlogging = "1.3.0"
-koin = "3.5.3"
+koin = "3.5.6"
+koin-compose = "1.1.5"
 kotlin = "1.9.23"
 kotlinx-datetime = "0.5.0"
 kotlinx-serialization = "1.6.2"
 ktor = "2.3.9"
 kvault = "1.12.0"
+metricsPerformance = "1.0.0-beta01"
+statelyConcurrency = "2.0.6"
 tracingPerfetto = "1.0.0"
 tracingPerfettoBinary = "1.0.0"
-realm = "1.15.0"
+playServicesAuth = "21.1.1"
+realm = "1.16.0"
 runtimeTracing = "1.0.0-beta01"
 voyager = "1.0.0"
+yandex-admob = "6.4.0.0"
 
 [libraries]
 analytics-amplitude-android = { module = "com.amplitude:analytics-android", version.ref = "amplitudeAndroid" }
@@ -40,6 +51,7 @@ androidx-activity-compose = { module = "androidx.activity:activity-compose", ver
 android-billing-ktx = { group = "com.android.billingclient", name = "billing-ktx", version.ref = "billing" }
 androidx-material = { group = "com.google.android.material", name = "material", version.ref = "androidx-material" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "androidx-constraintlayout" }
+androidx-metrics-performance = { module = "androidx.metrics:metrics-performance", version.ref = "metricsPerformance" }
 androidx-tracing-perfetto = { module = "androidx.tracing:tracing-perfetto", version.ref = "tracingPerfetto" }
 androidx-tracing-perfetto-binary = { module = "androidx.tracing:tracing-perfetto-binary", version.ref = "tracingPerfettoBinary" }
 androidx-runtime-tracing = { module = "androidx.compose.runtime:runtime-tracing", version.ref = "runtimeTracing" }
@@ -50,6 +62,15 @@ compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview"
 compose-material3-jetbrains = { group = "org.jetbrains.compose.material3", name = "material3", version.ref = "compose" }
 
 coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
+datastore = { group = "androidx.datastore", name = "datastore", version.ref = "datastore"}
+datastore-core = { group = "androidx.datastore", name = "datastore-core", version.ref = "datastore"}
+datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore"}
+firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics", version.ref = "firebase-analytics" }
+firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebase" }
+firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version.ref = "firebase" }
+google-admob = { group = "com.google.android.gms", name = "play-services-ads", version.ref = "google-admob" }
+
+play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
 
 realm-base = { group = "io.realm.kotlin", name = "library-base", version.ref = "realm" }
 realm-sync = { group = "io.realm.kotlin", name = "library-sync", version.ref = "realm" }
@@ -57,6 +78,7 @@ realm-sync = { group = "io.realm.kotlin", name = "library-sync", version.ref = "
 kmlogging = { group = "org.lighthousegames", name = "logging", version.ref = "kmlogging" }
 koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
 koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
+koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koin-compose"}
 kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinx-datetime" }
 kvault = { group = "com.liftric", name = "kvault", version.ref = "kvault" }
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
@@ -64,6 +86,7 @@ ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "kto
 ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
 ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
+stately-concurrency = { module = "co.touchlab:stately-concurrency", version.ref = "statelyConcurrency" }
 voyager-koin = { group = "cafe.adriel.voyager", name = "voyager-koin", version.ref = "voyager" }
 voyager-navigator = { group = "cafe.adriel.voyager", name = "voyager-navigator", version.ref = "voyager" }
 voyager-screenmodel = { group = "cafe.adriel.voyager", name = "voyager-screenmodel", version.ref = "voyager" }
@@ -82,12 +105,16 @@ kotlinx-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-seria
 
 twitter-compose-detekt = { group = "com.twitter.compose.rules", name = "detekt", version.ref = "detekt-twitter-compose" }
 
+yandex-admob = { group = "com.yandex.ads.adapter", name = "admob-mobileads", version.ref = "yandex-admob" }
+
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
+firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebase-crashlytics-plugin" }
 jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 realm = { id = "io.realm.kotlin", version.ref = "realm" }
 
 usmonie-multiplatform-core = { id = "com.usmonie.multiplatform.core" }

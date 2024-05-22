@@ -32,6 +32,7 @@ expect fun PredictiveBackHandler(
 
 @Composable
 fun BackGestureHandler(
+    saveableState: @Composable (Screen, @Composable () -> Unit) -> Unit,
     isGestureNavigationEnabled: Boolean,
     routeManager: RouteManager,
     content: @Composable (BoxScope.(Screen) -> Unit)
@@ -46,7 +47,7 @@ fun BackGestureHandler(
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             if (isGestureNavigationEnabled && state.draggingOffset.value > -1f) {
-                PreviousScreen()
+                PreviousScreen(saveableState)
             }
             CurrentScreen(content)
         }
@@ -54,27 +55,29 @@ fun BackGestureHandler(
 }
 
 @Composable
-private fun PreviousScreen() {
+private fun PreviousScreen(saveableState: @Composable (Screen, @Composable () -> Unit) -> Unit) {
     val routeManager = LocalRouteManager.current
     val state by routeManager.state.collectAsState()
-    val previousScreen by derivedStateOf { state.previousScreen }
+    val previousScreen = state.previousScreen
 
-    val showPrev by remember(state) {
-        derivedStateOf { state.showPrevious }
-    }
-
-    if (showPrev && previousScreen != null) {
+    if (state.showPrevious && previousScreen != null) {
         Box(
             Modifier
                 .background(MaterialTheme.colorScheme.background)
                 .graphicsLayer {
-                    val prevOffset = if (showPrev) { offset(state) } else { 0.dp }.toPx()
+                    val prevOffset = if (state.showPrevious) {
+                        offset(state)
+                    } else {
+                        0.dp
+                    }.toPx()
 
                     translationX = prevOffset
                 }
                 .fillMaxSize()
         ) {
-            previousScreen?.Content()
+            saveableState(previousScreen) {
+                previousScreen.Content()
+            }
         }
     }
 }
@@ -84,7 +87,9 @@ private fun GraphicsLayerScope.offset(state: RouteManagerState) =
         .coerceIn(MAX_PREV_SCREEN_OFFSET, 0.dp)
 
 @Composable
-private fun CurrentScreen(content: @Composable BoxScope.(Screen) -> Unit) {
+private fun CurrentScreen(
+    content: @Composable (BoxScope.(Screen) -> Unit)
+) {
     val routeManager = LocalRouteManager.current
     val state by routeManager.state.collectAsState()
 

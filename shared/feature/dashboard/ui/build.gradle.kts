@@ -25,6 +25,8 @@ kotlin {
 commonDependencies {
     implementation(projects.compass.core)
     implementation(projects.compass.viewmodel)
+
+    implementation(projects.shared.core.analytics)
     implementation(projects.shared.core.kit)
     implementation(projects.shared.core.tools)
 
@@ -34,21 +36,11 @@ commonDependencies {
     implementation(projects.shared.feature.dictionary.ui)
 
     implementation(projects.shared.feature.subscriptions.domain)
+    implementation(projects.shared.feature.subscriptions.ui)
 
     implementation(libs.compose.material3.jetbrains)
     implementation(compose.dependencies.materialIconsExtended)
     implementation(libs.kvault)
-}
-
-androidDependencies {
-    implementation(libs.compose.ui)
-    implementation("com.google.firebase:firebase-auth:22.3.1")
-
-    // Also add the dependency for the Google Play services library and specify its version
-    implementation("com.google.android.gms:play-services-auth:21.0.0")
-    api("androidx.credentials:credentials:1.3.0-alpha01")
-    api("androidx.credentials:credentials-play-services-auth:1.3.0-alpha01")
-    api("com.google.android.libraries.identity.googleid:googleid:1.1.0")
 }
 
 kotlin {
@@ -62,13 +54,13 @@ kotlin {
 }
 
 android {
-    compileSdk = 34 // config.versions.android.compileSdk.get().toInt()
+    compileSdk = libs.versions.android.compileSdk.get().toInt()
     namespace = "com.usmonie.word.features.dashboard.ui"
 
     sourceSets["main"].resources.srcDirs("src/commonMain/resources")
 
     defaultConfig {
-        minSdk = 24 // config.versions.android.minSdk.get().toInt()
+        minSdk = libs.versions.android.minSdk.get().toInt()
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17

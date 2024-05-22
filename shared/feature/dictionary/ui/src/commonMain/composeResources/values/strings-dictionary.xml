@@ -14,14 +14,12 @@
     <string name="vocabulary_word_senses_expand">Expand</string>
     <string name="vocabulary_word_senses_expand_examples">Expand examples</string>
     <string name="vocabulary_word_senses_collapse_examples">Collapse examples</string>
-    <string name="vocabulary_word_thesaurus">Thesaurus</string>
+    <string name="vocabulary_word_thesaurus">Click to see details</string>
     <string name="vocabulary_word_thesaurus_forms">Forms</string>
-    <string name="vocabulary_word_thesaurus_antonyms">Antonyms</string>
     <string name="vocabulary_word_thesaurus_synonyms">Synonyms</string>
     <string name="vocabulary_word_thesaurus_hypernyms">Hypernyms</string>
     <string name="vocabulary_word_thesaurus_hyponyms">Hyponyms</string>
     <string name="vocabulary_word_thesaurus_meronyms">Meronyms</string>
-    <string name="vocabulary_word_thesaurus_hyphenations">Hyphenations</string>
     <string name="vocabulary_word_thesaurus_hyphenations">Hyphenations</string>
     <string name="vocabulary_word_thesaurus_derived">Derived</string>
     <string name="vocabulary_word_thesaurus_holonyms">Holonyms</string>

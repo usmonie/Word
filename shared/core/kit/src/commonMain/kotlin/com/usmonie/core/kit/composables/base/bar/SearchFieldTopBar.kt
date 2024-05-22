@@ -47,8 +47,9 @@ fun SearchFieldTopBar(
     val isKeyboardVisible = isKeyboardOpen()
     LaunchedEffect(isKeyboardVisible) {
         if (!isKeyboardVisible) {
+            onFocusChange(false)
             focusManager.clearFocus(true)
-//            focusRequester.freeFocus()
+            focusRequester.freeFocus()
         }
     }
 

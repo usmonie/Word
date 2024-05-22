@@ -3,3 +3,5 @@
 
 -keep class com.yandex.mobile.ads.** { *; }
 -dontwarn com.yandex.mobile.ads.**
+
+-dontwarn org.slf4j.impl.StaticLoggerBinder

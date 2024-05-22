@@ -36,8 +36,7 @@ import com.usmonie.word.features.dictionary.ui.models.WordUi
 import org.jetbrains.compose.resources.stringResource
 import word.shared.feature.dictionary.ui.generated.resources.Res
 import word.shared.feature.dictionary.ui.generated.resources.vocabulary_word_senses
-import word.shared.feature.dictionary.ui.generated.resources.vocabulary_word_thesaurus_antonyms
-import word.shared.feature.dictionary.ui.generated.resources.vocabulary_word_thesaurus_synonyms
+import word.shared.feature.dictionary.ui.generated.resources.vocabulary_word_thesaurus
 
 val modifier = Modifier.fillMaxWidth()
 
@@ -48,7 +47,7 @@ fun ColumnScope.Words(getEtymology: () -> WordEtymologyUi) {
     etymology.words
         .take(2)
         .fastForEach {
-            Word(remember(etymology) { { it.copy(senses = it.senses.take(2)) } }, Modifier)
+            Word(remember(etymology) { { it.copy(senses = it.senses.take(2)) } })
         }
 }
 
@@ -57,25 +56,23 @@ fun Word(
     getWord: () -> WordUi,
     modifier: Modifier = Modifier,
 ) {
-    Column(modifier, verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        val word = getWord()
-        PartOfSpeech(getWord)
+    Column(
+        modifier,
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        PartOfSpeech(getWord, Modifier.fillMaxWidth().padding(horizontal = 16.dp))
         Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            MeaningsTitle()
+            MeaningsTitle(
+                Modifier.fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+            )
             Meaning(getWord, false)
         }
 
-        if ((word.synonyms.isNotEmpty() || word.antonyms.isNotEmpty())) {
-            Box(Modifier)
-        }
-
-        if (word.synonyms.isNotEmpty()) {
-            ThesaurusItem(stringResource(Res.string.vocabulary_word_thesaurus_synonyms))
-        }
-
-        if (word.antonyms.isNotEmpty()) {
-            ThesaurusItem(stringResource(Res.string.vocabulary_word_thesaurus_antonyms))
-        }
+        ThesaurusItem(
+            stringResource(Res.string.vocabulary_word_thesaurus),
+            Modifier.fillMaxWidth().padding(horizontal = 16.dp)
+        )
     }
 }
 
@@ -94,10 +91,11 @@ fun WordDetailed(
 }
 
 @Composable
-internal fun MeaningsTitle() {
+internal fun MeaningsTitle(modifier: Modifier = Modifier) {
     Text(
         stringResource(Res.string.vocabulary_word_senses),
         style = MaterialTheme.typography.titleSmall,
+        modifier = modifier
     )
 }
 

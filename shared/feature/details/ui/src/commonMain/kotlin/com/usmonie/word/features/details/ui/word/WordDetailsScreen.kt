@@ -19,9 +19,11 @@ import androidx.compose.ui.unit.dp
 import com.usmonie.compass.core.LocalRouteManager
 import com.usmonie.compass.core.ui.ScreenId
 import com.usmonie.compass.viewmodel.StateScreen
-import com.usmonie.core.kit.composables.word.HeaderState
 import com.usmonie.core.kit.composables.word.HeaderWordScaffold
 import com.usmonie.word.features.details.ui.mobile.WordDetailsContent
+import com.usmonie.word.features.details.ui.notification.SubscriptionPage
+import com.usmonie.word.features.details.ui.notification.SubscriptionScreenState
+import com.usmonie.word.features.details.ui.notification.SubscriptionViewModel
 import com.usmonie.word.features.details.ui.pos.PosDetailsScreenFactory
 import com.usmonie.word.features.details.ui.word.WordDetailsScreenFactory.Companion.ID
 import com.usmonie.word.features.dictionary.ui.IconFavoriteButton
@@ -30,7 +32,10 @@ import org.jetbrains.compose.resources.stringResource
 import word.shared.feature.details.ui.generated.resources.Res
 import word.shared.feature.details.ui.generated.resources.details_root_title
 
-internal class WordDetailsScreen(viewModel: WordDetailsViewModel) :
+internal class WordDetailsScreen(
+    viewModel: WordDetailsViewModel,
+    private val subscriptionsViewModel: SubscriptionViewModel
+) :
     StateScreen<WordDetailsState, WordDetailsAction, WordDetailsEvent, WordDetailsEffect, WordDetailsViewModel>(
         viewModel
     ) {
@@ -41,6 +46,7 @@ internal class WordDetailsScreen(viewModel: WordDetailsViewModel) :
     override fun Content() {
         val routeManager = LocalRouteManager.current
         val state by viewModel.state.collectAsState()
+        val subscriptionState by subscriptionsViewModel.state.collectAsState()
 
         val etymologiesPagerState = rememberPagerState { state.word.wordEtymology.size }
 
@@ -51,7 +57,11 @@ internal class WordDetailsScreen(viewModel: WordDetailsViewModel) :
         HeaderWordScaffold(
             { state.word.word },
             routeManager::popBackstack,
-            headerState = { HeaderState.Close },
+            header = if (subscriptionState is SubscriptionScreenState.Empty) {
+                null
+            } else {
+                { SubscriptionPage(subscriptionsViewModel) }
+            },
             topBarBottom = {
                 val coroutineScope = rememberCoroutineScope()
 

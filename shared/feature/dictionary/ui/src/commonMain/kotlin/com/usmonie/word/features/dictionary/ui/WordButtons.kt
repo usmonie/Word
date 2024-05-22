@@ -2,8 +2,8 @@ package com.usmonie.word.features.dictionary.ui
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.StarBorder
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
@@ -39,9 +39,9 @@ fun IconFavoriteButton(
     IconButton({ onClick(wordCombined) }, modifier = modifier) {
         Icon(
             if (wordCombined.isFavorite) {
-                Icons.Default.Favorite
+                Icons.Default.Star
             } else {
-                Icons.Default.FavoriteBorder
+                Icons.Default.StarBorder
             },
             contentDescription = null
         )

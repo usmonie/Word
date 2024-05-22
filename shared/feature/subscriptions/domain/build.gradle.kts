@@ -18,6 +18,7 @@ kotlin {
 
     commonDependencies {
         api(projects.shared.core.domain)
+        api(projects.shared.core.tools)
     }
 }
 task("testClasses")

@@ -8,9 +8,11 @@ import com.usmonie.compass.core.ui.ScreenId
 import kotlinx.coroutines.flow.StateFlow
 
 @Immutable
-abstract class RouteManager {
+abstract class RouteManager : ScreenSaveableStateHolder {
 
     abstract val state: StateFlow<RouteManagerState>
+
+    internal abstract val screensSavedStates: MutableMap<String, Map<String, List<Any?>>>
 
     /**
      * Registers a new [NavigationGraph] with the manager.

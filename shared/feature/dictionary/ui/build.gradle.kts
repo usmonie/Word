@@ -45,13 +45,13 @@ kotlin {
 }
 
 android {
-    compileSdk = 34 // config.versions.android.compileSdk.get().toInt()
+    compileSdk = libs.versions.android.compileSdk.get().toInt()
     namespace = "com.usmonie.word.features.dictionary.ui"
 
     sourceSets["main"].resources.srcDirs("src/commonMain/resources")
 
     defaultConfig {
-        minSdk = 24 // config.versions.android.minSdk.get().toInt()
+        minSdk = libs.versions.android.minSdk.get().toInt()
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17

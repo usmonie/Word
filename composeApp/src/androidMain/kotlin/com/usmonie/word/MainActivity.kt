@@ -4,18 +4,45 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.usmonie.compass.core.RouteManager
 import com.usmonie.core.kit.design.themes.WordThemes
 import com.usmonie.core.kit.design.themes.typographies.Friendly
-import org.koin.android.ext.android.inject
+import com.usmonie.word.di.appModule
+import com.usmonie.word.features.dashboard.data.di.dashboardDataModule
+import com.usmonie.word.features.dashboard.domain.di.dashboardDomainModule
+import com.usmonie.word.features.dashboard.ui.di.dashboardUiModule
+import com.usmonie.word.features.details.ui.di.wordDetailsUiModule
+import com.usmonie.word.features.dictionary.data.di.wordDataModule
+import com.usmonie.word.features.dictionary.domain.di.dictionaryDomainUseCase
+import com.usmonie.word.features.favorites.ui.di.favoritesUiModule
+import com.usmonie.word.features.subscription.data.di.billingModule
+import com.usmonie.word.features.subscription.data.di.datastoreModule
+import com.usmonie.word.features.subscription.data.di.subscriptionDataModule
+import com.usmonie.word.features.subscription.domain.di.subscriptionDomainModule
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
+import org.koin.core.context.GlobalContext.startKoin
 
 class MainActivity : ComponentActivity() {
-
-    private val routeManager: RouteManager by inject()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        startKoin {
+            androidContext(this@MainActivity)
+            androidLogger()
+            modules(
+                dictionaryDomainUseCase,
+                datastoreModule,
+                billingModule,
+                wordDataModule,
+                subscriptionDomainModule,
+                subscriptionDataModule,
+                dashboardDataModule,
+                dashboardDomainModule,
+                dashboardUiModule,
+                favoritesUiModule,
+                wordDetailsUiModule,
+                appModule
+            )
+        }
 //        val amplitude = Amplitude(
 //            Configuration(
 //                apiKey = appKeys.amplitudeKey,
@@ -28,7 +55,7 @@ class MainActivity : ComponentActivity() {
 
         enableEdgeToEdge()
         setContent {
-            App(routeManager, AppState(WordThemes.DEEP_INDIGO, Friendly))
+            App(appState = AppState(WordThemes.DEEP_INDIGO, Friendly))
         }
     }
 }

@@ -5,7 +5,7 @@ import com.usmonie.word.features.details.ui.word.WordDetailsScreenFactory
 import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
 
-val detailsModule = module {
+val wordDetailsUiModule = module {
     factoryOf(::WordDetailsScreenFactory)
     factoryOf(::PosDetailsScreenFactory)
 }
