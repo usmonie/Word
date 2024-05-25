@@ -4,7 +4,6 @@ import androidx.compose.runtime.Immutable
 
 @Immutable
 data class SoundUi(
-    val id: String,
     val audio: String?,
     val audioIpa: String?,
     val transcription: String?,

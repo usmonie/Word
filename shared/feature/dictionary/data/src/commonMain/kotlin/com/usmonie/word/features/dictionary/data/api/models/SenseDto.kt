@@ -6,7 +6,9 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-internal data class SenseDto @OptIn(ExperimentalSerializationApi::class) constructor(
+internal data class SenseDto
+@OptIn(ExperimentalSerializationApi::class)
+constructor(
     @SerialName("id")
     val id: String? = null,
 

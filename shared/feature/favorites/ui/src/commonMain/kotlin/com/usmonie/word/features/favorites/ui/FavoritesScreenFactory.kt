@@ -5,7 +5,7 @@ import com.usmonie.compass.core.Extra
 import com.usmonie.compass.core.ui.Screen
 import com.usmonie.compass.core.ui.ScreenFactory
 import com.usmonie.compass.core.ui.ScreenId
-import com.usmonie.word.features.details.ui.notification.SubscriptionViewModel
+import com.usmonie.word.features.subscriptions.ui.notification.SubscriptionViewModel
 import com.usmonie.word.features.dictionary.domain.usecases.GetAllFavouritesUseCase
 import com.usmonie.word.features.dictionary.domain.usecases.UpdateFavouriteUseCase
 import com.usmonie.word.features.dictionary.ui.models.WordCombinedUi

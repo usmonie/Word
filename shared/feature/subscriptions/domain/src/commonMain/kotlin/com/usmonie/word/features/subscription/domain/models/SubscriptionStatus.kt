@@ -9,7 +9,8 @@ sealed class SubscriptionStatus {
     data class Refunded(val subscription: Subscription) : SubscriptionStatus()
     data class Canceled(val subscription: Subscription) : SubscriptionStatus()
     data class Expired(val subscription: Subscription) : SubscriptionStatus()
-    object None : SubscriptionStatus()
+
+    data object None : SubscriptionStatus()
 }
 
 data class Sale(

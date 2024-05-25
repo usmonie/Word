@@ -1,7 +1,6 @@
 package com.usmonie.word.features.dictionary.domain.models
 
 data class Translation(
-    val id: String,
     val alt: String?,
     val code: String?,
     val english: String?,

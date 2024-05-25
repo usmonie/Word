@@ -8,6 +8,7 @@ import com.android.billingclient.api.BillingFlowParams
 import com.android.billingclient.api.BillingResult
 import com.android.billingclient.api.PurchasesUpdatedListener
 import com.android.billingclient.api.QueryProductDetailsParams
+import com.android.billingclient.api.QueryPurchasesParams
 import com.android.billingclient.api.queryProductDetails
 import com.usmonie.core.domain.BillingConfig
 import com.usmonie.core.domain.tools.fastForEach
@@ -60,6 +61,7 @@ actual class Billing(private val activity: Activity) {
                 if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
                     // Billing client is ready
                     checkSubscriptionStatus()
+
                 }
             }
 
@@ -141,6 +143,21 @@ actual class Billing(private val activity: Activity) {
     }
 
     private fun checkSubscriptionStatus() {
-//        billingClient.query
+        billingClient.queryPurchasesAsync(
+            QueryPurchasesParams.newBuilder()
+                .setProductType(BillingClient.ProductType.SUBS).build()
+        ) { billingResult, purchases ->
+            if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+                for (purchase in purchases) {
+//                    if (purchase.skus.contains(productId) && purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
+//                        callback(true)
+//                        return@queryPurchasesAsync
+//                    }
+                }
+//                callback(false)
+            } else {
+//                callback(false)
+            }
+        }
     }
 }

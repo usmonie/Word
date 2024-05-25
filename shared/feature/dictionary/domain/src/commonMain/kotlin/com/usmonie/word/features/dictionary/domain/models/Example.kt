@@ -1,7 +1,6 @@
 package com.usmonie.word.features.dictionary.domain.models
 
 data class Example(
-    val id: String,
     val english: String?,
     val note: String?,
     val ref: String?,

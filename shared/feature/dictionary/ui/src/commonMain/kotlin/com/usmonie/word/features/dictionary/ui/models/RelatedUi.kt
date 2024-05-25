@@ -1,12 +1,9 @@
 package com.usmonie.word.features.dictionary.ui.models
 
 import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.Stable
 
-@Stable
 @Immutable
 data class RelatedUi(
-    val id: String,
     val alt: String?,
     val english: String?,
     val qualifier: String?,

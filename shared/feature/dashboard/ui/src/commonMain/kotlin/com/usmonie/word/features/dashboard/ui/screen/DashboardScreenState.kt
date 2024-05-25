@@ -12,7 +12,7 @@ import com.usmonie.compass.viewmodel.ScreenState
 import com.usmonie.compass.viewmodel.updateData
 import com.usmonie.core.domain.tools.fastMap
 import com.usmonie.word.features.dashboard.ui.models.SubscriptionSaleStateUi
-import com.usmonie.word.features.details.ui.notification.SubscriptionAdState
+import com.usmonie.word.features.subscriptions.ui.notification.SubscriptionAdState
 import com.usmonie.word.features.dictionary.ui.models.WordCombinedUi
 import com.usmonie.word.features.subscription.domain.models.SubscriptionStatus
 
@@ -53,7 +53,6 @@ internal sealed class DashboardAction : ScreenAction {
     data class OnOpenWord(val wordCombined: WordCombinedUi) : DashboardAction()
     data class OnOpenSearchWord(val wordCombined: WordCombinedUi) : DashboardAction()
     data class OnFavoriteWord(val wordCombined: WordCombinedUi) : DashboardAction()
-    data class OnUpdateSubscriptionState(val collapsed: Boolean) : DashboardAction()
     data class OnInputQuery(val query: TextFieldValue) : DashboardAction()
     data class OnQueryFieldFocusChange(val focused: Boolean) : DashboardAction()
 

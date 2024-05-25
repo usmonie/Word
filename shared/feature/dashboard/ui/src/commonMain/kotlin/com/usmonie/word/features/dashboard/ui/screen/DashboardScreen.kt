@@ -3,12 +3,16 @@ package com.usmonie.word.features.dashboard.ui.screen
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeContent
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyRow
@@ -27,22 +31,24 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import com.usmonie.compass.core.ui.ScreenId
 import com.usmonie.compass.viewmodel.ContentState
 import com.usmonie.compass.viewmodel.StateScreen
 import com.usmonie.core.kit.composables.base.buttons.TextButton
 import com.usmonie.core.kit.composables.word.HeaderWordScaffold
-import com.usmonie.core.kit.tools.addVertical
-import com.usmonie.word.features.details.ui.notification.SubscriptionPage
-import com.usmonie.word.features.details.ui.notification.SubscriptionScreenState
-import com.usmonie.word.features.details.ui.notification.SubscriptionViewModel
+import com.usmonie.core.kit.tools.add
+import com.usmonie.word.features.ads.ui.AdMob
 import com.usmonie.word.features.dictionary.ui.RandomWordCollapsedState
 import com.usmonie.word.features.dictionary.ui.RandomWordExpandedState
 import com.usmonie.word.features.dictionary.ui.WordCardLarge
 import com.usmonie.word.features.dictionary.ui.WordCardSmall
 import com.usmonie.word.features.dictionary.ui.WordOfTheDayState
 import com.usmonie.word.features.dictionary.ui.models.WordCombinedUi
+import com.usmonie.word.features.subscriptions.ui.notification.SubscriptionPage
+import com.usmonie.word.features.subscriptions.ui.notification.SubscriptionScreenState
+import com.usmonie.word.features.subscriptions.ui.notification.SubscriptionViewModel
 import org.jetbrains.compose.resources.stringResource
 import word.shared.feature.dashboard.ui.generated.resources.Res
 import word.shared.feature.dashboard.ui.generated.resources.dashboard_search_history_title
@@ -59,6 +65,7 @@ internal class DashboardScreen(
     private val subscriptionsViewModel: SubscriptionViewModel,
     private val onOpenWord: (wordCombined: WordCombinedUi) -> Unit,
     private val openDashboardMenuItem: (DashboardMenuItem) -> Unit,
+    private val adMob: AdMob
 ) : StateScreen<DashboardState, DashboardAction, DashboardEvent, DashboardEffect, DashboardViewModel>(
     viewModel
 ) {
@@ -68,7 +75,7 @@ internal class DashboardScreen(
     @Composable
     override fun Content() {
         val state by viewModel.state.collectAsState()
-        val subscriptionState by subscriptionsViewModel.state.collectAsState()
+        val subscriptionAdState by subscriptionsViewModel.state.collectAsState()
         val searchPlaceholder = stringResource(Res.string.search_title)
 
         DashboardEffect(onOpenWord, openDashboardMenuItem, viewModel)
@@ -78,17 +85,28 @@ internal class DashboardScreen(
             query = { state.searchFieldState.searchFieldValue },
             onQueryChanged = viewModel::inputQuery,
             placeholder = { searchPlaceholder },
-            header = if (subscriptionState is SubscriptionScreenState.Empty) {
+            header = if (subscriptionAdState is SubscriptionScreenState.Empty) {
                 null
             } else {
                 { SubscriptionPage(subscriptionsViewModel) }
+            },
+            bottomAdBanner = {
+                adMob.Banner(
+                    Modifier.fillMaxWidth()
+                        .height(
+                            with(LocalDensity.current) {
+                                WindowInsets.safeContent.getBottom(this).toDp() + 56.dp
+                            }
+                        )
+                        .background(MaterialTheme.colorScheme.primary)
+                )
             },
             getShowBackButton = { state.searchFieldState.searchFieldValue.text.isNotEmpty() },
             onBackClicked = viewModel::backToMain,
             hasSearchFieldFocus = { state.searchFieldState.hasFocus },
             updateSearchFieldFocus = viewModel::queryFieldFocusChanged,
         ) { insets ->
-            val newInsets = remember(insets) { insets.addVertical(16.dp) }
+            val newInsets = remember(insets) { insets.add(top = 16.dp, bottom = 80.dp) }
             LazyColumn(
                 state = lazyListState,
                 contentPadding = newInsets,

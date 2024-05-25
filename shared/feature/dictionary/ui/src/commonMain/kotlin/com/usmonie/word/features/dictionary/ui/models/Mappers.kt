@@ -61,14 +61,13 @@ fun Word.toUi() = WordUi(
 )
 
 fun List<Related>.toUi() = fastMap { it.toUi() }
-fun Category.toUi() = CategoryUi(id, kind, langcode, name, orig, parents, source)
+fun Category.toUi() = CategoryUi(kind, langcode, name, orig, parents, source)
 
 fun Descendant.toUi() =
-    DescendantUi(id, depth, tags, templates.fastMap { it.toUi() }, text)
+    DescendantUi(depth, tags, templates.fastMap { it.toUi() }, text)
 
 fun Form.toUi() =
     FormUi(
-        id,
         form,
         headNr,
         ipa,
@@ -80,7 +79,6 @@ fun Form.toUi() =
     )
 
 fun Related.toUi() = RelatedUi(
-    id = id,
     alt = alt,
     english = english,
     qualifier = qualifier,
@@ -97,7 +95,6 @@ fun Related.toUi() = RelatedUi(
 )
 
 fun Translation.toUi() = TranslationUi(
-    id = id,
     alt = alt,
     code = code,
     english = english,
@@ -112,7 +109,6 @@ fun Translation.toUi() = TranslationUi(
 )
 
 fun Sense.toUi() = SenseUi(
-    id = id,
     qualifier = qualifier,
     taxonomic = taxonomic,
     headNr = headNr,
@@ -143,7 +139,6 @@ fun Sense.toUi() = SenseUi(
 )
 
 fun SenseCombined.toUi(): SenseCombinedUi = SenseCombinedUi(
-    id = id,
     gloss = gloss,
     children = children.fastMap { it.toUi() },
     qualifier = qualifier,
@@ -175,19 +170,17 @@ fun SenseCombined.toUi(): SenseCombinedUi = SenseCombinedUi(
 )
 
 fun EtymologyTemplate.toUi() = EtymologyTemplateUi(
-    id,
     expansion,
     name
 )
 
-fun Template.toUi() = TemplateUi(id, expansion, name)
+fun Template.toUi() = TemplateUi(expansion, name)
 
-fun HeadTemplate.toUi() = HeadTemplateUi(id, expansion, name)
+fun HeadTemplate.toUi() = HeadTemplateUi(expansion, name)
 
-fun InflectionTemplate.toUi() = InflectionTemplateUi(id, name)
+fun InflectionTemplate.toUi() = InflectionTemplateUi(name)
 
 fun Example.toUi() = ExampleUi(
-    id = id,
     english = english,
     note = note,
     ref = ref,
@@ -197,10 +190,9 @@ fun Example.toUi() = ExampleUi(
     type = type,
 )
 
-fun Instance.toUi() = InstanceUi(id, sense, source, word, tags, topics)
+fun Instance.toUi() = InstanceUi(sense, source, word, tags, topics)
 
 fun Sound.toUi() = SoundUi(
-    id = id,
     audio = audio,
     audioIpa = audio,
     transcription = ipa ?: enpr,

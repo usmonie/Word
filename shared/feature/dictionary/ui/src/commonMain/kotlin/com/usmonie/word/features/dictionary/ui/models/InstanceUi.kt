@@ -1,7 +1,9 @@
 package com.usmonie.word.features.dictionary.ui.models
 
+import androidx.compose.runtime.Immutable
+
+@Immutable
 data class InstanceUi(
-    val id: String,
     val sense: String?,
     val source: String?,
     val word: String?,

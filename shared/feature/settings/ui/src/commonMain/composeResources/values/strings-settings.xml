@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Settings-->
+    <string name="settings_title">[S]ettings</string>
+
+    <string name="settings_themes_title">Themes</string>
+    <string name="settings_themes_daylight_title">Dark theme</string>
+    <string name="settings_themes_daylight_auto_title">Auto</string>
+    <string name="settings_themes_daylight_always">Always</string>
+    <string name="settings_themes_daylight_never">Never</string>
+
+    <string name="settings_fonts_title">Typography</string>
+
+    <string name="settings_user_data_title">User Data</string>
+    <string name="settings_user_data_clear_search_history">Clear search history</string>
+</resources>

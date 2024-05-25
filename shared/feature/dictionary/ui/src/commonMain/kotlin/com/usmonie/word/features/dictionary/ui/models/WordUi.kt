@@ -21,7 +21,7 @@ data class WordEtymologyUi(
 
 @Immutable
 data class WordUi(
-    val id: String,
+    val id: Long,
     val source: String?,
     val word: String,
     val lang: String,
@@ -60,13 +60,6 @@ data class WordUi(
     val synonyms: List<RelatedUi> = listOf(),
     val troponyms: List<RelatedUi> = listOf(),
 ) {
-    val thesaurusAvailable: Boolean = abbreviations.isNotEmpty() || altOf.isNotEmpty() ||
-        antonyms.isNotEmpty() || coordinateTerms.isNotEmpty() || derived.isNotEmpty() ||
-        formOf.isNotEmpty() || holonyms.isNotEmpty() || hypernyms.isNotEmpty() ||
-        hyponyms.isNotEmpty() || instances.isNotEmpty() || meronyms.isNotEmpty() ||
-        proverbs.isNotEmpty() || related.isNotEmpty() || synonyms.isNotEmpty() ||
-        troponyms.isNotEmpty()
-
     val thesaurus: List<Pair<String, List<RelatedUi>>> = listOf(
         "Synonyms" to synonyms,
         "Antonyms" to antonyms,

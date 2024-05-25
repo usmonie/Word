@@ -1,7 +1,7 @@
 package com.usmonie.word.features.dictionary.domain.models
 
 data class Word(
-    val id: String,
+    val id: Long,
     val word: String,
     val etymologyNumber: Int?,
     val etymologyText: String?,

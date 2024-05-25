@@ -1,12 +1,9 @@
 package com.usmonie.word.features.dictionary.ui.models
 
 import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.Stable
 
-@Stable
 @Immutable
 data class SenseUi(
-    val id: String,
     val headNr: Int?,
     val qualifier: String?,
     val taxonomic: String?,
@@ -37,9 +34,8 @@ data class SenseUi(
     val wikipedia: List<String> = listOf(),
 )
 
-@Stable
+@Immutable
 data class SenseCombinedUi(
-    val id: String,
     val gloss: String,
     val children: List<SenseCombinedUi>,
     val altOf: List<RelatedUi>,
@@ -70,4 +66,5 @@ data class SenseCombinedUi(
     val wikipedia: List<String>,
 )
 
+@Immutable
 data class Gloss(val text: String, val children: List<Gloss>, val examples: List<ExampleUi>)

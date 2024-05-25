@@ -7,9 +7,12 @@ import platform.Foundation.NSDocumentDirectory
 import platform.Foundation.NSFileManager
 import platform.Foundation.NSURL
 import platform.Foundation.NSUserDomainMask
+import com.usmonie.word.features.subscription.data.Billing
+import org.koin.core.module.dsl.factoryOf
 
-actual val billingModule: Module
-    get() = TODO("Not yet implemented")
+actual val billingModule: Module = module {
+    factoryOf(::Billing)
+}
 
 @OptIn(ExperimentalForeignApi::class)
 actual val datastoreModule: Module = module {

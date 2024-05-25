@@ -1,7 +1,6 @@
 package com.usmonie.word.features.dictionary.domain.models
 
 data class Sense(
-    val id: String,
     val altOf: List<Related>,
     val antonyms: List<Related>,
     val categories: List<Related>,
@@ -32,7 +31,6 @@ data class Sense(
 )
 
 data class SenseCombined(
-    val id: String,
     val gloss: String,
     val children: List<SenseCombined>,
     val altOf: List<Related>,

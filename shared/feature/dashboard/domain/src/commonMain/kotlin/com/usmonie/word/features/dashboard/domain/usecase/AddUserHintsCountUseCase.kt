@@ -8,6 +8,6 @@ interface AddUserHintsCountUseCase : CoroutineUseCase<Int, Unit>
 class AddUserHintsCountUseCaseImpl(private val userRepository: UserRepository) :
     AddUserHintsCountUseCase {
     override suspend fun invoke(input: Int) {
-        userRepository.hintsCount += input
+        userRepository.addHints(input)
     }
 }

@@ -1,7 +1,6 @@
 package com.usmonie.word.features.dictionary.domain.models
 
 data class Sound(
-    val id: String,
     val audio: String?,
     val audioIpa: String?,
     val enpr: String?,

@@ -15,7 +15,6 @@ import com.usmonie.word.features.dictionary.domain.usecases.UpdateSearchHistory
 import com.usmonie.word.features.dictionary.ui.models.WordCombinedUi
 import com.usmonie.word.features.dictionary.ui.models.toUi
 import com.usmonie.word.features.subscription.domain.models.SubscriptionStatus
-import com.usmonie.word.features.subscription.domain.usecase.SubscriptionStatusUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.Job
@@ -25,7 +24,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @Immutable
-@Suppress("TooManyFunctions", "MagicNumber")
+@Suppress("TooManyFunctions", "MagicNumber", "LongParameterList")
 internal class DashboardViewModel(
     private val searchWordsUseCase: SearchWordsUseCase,
     private val searchHistoryUseCase: GetSearchHistoryUseCase,
@@ -33,7 +32,6 @@ internal class DashboardViewModel(
     private val updateSearchHistory: UpdateSearchHistory,
     private val wordOfTheDayUseCase: GetWordOfTheDayUseCase,
     private val updateFavouriteUseCase: UpdateFavouriteUseCase,
-    private val subscriptionStatusUseCase: SubscriptionStatusUseCase,
 //    private val analytics: Analytics
 ) : StateViewModel<DashboardState, DashboardAction, DashboardEvent, DashboardEffect>(DashboardState()) {
 
@@ -41,12 +39,6 @@ internal class DashboardViewModel(
 
     init {
         tryAgain()
-
-        viewModelScope.launchSafe {
-            subscriptionStatusUseCase(Unit).collect {
-
-            }
-        }
     }
 
     override fun DashboardState.reduce(event: DashboardEvent) = when (event) {
@@ -68,7 +60,10 @@ internal class DashboardViewModel(
 
     override suspend fun processAction(action: DashboardAction): DashboardEvent {
         return when (action) {
-            DashboardAction.OnBackToMain -> DashboardEvent.BackToMain
+            DashboardAction.OnBackToMain -> {
+//                analytics.log()
+                DashboardEvent.BackToMain
+            }
             DashboardAction.OnLoadData -> {
                 loadData(false)
 
@@ -87,16 +82,25 @@ internal class DashboardViewModel(
                 )
             }
 
-            is DashboardAction.OnInputQuery -> search(action.query)
-            is DashboardAction.OnMenuItemClicked -> DashboardEvent.OnMenuItemClicked(action.menuItem)
-            is DashboardAction.OnOpenWord -> DashboardEvent.OpenWord(action.wordCombined)
-            is DashboardAction.OnFavoriteWord -> updateFavourite(action.wordCombined, state.value)
-            is DashboardAction.OnQueryFieldFocusChange -> DashboardEvent.QueryFocusChanged(action.focused)
+            is DashboardAction.OnInputQuery -> {
+                search(action.query)
+            }
+            is DashboardAction.OnMenuItemClicked -> {
+                DashboardEvent.OnMenuItemClicked(action.menuItem)
+            }
+            is DashboardAction.OnOpenWord -> {
+                DashboardEvent.OpenWord(action.wordCombined)
+            }
+            is DashboardAction.OnFavoriteWord -> {
+                updateFavourite(action.wordCombined, state.value)
+            }
+            is DashboardAction.OnQueryFieldFocusChange -> {
+                DashboardEvent.QueryFocusChanged(action.focused)
+            }
             is DashboardAction.OnOpenSearchWord -> {
                 updateSearchHistory(UpdateSearchHistory.Param(action.wordCombined.word))
                 DashboardEvent.OpenWord(action.wordCombined)
             }
-            is DashboardAction.OnUpdateSubscriptionState -> TODO()
         }
     }
 
@@ -218,12 +222,6 @@ internal fun DashboardViewModel.openSearchWord(wordCombined: WordCombinedUi) =
 
 internal fun DashboardViewModel.favoriteWord(wordCombined: WordCombinedUi) =
     handleAction(DashboardAction.OnFavoriteWord(wordCombined))
-
-internal fun DashboardViewModel.collapseSubscriptionAd() =
-    handleAction(DashboardAction.OnUpdateSubscriptionState(true))
-
-internal fun DashboardViewModel.expandSubscriptionAd() =
-    handleAction(DashboardAction.OnUpdateSubscriptionState(false))
 
 internal fun DashboardViewModel.tryAgain() = handleAction(DashboardAction.OnLoadData)
 internal fun DashboardViewModel.nextRandomWord() = handleAction(DashboardAction.OnNextRandomWord)

@@ -10,6 +10,7 @@ import org.koin.core.module.Module
 import org.koin.dsl.module
 
 val subscriptionDataModule = module {
+    includes(billingModule, datastoreModule)
     factory<SubscriptionRepository> { SubscriptionRepositoryImpl(get(), get()) }
 }
 

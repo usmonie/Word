@@ -47,6 +47,7 @@ internal class SubscriptionRepositoryImpl(
                 it[SubscriptionPreferences.SUBSCRIPTION_SALE_DURATION] = 24
             }
         }
+
         return dataStore.data
             .map {
                 val startedTime = it[SubscriptionPreferences.SUBSCRIPTION_SALE_STARTED]

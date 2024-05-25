@@ -1,7 +1,6 @@
 package com.usmonie.word.features.dictionary.domain.models
 
 data class Form(
-    val id: String,
     val form: String?,
     val headNr: Int?,
     val ipa: String?,

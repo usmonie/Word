@@ -26,11 +26,11 @@ import com.usmonie.compass.viewmodel.ContentState
 import com.usmonie.compass.viewmodel.StateScreen
 import com.usmonie.core.kit.composables.word.HeaderWordScaffold
 import com.usmonie.core.kit.tools.add
-import com.usmonie.word.features.details.ui.notification.SubscriptionPage
-import com.usmonie.word.features.details.ui.notification.SubscriptionScreenState
-import com.usmonie.word.features.details.ui.notification.SubscriptionViewModel
 import com.usmonie.word.features.dictionary.ui.WordCardLarge
 import com.usmonie.word.features.dictionary.ui.models.WordCombinedUi
+import com.usmonie.word.features.subscriptions.ui.notification.SubscriptionPage
+import com.usmonie.word.features.subscriptions.ui.notification.SubscriptionScreenState
+import com.usmonie.word.features.subscriptions.ui.notification.SubscriptionViewModel
 import org.jetbrains.compose.resources.stringResource
 import word.shared.feature.favorites.ui.generated.resources.Res
 import word.shared.feature.favorites.ui.generated.resources.favorites_empty_description
@@ -68,7 +68,8 @@ internal class FavoritesScreen(
                 is ContentState.Error<*, *> -> Box(Modifier.padding(it)) {
                     EmptyItem(
                         stringResource(Res.string.favorites_empty_title),
-                        stringResource(Res.string.favorites_empty_description)
+                        stringResource(Res.string.favorites_empty_description),
+                        modifier = Modifier.fillMaxWidth().padding(vertical = 32.dp)
                     )
                 }
 
@@ -80,7 +81,8 @@ internal class FavoritesScreen(
                     Box(Modifier.padding(it)) {
                         EmptyItem(
                             stringResource(Res.string.favorites_empty_title),
-                            stringResource(Res.string.favorites_empty_description)
+                            stringResource(Res.string.favorites_empty_description),
+                            modifier = Modifier.fillMaxWidth().padding(vertical = 32.dp)
                         )
                     }
                 } else {
@@ -124,11 +126,11 @@ internal class FavoritesScreen(
 }
 
 @Composable
-fun EmptyItem(title: String, description: String) {
+fun EmptyItem(title: String, description: String, modifier: Modifier = Modifier) {
     Column(
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.Center,
-        modifier = Modifier.fillMaxWidth()
+        modifier = modifier
     ) {
         Text(
             text = title,

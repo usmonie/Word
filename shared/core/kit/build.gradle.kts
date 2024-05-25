@@ -5,6 +5,7 @@ plugins {
     id(libs.plugins.usmonie.multiplatform.core.get().pluginId)
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.jetbrainsCompose)
+    alias(libs.plugins.compose.compiler)
     id(libs.plugins.usmonie.multiplatform.ui.get().pluginId)
 }
 
@@ -32,7 +33,7 @@ kotlin {
         api(compose.components.resources)
         api(compose.components.uiToolingPreview)
 
-        api("io.github.theapache64:rebugger:1.0.0-rc02")
+        api("io.github.theapache64:rebugger:1.0.0-rc03")
     }
 
     androidDependencies {
@@ -47,6 +48,10 @@ android {
 
 dependencies {
     detektPlugins(libs.twitter.compose.detekt)
+}
+
+compose.resources {
+    publicResClass = true
 }
 
 task("testClasses")

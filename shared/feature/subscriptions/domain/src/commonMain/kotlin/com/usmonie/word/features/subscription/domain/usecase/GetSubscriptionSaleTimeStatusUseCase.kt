@@ -12,7 +12,7 @@ internal class GetSubscriptionSaleTimeStatusUseCaseImpl(
     private val repository: SubscriptionRepository
 ) : GetSubscriptionSaleTimeStatusUseCase {
 
-    override suspend fun invoke(input: Unit): Flow<SubscriptionStatus> {
+    override fun invoke(input: Unit): Flow<SubscriptionStatus> {
         return repository.getSubscriptionState().distinctUntilChanged()
     }
 }

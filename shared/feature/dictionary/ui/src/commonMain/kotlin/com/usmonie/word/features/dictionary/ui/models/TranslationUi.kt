@@ -1,7 +1,9 @@
 package com.usmonie.word.features.dictionary.ui.models
 
+import androidx.compose.runtime.Immutable
+
+@Immutable
 data class TranslationUi(
-    val id: String,
     val alt: String?,
     val code: String?,
     val english: String?,

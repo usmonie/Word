@@ -1,7 +1,10 @@
 package com.usmonie.core.kit.composables.word
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
@@ -12,10 +15,12 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.unit.dp
 import com.usmonie.core.kit.composables.base.bar.SearchLargeTopBar
 import com.usmonie.core.kit.composables.base.bar.SearchTopBar
 import com.usmonie.core.kit.composables.base.scaffold.BaseHeaderScaffold
@@ -80,6 +85,7 @@ fun HeaderWordScaffold(
     modifier: Modifier = Modifier,
     header: (@Composable () -> Unit)? = null,
     bottomBar: @Composable () -> Unit = {},
+    bottomAdBanner: (@Composable (PaddingValues) -> Unit)? = null,
     snackbarHost: @Composable () -> Unit = {},
     floatingActionButton: @Composable () -> Unit = {},
     floatingActionButtonPosition: FabPosition = FabPosition.End,
@@ -91,44 +97,54 @@ fun HeaderWordScaffold(
 ) {
     BaseHeaderScaffold(
         header = header ?: {},
-        content = {
-            Scaffold(
-                modifier = modifier.padding(if (header != null) it else PaddingValues())
-                    .nestedScroll(topAppBarScrollBehavior.nestedScrollConnection),
-                topBar = {
-                    if (header != null) {
-                        SearchTopBar(
-                            onBackClicked = onBackClicked,
-                            getShowBackButton = getShowBackButton,
-                            placeholder = placeholder,
-                            query = query,
-                            onQueryChanged = onQueryChanged,
-                            hasFocus = hasSearchFieldFocus,
-                            onFocusChanged = updateSearchFieldFocus,
-                            getScrollBehavior = { topAppBarScrollBehavior }
-                        )
-                    } else {
-                        SearchLargeTopBar(
-                            onBackClicked,
-                            getShowBackButton,
-                            placeholder,
-                            query,
-                            onQueryChanged,
-                            hasSearchFieldFocus,
-                            updateSearchFieldFocus,
-                            { topAppBarScrollBehavior },
-                        )
+        content = { baseInsets ->
+            Box {
+                val topInsets = if (header != null) baseInsets.calculateTopPadding() else 0.dp
+                Scaffold(
+                    modifier = modifier.fillMaxSize()
+                        .padding(top = topInsets)
+                        .nestedScroll(topAppBarScrollBehavior.nestedScrollConnection),
+                    topBar = {
+                        if (header != null) {
+                            SearchTopBar(
+                                onBackClicked = onBackClicked,
+                                getShowBackButton = getShowBackButton,
+                                placeholder = placeholder,
+                                query = query,
+                                onQueryChanged = onQueryChanged,
+                                hasFocus = hasSearchFieldFocus,
+                                onFocusChanged = updateSearchFieldFocus,
+                                getScrollBehavior = { topAppBarScrollBehavior }
+                            )
+                        } else {
+                            SearchLargeTopBar(
+                                onBackClicked,
+                                getShowBackButton,
+                                placeholder,
+                                query,
+                                onQueryChanged,
+                                hasSearchFieldFocus,
+                                updateSearchFieldFocus,
+                                { topAppBarScrollBehavior },
+                            )
+                        }
+                    },
+                    bottomBar = bottomBar,
+                    snackbarHost = snackbarHost,
+                    floatingActionButton = floatingActionButton,
+                    floatingActionButtonPosition = floatingActionButtonPosition,
+                    containerColor = containerColor,
+                    contentColor = contentColor,
+                    contentWindowInsets = contentWindowInsets,
+                    content = content
+                )
+
+                if (bottomAdBanner != null) {
+                    Box(Modifier.fillMaxWidth().align(Alignment.BottomCenter)) {
+                        bottomAdBanner(baseInsets)
                     }
-                },
-                bottomBar = bottomBar,
-                snackbarHost = snackbarHost,
-                floatingActionButton = floatingActionButton,
-                floatingActionButtonPosition = floatingActionButtonPosition,
-                containerColor = containerColor,
-                contentColor = contentColor,
-                contentWindowInsets = contentWindowInsets,
-                content = content
-            )
+                }
+            }
         }
     )
 }

@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.jetbrainsCompose)
     id(libs.plugins.usmonie.multiplatform.ui.get().pluginId)
     id("dev.shreyaspatil.compose-compiler-report-generator") version "1.1.0"
+    alias(libs.plugins.compose.compiler)
 }
 
 android.namespace = "com.usmonie.word.features.details.ui"
@@ -36,7 +37,6 @@ commonDependencies {
 
     implementation(libs.compose.material3.jetbrains)
     implementation(compose.dependencies.materialIconsExtended)
-    implementation(libs.kvault)
 }
 
 kotlin {

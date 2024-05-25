@@ -21,9 +21,9 @@ import com.usmonie.compass.core.ui.ScreenId
 import com.usmonie.compass.viewmodel.StateScreen
 import com.usmonie.core.kit.composables.word.HeaderWordScaffold
 import com.usmonie.word.features.details.ui.mobile.WordDetailsContent
-import com.usmonie.word.features.details.ui.notification.SubscriptionPage
-import com.usmonie.word.features.details.ui.notification.SubscriptionScreenState
-import com.usmonie.word.features.details.ui.notification.SubscriptionViewModel
+import com.usmonie.word.features.subscriptions.ui.notification.SubscriptionPage
+import com.usmonie.word.features.subscriptions.ui.notification.SubscriptionScreenState
+import com.usmonie.word.features.subscriptions.ui.notification.SubscriptionViewModel
 import com.usmonie.word.features.details.ui.pos.PosDetailsScreenFactory
 import com.usmonie.word.features.details.ui.word.WordDetailsScreenFactory.Companion.ID
 import com.usmonie.word.features.dictionary.ui.IconFavoriteButton

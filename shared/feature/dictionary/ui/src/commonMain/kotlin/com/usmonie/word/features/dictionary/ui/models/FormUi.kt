@@ -4,7 +4,6 @@ import androidx.compose.runtime.Immutable
 
 @Immutable
 data class FormUi(
-    val id: String,
     val formText: String?,
     val headNr: Int?,
     val ipa: String?,

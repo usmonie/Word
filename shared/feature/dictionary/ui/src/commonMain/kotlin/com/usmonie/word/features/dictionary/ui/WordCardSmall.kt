@@ -2,6 +2,7 @@ package com.usmonie.word.features.dictionary.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -11,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.usmonie.core.kit.composables.base.text.AutoSizeText
 import com.usmonie.word.features.dictionary.ui.models.WordCombinedUi
 
 @Composable
@@ -28,7 +30,12 @@ fun WordCardSmall(
             verticalArrangement = Arrangement.spacedBy(12.dp),
             modifier = Modifier.padding(16.dp)
         ) {
-            Text(wordCombinedUi.word, style = MaterialTheme.typography.headlineSmall)
+            AutoSizeText(
+                wordCombinedUi.word,
+                modifier = Modifier.fillMaxWidth(),
+                maxLines = 2,
+                style = MaterialTheme.typography.headlineSmall
+            )
 
             Text(
                 wordCombinedUi.wordEtymology.first().words.first().senses.first().gloss,

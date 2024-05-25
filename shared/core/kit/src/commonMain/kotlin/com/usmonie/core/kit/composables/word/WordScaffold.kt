@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
@@ -18,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.unit.dp
 import com.usmonie.core.kit.composables.base.bar.TextLargeTopBar
 import com.usmonie.core.kit.composables.base.bar.TextTopBar
 import com.usmonie.core.kit.composables.base.scaffold.BaseHeaderScaffold
@@ -78,12 +80,13 @@ fun HeaderWordScaffold(
     actions: @Composable RowScope.() -> Unit = {},
     content: @Composable (PaddingValues) -> Unit
 ) {
-
     BaseHeaderScaffold(
         header ?: {}
-    ) {
+    ) { baseInsets ->
+        val topInsets = if (header != null) baseInsets.calculateTopPadding() else 0.dp
         Scaffold(
-            modifier.padding(if (header != null) it else PaddingValues())
+            modifier = modifier.fillMaxSize()
+                .padding(top = topInsets)
                 .nestedScroll(topAppBarScrollBehavior.nestedScrollConnection),
             content = content,
             snackbarHost = snackbarHost,

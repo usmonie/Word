@@ -4,8 +4,9 @@ import extensions.iOSDependencies
 
 plugins {
     id(libs.plugins.usmonie.multiplatform.domain.get().pluginId)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.room)
     kotlin("plugin.serialization") version "1.9.0"
-    id(libs.plugins.realm.get().pluginId)
 }
 
 android.namespace = "com.usmonie.word.features.dictionary.data"
@@ -24,6 +25,10 @@ kotlin {
         implementation(libs.ktor.client.core)
         implementation(libs.ktor.client.content.negotiation)
         implementation(libs.ktor.serialization.kotlinx.json)
+
+        implementation(libs.room.runtime)
+        implementation(libs.sqlite.bundled)
+
         implementation(libs.realm.base)
         implementation(libs.realm.sync)
 
@@ -35,11 +40,20 @@ kotlin {
 
     androidDependencies {
         implementation(libs.ktor.client.okhttp)
+        implementation(libs.room.runtime.android)
     }
 
     iOSDependencies {
         implementation(libs.ktor.client.darwin)
     }
+}
+
+dependencies {
+    ksp(libs.room.compiler)
+}
+
+room {
+    schemaDirectory("$projectDir/schemas")
 }
 
 task("testClasses")

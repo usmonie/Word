@@ -2,9 +2,10 @@ package com.usmonie.core.kit.composables.base.bar
 
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.only
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -39,7 +40,7 @@ fun SearchTopBar(
     onFocusChanged: (Boolean) -> Unit,
     getScrollBehavior: () -> TopAppBarScrollBehavior,
     modifier: Modifier = Modifier,
-    windowInsets: WindowInsets = TopAppBarDefaults.windowInsets,
+    windowInsets: WindowInsets = TopAppBarDefaults.windowInsets.only(WindowInsetsSides.Horizontal),
     colors: TopAppBarColors = TopAppBarDefaults.largeTopAppBarColors()
 ) {
     val focusManager = LocalFocusManager.current
@@ -63,7 +64,7 @@ fun SearchTopBar(
                 onQueryChanged,
                 hasFocus,
                 onFocusChanged,
-                { 1f },
+                { 0.2f },
                 TopBarSearchFieldModifier,
                 focusRequester = focusRequester,
             )
@@ -126,20 +127,25 @@ fun TextTopBar(
     getScrollBehavior: () -> TopAppBarScrollBehavior,
     modifier: Modifier = Modifier,
     colors: TopAppBarColors = TopAppBarDefaults.largeTopAppBarColors(),
-    textStyle: TextStyle = MaterialTheme.typography.displayMedium,
-    actions: @Composable RowScope.() -> Unit = {},
+    windowInsets: WindowInsets = TopAppBarDefaults.windowInsets.only(WindowInsetsSides.Horizontal),
+    actions: @Composable (RowScope.() -> Unit) = {},
 ) {
     TopAppBar(
         modifier = modifier,
         navigationIcon = { NavigationBack(onBackClicked) },
         scrollBehavior = getScrollBehavior(),
         title = {
-            Text(
-                placeholder(),
-                style = textStyle,
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
+            SearchFieldTopBar(
+                placeholder,
+                { TextFieldValue() },
+                { },
+                { false },
+                { },
+                { 0.3f },
+                Modifier.fillMaxWidth(),
             )
         },
+        windowInsets = windowInsets,
         colors = colors,
         actions = actions
     )

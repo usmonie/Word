@@ -2,7 +2,7 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
-//    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.compose.compiler)
 }
 
 //composeCompiler {
@@ -58,6 +58,10 @@ kotlin {
             implementation(projects.shared.feature.dashboard.ui)
 
             implementation(projects.shared.feature.favorites.ui)
+
+            implementation(projects.shared.feature.settings.data)
+            implementation(projects.shared.feature.settings.domain)
+            implementation(projects.shared.feature.settings.ui)
 
             implementation(projects.shared.feature.subscriptions.data)
             implementation(projects.shared.feature.subscriptions.domain)

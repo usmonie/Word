@@ -2,14 +2,12 @@ package com.usmonie.core.kit.composables.base.text
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -115,26 +113,24 @@ fun ResizableBaseTextInputField(
         )
     }
 
-    BoxWithConstraints {
-        BaseTextInputField(
-            text(),
-            onTextChanged,
-            enabled = enabled,
-            readOnly = !enabled,
-            modifier = modifier,
-            colors = colors,
-            textStyle = customTextStyle,
-            placeholder = {
-                PlaceholderTextField(
-                    hasFocus,
-                    placeholder,
-                    textStyle = { customTextStyle }
-                )
-            },
-            keyboardActions = keyboardActions,
-            keyboardOptions = keyboardOptions,
-        )
-    }
+    BaseTextInputField(
+        text(),
+        onTextChanged,
+        enabled = enabled,
+        readOnly = !enabled,
+        modifier = modifier,
+        colors = colors,
+        textStyle = customTextStyle,
+        placeholder = {
+            PlaceholderTextField(
+                hasFocus,
+                placeholder,
+                textStyle = { customTextStyle }
+            )
+        },
+        keyboardActions = keyboardActions,
+        keyboardOptions = keyboardOptions,
+    )
 }
 
 @Composable
@@ -146,10 +142,11 @@ private fun PlaceholderTextField(
     val color = MaterialTheme.colorScheme.onBackground
     val placeholderAlphaAnimation by animateFloatAsState(if (hasFocus()) PLACEHOLDER_FOCUSED_ALPHA else 1f)
 
-    Text(
+    AutoSizeText(
         placeholder(),
         style = textStyle(),
         color = color,
+        maxLines = 3,
         modifier = Modifier
             .graphicsLayer { compositingStrategy = CompositingStrategy.Offscreen }
             .drawWithContent {
@@ -165,4 +162,4 @@ private fun PlaceholderTextField(
 
 const val PLACEHOLDER_FOCUSED_ALPHA = .5f
 const val THRESHOLD_SIZE = .5f
-const val RESIZEABLE_TEXT_MIN_FRACTION = .7f
+const val RESIZEABLE_TEXT_MIN_FRACTION = .55f

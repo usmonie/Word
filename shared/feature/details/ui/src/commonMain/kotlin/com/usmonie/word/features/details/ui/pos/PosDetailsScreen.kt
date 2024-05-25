@@ -17,10 +17,10 @@ import com.usmonie.compass.core.ui.ScreenId
 import com.usmonie.compass.viewmodel.StateScreen
 import com.usmonie.core.kit.composables.word.HeaderWordScaffold
 import com.usmonie.core.kit.tools.add
-import com.usmonie.word.features.details.ui.notification.SubscriptionPage
-import com.usmonie.word.features.details.ui.notification.SubscriptionScreenState
-import com.usmonie.word.features.details.ui.notification.SubscriptionViewModel
 import com.usmonie.word.features.dictionary.ui.WordDetailed
+import com.usmonie.word.features.subscriptions.ui.notification.SubscriptionPage
+import com.usmonie.word.features.subscriptions.ui.notification.SubscriptionScreenState
+import com.usmonie.word.features.subscriptions.ui.notification.SubscriptionViewModel
 
 class PosDetailsScreen(
     viewModel: PosDetailsViewModel,

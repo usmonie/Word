@@ -19,7 +19,7 @@ import com.usmonie.word.features.dictionary.domain.models.Word
 import io.realm.kotlin.ext.toRealmDictionary
 
 internal fun WordDb.toDomain() = Word(
-    id = _id.toHexString(),
+    id = 0,
     word = word,
     langCode = langCode,
     lang = lang,
@@ -73,7 +73,8 @@ fun combineSenses(senses: List<Sense>): List<SenseCombined> {
             gloss ?: return emptyList()
 
             val root = group
-                .find { it.glosses.first() == gloss || it.glosses.last() == gloss } ?: return emptyList()
+                .find { it.glosses.first() == gloss || it.glosses.last() == gloss }
+                ?: return emptyList()
 
             root.toCombinedDomain(gloss, groupByPrefix(group, prefix + listOfNotNull(gloss)))
         }
@@ -85,15 +86,16 @@ fun combineSenses(senses: List<Sense>): List<SenseCombined> {
 internal fun List<RelatedDb>.toDomain(): List<Related> {
     return map { it.toDomain() }
 }
+
 internal fun CategoryDb.toDomain() =
-    Category(_id.toHexString(), kind, langcode, name, orig, parents, source)
+    Category(kind, langcode, name, orig, parents, source)
 
 internal fun DescendantDb.toDomain() =
-    Descendant(_id.toHexString(), depth, tags, templates.fastMap { it.toDomain() }, text)
+    Descendant(depth, tags, templates.fastMap { it.toDomain() }, text)
 
 internal fun FormDb.toDomain() =
     Form(
-        _id.toHexString(),
+
         form,
         headNr,
         ipa,
@@ -105,7 +107,7 @@ internal fun FormDb.toDomain() =
     )
 
 internal fun RelatedDb.toDomain() = Related(
-    _id.toHexString(),
+
     alt = alt,
     english = english,
     qualifier = qualifier,
@@ -122,7 +124,6 @@ internal fun RelatedDb.toDomain() = Related(
 )
 
 internal fun TranslationDb.toDomain() = Translation(
-    id = _id.toHexString(),
     alt = alt,
     code = code,
     english = english,
@@ -137,7 +138,6 @@ internal fun TranslationDb.toDomain() = Translation(
 )
 
 internal fun SenseDb.toDomain() = Sense(
-    id = _id.toHexString(),
     qualifier = qualifier,
     taxonomic = taxonomic,
     headNr = headNr,
@@ -168,7 +168,6 @@ internal fun SenseDb.toDomain() = Sense(
 )
 
 internal fun Sense.toCombinedDomain(gloss: String, children: List<SenseCombined>) = SenseCombined(
-    id = id,
     gloss = gloss,
     children = children,
     qualifier = qualifier,
@@ -200,34 +199,33 @@ internal fun Sense.toCombinedDomain(gloss: String, children: List<SenseCombined>
 )
 
 internal fun EtymologyTemplateDb.toDomain() = EtymologyTemplate(
-    _id.toHexString(),
+
     args.toMap(),
     expansion,
     name
 )
 
 internal fun TemplateDb.toDomain() = Template(
-    _id.toHexString(),
+
     args.toRealmDictionary(),
     expansion,
     name
 )
 
 internal fun HeadTemplateDb.toDomain() = HeadTemplate(
-    _id.toHexString(),
+
     args.toRealmDictionary(),
     expansion,
     name
 )
 
 internal fun InflectionTemplateDb.toDomain() = InflectionTemplate(
-    _id.toHexString(),
+
     args.toRealmDictionary(),
     name
 )
 
 internal fun ExampleDb.toDomain() = Example(
-    id = _id.toHexString(),
     english = english,
     note = note,
     ref = ref,
@@ -238,10 +236,9 @@ internal fun ExampleDb.toDomain() = Example(
 )
 
 internal fun InstanceDb.toDomain() =
-    Instance(_id.toHexString(), sense, source, tags, topics, word)
+    Instance(sense, source, tags, topics, word)
 
 internal fun SoundDb.toDomain() = Sound(
-    id = _id.toHexString(),
     audio = audio,
     audioIpa = audio,
     enpr = enpr,

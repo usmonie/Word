@@ -11,7 +11,7 @@ fun interface CoroutineUseCase<in Input, out Output> {
 }
 
 fun interface FlowUseCase<in Input, out Output> {
-    suspend operator fun invoke(input: Input): Flow<Output>
+    operator fun invoke(input: Input): Flow<Output>
 }
 
 fun interface BiFlowUseCase<in Input, out Output> {
@@ -20,4 +20,4 @@ fun interface BiFlowUseCase<in Input, out Output> {
 
 operator fun <Output> UseCase<Unit, Output>.invoke() = invoke(Unit)
 suspend operator fun <Output> CoroutineUseCase<Unit, Output>.invoke() = invoke(Unit)
-suspend operator fun <Output> FlowUseCase<Unit, Output>.invoke() = invoke(Unit)
+operator fun <Output> FlowUseCase<Unit, Output>.invoke() = invoke(Unit)

@@ -1,7 +1,6 @@
 package com.usmonie.word.features.dictionary.domain.models
 
 data class Related(
-    val id: String,
     val alt: String?,
     val english: String?,
     val qualifier: String?,

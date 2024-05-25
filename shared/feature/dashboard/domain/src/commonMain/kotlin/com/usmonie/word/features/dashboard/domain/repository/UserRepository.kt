@@ -1,21 +1,14 @@
 package com.usmonie.word.features.dashboard.domain.repository
 
-import com.usmonie.word.features.dashboard.domain.models.Language
-import com.usmonie.word.features.dashboard.domain.models.LanguageLevel
-import com.usmonie.word.features.dashboard.domain.models.NotificationTime
-import com.usmonie.word.features.dashboard.domain.models.UserLearningStatus
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
-    var lastPracticeTime: Long
+    val hintsCount: Flow<Int>
+    val livesCount: Flow<Int>
 
-    var wordsPerDayCount: Int
-    var nativeLanguage: Language
-    var notificationsTime: NotificationTime
-    var languageLevel: LanguageLevel
+    suspend fun addHints(hintsCount: Int)
+    suspend fun useHints(hintsCount: Int)
 
-    val learningStatusFlow: StateFlow<UserLearningStatus>
-
-    var hintsCount: Int
-    var livesCount: Int
+    suspend fun addLives(livesCount: Int)
+    suspend fun useLives(livesCount: Int)
 }
