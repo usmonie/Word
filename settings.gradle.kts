@@ -1,5 +1,8 @@
 import org.gradle.api.internal.FeaturePreviews
 
+include(":benchmark")
+
+
 rootProject.name = "Word"
 
 enableFeaturePreview(FeaturePreviews.Feature.TYPESAFE_PROJECT_ACCESSORS.name)

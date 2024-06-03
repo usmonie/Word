@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)
-    alias(libs.plugins.jetbrainsCompose)
+    alias(libs.plugins.compose.jetbrains)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.androidx.baselineprofile)
     alias(libs.plugins.google.services)
@@ -87,6 +87,11 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+        create("benchmark") {
+            initWith(buildTypes.getByName("release"))
+            matchingFallbacks += listOf("release")
+            isDebuggable = false
         }
     }
     compileOptions {

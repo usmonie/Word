@@ -1,7 +1,7 @@
 import extensions.commonDependencies
 
 plugins {
-    alias(libs.plugins.jetbrainsCompose)
+    alias(libs.plugins.compose.jetbrains)
     id(libs.plugins.usmonie.multiplatform.ui.get().pluginId)
     id("dev.shreyaspatil.compose-compiler-report-generator") version "1.1.0"
     alias(libs.plugins.compose.compiler)
