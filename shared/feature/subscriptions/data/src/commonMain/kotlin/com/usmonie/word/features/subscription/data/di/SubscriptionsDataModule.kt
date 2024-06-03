@@ -17,6 +17,7 @@ val subscriptionDataModule = module {
 expect val datastoreModule: Module
 
 expect val billingModule: Module
+
 /**
  * Gets the singleton DataStore instance, creating it if necessary.
  */

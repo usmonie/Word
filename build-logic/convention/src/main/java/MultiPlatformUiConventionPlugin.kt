@@ -27,7 +27,7 @@ class MultiPlatformUiConventionPlugin : Plugin<Project> {
                 apply("com.android.library")
                 apply("org.jetbrains.kotlin.multiplatform")
                 apply("io.gitlab.arturbosch.detekt")
-//                apply("org.jetbrains.kotlin.plugin.compose")
+                apply("org.jetbrains.kotlin.plugin.compose")
             }
 
             val libraryExtension = extensions.getByType<LibraryExtension>()

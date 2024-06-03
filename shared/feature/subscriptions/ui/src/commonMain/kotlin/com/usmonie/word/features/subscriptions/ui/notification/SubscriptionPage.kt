@@ -45,7 +45,7 @@ fun SubscriptionPage(viewModel: SubscriptionViewModel) {
                         else -> {
                             SaleSubscriptionAdMinified({
                                 viewModel.handleAction(SubscriptionScreenAction.Expand)
-                            }, { "23:32" })
+                            })
                         }
                     }
                 }

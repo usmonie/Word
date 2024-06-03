@@ -1,5 +1,3 @@
-
-import extensions.androidDependencies
 import extensions.commonDependencies
 
 plugins {
@@ -32,7 +30,6 @@ commonDependencies {
     implementation(projects.shared.core.tools)
 
     implementation(projects.shared.feature.ads.ui)
-    implementation(projects.shared.feature.dashboard.domain)
 
     implementation(projects.shared.feature.dictionary.domain)
     implementation(projects.shared.feature.dictionary.ui)
@@ -67,6 +64,11 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+}
+
+composeCompiler {
+    enableIntrinsicRemember = true
+    enableStrongSkippingMode = true
 }
 
 task("testClasses")

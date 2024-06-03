@@ -42,6 +42,7 @@ object RichMaroonColors : Colors() {
     override val light_surfaceContainerHigh = Color(0xFFCDA2CD)
     override val light_surfaceContainerLow = Color(0xFFE6CBE6)
     override val light_surfaceContainerLowest = Color(0xFF5ECF5)
+    override val light_isAppearanceLightStatusBars: Boolean = true
 
     override val dark_primary = Color(0xFFFFB4A8)
     override val dark_onPrimary = Color(0xFF690000)

@@ -12,8 +12,5 @@ internal fun Project.configureCompose(extension: LibraryExtension) {
     with(extension) {
         // Enable Compose build features.
         buildFeatures.compose = true
-
-        // Set the Kotlin compiler extension version for Compose based on the configured version in the project.
-        composeOptions.kotlinCompilerExtensionVersion = "1.5.14"
     }
 }

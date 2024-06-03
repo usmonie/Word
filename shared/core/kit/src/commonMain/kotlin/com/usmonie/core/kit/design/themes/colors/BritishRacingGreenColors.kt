@@ -42,6 +42,7 @@ object BritishRacingGreenColors : Colors() {
     override val light_surfaceContainerHigh: Color = Color(0xFFE2D6C9)
     override val light_surfaceContainerLow: Color = Color(0xFFD1D4C8)
     override val light_surfaceContainerLowest: Color = Color(0xFFBEBFB4)
+    override val light_isAppearanceLightStatusBars: Boolean = true
 
     override val dark_primary = Color(0xFF78DA9F)
     override val dark_onPrimary = Color(0xFF00391F)

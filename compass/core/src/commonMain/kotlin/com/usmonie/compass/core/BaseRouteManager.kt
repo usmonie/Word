@@ -174,7 +174,7 @@ internal class BaseRouteManager : RouteManager(), ScreenSaveableStateHolder {
 
     @Composable
     override fun SaveableStateProvider(screen: Screen, content: @Composable () -> Unit) {
-        val key = screen.id.id
+        val key = screen.uuid
         ReusableContent(key) {
             val registryHolder = remember {
                 require(parentSaveableStateRegistry?.canBeSaved(key) ?: true) {

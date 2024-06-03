@@ -42,6 +42,7 @@ object DeepIndigoColors : Colors() {
     override val light_surfaceContainerHigh = Color(0xFFccccdb)
     override val light_surfaceContainerLow = Color(0xFFE6E6E8)
     override val light_surfaceContainerLowest = Color(0xFFDADADB)
+    override val light_isAppearanceLightStatusBars: Boolean = true
 
     override val dark_primary = Color(0xFF99CBFF)
     override val dark_onPrimary = Color(0xFF003354)

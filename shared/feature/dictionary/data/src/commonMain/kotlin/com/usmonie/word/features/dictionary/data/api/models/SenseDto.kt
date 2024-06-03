@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalSerializationApi::class)
+
 package com.usmonie.word.features.dictionary.data.api.models
 
 import kotlinx.serialization.EncodeDefault
@@ -7,7 +9,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 internal data class SenseDto
-@OptIn(ExperimentalSerializationApi::class)
+@OptIn(ExperimentalSerializationApi::class, ExperimentalSerializationApi::class)
 constructor(
     @SerialName("id")
     val id: String? = null,

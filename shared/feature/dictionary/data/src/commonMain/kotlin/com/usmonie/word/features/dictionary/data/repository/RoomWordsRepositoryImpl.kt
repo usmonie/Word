@@ -61,10 +61,10 @@ internal class RoomWordsRepositoryImpl(
     }
 
     override suspend fun getAllFavorites(): List<WordCombined> {
-        return favoritesDao.favorites()
+        return  listOf()/* favoritesDao.favorites()
             .asSequence()
             .flatMap { it.words }
-            .mapDbToCombined(::checkFavorite)
+            .mapDbToCombined(::checkFavorite)*/
     }
 
     override suspend fun addToSearchHistory(word: String): List<WordCombined> {
@@ -73,10 +73,10 @@ internal class RoomWordsRepositoryImpl(
     }
 
     override suspend fun getSearchHistory(): List<WordCombined> {
-        return wordDao.searchHistory()
+        return listOf()/* wordDao.searchHistory()
             .asSequence()
             .flatMap { it.words }
-            .mapDbToCombined(::checkFavorite)
+            .mapDbToCombined(::checkFavorite)*/
     }
 
     override suspend fun clearSearchHistory() {

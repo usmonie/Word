@@ -2,7 +2,6 @@ package com.usmonie.word.features.subscriptions.ui.notification
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -17,7 +16,6 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun SaleSubscriptionAdMinified(
     onExpandClick: () -> Unit,
-    leftTime: () -> String,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -25,14 +23,13 @@ fun SaleSubscriptionAdMinified(
             .fillMaxWidth()
             .clickable(onClick = onExpandClick)
             .background(MaterialTheme.colorScheme.primaryContainer),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Text(
             "Click here to see offers",
-            style = MaterialTheme.typography.titleSmall,
+            style = MaterialTheme.typography.titleMedium,
             modifier = Modifier.fillMaxWidth()
                 .statusBarsPadding()
-                .padding(24.dp),
+                .padding(16.dp),
             textAlign = TextAlign.Center,
             color = MaterialTheme.colorScheme.onPrimaryContainer
         )

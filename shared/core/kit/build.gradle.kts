@@ -54,4 +54,9 @@ compose.resources {
     publicResClass = true
 }
 
+composeCompiler {
+    enableIntrinsicRemember = true
+    enableStrongSkippingMode = true
+}
+
 task("testClasses")

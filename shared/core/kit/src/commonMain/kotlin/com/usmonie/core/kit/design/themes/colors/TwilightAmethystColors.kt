@@ -42,6 +42,7 @@ object TwilightAmethystColors : Colors() {
     override val light_surfaceContainerHigh = Color(0xFFf5e1f5)
     override val light_surfaceContainerLow = Color(0xFFe0c3e0)
     override val light_surfaceContainerLowest = Color(0xFFc9adc9)
+    override val light_isAppearanceLightStatusBars: Boolean = true
 
     override val dark_primary = Color(0xFFFFB4A8)
     override val dark_onPrimary = Color(0xFF690000)

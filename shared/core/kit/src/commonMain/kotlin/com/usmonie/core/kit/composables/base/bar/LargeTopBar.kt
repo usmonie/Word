@@ -1,8 +1,10 @@
 package com.usmonie.core.kit.composables.base.bar
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -17,6 +19,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalFocusManager
@@ -81,7 +84,7 @@ fun SearchLargeTopBar(
     modifier: Modifier = Modifier,
     colors: TopAppBarColors = TopAppBarDefaults.largeTopAppBarColors()
 ) {
-    val scrollBehavior = derivedStateOf { getScrollBehavior() }
+    val scrollBehavior by derivedStateOf(getScrollBehavior)
 
     val focusManager = LocalFocusManager.current
     val focusRequester = remember { FocusRequester() }
@@ -96,18 +99,20 @@ fun SearchLargeTopBar(
 
     LargeTopAppBar(
         modifier = modifier,
-        scrollBehavior = scrollBehavior.value,
+        scrollBehavior = scrollBehavior,
         title = {
-            SearchFieldTopBar(
-                placeholder,
-                query,
-                onQueryChanged,
-                hasFocus,
-                onFocusChanged,
-                { scrollBehavior.value.state.collapsedFraction },
-                LargeTopBarSearchFieldModifier,
-                focusRequester = focusRequester
-            )
+            Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                SearchFieldTopBar(
+                    placeholder,
+                    query,
+                    onQueryChanged,
+                    hasFocus,
+                    onFocusChanged,
+                    { scrollBehavior.state.collapsedFraction },
+                    LargeTopBarSearchFieldModifier,
+                    focusRequester = focusRequester
+                )
+            }
         },
         colors = colors
     )
@@ -162,7 +167,12 @@ fun TextLargeTopBar(
                 val fraction = scrollBehavior.state.collapsedFraction
 
                 val titleStyle = remember(fraction) {
-                    titleTextStyle.copy(fontSize = titleTextStyle.fontSize * (1 - fraction).coerceIn(minTextSize, 1f))
+                    titleTextStyle.copy(
+                        fontSize = titleTextStyle.fontSize * (1 - fraction).coerceIn(
+                            minTextSize,
+                            1f
+                        )
+                    )
                 }
                 Text(
                     placeholder(),

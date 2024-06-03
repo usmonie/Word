@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Favorites-->
+    <string name="games_title">[G]ames</string>
+    <string name="games_hangman_title">[H]angman</string>
+    <string name="games_enigma_title">[E]nigma</string>
+</resources>

@@ -10,7 +10,6 @@ val favoritesUiModule = module {
             get(),
             get(),
             get(),
-            get(),
             openWord
         )
     }

@@ -43,6 +43,7 @@ data object PastelSunsetColors : Colors() {
     override val light_surfaceContainerHigh = Color(0xFFf1eff3)
     override val light_surfaceContainerLow = Color(0xFFE6E6E8)
     override val light_surfaceContainerLowest = Color(0xFFDADADB)
+    override val light_isAppearanceLightStatusBars: Boolean = true
 
     override val dark_primary = Color(0xFFFFB4A8)
     override val dark_onPrimary = Color(0xFF690000)

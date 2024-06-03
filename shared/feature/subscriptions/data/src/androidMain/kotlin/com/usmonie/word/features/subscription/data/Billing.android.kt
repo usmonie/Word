@@ -1,7 +1,6 @@
 package com.usmonie.word.features.subscription.data
 
 import android.app.Activity
-import android.util.Log
 import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingClientStateListener
 import com.android.billingclient.api.BillingFlowParams
@@ -92,7 +91,6 @@ actual class Billing(private val activity: Activity) {
     }
 
     actual suspend fun subscribe(subscription: Subscription) {
-        Log.d("SubscribingProcess", subscription.toString())
         val queryProductDetailsParams =
             QueryProductDetailsParams.newBuilder()
                 .setProductList(
@@ -118,11 +116,9 @@ actual class Billing(private val activity: Activity) {
                     )
                 )
                 .build()
-        Log.d("SubscribingProcess", queryProductDetailsParams.toString())
 
         val product = billingClient.queryProductDetails(queryProductDetailsParams)
             .productDetailsList?.get(0) ?: return
-        Log.d("SubscribingProcess", product.toString())
 
         val productDetailsParamsList = listOf(
             BillingFlowParams.ProductDetailsParams.newBuilder()

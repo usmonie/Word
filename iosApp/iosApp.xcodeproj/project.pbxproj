@@ -41,16 +41,28 @@
 		DA1908852BE6CCE5003D1F16 /* sourceserif_bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DA1908662BE6CCE5003D1F16 /* sourceserif_bold.ttf */; };
 		DA1908862BE6CCE5003D1F16 /* sourceserif_light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DA1908672BE6CCE5003D1F16 /* sourceserif_light.ttf */; };
 		DA1908872BE6CCE5003D1F16 /* sourceserif_regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DA1908682BE6CCE5003D1F16 /* sourceserif_regular.ttf */; };
+		DAA7B6C72C0B46F300D038BA /* Analytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA7B6C62C0B46F300D038BA /* Analytics.swift */; };
+		DAA7B6C92C0B4EFF00D038BA /* SwiftView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA7B6C82C0B4EFF00D038BA /* SwiftView.swift */; };
+		DAA7B6CB2C0B4F5700D038BA /* AdBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA7B6CA2C0B4F5700D038BA /* AdBannerView.swift */; };
+		DAA7B6CE2C0B606900D038BA /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = DAA7B6CD2C0B606900D038BA /* FirebaseAnalyticsSwift */; };
+		DAA7B6D02C0B606900D038BA /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = DAA7B6CF2C0B606900D038BA /* FirebaseCrashlytics */; };
+		DAA7B6D22C0B606900D038BA /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = DAA7B6D12C0B606900D038BA /* FirebaseMessaging */; };
+		DAA7B6D52C0B608400D038BA /* AmplitudeSwift in Frameworks */ = {isa = PBXBuildFile; productRef = DAA7B6D42C0B608400D038BA /* AmplitudeSwift */; };
+		DAA7B6D82C0B609F00D038BA /* YandexMobileAdsPackage in Frameworks */ = {isa = PBXBuildFile; productRef = DAA7B6D72C0B609F00D038BA /* YandexMobileAdsPackage */; };
+		DAA7B6DB2C0B60C000D038BA /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = DAA7B6DA2C0B60C000D038BA /* GoogleMobileAds */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		058557BA273AAA24004C7B11 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		058557D8273AAEEB004C7B11 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		2152FB032600AC8F00CF470E /* iOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSApp.swift; sourceTree = "<group>"; };
+		3B376FFD696EF89CBEF4485E /* Pods-iosApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iosApp.release.xcconfig"; path = "Target Support Files/Pods-iosApp/Pods-iosApp.release.xcconfig"; sourceTree = "<group>"; };
 		7555FF7B242A565900829871 /* Word.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Word.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7555FF82242A565900829871 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		7555FF8C242A565B00829871 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A3A058BC466FCB35DCED427E /* Pods_iosApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iosApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB3632DC29227652001CCB65 /* Config.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
+		C33F53EF9253C0722416992F /* Pods-iosApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iosApp.debug.xcconfig"; path = "Target Support Files/Pods-iosApp/Pods-iosApp.debug.xcconfig"; sourceTree = "<group>"; };
 		DA19084B2BE6CCE5003D1F16 /* lato_bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = lato_bold.ttf; sourceTree = "<group>"; };
 		DA19084C2BE6CCE5003D1F16 /* lato_medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = lato_medium.ttf; sourceTree = "<group>"; };
 		DA19084D2BE6CCE5003D1F16 /* lato_regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = lato_regular.ttf; sourceTree = "<group>"; };
@@ -81,6 +93,9 @@
 		DA1908662BE6CCE5003D1F16 /* sourceserif_bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = sourceserif_bold.ttf; sourceTree = "<group>"; };
 		DA1908672BE6CCE5003D1F16 /* sourceserif_light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = sourceserif_light.ttf; sourceTree = "<group>"; };
 		DA1908682BE6CCE5003D1F16 /* sourceserif_regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = sourceserif_regular.ttf; sourceTree = "<group>"; };
+		DAA7B6C62C0B46F300D038BA /* Analytics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Analytics.swift; sourceTree = "<group>"; };
+		DAA7B6C82C0B4EFF00D038BA /* SwiftView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftView.swift; sourceTree = "<group>"; };
+		DAA7B6CA2C0B4F5700D038BA /* AdBannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdBannerView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +103,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DAA7B6DB2C0B60C000D038BA /* GoogleMobileAds in Frameworks */,
+				DAA7B6D52C0B608400D038BA /* AmplitudeSwift in Frameworks */,
+				DAA7B6D22C0B606900D038BA /* FirebaseMessaging in Frameworks */,
+				DAA7B6CE2C0B606900D038BA /* FirebaseAnalyticsSwift in Frameworks */,
+				DAA7B6D02C0B606900D038BA /* FirebaseCrashlytics in Frameworks */,
+				DAA7B6D82C0B609F00D038BA /* YandexMobileAdsPackage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -105,6 +126,7 @@
 		42799AB246E5F90AF97AA0EF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A3A058BC466FCB35DCED427E /* Pods_iosApp.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -116,6 +138,7 @@
 				7555FF7D242A565900829871 /* iosApp */,
 				7555FF7C242A565900829871 /* Products */,
 				42799AB246E5F90AF97AA0EF /* Frameworks */,
+				B021BE99BC256D36C393C65D /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -136,6 +159,9 @@
 				7555FF8C242A565B00829871 /* Info.plist */,
 				2152FB032600AC8F00CF470E /* iOSApp.swift */,
 				058557D7273AAEEB004C7B11 /* Preview Content */,
+				DAA7B6C62C0B46F300D038BA /* Analytics.swift */,
+				DAA7B6C82C0B4EFF00D038BA /* SwiftView.swift */,
+				DAA7B6CA2C0B4F5700D038BA /* AdBannerView.swift */,
 			);
 			path = iosApp;
 			sourceTree = "<group>";
@@ -146,6 +172,15 @@
 				AB3632DC29227652001CCB65 /* Config.xcconfig */,
 			);
 			path = Configuration;
+			sourceTree = "<group>";
+		};
+		B021BE99BC256D36C393C65D /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				C33F53EF9253C0722416992F /* Pods-iosApp.debug.xcconfig */,
+				3B376FFD696EF89CBEF4485E /* Pods-iosApp.release.xcconfig */,
+			);
+			path = Pods;
 			sourceTree = "<group>";
 		};
 		DA1908692BE6CCE5003D1F16 /* font */ = {
@@ -192,6 +227,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7555FFA5242A565B00829871 /* Build configuration list for PBXNativeTarget "iosApp" */;
 			buildPhases = (
+				3833B98C2A37834FEBD91C98 /* [CP] Check Pods Manifest.lock */,
 				F36B1CEB2AD83DDC00CB74D5 /* Compile Kotlin Framework */,
 				7555FF77242A565900829871 /* Sources */,
 				B92378962B6B1156000C7307 /* Frameworks */,
@@ -203,6 +239,12 @@
 			);
 			name = iosApp;
 			packageProductDependencies = (
+				DAA7B6CD2C0B606900D038BA /* FirebaseAnalyticsSwift */,
+				DAA7B6CF2C0B606900D038BA /* FirebaseCrashlytics */,
+				DAA7B6D12C0B606900D038BA /* FirebaseMessaging */,
+				DAA7B6D42C0B608400D038BA /* AmplitudeSwift */,
+				DAA7B6D72C0B609F00D038BA /* YandexMobileAdsPackage */,
+				DAA7B6DA2C0B60C000D038BA /* GoogleMobileAds */,
 			);
 			productName = iosApp;
 			productReference = 7555FF7B242A565900829871 /* Word.app */;
@@ -233,6 +275,10 @@
 			);
 			mainGroup = 7555FF72242A565900829871;
 			packageReferences = (
+				DAA7B6CC2C0B606900D038BA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				DAA7B6D32C0B608400D038BA /* XCRemoteSwiftPackageReference "Amplitude-Swift" */,
+				DAA7B6D62C0B609F00D038BA /* XCRemoteSwiftPackageReference "yandex-ads-sdk-ios" */,
+				DAA7B6D92C0B60C000D038BA /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
 			);
 			productRefGroup = 7555FF7C242A565900829871 /* Products */;
 			projectDirPath = "";
@@ -286,6 +332,28 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		3833B98C2A37834FEBD91C98 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-iosApp-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 		F36B1CEB2AD83DDC00CB74D5 /* Compile Kotlin Framework */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -311,8 +379,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DAA7B6C92C0B4EFF00D038BA /* SwiftView.swift in Sources */,
+				DAA7B6CB2C0B4F5700D038BA /* AdBannerView.swift in Sources */,
 				2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */,
 				7555FF83242A565900829871 /* ContentView.swift in Sources */,
+				DAA7B6C72C0B46F300D038BA /* Analytics.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -439,6 +510,7 @@
 		};
 		7555FFA6242A565B00829871 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C33F53EF9253C0722416992F /* Pods-iosApp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
@@ -475,6 +547,7 @@
 		};
 		7555FFA7242A565B00829871 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3B376FFD696EF89CBEF4485E /* Pods-iosApp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
@@ -531,6 +604,74 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		DAA7B6CC2C0B606900D038BA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 10.27.0;
+			};
+		};
+		DAA7B6D32C0B608400D038BA /* XCRemoteSwiftPackageReference "Amplitude-Swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/amplitude/Amplitude-Swift";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+		DAA7B6D62C0B609F00D038BA /* XCRemoteSwiftPackageReference "yandex-ads-sdk-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/yandexmobile/yandex-ads-sdk-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.0.2;
+			};
+		};
+		DAA7B6D92C0B60C000D038BA /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/googleads/swift-package-manager-google-mobile-ads.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.5.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		DAA7B6CD2C0B606900D038BA /* FirebaseAnalyticsSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DAA7B6CC2C0B606900D038BA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsSwift;
+		};
+		DAA7B6CF2C0B606900D038BA /* FirebaseCrashlytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DAA7B6CC2C0B606900D038BA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCrashlytics;
+		};
+		DAA7B6D12C0B606900D038BA /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DAA7B6CC2C0B606900D038BA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
+		};
+		DAA7B6D42C0B608400D038BA /* AmplitudeSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DAA7B6D32C0B608400D038BA /* XCRemoteSwiftPackageReference "Amplitude-Swift" */;
+			productName = AmplitudeSwift;
+		};
+		DAA7B6D72C0B609F00D038BA /* YandexMobileAdsPackage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DAA7B6D62C0B609F00D038BA /* XCRemoteSwiftPackageReference "yandex-ads-sdk-ios" */;
+			productName = YandexMobileAdsPackage;
+		};
+		DAA7B6DA2C0B60C000D038BA /* GoogleMobileAds */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DAA7B6D92C0B60C000D038BA /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */;
+			productName = GoogleMobileAds;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 7555FF73242A565900829871 /* Project object */;
 }

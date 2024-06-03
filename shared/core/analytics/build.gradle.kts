@@ -1,15 +1,10 @@
-import extensions.androidDependencies
+import extensions.commonDependencies
 
 plugins {
     id(libs.plugins.usmonie.multiplatform.domain.get().pluginId)
 }
 
 android.namespace = "com.usmonie.word.core.analytics.ui"
-
-androidDependencies {
-    implementation(libs.analytics.amplitude.android)
-    implementation(libs.firebase.analytics)
-}
 
 kotlin {
     applyDefaultHierarchyTemplate()
@@ -31,6 +26,10 @@ kotlin {
         iosArm64(),
         iosSimulatorArm64()
     )
+}
+
+commonDependencies {
+    implementation(projects.shared.core.tools)
 }
 
 android {

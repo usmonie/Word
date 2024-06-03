@@ -24,11 +24,8 @@ internal fun Project.configureKotlinJvm() {
 internal fun Project.configureKotlin() {
     // Configure Kotlin options for all Kotlin compile tasks.
     tasks.withType<KotlinCompile>().configureEach {
-        kotlinOptions {
-            jvmTarget = "17"
-
-            // Add any additional compiler arguments if needed.
-            freeCompilerArgs = freeCompilerArgs + listOf()
+        compilerOptions {
+            apiVersion.set(org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_0)
         }
     }
 }

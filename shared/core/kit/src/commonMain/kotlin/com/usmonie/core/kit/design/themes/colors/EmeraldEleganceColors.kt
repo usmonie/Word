@@ -43,6 +43,7 @@ object EmeraldEleganceColors : Colors() {
     override val light_surfaceContainerHigh = Color(0xFF07594b)
     override val light_surfaceContainerLow = Color(0xFF02362d)
     override val light_surfaceContainerLowest = Color(0xFF01241d)
+    override val light_isAppearanceLightStatusBars: Boolean = true
 
     override val dark_primary: Color = Color(0xFF80CBC4)
     override val dark_onPrimary: Color = Color(0xFF003D33)

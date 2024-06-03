@@ -25,9 +25,11 @@ kotlin {
 commonDependencies {
     implementation(projects.compass.core)
     implementation(projects.compass.viewmodel)
+    implementation(projects.shared.core.analytics)
     implementation(projects.shared.core.kit)
     implementation(projects.shared.core.tools)
 
+    implementation(projects.shared.feature.ads.ui)
     implementation(projects.shared.feature.dictionary.domain)
     implementation(projects.shared.feature.dictionary.ui)
 
@@ -60,6 +62,11 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+}
+
+composeCompiler {
+    enableIntrinsicRemember = true
+    enableStrongSkippingMode = true
 }
 
 task("testClasses")

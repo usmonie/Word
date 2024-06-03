@@ -43,6 +43,7 @@ object GentleBreezeColors : Colors() {
     override val light_surfaceContainerHigh = Color(0xFFF5F5F7)
     override val light_surfaceContainerLow = Color(0xFFE6E6E8)
     override val light_surfaceContainerLowest = Color(0xFFDADADB)
+    override val light_isAppearanceLightStatusBars: Boolean = true
 
     override val dark_primary: Color = Color(0xFF2336b0)
     override val dark_onPrimary: Color = Color(0xFFFFFFFF)

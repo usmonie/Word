@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import com.usmonie.word.features.dictionary.data.db.room.models.FavoriteWords
 import com.usmonie.word.features.dictionary.data.db.room.models.WordFavorite
 
@@ -16,7 +17,9 @@ internal interface FavoritesDao {
     @Query("DELETE FROM favorites_table WHERE word = :word")
     suspend fun unfavorite(word: String)
 
-    @Query("SELECT * FROM favorites_table")
+    // TODO: Fix that with ksp2 and room
+    @Transaction
+    @Query("SELECT * FROM favorites_table ORDER BY date DESC")
     suspend fun favorites(): List<FavoriteWords>
 
     @Query("SELECT * FROM favorites_table WHERE word = :wordQuery")

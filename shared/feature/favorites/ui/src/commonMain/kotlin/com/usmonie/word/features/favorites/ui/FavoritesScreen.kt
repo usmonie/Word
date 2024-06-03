@@ -1,11 +1,13 @@
 package com.usmonie.word.features.favorites.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -26,6 +28,7 @@ import com.usmonie.compass.viewmodel.ContentState
 import com.usmonie.compass.viewmodel.StateScreen
 import com.usmonie.core.kit.composables.word.HeaderWordScaffold
 import com.usmonie.core.kit.tools.add
+import com.usmonie.word.features.ads.ui.LocalAdMob
 import com.usmonie.word.features.dictionary.ui.WordCardLarge
 import com.usmonie.word.features.dictionary.ui.models.WordCombinedUi
 import com.usmonie.word.features.subscriptions.ui.notification.SubscriptionPage
@@ -63,6 +66,19 @@ internal class FavoritesScreen(
             } else {
                 { SubscriptionPage(subscriptionsViewModel) }
             },
+            bottomAdBanner = {
+                Box(
+                    Modifier.fillMaxWidth()
+                        .background(MaterialTheme.colorScheme.surface)
+                ) {
+                    val adMob = LocalAdMob.current
+
+                    adMob.Banner(
+                        Modifier.fillMaxWidth()
+                            .navigationBarsPadding()
+                    )
+                }
+            }
         ) {
             when (val w = state.words) {
                 is ContentState.Error<*, *> -> Box(Modifier.padding(it)) {
@@ -134,15 +150,15 @@ fun EmptyItem(title: String, description: String, modifier: Modifier = Modifier)
     ) {
         Text(
             text = title,
-            modifier = Modifier.padding(horizontal = 20.dp),
-            style = MaterialTheme.typography.headlineMedium,
+            modifier = Modifier.padding(horizontal = 32.dp),
+            style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.onBackground
         )
 
         Text(
             text = description,
-            modifier = Modifier.padding(vertical = 8.dp, horizontal = 20.dp),
-            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier.padding(vertical = 8.dp, horizontal = 32.dp),
+            style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onBackground
         )
     }

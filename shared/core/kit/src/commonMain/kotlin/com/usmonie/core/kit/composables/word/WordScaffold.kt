@@ -1,11 +1,13 @@
 package com.usmonie.core.kit.composables.word
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
@@ -69,6 +71,7 @@ fun HeaderWordScaffold(
     modifier: Modifier = Modifier,
     header: @Composable (() -> Unit)? = null,
     bottomBar: @Composable () -> Unit = {},
+    bottomAdBanner: (@Composable (PaddingValues) -> Unit)? = null,
     snackbarHost: @Composable () -> Unit = {},
     floatingActionButton: @Composable () -> Unit = {},
     topBarBottom: @Composable ColumnScope.() -> Unit = {},
@@ -83,41 +86,50 @@ fun HeaderWordScaffold(
     BaseHeaderScaffold(
         header ?: {}
     ) { baseInsets ->
-        val topInsets = if (header != null) baseInsets.calculateTopPadding() else 0.dp
-        Scaffold(
-            modifier = modifier.fillMaxSize()
-                .padding(top = topInsets)
-                .nestedScroll(topAppBarScrollBehavior.nestedScrollConnection),
-            content = content,
-            snackbarHost = snackbarHost,
-            floatingActionButton = floatingActionButton,
-            floatingActionButtonPosition = floatingActionButtonPosition,
-            containerColor = containerColor,
-            contentColor = contentColor,
-            contentWindowInsets = contentWindowInsets,
-            bottomBar = bottomBar,
-            topBar = {
-                Column {
-                    if (header != null) {
-                        TextTopBar(
-                            onBackClicked,
-                            placeholder,
-                            { topAppBarScrollBehavior },
-                            actions = actions
-                        )
-                    } else {
-                        TextLargeTopBar(
-                            onBackClicked,
-                            placeholder,
-                            { topAppBarScrollBehavior },
-                            actions = actions,
-                        )
-                    }
+        Column {
+            val topInsets = if (header != null) baseInsets.calculateTopPadding() else 0.dp
+            Scaffold(
+                modifier = modifier
+                    .weight(1f)
+                    .padding(top = topInsets)
+                    .nestedScroll(topAppBarScrollBehavior.nestedScrollConnection),
+                content = content,
+                snackbarHost = snackbarHost,
+                floatingActionButton = floatingActionButton,
+                floatingActionButtonPosition = floatingActionButtonPosition,
+                containerColor = containerColor,
+                contentColor = contentColor,
+                contentWindowInsets = contentWindowInsets,
+                bottomBar = bottomBar,
+                topBar = {
+                    Column(verticalArrangement = Arrangement.Center) {
+                        if (header != null) {
+                            TextTopBar(
+                                onBackClicked,
+                                placeholder,
+                                { topAppBarScrollBehavior },
+                                actions = actions
+                            )
+                        } else {
+                            TextLargeTopBar(
+                                onBackClicked,
+                                placeholder,
+                                { topAppBarScrollBehavior },
+                                actions = actions,
+                            )
+                        }
 
-                    topBarBottom()
+                        topBarBottom()
+                    }
+                }
+            )
+
+            if (bottomAdBanner != null) {
+                Box(Modifier.fillMaxWidth()) {
+                    bottomAdBanner(baseInsets)
                 }
             }
-        )
+        }
     }
 }
 

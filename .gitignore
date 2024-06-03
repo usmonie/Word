@@ -26,6 +26,7 @@ build/
 *.hprof
 out/
 .fleet/
+.kotlin/
 
 ### iOS Xcode generated ###
 iosApp/iosApp.xcodeproj/*

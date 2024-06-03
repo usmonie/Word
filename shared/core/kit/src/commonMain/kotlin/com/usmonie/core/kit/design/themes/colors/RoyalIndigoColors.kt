@@ -42,6 +42,7 @@ object RoyalIndigoColors : Colors() {
     override val light_surfaceContainerHigh = Color(0xFFb9b9c9)
     override val light_surfaceContainerLow = Color(0xFFE6E6E8)
     override val light_surfaceContainerLowest = Color(0xFFDADADB)
+    override val light_isAppearanceLightStatusBars: Boolean = true
 
     override val dark_primary: Color = Color(0xFFC5CAE9)
     override val dark_onPrimary: Color = Color(0xFF000063)

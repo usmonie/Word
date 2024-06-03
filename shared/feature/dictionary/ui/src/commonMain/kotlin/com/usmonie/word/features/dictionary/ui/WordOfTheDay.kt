@@ -66,7 +66,7 @@ fun WordOfTheDay(
                     Pronunciations(remember { { etymology } })
                 }
 
-                Words({ etymology })
+                Words { etymology }
             }
         }
     }

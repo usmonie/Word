@@ -31,8 +31,11 @@ androidDependencies {
 
 android {
     buildFeatures.compose = true
+}
 
-    composeOptions.kotlinCompilerExtensionVersion = "1.5.14"
+composeCompiler {
+    enableIntrinsicRemember = true
+    enableStrongSkippingMode = true
 }
 
 task("testClasses")

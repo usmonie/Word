@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Favorites-->
+    <string name="games_title">[G]ames</string>
+    <string name="games_hangman_title">[H]angman</string>
+    <string name="games_enigma_title">[E]nigma</string>
+
+    <string name="games_show_details">Show details</string>
+    <string name="games_show_hint">Show hint</string>
+    <string name="games_hide_hint">Hide hint</string>
+
+    <string name="games_next_word">Next word</string>
+    <string name="games_next_phrase">Next phrase</string>
+
+    <string name="games_enigma_won_title">You deciphered the quote</string>
+    <string name="games_hangman_won_title">You guessed the word</string>
+
+    <string name="games_lost_title">You've exhausted all attempts</string>
+    <string name="games_lost_revive_title">Revive</string>
+    <string name="games_lost_revive_free_title">FREE</string>
+
+</resources>

@@ -25,6 +25,7 @@ kotlin {
 commonDependencies {
     implementation(projects.compass.core)
     implementation(projects.compass.viewmodel)
+    implementation(projects.shared.core.analytics)
     implementation(projects.shared.core.kit)
     implementation(projects.shared.core.tools)
 
@@ -61,7 +62,9 @@ android {
     }
 }
 
-task("testClasses")
-dependencies {
-    implementation(project(":compass:viewmodel"))
+composeCompiler {
+    enableIntrinsicRemember = true
+    enableStrongSkippingMode = true
 }
+
+task("testClasses")

@@ -1,7 +1,11 @@
 package com.usmonie.word.features.details.ui.pos
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -17,11 +21,16 @@ import com.usmonie.compass.core.ui.ScreenId
 import com.usmonie.compass.viewmodel.StateScreen
 import com.usmonie.core.kit.composables.word.HeaderWordScaffold
 import com.usmonie.core.kit.tools.add
+import com.usmonie.word.features.ads.ui.LocalAdMob
 import com.usmonie.word.features.dictionary.ui.WordDetailed
 import com.usmonie.word.features.subscriptions.ui.notification.SubscriptionPage
 import com.usmonie.word.features.subscriptions.ui.notification.SubscriptionScreenState
 import com.usmonie.word.features.subscriptions.ui.notification.SubscriptionViewModel
+import kotlin.experimental.ExperimentalObjCRefinement
+import kotlin.native.HiddenFromObjC
 
+@OptIn(ExperimentalObjCRefinement::class)
+@HiddenFromObjC
 class PosDetailsScreen(
     viewModel: PosDetailsViewModel,
     private val subscriptionsViewModel: SubscriptionViewModel
@@ -46,6 +55,19 @@ class PosDetailsScreen(
                 { SubscriptionPage(subscriptionsViewModel) }
             },
             onBackClicked = routeManager::popBackstack,
+            bottomAdBanner = {
+                Box(
+                    Modifier.fillMaxWidth()
+                        .background(MaterialTheme.colorScheme.surface)
+                ) {
+                    val adMob = LocalAdMob.current
+
+                    adMob.Banner(
+                        Modifier.fillMaxWidth()
+                            .navigationBarsPadding()
+                    )
+                }
+            }
         ) {
             LazyColumn(contentPadding = it.add(32.dp), verticalArrangement = Arrangement.spacedBy(24.dp)) {
                 item {

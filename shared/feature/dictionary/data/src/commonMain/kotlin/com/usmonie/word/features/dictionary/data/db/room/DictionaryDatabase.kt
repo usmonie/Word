@@ -9,6 +9,11 @@ import com.usmonie.word.features.dictionary.data.db.room.models.SearchHistoryDb
 import com.usmonie.word.features.dictionary.data.db.room.models.WordDb
 import com.usmonie.word.features.dictionary.data.db.room.models.WordFavorite
 
+@Database(
+    entities = [WordDb::class, WordFavorite::class, SearchHistoryDb::class],
+    version = 7,
+    exportSchema = false
+)
 @TypeConverters(
     StringConverters::class,
     RelatedConverters::class,
@@ -22,7 +27,6 @@ import com.usmonie.word.features.dictionary.data.db.room.models.WordFavorite
     SoundConverters::class,
     TranslationsConverters::class,
 )
-@Database(entities = [WordDb::class, WordFavorite::class, SearchHistoryDb::class], version = 3)
 abstract class DictionaryDatabase : RoomDatabase() {
     internal abstract fun favoritesDao(): FavoritesDao
     internal abstract fun wordDao(): WordDao

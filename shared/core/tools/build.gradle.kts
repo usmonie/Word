@@ -25,4 +25,9 @@ androidDependencies {
     api(libs.koin.android)
 }
 
+composeCompiler {
+    enableIntrinsicRemember = true
+    enableStrongSkippingMode = true
+}
+
 task("testClasses")

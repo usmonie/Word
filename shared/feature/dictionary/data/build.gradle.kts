@@ -3,10 +3,10 @@ import extensions.commonDependencies
 import extensions.iOSDependencies
 
 plugins {
-    id(libs.plugins.usmonie.multiplatform.domain.get().pluginId)
     alias(libs.plugins.ksp)
     alias(libs.plugins.room)
-    kotlin("plugin.serialization") version "1.9.0"
+    id(libs.plugins.usmonie.multiplatform.domain.get().pluginId)
+    kotlin("plugin.serialization") version "2.0.0"
 }
 
 android.namespace = "com.usmonie.word.features.dictionary.data"
@@ -16,7 +16,7 @@ kotlin {
     listOf(
         iosX64(),
         iosArm64(),
-        iosSimulatorArm64()
+        iosSimulatorArm64(),
     )
 
     commonDependencies {
@@ -47,13 +47,21 @@ kotlin {
         implementation(libs.ktor.client.darwin)
     }
 }
-
 dependencies {
-    ksp(libs.room.compiler)
+    kspAndroid(libs.room.compiler)
 }
+
+//dependencies {
+//    add("kspCommonMainMetadata", libs.room.compiler) // Run KSP on [commonMain] code
+//    add("kspAndroid", libs.room.compiler)
+//    add("kspIosSimulatorArm64", libs.room.compiler)
+//    add("kspIosX64", libs.room.compiler)
+//    add("kspIosArm64", libs.room.compiler)
+//}
 
 room {
     schemaDirectory("$projectDir/schemas")
+    generateKotlin = true
 }
 
 task("testClasses")

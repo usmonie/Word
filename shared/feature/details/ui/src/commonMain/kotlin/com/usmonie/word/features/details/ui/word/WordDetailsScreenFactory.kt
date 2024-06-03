@@ -5,20 +5,16 @@ import com.usmonie.compass.core.Extra
 import com.usmonie.compass.core.ui.Screen
 import com.usmonie.compass.core.ui.ScreenFactory
 import com.usmonie.compass.core.ui.ScreenId
-import com.usmonie.word.features.subscriptions.ui.notification.SubscriptionViewModel
 import com.usmonie.word.features.dictionary.domain.usecases.CheckIsFavoriteUseCase
 import com.usmonie.word.features.dictionary.domain.usecases.UpdateFavouriteUseCase
 import com.usmonie.word.features.dictionary.ui.models.WordCombinedUi
-import com.usmonie.word.features.subscription.domain.usecase.SubscribeUseCase
-import com.usmonie.word.features.subscription.domain.usecase.SubscriptionStatusUseCase
+import com.usmonie.word.features.subscriptions.ui.notification.SubscriptionViewModel
 
 class WordDetailsScreenFactory(
     private val favoriteUseCase: UpdateFavouriteUseCase,
     private val checkIsFavoriteUseCase: CheckIsFavoriteUseCase,
-    private val subscribeUseCase: SubscribeUseCase,
-    private val subscriptionStatusUseCase: SubscriptionStatusUseCase,
-) :
-    ScreenFactory {
+    private val subscriptionViewModel: SubscriptionViewModel
+) : ScreenFactory {
     override val id: ScreenId = ID
 
     override fun invoke(params: ScatterMap<String, String>?, extra: Extra?): Screen {
@@ -29,7 +25,7 @@ class WordDetailsScreenFactory(
                 checkIsFavoriteUseCase,
                 extra.wordCombined
             ),
-            SubscriptionViewModel(subscribeUseCase, subscriptionStatusUseCase)
+            subscriptionViewModel
         )
     }
 

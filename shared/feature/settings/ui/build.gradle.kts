@@ -28,6 +28,8 @@ commonDependencies {
     implementation(projects.shared.core.kit)
     implementation(projects.shared.core.tools)
 
+    implementation(projects.shared.feature.ads.ui)
+    implementation(projects.shared.core.analytics)
     implementation(projects.shared.feature.subscriptions.domain)
     implementation(projects.shared.feature.subscriptions.ui)
 
@@ -60,6 +62,11 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+}
+
+composeCompiler {
+    enableIntrinsicRemember = true
+    enableStrongSkippingMode = true
 }
 
 task("testClasses")

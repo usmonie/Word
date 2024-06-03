@@ -2,21 +2,22 @@ package com.usmonie.word.features.subscriptions.ui.notification
 
 import androidx.compose.runtime.Immutable
 import com.usmonie.compass.viewmodel.StateViewModel
+import com.usmonie.core.domain.usecases.invoke
 import com.usmonie.word.features.subscription.domain.models.Currency
 import com.usmonie.word.features.subscription.domain.models.Subscription
-import com.usmonie.word.features.subscription.domain.models.SubscriptionStatus
 import com.usmonie.word.features.subscription.domain.usecase.SubscribeUseCase
 import com.usmonie.word.features.subscription.domain.usecase.SubscriptionStatusUseCase
 
 @Immutable
 class SubscriptionViewModel(
     private val subscribeUseCase: SubscribeUseCase,
-    private val subscriptionStatusUseCase: SubscriptionStatusUseCase
+    private val subscriptionStatusUseCase: SubscriptionStatusUseCase,
+//    private val onboardingShowedStatusUseCase:
 ) : StateViewModel<
-        SubscriptionScreenState,
-        SubscriptionScreenAction,
-        SubscriptionScreenEvent,
-        SubscriptionScreenEffect
+    SubscriptionScreenState,
+    SubscriptionScreenAction,
+    SubscriptionScreenEvent,
+    SubscriptionScreenEffect
     >(
     SubscriptionScreenState.Empty()
 ) {
@@ -29,10 +30,10 @@ class SubscriptionViewModel(
 
     init {
         viewModelScope.launchSafe {
-            subscriptionStatusUseCase(Unit).collect {
-                if (it !is SubscriptionStatus.Purchased) {
-                    handleAction(SubscriptionScreenAction.ShowSaleSubscriptions)
-                }
+            subscriptionStatusUseCase().collect {
+//                if (it !is SubscriptionStatus.Purchased) {
+//                    handleAction(SubscriptionScreenAction.ShowSaleSubscriptions)
+//                }
             }
         }
     }

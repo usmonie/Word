@@ -99,14 +99,14 @@ fun RandomWordExpanded(
                     NextButton(onNextClicked)
                 }
 
-                if (etymology.sounds.isNotEmpty()) {
-                    Pronunciations(
-                        { etymology },
-                        Modifier.fillMaxWidth().padding(horizontal = 16.dp)
-                    )
-                }
+//                if (etymology.sounds.isNotEmpty()) {
+//                    Pronunciations(
+//                        { etymology },
+//                        Modifier.fillMaxWidth().padding(horizontal = 16.dp)
+//                    )
+//                }
 
-                Words({ etymology })
+                Words { etymology }
             }
         }
     }
@@ -126,7 +126,6 @@ fun RandomWordCollapsed(
         { onClick(word) },
         modifier = modifier,
         shape = MaterialTheme.shapes.large,
-        color = MaterialTheme.colorScheme.background
     ) {
         Column(Modifier.padding(vertical = 16.dp)) {
             RandomWordTitle(modifierWithPaddings)
@@ -145,10 +144,6 @@ fun RandomWordCollapsed(
                 ) {
                     FavoriteButton(wordCombined, onFavoriteClicked)
                     NextButton(onNextClicked)
-                }
-
-                if (etymology.sounds.isNotEmpty()) {
-                    Pronunciations({ etymology })
                 }
 
                 Words { etymology }

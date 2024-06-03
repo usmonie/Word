@@ -3,6 +3,7 @@ package com.usmonie.compass.core.ui
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -76,8 +77,5 @@ actual fun PredictiveBackHandler(
         }
     }
 
-    Box(
-        modifier = Modifier.pointerInput(Unit, pointerInput),
-        content = content
-    )
+    Box(modifier = Modifier.pointerInput(Unit, pointerInput), content = content)
 }

@@ -58,8 +58,6 @@ include(":shared:core:tools")
 
 include(":shared:feature:ads:ui")
 
-include(":shared:feature:dashboard:data")
-include(":shared:feature:dashboard:domain")
 include(":shared:feature:dashboard:ui")
 
 include(":shared:feature:details:ui")
@@ -67,6 +65,9 @@ include(":shared:feature:details:ui")
 include(":shared:feature:dictionary:data")
 include(":shared:feature:dictionary:domain")
 include(":shared:feature:dictionary:ui")
+
+include(":shared:feature:games:domain")
+include(":shared:feature:games:ui")
 
 include(":shared:feature:favorites:ui")
 
@@ -77,3 +78,6 @@ include(":shared:feature:settings:ui")
 include(":shared:feature:subscriptions:data")
 include(":shared:feature:subscriptions:domain")
 include(":shared:feature:subscriptions:ui")
+
+include(":shared:feature:quotes:domain")
+include(":shared:feature:quotes:ui")

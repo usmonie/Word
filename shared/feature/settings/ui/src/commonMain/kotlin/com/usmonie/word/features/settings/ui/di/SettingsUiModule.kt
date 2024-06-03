@@ -1,6 +1,6 @@
 package com.usmonie.word.features.settings.ui.di
 
-import com.usmonie.word.features.settings.domain.settingsDomainModule
+import com.usmonie.word.features.settings.domain.di.settingsDomainModule
 import com.usmonie.word.features.settings.ui.SettingsScreenFactory
 import com.usmonie.word.features.settings.ui.usecases.UserSelectedThemeUseCase
 import com.usmonie.word.features.settings.ui.usecases.UserSelectedThemeUseCaseImpl

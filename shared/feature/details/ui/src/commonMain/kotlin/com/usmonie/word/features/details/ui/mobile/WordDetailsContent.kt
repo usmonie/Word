@@ -21,6 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -44,7 +45,8 @@ internal fun WordDetailsContent(
 
     HorizontalPager(
         etymologiesPagerState,
-        verticalAlignment = Alignment.Top
+        userScrollEnabled = state.word.wordEtymology.size > 1,
+        verticalAlignment = Alignment.Top,
     ) {
         val etymology = state.word.wordEtymology[it]
         val etymologyText = etymology.etymologyText
@@ -64,6 +66,7 @@ internal fun WordDetailsContent(
                         onClick = { expanded = !expanded },
                         shape = MaterialTheme.shapes.small,
                         modifier = Modifier.fillParentMaxWidth()
+                            .clip(MaterialTheme.shapes.medium)
                             .animateContentSize()
                     ) {
                         Text(

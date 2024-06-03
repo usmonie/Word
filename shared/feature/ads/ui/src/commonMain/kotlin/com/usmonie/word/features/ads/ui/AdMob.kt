@@ -4,24 +4,36 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.usmonie.word.features.subscription.domain.models.SubscriptionStatus
 import com.usmonie.word.features.subscription.domain.usecase.SubscriptionStatusUseCase
-import kotlinx.coroutines.flow.StateFlow
 
+@Suppress("LongParameterList")
 @Immutable
 class AdMob(
     private val banner: @Composable (modifier: Modifier) -> Unit,
-    private val rewardedInterstitial: @Composable (onAddDismissed: () -> Unit, onRewardGranted: (Int) -> Unit) -> Unit,
+    private val rewardedLifeInterstitial: @Composable (
+        onAddDismissed: () -> Unit,
+        onRewardGranted: (Int) -> Unit
+    ) -> Unit,
+    private val rewardedHintInterstitial: @Composable (
+        onAddDismissed: () -> Unit,
+        onRewardGranted: (Int) -> Unit
+    ) -> Unit,
+    private val rewardedNewGameInterstitial: @Composable (
+        onAddDismissed: () -> Unit,
+        onRewardGranted: (Int) -> Unit
+    ) -> Unit,
     private val interstitial: @Composable () -> Unit,
     private val subscriptionUseCase: SubscriptionStatusUseCase,
-    val adMobState: StateFlow<AdMobState>
+    private val getAdState: () -> AdMobState
 ) {
 
     @Composable
     fun Banner(modifier: Modifier = Modifier) {
-        val state by adMobState.collectAsState()
+        val state = getAdMobState()
         val subscriptionState by subscriptionUseCase(Unit).collectAsState(null)
         if (subscriptionState != null && subscriptionState !is SubscriptionStatus.Purchased && state.isBannerReady) {
             banner(modifier)
@@ -29,17 +41,44 @@ class AdMob(
     }
 
     @Composable
-    fun RewardedInterstitial(onAddDismissed: () -> Unit, onRewardGranted: (Int) -> Unit) {
-        val state by adMobState.collectAsState()
+    fun RewardedLifeInterstitial(onAddDismissed: () -> Unit, onRewardGranted: (Int) -> Unit) {
+        val state = getAdMobState()
         val subscriptionState by subscriptionUseCase(Unit).collectAsState(null)
-        if (subscriptionState != null && subscriptionState !is SubscriptionStatus.Purchased && state.isRewardReady) {
-            rewardedInterstitial(onAddDismissed, onRewardGranted)
+        if (subscriptionState != null &&
+            subscriptionState !is SubscriptionStatus.Purchased &&
+            state.isRewardLifeReady
+        ) {
+            rewardedLifeInterstitial(onAddDismissed, onRewardGranted)
+        }
+    }
+
+    @Composable
+    fun RewardedHintInterstitial(onAddDismissed: () -> Unit, onRewardGranted: (Int) -> Unit) {
+        val state = getAdMobState()
+        val subscriptionState by subscriptionUseCase(Unit).collectAsState(null)
+        if (subscriptionState != null &&
+            subscriptionState !is SubscriptionStatus.Purchased &&
+            state.isRewardHintReady
+        ) {
+            rewardedHintInterstitial(onAddDismissed, onRewardGranted)
+        }
+    }
+
+    @Composable
+    fun RewardedNewGameInterstitial(onAddDismissed: () -> Unit, onRewardGranted: (Int) -> Unit) {
+        val state = getAdMobState()
+        val subscriptionState by subscriptionUseCase(Unit).collectAsState(null)
+        if (subscriptionState != null &&
+            subscriptionState !is SubscriptionStatus.Purchased &&
+            state.isRewardNewGameReady
+        ) {
+            rewardedNewGameInterstitial(onAddDismissed, onRewardGranted)
         }
     }
 
     @Composable
     fun Interstitial() {
-        val state by adMobState.collectAsState()
+        val state = getAdMobState()
         val subscriptionState by subscriptionUseCase(Unit).collectAsState(null)
         if (subscriptionState != null &&
             subscriptionState !is SubscriptionStatus.Purchased &&
@@ -48,11 +87,19 @@ class AdMob(
             interstitial()
         }
     }
+
+    fun getAdMobState(): AdMobState = getAdState()
 }
 
 @Stable
 data class AdMobState(
     var isInterstitialReady: Boolean = false,
-    var isRewardReady: Boolean = false,
+    var isRewardLifeReady: Boolean = false,
+    var isRewardHintReady: Boolean = false,
+    var isRewardNewGameReady: Boolean = false,
     var isBannerReady: Boolean = false
 )
+
+val LocalAdMob = compositionLocalOf<AdMob> {
+    error("No AdMob provided!")
+}

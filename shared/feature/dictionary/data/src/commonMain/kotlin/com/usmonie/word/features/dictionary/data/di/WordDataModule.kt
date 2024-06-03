@@ -16,7 +16,8 @@ import org.koin.dsl.module
 val dictionaryDataModule = module {
     includes(roomModule)
     single { WordApi("http://16.170.6.0") }
-    factory {
+
+    single {
         get<RoomDatabase.Builder<DictionaryDatabase>>()
             .setQueryCoroutineContext(Dispatchers.IO)
             .fallbackToDestructiveMigration(true)
@@ -48,6 +49,7 @@ val dictionaryDataModule = module {
             .deleteRealmIfMigrationNeeded()
             .build()
     }
+
     single<WordRepository> {
         RoomWordsRepositoryImpl(get(), get())
     }

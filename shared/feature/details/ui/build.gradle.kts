@@ -30,6 +30,7 @@ commonDependencies {
     implementation(projects.shared.core.kit)
     implementation(projects.shared.core.tools)
 
+    implementation(projects.shared.feature.ads.ui)
     implementation(projects.shared.feature.dictionary.domain)
     implementation(projects.shared.feature.dictionary.ui)
     implementation(projects.shared.feature.subscriptions.domain)
@@ -64,7 +65,9 @@ android {
     }
 }
 
-task("testClasses")
-dependencies {
-    implementation(project(":compass:viewmodel"))
+composeCompiler {
+    enableIntrinsicRemember = true
+    enableStrongSkippingMode = true
 }
+
+task("testClasses")

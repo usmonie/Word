@@ -9,8 +9,9 @@ import org.koin.dsl.module
 actual val billingModule: Module = module {
     factory { Billing(androidContext() as Activity) }
 }
+
 actual val datastoreModule: Module = module {
-    factory {
+    single {
         createDataStore(
             producePath = { androidContext().filesDir.resolve(DATA_STORE_FILENAME).absolutePath }
         )

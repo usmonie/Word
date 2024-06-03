@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import com.usmonie.core.kit.composables.base.buttons.NavigationBack
 import com.usmonie.core.kit.composables.base.device.isKeyboardOpen
 
-private val TopBarSearchFieldModifier = Modifier.offset(x = (-12).dp).fillMaxWidth()
+private val TopBarSearchFieldModifier = Modifier.offset(x = (-0).dp).fillMaxWidth()
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -64,7 +64,7 @@ fun SearchTopBar(
                 onQueryChanged,
                 hasFocus,
                 onFocusChanged,
-                { 0.2f },
+                { 0.35f },
                 TopBarSearchFieldModifier,
                 focusRequester = focusRequester,
             )
@@ -141,7 +141,7 @@ fun TextTopBar(
                 { },
                 { false },
                 { },
-                { 0.3f },
+                { 0.5f },
                 Modifier.fillMaxWidth(),
             )
         },

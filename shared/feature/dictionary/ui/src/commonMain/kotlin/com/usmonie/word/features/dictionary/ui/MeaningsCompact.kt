@@ -27,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import com.usmonie.core.domain.tools.fastForEach
@@ -129,9 +130,11 @@ fun MeaningTreeDetailed(
         var examplesExpanded by remember(senseCombined) { mutableStateOf(examples.size < 2) }
 
         MeaningItem(
-            Modifier.clickable(enabled = examplesExpandable) {
-                examplesExpanded = !examplesExpanded
-            },
+            Modifier
+                .clip(MaterialTheme.shapes.extraSmall)
+                .clickable(enabled = examplesExpandable) {
+                    examplesExpanded = !examplesExpanded
+                },
             examplesExpanded,
             examplesExpandable,
             senseCombined

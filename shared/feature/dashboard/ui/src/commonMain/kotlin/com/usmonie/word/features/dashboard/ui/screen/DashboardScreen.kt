@@ -2,17 +2,22 @@ package com.usmonie.word.features.dashboard.ui.screen
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeContent
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyRow
@@ -31,7 +36,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import com.usmonie.compass.core.ui.ScreenId
 import com.usmonie.compass.viewmodel.ContentState
@@ -39,13 +43,13 @@ import com.usmonie.compass.viewmodel.StateScreen
 import com.usmonie.core.kit.composables.base.buttons.TextButton
 import com.usmonie.core.kit.composables.word.HeaderWordScaffold
 import com.usmonie.core.kit.tools.add
-import com.usmonie.word.features.ads.ui.AdMob
-import com.usmonie.word.features.dictionary.ui.RandomWordCollapsedState
+import com.usmonie.word.features.ads.ui.LocalAdMob
 import com.usmonie.word.features.dictionary.ui.RandomWordExpandedState
 import com.usmonie.word.features.dictionary.ui.WordCardLarge
 import com.usmonie.word.features.dictionary.ui.WordCardSmall
 import com.usmonie.word.features.dictionary.ui.WordOfTheDayState
 import com.usmonie.word.features.dictionary.ui.models.WordCombinedUi
+import com.usmonie.word.features.subscription.domain.models.SubscriptionStatus
 import com.usmonie.word.features.subscriptions.ui.notification.SubscriptionPage
 import com.usmonie.word.features.subscriptions.ui.notification.SubscriptionScreenState
 import com.usmonie.word.features.subscriptions.ui.notification.SubscriptionViewModel
@@ -64,8 +68,7 @@ internal class DashboardScreen(
     viewModel: DashboardViewModel,
     private val subscriptionsViewModel: SubscriptionViewModel,
     private val onOpenWord: (wordCombined: WordCombinedUi) -> Unit,
-    private val openDashboardMenuItem: (DashboardMenuItem) -> Unit,
-    private val adMob: AdMob
+    private val openDashboardMenuItem: (DashboardMenuItem) -> Unit
 ) : StateScreen<DashboardState, DashboardAction, DashboardEvent, DashboardEffect, DashboardViewModel>(
     viewModel
 ) {
@@ -74,7 +77,7 @@ internal class DashboardScreen(
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     override fun Content() {
-        val state by viewModel.state.collectAsState()
+        val state: DashboardState by viewModel.state.collectAsState()
         val subscriptionAdState by subscriptionsViewModel.state.collectAsState()
         val searchPlaceholder = stringResource(Res.string.search_title)
 
@@ -90,23 +93,34 @@ internal class DashboardScreen(
             } else {
                 { SubscriptionPage(subscriptionsViewModel) }
             },
-            bottomAdBanner = {
-                adMob.Banner(
-                    Modifier.fillMaxWidth()
-                        .height(
-                            with(LocalDensity.current) {
-                                WindowInsets.safeContent.getBottom(this).toDp() + 56.dp
-                            }
-                        )
-                        .background(MaterialTheme.colorScheme.primary)
-                )
+            bottomAdBanner = if (state.subscriptionStatus is SubscriptionStatus.None) {
+                {
+                    Box(Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.surface)) {
+                        val adMob = LocalAdMob.current
+
+                        adMob.Banner(Modifier.fillMaxWidth().navigationBarsPadding())
+                    }
+                }
+            } else {
+                null
             },
             getShowBackButton = { state.searchFieldState.searchFieldValue.text.isNotEmpty() },
             onBackClicked = viewModel::backToMain,
             hasSearchFieldFocus = { state.searchFieldState.hasFocus },
             updateSearchFieldFocus = viewModel::queryFieldFocusChanged,
         ) { insets ->
-            val newInsets = remember(insets) { insets.add(top = 16.dp, bottom = 80.dp) }
+            val newInsets = remember(insets, state.searchFieldState) {
+                insets.add(
+                    top =16.dp /*if (state.searchFieldState.hasFocus &&
+                        state.searchFieldState.searchFieldValue.text.isBlank()
+                    ) {
+                        16.dp
+                    } else {
+                        0.dp
+                    },*/
+                )
+            }
+
             LazyColumn(
                 state = lazyListState,
                 contentPadding = newInsets,
@@ -121,7 +135,10 @@ internal class DashboardScreen(
 
                     is ContentState.Success -> {
                         if (state.searchFieldState.searchFieldValue.text.isBlank()) {
-                            defaultState(state, false)
+                            defaultState(
+                                state,
+                                false,
+                            )
                         } else {
                             items(foundWordState.data) {
                                 WordCardLarge(
@@ -144,7 +161,7 @@ internal class DashboardScreen(
     ) {
         if (state.recentSearch.isNotEmpty()) {
             item {
-                RecentSearchHistory(state, saleSubscriptionExpanded)
+                SearchHistoryState(state, saleSubscriptionExpanded)
             }
         }
 
@@ -178,27 +195,7 @@ internal class DashboardScreen(
         if (state.wordOfTheDay is ContentState.Error<*, *> &&
             state.randomWord is ContentState.Error<*, *>
         ) {
-            item {
-                Column(
-                    Modifier.padding(horizontal = 32.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    Text(
-                        stringResource(Res.string.network_connection_error),
-                        style = MaterialTheme.typography.headlineMedium
-                    )
-                    Text(
-                        stringResource(Res.string.network_connection_description),
-                        style = MaterialTheme.typography.bodyLarge
-                    )
-
-                    TextButton(
-                        stringResource(Res.string.network_connection_try_again),
-                        viewModel::tryAgain,
-                        contentPadding = PaddingValues(0.dp)
-                    )
-                }
-            }
+            item { NetworkConnectionError() }
         }
 
         if (state.wordOfTheDay !is ContentState.Error<*, *>) {
@@ -208,39 +205,65 @@ internal class DashboardScreen(
         }
 
         item(key = "RandomWord", contentType = "RandomWord") {
-            AnimatedContent(
-                state.wordOfTheDay is ContentState.Error<*, *> ||
-                        state.wordOfTheDay is ContentState.Loading
-            ) { wordOfTheDayLoadingState ->
-                AnimatedContent(
-                    state.randomWord,
-                    contentKey = { it.item?.word },
-                    transitionSpec = {
-                        slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Start)
-                            .togetherWith(
-                                slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Start)
-                            )
-                    }
-                ) {
-                    if (wordOfTheDayLoadingState) {
-                        RandomWordExpandedState(
-                            { it },
-                            viewModel::openWord,
-                            viewModel::favoriteWord,
-                            viewModel::nextRandomWord,
-                            Modifier.padding(horizontal = 16.dp)
-                        )
-                    } else {
-                        RandomWordCollapsedState(
-                            { it },
-                            viewModel::openWord,
-                            viewModel::favoriteWord,
-                            viewModel::nextRandomWord,
-                            Modifier.padding(horizontal = 16.dp)
-                        )
-                    }
-                }
+            RandomWordState(state)
+        }
+    }
+
+    @Composable
+    private fun SearchHistoryState(
+        state: DashboardState,
+        saleSubscriptionExpanded: Boolean
+    ) {
+        AnimatedVisibility(
+            state.searchFieldState.hasFocus && state.searchFieldState.searchFieldValue.text.isBlank(),
+            enter = slideInVertically(spring(stiffness = Spring.StiffnessHigh)) { -it } + fadeIn(),
+            exit = slideOutVertically(spring(stiffness = Spring.StiffnessHigh)) { -it } + fadeOut(),
+            content = { RecentSearchHistory(state, saleSubscriptionExpanded) }
+        )
+    }
+
+    @Composable
+    private fun RandomWordState(state: DashboardState) {
+        AnimatedContent(
+            state.randomWord,
+            contentKey = { it.item?.word },
+            transitionSpec = {
+                slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Start)
+                    .togetherWith(
+                        slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Start)
+                    )
             }
+        ) {
+            RandomWordExpandedState(
+                { it },
+                viewModel::openWord,
+                viewModel::favoriteWord,
+                viewModel::nextRandomWord,
+                Modifier.padding(horizontal = 16.dp)
+            )
+        }
+    }
+
+    @Composable
+    private fun NetworkConnectionError() {
+        Column(
+            Modifier.padding(horizontal = 32.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Text(
+                stringResource(Res.string.network_connection_error),
+                style = MaterialTheme.typography.headlineMedium
+            )
+            Text(
+                stringResource(Res.string.network_connection_description),
+                style = MaterialTheme.typography.bodyLarge
+            )
+
+            TextButton(
+                stringResource(Res.string.network_connection_try_again),
+                viewModel::tryAgain,
+                contentPadding = PaddingValues(0.dp)
+            )
         }
     }
 

@@ -5,10 +5,10 @@ import kotlin.math.pow
 import kotlin.math.round
 
 sealed class SubscriptionStatus {
-    data class Purchased(val subscription: Subscription) : SubscriptionStatus()
-    data class Refunded(val subscription: Subscription) : SubscriptionStatus()
-    data class Canceled(val subscription: Subscription) : SubscriptionStatus()
-    data class Expired(val subscription: Subscription) : SubscriptionStatus()
+    data class Purchased(val subscription: Subscription?) : SubscriptionStatus()
+    data class Refunded(val subscription: Subscription?) : SubscriptionStatus()
+    data class Canceled(val subscription: Subscription?) : SubscriptionStatus()
+    data class Expired(val subscription: Subscription?) : SubscriptionStatus()
 
     data object None : SubscriptionStatus()
 }

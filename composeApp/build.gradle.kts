@@ -3,12 +3,10 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.androidx.baselineprofile)
+    alias(libs.plugins.google.services)
+//    id("com.google.firebase.crashlytics")
 }
-
-//composeCompiler {
-//    enableStrongSkippingMode = true
-//    enableIntrinsicRemember = true
-//}
 
 kotlin {
     androidTarget()
@@ -20,14 +18,11 @@ kotlin {
         iosTarget.binaries.framework {
             baseName = "ComposeApp"
             isStatic = true
+            linkerOpts.add("-lsqlite3")
         }
     }
 
     sourceSets {
-        androidMain.dependencies {
-            implementation(libs.compose.ui.tooling.preview)
-            implementation(libs.androidx.activity.compose)
-        }
         commonMain.dependencies {
             implementation(libs.koin.compose)
             implementation(libs.koin.core)
@@ -46,23 +41,17 @@ kotlin {
             implementation(projects.shared.core.kit)
             implementation(projects.shared.core.tools)
 
-//            implementation(projects.shared.feature.ads.ui)
+            implementation(projects.shared.feature.ads.ui)
             implementation(projects.shared.feature.details.ui)
-
             implementation(projects.shared.feature.dictionary.data)
             implementation(projects.shared.feature.dictionary.domain)
             implementation(projects.shared.feature.dictionary.ui)
-
-            implementation(projects.shared.feature.dashboard.data)
-            implementation(projects.shared.feature.dashboard.domain)
             implementation(projects.shared.feature.dashboard.ui)
-
             implementation(projects.shared.feature.favorites.ui)
-
+            implementation(projects.shared.feature.games.ui)
             implementation(projects.shared.feature.settings.data)
             implementation(projects.shared.feature.settings.domain)
             implementation(projects.shared.feature.settings.ui)
-
             implementation(projects.shared.feature.subscriptions.data)
             implementation(projects.shared.feature.subscriptions.domain)
             implementation(projects.shared.feature.subscriptions.ui)
@@ -104,12 +93,30 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+
+    buildFeatures {
+        buildConfig = true
+    }
+}
+
+composeCompiler {
+    enableIntrinsicRemember = true
+    enableStrongSkippingMode = true
 }
 
 dependencies {
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.profileinstaller)
+    implementation(libs.compose.ui.tooling.preview)
+
+    implementation(libs.analytics.amplitude.android)
+    implementation(libs.firebase.analytics)
+    implementation(libs.google.admob)
+//    "baselineProfile"(project(":baselineprofile"))
+
     debugImplementation(libs.compose.ui.tooling)
     debugImplementation(libs.androidx.runtime.tracing)
     debugImplementation(libs.androidx.tracing.perfetto)
     debugImplementation(libs.androidx.tracing.perfetto.binary)
-    debugImplementation(libs.compose.ui.tooling)
 }

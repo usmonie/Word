@@ -9,14 +9,6 @@ plugins {
 
 android.namespace = "com.usmonie.word.features.ads.ui"
 
-commonDependencies {
-    implementation(projects.shared.feature.subscriptions.domain)
-}
-
-androidDependencies {
-    implementation(libs.compose.ui)
-}
-
 kotlin {
     applyDefaultHierarchyTemplate()
     listOf(
@@ -39,6 +31,19 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+}
+
+composeCompiler {
+    enableIntrinsicRemember = true
+    enableStrongSkippingMode = true
+}
+
+commonDependencies {
+    implementation(projects.shared.feature.subscriptions.domain)
+}
+
+androidDependencies {
+    implementation(libs.compose.ui)
 }
 
 task("testClasses")

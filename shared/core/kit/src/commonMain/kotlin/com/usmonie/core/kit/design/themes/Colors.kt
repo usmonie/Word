@@ -8,6 +8,7 @@ import androidx.compose.ui.graphics.Color
 
 @Suppress("VariableNaming")
 abstract class Colors {
+    abstract val light_isAppearanceLightStatusBars: Boolean
 
     protected abstract val light_primary: Color
     protected abstract val light_onPrimary: Color
@@ -82,6 +83,7 @@ abstract class Colors {
     protected abstract val dark_surfaceContainerHigh: Color
     protected abstract val dark_surfaceContainerLow: Color
     protected abstract val dark_surfaceContainerLowest: Color
+    protected open val dark_isAppearanceLightStatusBars: Boolean = true
 
     protected abstract val seed: Color
 

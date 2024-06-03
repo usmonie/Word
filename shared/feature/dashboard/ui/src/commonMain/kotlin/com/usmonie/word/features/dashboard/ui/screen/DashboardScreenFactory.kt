@@ -24,8 +24,7 @@ class DashboardScreenFactory internal constructor(
             dashboardViewModel,
             subscriptionViewModel,
             openWord,
-            openDashboardMenuItem,
-            adMob
+            openDashboardMenuItem
         )
     }
 

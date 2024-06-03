@@ -1,7 +1,8 @@
 package com.usmonie.word
 
-data class MainState(
-    val isSubscribed: Boolean,
+import com.usmonie.word.features.subscription.domain.models.SubscriptionStatus
 
-) {
-}
+data class MainState(
+    val subscriptionStatus: SubscriptionStatus,
+
+)
