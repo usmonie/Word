@@ -27,7 +27,7 @@ import com.usmonie.compass.core.gesture.ScreenGestureHandler
 import com.usmonie.compass.core.ui.ScreenId
 import com.usmonie.compass.viewmodel.StateScreen
 import com.usmonie.core.kit.composables.word.HeaderWordScaffold
-import com.usmonie.word.features.ads.ui.LocalAdMob
+import com.usmonie.word.features.ads.ui.LocalAdsManager
 import com.usmonie.word.features.details.ui.mobile.WordDetailsContent
 import com.usmonie.word.features.details.ui.pos.PosDetailsScreenFactory
 import com.usmonie.word.features.details.ui.word.WordDetailsScreenFactory.Companion.ID
@@ -114,7 +114,7 @@ internal class WordDetailsScreen(
                     Modifier.fillMaxWidth()
                         .background(MaterialTheme.colorScheme.surface)
                 ) {
-                    val adMob = LocalAdMob.current
+                    val adMob = LocalAdsManager.current
 
                     adMob.Banner(Modifier.fillMaxWidth().navigationBarsPadding())
                 }

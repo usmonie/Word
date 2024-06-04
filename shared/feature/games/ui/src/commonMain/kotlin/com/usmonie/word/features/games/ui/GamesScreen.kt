@@ -26,7 +26,7 @@ import com.usmonie.compass.core.LocalRouteManager
 import com.usmonie.compass.core.ui.Screen
 import com.usmonie.compass.core.ui.ScreenId
 import com.usmonie.core.kit.composables.word.HeaderWordScaffold
-import com.usmonie.word.features.ads.ui.LocalAdMob
+import com.usmonie.word.features.ads.ui.LocalAdsManager
 import com.usmonie.word.features.games.ui.GamesScreenFactory.Companion.ID
 import com.usmonie.word.features.games.ui.enigma.EnigmaGameScreenFactory
 import com.usmonie.word.features.games.ui.hangman.HangmanGameScreenFactory
@@ -61,7 +61,7 @@ class GamesScreen(private val subscriptionViewModel: SubscriptionViewModel) : Sc
                     Modifier.fillMaxWidth()
                         .background(MaterialTheme.colorScheme.surface)
                 ) {
-                    val adMob = LocalAdMob.current
+                    val adMob = LocalAdsManager.current
 
                     adMob.Banner(
                         Modifier.fillMaxWidth()

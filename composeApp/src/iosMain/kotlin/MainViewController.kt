@@ -8,8 +8,8 @@ import androidx.compose.ui.window.ComposeUIViewController
 import com.usmonie.word.App
 import com.usmonie.word.core.analytics.Analytics
 import com.usmonie.word.di.appModule
-import com.usmonie.word.features.ads.ui.AdMob
-import com.usmonie.word.features.ads.ui.AdMobState
+import com.usmonie.word.features.ads.ui.AdsManager
+import com.usmonie.word.features.ads.ui.AdsManagerState
 import kotlinx.cinterop.ExperimentalForeignApi
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
@@ -25,7 +25,7 @@ fun MainViewController(
     showRewardedLifeInterstitialAd: (onAddDismissed: () -> Unit, onRewardGranted: (Int) -> Unit) -> Unit,
     showRewardedHintInterstitialAd: (onAddDismissed: () -> Unit, onRewardGranted: (Int) -> Unit) -> Unit,
     showRewardedNewGameInterstitialAd: (onAddDismissed: () -> Unit, onRewardGranted: (Int) -> Unit) -> Unit,
-    getAdMobState: () -> AdMobState
+    getAdsManagerState: () -> AdsManagerState
 ): UIViewController {
     startKoin {
         modules(
@@ -33,7 +33,7 @@ fun MainViewController(
             module {
                 single { analytics }
                 single {
-                    AdMob(
+                    AdsManager(
                         {
                             UIKitView(
                                 factory = bannerAd,
@@ -62,7 +62,7 @@ fun MainViewController(
                         },
                         { showInterstitialAd() },
                         get(),
-                        getAdMobState
+                        getAdsManagerState
                     )
                 }
             }

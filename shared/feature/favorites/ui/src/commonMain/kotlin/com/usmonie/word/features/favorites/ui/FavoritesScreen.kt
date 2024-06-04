@@ -28,7 +28,7 @@ import com.usmonie.compass.viewmodel.ContentState
 import com.usmonie.compass.viewmodel.StateScreen
 import com.usmonie.core.kit.composables.word.HeaderWordScaffold
 import com.usmonie.core.kit.tools.add
-import com.usmonie.word.features.ads.ui.LocalAdMob
+import com.usmonie.word.features.ads.ui.LocalAdsManager
 import com.usmonie.word.features.dictionary.ui.WordCardLarge
 import com.usmonie.word.features.dictionary.ui.models.WordCombinedUi
 import com.usmonie.word.features.subscriptions.ui.notification.SubscriptionPage
@@ -71,7 +71,7 @@ internal class FavoritesScreen(
                     Modifier.fillMaxWidth()
                         .background(MaterialTheme.colorScheme.surface)
                 ) {
-                    val adMob = LocalAdMob.current
+                    val adMob = LocalAdsManager.current
 
                     adMob.Banner(
                         Modifier.fillMaxWidth()

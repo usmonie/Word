@@ -11,12 +11,12 @@ import com.usmonie.word.features.dictionary.data.db.room.models.mapper.toDb
 import com.usmonie.word.features.dictionary.data.db.room.models.mapper.toDomain
 import com.usmonie.word.features.dictionary.domain.models.WordCombined
 import com.usmonie.word.features.dictionary.domain.models.WordEtymology
-import com.usmonie.word.features.dictionary.domain.repository.WordRepository
+import com.usmonie.word.features.dictionary.domain.repository.WordsRepository
 
 internal class RoomWordsRepositoryImpl(
     dictionaryDatabase: DictionaryDatabase,
     private val api: WordApi,
-) : WordRepository {
+) : WordsRepository {
     private val wordDao = dictionaryDatabase.wordDao()
     private val favoritesDao = dictionaryDatabase.favoritesDao()
 
@@ -53,7 +53,7 @@ internal class RoomWordsRepositoryImpl(
     }
 
     override suspend fun addFavorite(word: String) {
-        favoritesDao.favorite(WordFavorite(word))
+        favoritesDao.insert(WordFavorite(word))
     }
 
     override suspend fun deleteFavorite(word: String) {
@@ -61,55 +61,63 @@ internal class RoomWordsRepositoryImpl(
     }
 
     override suspend fun getAllFavorites(): List<WordCombined> {
-        return  listOf()/* favoritesDao.favorites()
+        return favoritesDao.favorites()
             .asSequence()
             .flatMap { it.words }
-            .mapDbToCombined(::checkFavorite)*/
+            .mapDbToCombined(::checkFavorite)
     }
 
     override suspend fun addToSearchHistory(word: String): List<WordCombined> {
-        wordDao.insert(SearchHistoryDb(word))
+        wordDao.insertHistory(SearchHistoryDb(word))
         return getSearchHistory()
     }
 
     override suspend fun getSearchHistory(): List<WordCombined> {
-        return listOf()/* wordDao.searchHistory()
+        return wordDao.searchHistory()
             .asSequence()
             .flatMap { it.words }
-            .mapDbToCombined(::checkFavorite)*/
+            .mapDbToCombined(::checkFavorite)
     }
 
     override suspend fun clearSearchHistory() {
         wordDao.clearSearchHistory()
     }
 
-    private suspend fun Sequence<WordDto>.mapDtoToCombined(checkFavorite: suspend (String) -> Boolean) =
-        map { it.toDb() }.mapDbToCombined(checkFavorite)
+    internal suspend fun addSearchHistory(history: List<SearchHistoryDb>) {
+        wordDao.insertHistory(history)
+    }
 
-    private suspend fun Sequence<WordDb>.mapDbToCombined(checkFavorite: suspend (String) -> Boolean) =
-        map { it.toDomain() }
-            .groupBy { it.word }
-            .mapValues { entry ->
-                entry.value
-                    .groupBy { word ->
-                        Triple(word.etymologyText, word.etymologyNumber, word.sounds)
-                    }
-                    .map { etymology ->
-                        WordEtymology(
-                            etymology.key.first,
-                            etymology.key.second,
-                            etymology.value,
-                            etymology.key.third,
-                        )
-                    }
-            }
-            .map { entry ->
-                val isFavorite = checkFavorite(entry.key)
-
-                WordCombined(entry.value, isFavorite, entry.key)
-            }
+    internal suspend fun addFavorites(favorites: List<WordFavorite>) {
+        favoritesDao.insert(favorites)
+    }
 
     private suspend fun checkFavorite(word: String): Boolean {
         return favoritesDao.query(word) != null
     }
 }
+
+private suspend fun Sequence<WordDto>.mapDtoToCombined(checkFavorite: suspend (String) -> Boolean) =
+    map { it.toDb() }.mapDbToCombined(checkFavorite)
+
+private suspend fun Sequence<WordDb>.mapDbToCombined(checkFavorite: suspend (String) -> Boolean) =
+    map { it.toDomain() }
+        .groupBy { it.word }
+        .mapValues { entry ->
+            entry.value
+                .groupBy { word ->
+                    Triple(word.etymologyText, word.etymologyNumber, word.sounds)
+                }
+                .map { etymology ->
+                    WordEtymology(
+                        etymology.key.first,
+                        etymology.key.second,
+                        etymology.value,
+                        etymology.key.third,
+                    )
+                }
+        }
+        .map { entry ->
+            val isFavorite = checkFavorite(entry.key)
+
+            WordCombined(entry.value, isFavorite, entry.key)
+        }

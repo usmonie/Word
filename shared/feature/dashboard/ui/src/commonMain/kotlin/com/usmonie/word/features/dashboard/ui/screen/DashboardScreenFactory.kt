@@ -5,7 +5,7 @@ import com.usmonie.compass.core.Extra
 import com.usmonie.compass.core.ui.Screen
 import com.usmonie.compass.core.ui.ScreenFactory
 import com.usmonie.compass.core.ui.ScreenId
-import com.usmonie.word.features.ads.ui.AdMob
+import com.usmonie.word.features.ads.ui.AdsManager
 import com.usmonie.word.features.dictionary.ui.models.WordCombinedUi
 import com.usmonie.word.features.subscriptions.ui.notification.SubscriptionViewModel
 
@@ -15,7 +15,7 @@ class DashboardScreenFactory internal constructor(
     private val subscriptionViewModel: SubscriptionViewModel,
     private val openWord: (WordCombinedUi) -> Unit,
     private val openDashboardMenuItem: (DashboardMenuItem) -> Unit,
-    private val adMob: AdMob
+    private val adsManager: AdsManager
 ) : ScreenFactory {
     override val id: ScreenId = ID
 

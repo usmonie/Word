@@ -4,7 +4,7 @@ import androidx.compose.runtime.Immutable
 import com.usmonie.compass.viewmodel.StateViewModel
 import com.usmonie.core.domain.usecases.invoke
 import com.usmonie.word.core.analytics.Analytics
-import com.usmonie.word.features.dictionary.domain.usecases.GetNextPhraseUseCase
+import com.usmonie.word.features.qutoes.domain.usecases.GetNextPhraseUseCase
 import com.usmonie.word.features.games.ui.enigma.EnigmaState.Companion.MIN_LIVES_COUNT
 import com.usmonie.word.features.settings.domain.usecase.AddUserHintsCountUseCase
 import com.usmonie.word.features.settings.domain.usecase.GetUserHintsCountUseCase

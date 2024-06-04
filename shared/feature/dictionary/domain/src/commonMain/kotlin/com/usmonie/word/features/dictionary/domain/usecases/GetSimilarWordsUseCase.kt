@@ -2,7 +2,7 @@ package com.usmonie.word.features.dictionary.domain.usecases
 
 import com.usmonie.core.domain.usecases.CoroutineUseCase
 import com.usmonie.word.features.dictionary.domain.models.WordCombined
-import com.usmonie.word.features.dictionary.domain.repository.WordRepository
+import com.usmonie.word.features.dictionary.domain.repository.WordsRepository
 
 interface GetSimilarWordsUseCase :
     CoroutineUseCase<GetSimilarWordsUseCase.Param, List<WordCombined>> {
@@ -10,7 +10,7 @@ interface GetSimilarWordsUseCase :
 }
 
 class GetSimilarWordsUseCaseImpl(
-    private val wordRepository: WordRepository
+    private val wordsRepository: WordsRepository
 ) : GetSimilarWordsUseCase {
     override suspend fun invoke(input: GetSimilarWordsUseCase.Param): List<WordCombined> {
         return listOf() /*wordRepository.searchSynonymsForWord(

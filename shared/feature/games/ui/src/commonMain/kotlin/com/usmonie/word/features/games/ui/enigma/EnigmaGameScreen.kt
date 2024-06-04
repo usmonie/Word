@@ -48,7 +48,7 @@ import com.usmonie.core.domain.tools.fastForEachIndexed
 import com.usmonie.core.tools.ui.ShakeController
 import com.usmonie.core.tools.ui.rememberShakeController
 import com.usmonie.core.tools.ui.shake
-import com.usmonie.word.features.ads.ui.LocalAdMob
+import com.usmonie.word.features.ads.ui.LocalAdsManager
 import com.usmonie.word.features.games.ui.enigma.EnigmaGameScreenFactory.Companion.ID
 import com.usmonie.word.features.games.ui.hangman.GuessedLetters
 import com.usmonie.word.features.games.ui.hangman.Keyboard
@@ -158,7 +158,7 @@ internal class EnigmaGameScreen(
         val effect by viewModel.effect.collectAsState(null)
         val state by viewModel.state.collectAsState()
 
-        val adMob = LocalAdMob.current
+        val adMob = LocalAdsManager.current
         AnimatedVisibility(
             state is EnigmaState.Loading || effect is EnigmaEffect.ShowMiddleGameAd,
             content = { adMob.Interstitial() }
@@ -210,7 +210,7 @@ internal class EnigmaGameScreen(
                     contentAlignment = Alignment.CenterEnd,
                     modifier = Modifier.fillMaxWidth().padding(horizontal = 32.dp)
                 ) {
-                    val adMob = LocalAdMob.current
+                    val adMob = LocalAdsManager.current
                     LivesAmount(getLives(), getMaxLives(), Modifier.align(Alignment.Center))
                     if (getHintsCount() > 0 || adMob.getAdMobState().isRewardHintReady) {
                         UseHintButton(viewModel::useHint, getHintsCount())

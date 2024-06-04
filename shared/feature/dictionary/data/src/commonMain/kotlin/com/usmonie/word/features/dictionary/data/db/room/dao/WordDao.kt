@@ -22,9 +22,11 @@ internal interface WordDao {
     suspend fun query(wordQuery: String): List<WordDb>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(searchHistoryDb: SearchHistoryDb)
+    suspend fun insertHistory(searchHistoryDb: SearchHistoryDb)
 
-    //TODO: Fix that with KSP and Room
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertHistory(searchHistoryDb: List<SearchHistoryDb>)
+
     @Transaction
     @Query("SELECT * FROM search_history_table ORDER BY date DESC")
     suspend fun searchHistory(): List<WordSearchHistoryDb>

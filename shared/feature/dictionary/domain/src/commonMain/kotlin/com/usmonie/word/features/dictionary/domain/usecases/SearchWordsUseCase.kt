@@ -2,14 +2,14 @@ package com.usmonie.word.features.dictionary.domain.usecases
 
 import com.usmonie.core.domain.usecases.CoroutineUseCase
 import com.usmonie.word.features.dictionary.domain.models.WordCombined
-import com.usmonie.word.features.dictionary.domain.repository.WordRepository
+import com.usmonie.word.features.dictionary.domain.repository.WordsRepository
 
 interface SearchWordsUseCase : CoroutineUseCase<SearchWordsUseCase.Param, List<WordCombined>> {
 
     data class Param(val query: String, val offset: Long, val limit: Long, val exactly: Boolean)
 }
 
-internal class SearchWordsUseCaseImpl(private val wordRepository: WordRepository) :
+internal class SearchWordsUseCaseImpl(private val wordsRepository: WordsRepository) :
     SearchWordsUseCase {
     override suspend fun invoke(input: SearchWordsUseCase.Param): List<WordCombined> {
         /*        val foundWords = when (SearchWordQuery.match(input.query)) {
@@ -46,7 +46,7 @@ internal class SearchWordsUseCaseImpl(private val wordRepository: WordRepository
                     }
                 }*/
 
-        return wordRepository.searchWords(input.query, input.limit.toInt(), input.offset.toInt())
+        return wordsRepository.searchWords(input.query, input.limit.toInt(), input.offset.toInt())
     }
 
     sealed class SearchWordQuery(private val regex: Regex) {

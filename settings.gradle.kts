@@ -82,5 +82,6 @@ include(":shared:feature:subscriptions:data")
 include(":shared:feature:subscriptions:domain")
 include(":shared:feature:subscriptions:ui")
 
+include(":shared:feature:quotes:data")
 include(":shared:feature:quotes:domain")
 include(":shared:feature:quotes:ui")

@@ -24,8 +24,8 @@ import com.usmonie.core.domain.AppConfig
 import com.usmonie.word.di.analyticsModule
 import com.usmonie.word.di.appModule
 import com.usmonie.word.di.mainModule
-import com.usmonie.word.features.ads.ui.AdMob
-import com.usmonie.word.features.ads.ui.AdMobState
+import com.usmonie.word.features.ads.ui.AdsManager
+import com.usmonie.word.features.ads.ui.AdsManagerState
 import com.usmonie.word.features.subscription.domain.models.SubscriptionStatus
 import org.koin.android.ext.android.inject
 import org.koin.android.ext.koin.androidContext
@@ -59,7 +59,7 @@ class MainActivity : ComponentActivity() {
                 analyticsModule,
                 module {
                     single {
-                        AdMob(
+                        AdsManager(
                             { AdmobBanner(it) },
                             { _, onRewardGranted ->
                                 showRewardedLifeAd { onRewardGranted(it.amount) }
@@ -74,7 +74,7 @@ class MainActivity : ComponentActivity() {
                             { showInterstitialAd() },
                             get(),
                             {
-                                AdMobState(
+                                AdsManagerState(
                                     interstitialAd != null,
                                     rewardedLifeAd != null,
                                     rewardedHintAd != null,

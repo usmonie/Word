@@ -55,6 +55,8 @@ kotlin {
             implementation(projects.shared.feature.subscriptions.data)
             implementation(projects.shared.feature.subscriptions.domain)
             implementation(projects.shared.feature.subscriptions.ui)
+            implementation(projects.shared.feature.quotes.data)
+            implementation(projects.shared.feature.quotes.ui)
         }
     }
 }
@@ -124,4 +126,9 @@ dependencies {
     debugImplementation(libs.androidx.runtime.tracing)
     debugImplementation(libs.androidx.tracing.perfetto)
     debugImplementation(libs.androidx.tracing.perfetto.binary)
+}
+
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinNativeCompile> {
+    dependsOn(tasks.withType<com.google.devtools.ksp.gradle.KspTask>())
 }

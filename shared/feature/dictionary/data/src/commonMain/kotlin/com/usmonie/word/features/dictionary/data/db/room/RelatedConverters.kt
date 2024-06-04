@@ -11,10 +11,10 @@ import com.usmonie.word.features.dictionary.data.api.models.RelatedDto
 import com.usmonie.word.features.dictionary.data.api.models.SenseDto
 import com.usmonie.word.features.dictionary.data.api.models.SoundDto
 import com.usmonie.word.features.dictionary.data.api.models.TranslationDto
+import com.usmonie.word.features.dictionary.data.db.room.models.WordDb
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
-@Suppress("TooManyFunctions")
 class StringConverters {
     @TypeConverter
     internal fun fromStrings(value: List<String>): String {
@@ -27,7 +27,6 @@ class StringConverters {
     }
 }
 
-@Suppress("TooManyFunctions")
 class StringsConverters {
     @TypeConverter
     internal fun fromStrings(value: List<List<String>>): String {
@@ -40,7 +39,19 @@ class StringsConverters {
     }
 }
 
-@Suppress("TooManyFunctions")
+
+class WordsConverters {
+    @TypeConverter
+    internal fun fromWords(value: List<WordDb>): String {
+        return Json.encodeToString(value = value)
+    }
+
+    @TypeConverter
+    internal fun toStrings(value: String): List<WordDb> {
+        return Json.decodeFromString(value)
+    }
+}
+
 class RelatedConverters {
     @TypeConverter
     internal fun fromRelated(value: List<RelatedDto>): String {

@@ -1,5 +1,6 @@
 package com.usmonie.word.features.dictionary.data.db.room
 
+import androidx.room.BuiltInTypeConverters
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
@@ -11,11 +12,12 @@ import com.usmonie.word.features.dictionary.data.db.room.models.WordFavorite
 
 @Database(
     entities = [WordDb::class, WordFavorite::class, SearchHistoryDb::class],
-    version = 7,
+    version = 9,
     exportSchema = false
 )
 @TypeConverters(
     StringConverters::class,
+    StringsConverters::class,
     RelatedConverters::class,
     CategoryConverters::class,
     DescendantConverters::class,
@@ -26,6 +28,8 @@ import com.usmonie.word.features.dictionary.data.db.room.models.WordFavorite
     SenseConverters::class,
     SoundConverters::class,
     TranslationsConverters::class,
+    WordsConverters::class,
+    builtInTypeConverters = BuiltInTypeConverters()
 )
 abstract class DictionaryDatabase : RoomDatabase() {
     internal abstract fun favoritesDao(): FavoritesDao

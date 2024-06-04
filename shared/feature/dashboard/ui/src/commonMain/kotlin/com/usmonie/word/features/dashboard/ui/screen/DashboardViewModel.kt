@@ -9,6 +9,7 @@ import com.usmonie.core.domain.tools.fastMap
 import com.usmonie.word.features.dictionary.domain.usecases.GetRandomWordUseCase
 import com.usmonie.word.features.dictionary.domain.usecases.GetSearchHistoryUseCase
 import com.usmonie.word.features.dictionary.domain.usecases.GetWordOfTheDayUseCase
+import com.usmonie.word.features.dictionary.domain.usecases.MoveToNewDatabaseUseCase
 import com.usmonie.word.features.dictionary.domain.usecases.SearchWordsUseCase
 import com.usmonie.word.features.dictionary.domain.usecases.UpdateFavouriteUseCase
 import com.usmonie.word.features.dictionary.domain.usecases.UpdateSearchHistory
@@ -22,6 +23,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import wtf.word.core.domain.usecases.invoke
 
 @Immutable
 @Suppress("TooManyFunctions", "MagicNumber", "LongParameterList")
@@ -32,6 +34,7 @@ internal class DashboardViewModel(
     private val updateSearchHistory: UpdateSearchHistory,
     private val wordOfTheDayUseCase: GetWordOfTheDayUseCase,
     private val updateFavouriteUseCase: UpdateFavouriteUseCase,
+    private val moveToNewDatabaseUseCase: MoveToNewDatabaseUseCase
 //    private val analytics: Analytics
 ) : StateViewModel<DashboardState, DashboardAction, DashboardEvent, DashboardEffect>(DashboardState()) {
 
@@ -39,6 +42,9 @@ internal class DashboardViewModel(
 
     init {
         tryAgain()
+        viewModelScope.launchSafe {
+            moveToNewDatabaseUseCase()
+        }
     }
 
     override fun DashboardState.reduce(event: DashboardEvent) = when (event) {

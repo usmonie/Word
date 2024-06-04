@@ -10,8 +10,8 @@ import com.usmonie.compass.core.ui.Root
 import com.usmonie.core.kit.design.themes.WordTheme
 import com.usmonie.core.kit.design.themes.WordThemes
 import com.usmonie.core.kit.design.themes.typographies.ModernChic
-import com.usmonie.word.features.ads.ui.AdMob
-import com.usmonie.word.features.ads.ui.LocalAdMob
+import com.usmonie.word.features.ads.ui.AdsManager
+import com.usmonie.word.features.ads.ui.LocalAdsManager
 import com.usmonie.word.features.settings.domain.models.DarkThemeMode
 import com.usmonie.word.features.settings.ui.models.UserSelectedTheme
 import com.usmonie.word.features.settings.ui.usecases.UserSelectedThemeUseCase
@@ -19,7 +19,7 @@ import org.koin.compose.koinInject
 
 @Composable
 fun App(
-    adMob: AdMob = koinInject(),
+    adsManager: AdsManager = koinInject(),
     routeManager: RouteManager = koinInject(),
     userSelectedThemeUseCase: UserSelectedThemeUseCase = koinInject(),
 ) {
@@ -39,7 +39,7 @@ fun App(
         currentTheme.typography,
         useDarkThemeMode
     ) {
-        CompositionLocalProvider(LocalAdMob provides adMob) {
+        CompositionLocalProvider(LocalAdsManager provides adsManager) {
             Root(routeManager, isGestureNavigationEnabled = true)
         }
     }

@@ -37,7 +37,7 @@ import com.usmonie.core.kit.design.themes.typographies.Friendly
 import com.usmonie.core.kit.design.themes.typographies.ModernChic
 import com.usmonie.core.kit.design.themes.typographies.TimelessElegant
 import com.usmonie.core.kit.tools.add
-import com.usmonie.word.features.ads.ui.LocalAdMob
+import com.usmonie.word.features.ads.ui.LocalAdsManager
 import com.usmonie.word.features.settings.domain.models.DarkThemeMode
 import com.usmonie.word.features.subscription.domain.models.SubscriptionStatus
 import com.usmonie.word.features.subscriptions.ui.notification.SubscriptionPage
@@ -94,7 +94,7 @@ internal class SettingsScreen(
                     Modifier.fillMaxWidth()
                         .background(MaterialTheme.colorScheme.surface)
                 ) {
-                    val adMob = LocalAdMob.current
+                    val adMob = LocalAdsManager.current
 
                     adMob.Banner(
                         Modifier.fillMaxWidth()

@@ -6,8 +6,6 @@ import com.usmonie.word.features.dictionary.domain.usecases.ClearRecentUseCase
 import com.usmonie.word.features.dictionary.domain.usecases.ClearRecentUseCaseImpl
 import com.usmonie.word.features.dictionary.domain.usecases.GetAllFavouritesUseCase
 import com.usmonie.word.features.dictionary.domain.usecases.GetAllFavouritesUseCaseImpl
-import com.usmonie.word.features.dictionary.domain.usecases.GetNextPhraseUseCase
-import com.usmonie.word.features.dictionary.domain.usecases.GetNextPhraseUseCaseImpl
 import com.usmonie.word.features.dictionary.domain.usecases.GetRandomWordUseCase
 import com.usmonie.word.features.dictionary.domain.usecases.GetRandomWordUseCaseImpl
 import com.usmonie.word.features.dictionary.domain.usecases.GetSearchHistoryUseCase
@@ -27,7 +25,6 @@ val dictionaryDomainUseCase = module {
     factory<ClearRecentUseCase> { ClearRecentUseCaseImpl(get()) }
     factory<GetSearchHistoryUseCase> { GetSearchHistoryUseCaseImpl(get()) }
     factory<GetAllFavouritesUseCase> { GetAllFavouritesUseCaseImpl(get()) }
-    factory<GetNextPhraseUseCase> { GetNextPhraseUseCaseImpl() }
     factory<GetRandomWordUseCase> { GetRandomWordUseCaseImpl(get()) }
     factory<GetWordOfTheDayUseCase> { GetWordOfTheDayUseCaseImpl(get()) }
     factory<UpdateFavouriteUseCase> { UpdateFavouriteUseCaseImpl(get()) }

@@ -18,7 +18,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.usmonie.core.kit.composables.base.scaffold.BaseHeaderScaffold
-import com.usmonie.word.features.ads.ui.LocalAdMob
+import com.usmonie.word.features.ads.ui.LocalAdsManager
 import com.usmonie.word.features.subscriptions.ui.notification.SubscriptionPage
 import com.usmonie.word.features.subscriptions.ui.notification.SubscriptionScreenState
 import com.usmonie.word.features.subscriptions.ui.notification.SubscriptionViewModel
@@ -65,7 +65,7 @@ fun GameBoard(
                 Modifier.fillMaxWidth()
                     .background(MaterialTheme.colorScheme.surface)
             ) {
-                val adMob = LocalAdMob.current
+                val adMob = LocalAdsManager.current
 
                 adMob.Banner(
                     Modifier.fillMaxWidth()

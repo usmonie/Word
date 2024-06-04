@@ -39,7 +39,7 @@ import com.usmonie.compass.core.LocalRouteManager
 import com.usmonie.compass.core.ui.ScreenId
 import com.usmonie.compass.viewmodel.StateScreen
 import com.usmonie.core.domain.tools.fastForEach
-import com.usmonie.word.features.ads.ui.LocalAdMob
+import com.usmonie.word.features.ads.ui.LocalAdsManager
 import com.usmonie.word.features.dictionary.ui.models.WordCombinedUi
 import com.usmonie.word.features.games.ui.hangman.HangmanGameScreenFactory.Companion.ID
 import com.usmonie.word.features.games.ui.kit.GameBoard
@@ -89,7 +89,7 @@ internal class HangmanGameScreen(
             subscriptionViewModel,
             actions = {
                 if (state !is HangmanState.Loading && state !is HangmanState.Error) {
-                    val adMob = LocalAdMob.current
+                    val adMob = LocalAdsManager.current
 
                     Box(
                         contentAlignment = Alignment.CenterEnd,
@@ -108,7 +108,7 @@ internal class HangmanGameScreen(
                 }
             }
         ) { insets ->
-            val adMob = LocalAdMob.current
+            val adMob = LocalAdsManager.current
             AnimatedContent(state is HangmanState.Loading) { isLoading ->
                 if (isLoading) {
                     LoadingProgress(insets)

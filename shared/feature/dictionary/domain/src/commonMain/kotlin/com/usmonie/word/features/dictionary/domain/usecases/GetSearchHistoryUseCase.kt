@@ -2,7 +2,7 @@ package com.usmonie.word.features.dictionary.domain.usecases
 
 import com.usmonie.core.domain.usecases.CoroutineUseCase
 import com.usmonie.word.features.dictionary.domain.models.WordCombined
-import com.usmonie.word.features.dictionary.domain.repository.WordRepository
+import com.usmonie.word.features.dictionary.domain.repository.WordsRepository
 
 /**
  * Use case for retrieving search history.
@@ -18,7 +18,7 @@ interface GetSearchHistoryUseCase :
     data class Param(val offset: Long, val limit: Long)
 }
 
-internal class GetSearchHistoryUseCaseImpl(private val wordRepository: WordRepository) :
+internal class GetSearchHistoryUseCaseImpl(private val wordsRepository: WordsRepository) :
     GetSearchHistoryUseCase {
     /**
      * Invokes the use case to retrieve the search history from the repository based on pagination parameters.
@@ -27,6 +27,6 @@ internal class GetSearchHistoryUseCaseImpl(private val wordRepository: WordRepos
      * @return A list of `WordCombined` objects that represent the search history.
      */
     override suspend fun invoke(input: GetSearchHistoryUseCase.Param): List<WordCombined> {
-        return wordRepository.getSearchHistory()
+        return wordsRepository.getSearchHistory()
     }
 }

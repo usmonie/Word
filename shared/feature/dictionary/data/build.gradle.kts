@@ -3,9 +3,10 @@ import extensions.commonDependencies
 import extensions.iOSDependencies
 
 plugins {
+    id(libs.plugins.usmonie.multiplatform.domain.get().pluginId)
     alias(libs.plugins.ksp)
     alias(libs.plugins.room)
-    id(libs.plugins.usmonie.multiplatform.domain.get().pluginId)
+    alias(libs.plugins.realm)
     kotlin("plugin.serialization") version "2.0.0"
 }
 
@@ -49,15 +50,11 @@ kotlin {
 }
 dependencies {
     kspAndroid(libs.room.compiler)
+    kspIosX64(libs.room.compiler)
+    kspIosArm64(libs.room.compiler)
+    kspIosSimulatorArm64(libs.room.compiler)
+    kspCommonMainMetadata(libs.room.compiler)
 }
-
-//dependencies {
-//    add("kspCommonMainMetadata", libs.room.compiler) // Run KSP on [commonMain] code
-//    add("kspAndroid", libs.room.compiler)
-//    add("kspIosSimulatorArm64", libs.room.compiler)
-//    add("kspIosX64", libs.room.compiler)
-//    add("kspIosArm64", libs.room.compiler)
-//}
 
 room {
     schemaDirectory("$projectDir/schemas")

@@ -1,5 +1,7 @@
 package com.usmonie.word.features.qutoes.domain.di
 
+import com.usmonie.word.features.qutoes.domain.usecases.GetNextPhraseUseCase
+import com.usmonie.word.features.qutoes.domain.usecases.GetNextPhraseUseCaseImpl
 import com.usmonie.word.features.qutoes.domain.usecases.GetRandomQuoteUseCase
 import com.usmonie.word.features.qutoes.domain.usecases.GetRandomQuoteUseCaseImpl
 import org.koin.core.module.dsl.bind
@@ -9,5 +11,9 @@ import org.koin.dsl.module
 val quotesDomainModule = module {
     singleOf(::GetRandomQuoteUseCaseImpl) {
         bind<GetRandomQuoteUseCase>()
+    }
+
+    singleOf(::GetNextPhraseUseCaseImpl) {
+        bind<GetNextPhraseUseCase>()
     }
 }

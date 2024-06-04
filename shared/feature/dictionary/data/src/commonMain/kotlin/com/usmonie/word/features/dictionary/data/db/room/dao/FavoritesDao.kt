@@ -12,12 +12,14 @@ import com.usmonie.word.features.dictionary.data.db.room.models.WordFavorite
 internal interface FavoritesDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun favorite(wordFavorite: WordFavorite)
+    suspend fun insert(wordFavorite: WordFavorite)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(wordFavorites: List<WordFavorite>)
 
     @Query("DELETE FROM favorites_table WHERE word = :word")
     suspend fun unfavorite(word: String)
 
-    // TODO: Fix that with ksp2 and room
     @Transaction
     @Query("SELECT * FROM favorites_table ORDER BY date DESC")
     suspend fun favorites(): List<FavoriteWords>

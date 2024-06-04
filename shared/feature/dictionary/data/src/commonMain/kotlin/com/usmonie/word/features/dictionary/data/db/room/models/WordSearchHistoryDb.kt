@@ -9,10 +9,9 @@ import kotlinx.datetime.Clock
 @Entity(tableName = "search_history_table")
 internal data class SearchHistoryDb(
     @PrimaryKey
-    val word: String
-) {
-    var date: Long = Clock.System.now().epochSeconds
-}
+    val word: String,
+    val date: Long = Clock.System.now().epochSeconds
+)
 
 internal data class WordSearchHistoryDb(
     @Embedded

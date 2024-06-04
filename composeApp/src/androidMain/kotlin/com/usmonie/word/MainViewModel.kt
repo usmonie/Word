@@ -9,7 +9,4 @@ internal class MainViewModel : ViewModel() {
 
     private val _state = MutableStateFlow(MainState(SubscriptionStatus.Purchased(null)))
     val state = _state.asStateFlow()
-
-    init {
-    }
 }
