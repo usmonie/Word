@@ -379,3 +379,18 @@ iosApp/iosApp/GoogleService-Info.plist
 /shared/feature/dictionary/data/schemas/com.usmonie.word.features.dictionary.data.db.room.DictionaryDatabase/2.json
 /shared/feature/dictionary/data/schemas/com.usmonie.word.features.dictionary.data.db.room.DictionaryDatabase/3.json
 /word of the day.png
+/iosApp/.gitattributes
+/iosApp/Podfile
+/iosApp/Podfile.lock
+/iosApp/Pods/Pods.xcodeproj/project.pbxproj
+/iosApp/Pods/Target Support Files/Pods-iosApp/Pods-iosApp.debug.xcconfig
+/iosApp/Pods/Target Support Files/Pods-iosApp/Pods-iosApp.modulemap
+/iosApp/Pods/Target Support Files/Pods-iosApp/Pods-iosApp.release.xcconfig
+/iosApp/Pods/Target Support Files/Pods-iosApp/Pods-iosApp-acknowledgements.markdown
+/iosApp/Pods/Target Support Files/Pods-iosApp/Pods-iosApp-acknowledgements.plist
+/iosApp/Pods/Target Support Files/Pods-iosApp/Pods-iosApp-dummy.m
+/iosApp/Pods/Target Support Files/Pods-iosApp/Pods-iosApp-Info.plist
+/iosApp/Pods/Target Support Files/Pods-iosApp/Pods-iosApp-umbrella.h
+/iosApp/Pods/Manifest.lock
+/iosApp/iosApp.xcworkspace/contents.xcworkspacedata
+/shared/feature/quotes/data/schemas/com.usmonie.word.features.quotes.data.QuotesDatabase/1.json
