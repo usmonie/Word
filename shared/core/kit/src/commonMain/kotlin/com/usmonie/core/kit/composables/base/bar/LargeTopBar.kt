@@ -160,7 +160,7 @@ fun TextLargeTopBar(
     LargeTopAppBar(
         modifier = modifier,
         scrollBehavior = scrollBehavior,
-        navigationIcon = { NavigationBack(onBackClicked, Modifier.padding(start = 12.dp)) },
+        navigationIcon = { NavigationBack(onBackClicked, Modifier.padding(start = 16.dp)) },
         actions = actions,
         title = {
             Column {
@@ -177,7 +177,7 @@ fun TextLargeTopBar(
                 Text(
                     placeholder(),
                     style = titleStyle,
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
                 )
             }
         },
