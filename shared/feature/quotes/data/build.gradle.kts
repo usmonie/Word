@@ -9,8 +9,6 @@ plugins {
     kotlin("plugin.serialization") version "2.0.0"
 }
 
-android.namespace = "com.usmonie.word.features.quotes.data"
-
 kotlin {
     applyDefaultHierarchyTemplate()
     listOf(
@@ -46,6 +44,10 @@ kotlin {
     iOSDependencies {
         implementation(libs.ktor.client.darwin)
     }
+}
+
+android {
+    namespace = "com.usmonie.word.features.quotes.data"
 }
 
 dependencies {

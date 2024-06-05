@@ -5,6 +5,7 @@ import com.usmonie.word.features.quotes.data.QuotesDatabase
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.Module
 import org.koin.dsl.module
+import java.io.File
 
 internal actual val roomModule: Module = module {
     factory {
@@ -14,5 +15,6 @@ internal actual val roomModule: Module = module {
             context = appContext,
             name = dbFile.absolutePath
         )
+            .createFromFile(File(""))
     }
 }

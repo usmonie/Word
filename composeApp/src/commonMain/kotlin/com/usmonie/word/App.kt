@@ -7,6 +7,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import com.usmonie.compass.core.RouteManager
 import com.usmonie.compass.core.ui.Root
+import com.usmonie.core.domain.usecases.invoke
 import com.usmonie.core.kit.design.themes.WordTheme
 import com.usmonie.core.kit.design.themes.WordThemes
 import com.usmonie.core.kit.design.themes.typographies.ModernChic
@@ -24,7 +25,7 @@ fun App(
     userSelectedThemeUseCase: UserSelectedThemeUseCase = koinInject(),
 ) {
     val isSystemInDark = isSystemInDarkTheme()
-    val currentTheme by userSelectedThemeUseCase(Unit).collectAsState(
+    val currentTheme by userSelectedThemeUseCase().collectAsState(
         UserSelectedTheme(
             WordThemes.DEEP_INDIGO,
             ModernChic,

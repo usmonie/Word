@@ -51,9 +51,9 @@ import com.usmonie.core.tools.ui.shake
 import com.usmonie.word.features.ads.ui.LocalAdsManager
 import com.usmonie.word.features.games.ui.enigma.EnigmaGameScreenFactory.Companion.ID
 import com.usmonie.word.features.games.ui.hangman.GuessedLetters
-import com.usmonie.word.features.games.ui.hangman.Keyboard
 import com.usmonie.word.features.games.ui.kit.EnigmaGameWon
 import com.usmonie.word.features.games.ui.kit.GameBoard
+import com.usmonie.word.features.games.ui.kit.Keyboard
 import com.usmonie.word.features.games.ui.kit.LivesAmount
 import com.usmonie.word.features.games.ui.kit.ReviveLifeDialog
 import com.usmonie.word.features.games.ui.kit.UseHintButton
@@ -64,7 +64,6 @@ import word.shared.feature.games.ui.generated.resources.Res
 import word.shared.feature.games.ui.generated.resources.games_next_phrase
 
 internal class EnigmaGameScreen(
-//    private val adMob: AdMob,
     viewModel: EnigmaGameViewModel,
     private val subscriptionViewModel: SubscriptionViewModel
 ) : StateScreen<EnigmaState, EnigmaAction, EnigmaEvent, EnigmaEffect, EnigmaGameViewModel>(viewModel) {
@@ -95,8 +94,8 @@ internal class EnigmaGameScreen(
                 { state.currentSelectedCellPosition },
                 { cellState ->
                     state is EnigmaState.Game &&
-                            cellState != CellState.Correct &&
-                            cellState != CellState.Found
+                        cellState != CellState.Correct &&
+                        cellState != CellState.Found
                 },
                 { state is EnigmaState.Game.HintSelection },
                 { state.guessedLetters },

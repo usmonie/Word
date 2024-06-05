@@ -7,6 +7,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import com.usmonie.core.domain.usecases.invoke
 import com.usmonie.word.features.subscription.domain.models.SubscriptionStatus
 import com.usmonie.word.features.subscription.domain.usecase.SubscriptionStatusUseCase
 
@@ -34,8 +35,8 @@ class AdsManager(
     @Composable
     fun Banner(modifier: Modifier = Modifier) {
         val state = getAdMobState()
-        val subscriptionState by subscriptionUseCase(Unit).collectAsState(null)
-        if (false && subscriptionState != null && subscriptionState !is SubscriptionStatus.Purchased && state.isBannerReady) {
+        val subscriptionState by subscriptionUseCase().collectAsState(null)
+        if (subscriptionState != null && subscriptionState !is SubscriptionStatus.Purchased && state.isBannerReady) {
             banner(modifier)
         }
     }
@@ -43,7 +44,7 @@ class AdsManager(
     @Composable
     fun RewardedLifeInterstitial(onAddDismissed: () -> Unit, onRewardGranted: (Int) -> Unit) {
         val state = getAdMobState()
-        val subscriptionState by subscriptionUseCase(Unit).collectAsState(null)
+        val subscriptionState by subscriptionUseCase().collectAsState(null)
         if (subscriptionState != null &&
             subscriptionState !is SubscriptionStatus.Purchased &&
             state.isRewardLifeReady
@@ -55,7 +56,7 @@ class AdsManager(
     @Composable
     fun RewardedHintInterstitial(onAddDismissed: () -> Unit, onRewardGranted: (Int) -> Unit) {
         val state = getAdMobState()
-        val subscriptionState by subscriptionUseCase(Unit).collectAsState(null)
+        val subscriptionState by subscriptionUseCase().collectAsState(null)
         if (subscriptionState != null &&
             subscriptionState !is SubscriptionStatus.Purchased &&
             state.isRewardHintReady
@@ -67,7 +68,7 @@ class AdsManager(
     @Composable
     fun RewardedNewGameInterstitial(onAddDismissed: () -> Unit, onRewardGranted: (Int) -> Unit) {
         val state = getAdMobState()
-        val subscriptionState by subscriptionUseCase(Unit).collectAsState(null)
+        val subscriptionState by subscriptionUseCase().collectAsState(null)
         if (subscriptionState != null &&
             subscriptionState !is SubscriptionStatus.Purchased &&
             state.isRewardNewGameReady
@@ -79,7 +80,7 @@ class AdsManager(
     @Composable
     fun Interstitial() {
         val state = getAdMobState()
-        val subscriptionState by subscriptionUseCase(Unit).collectAsState(null)
+        val subscriptionState by subscriptionUseCase().collectAsState(null)
         if (subscriptionState != null &&
             subscriptionState !is SubscriptionStatus.Purchased &&
             state.isInterstitialReady

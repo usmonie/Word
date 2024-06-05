@@ -81,7 +81,7 @@ sealed class HangmanAction : ScreenAction {
 }
 
 sealed class HangmanEvent : ScreenEvent {
-    data class StartGame(val word: WordCombinedUi) : HangmanEvent()
+    data class StartGame(val word: WordCombinedUi, val hintsCount: Int) : HangmanEvent()
     data class OpenWord(val word: WordCombinedUi) : HangmanEvent()
     data class UpdateWord(val word: WordCombinedUi) : HangmanEvent()
     data class UpdateHints(val hintsCount: Int) : HangmanEvent()

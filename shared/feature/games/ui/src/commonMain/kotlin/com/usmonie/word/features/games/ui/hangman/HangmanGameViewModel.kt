@@ -3,6 +3,7 @@ package com.usmonie.word.features.games.ui.hangman
 import androidx.compose.runtime.Immutable
 import com.usmonie.compass.viewmodel.StateViewModel
 import com.usmonie.core.domain.tools.xor
+import com.usmonie.core.domain.usecases.invoke
 import com.usmonie.word.features.dictionary.domain.usecases.GetRandomWordUseCase
 import com.usmonie.word.features.dictionary.ui.models.WordCombinedUi
 import com.usmonie.word.features.dictionary.ui.models.toUi
@@ -20,12 +21,13 @@ class HangmanGameViewModel(
 ) : StateViewModel<HangmanState, HangmanAction, HangmanEvent, HangmanEffect>(HangmanState.Loading()) {
 
     init {
+        handleAction(HangmanAction.StartGame)
+
         viewModelScope.launchSafe {
-            getUserHintsCountUseCase(Unit).collect {
+            getUserHintsCountUseCase().collect {
                 handleAction(HangmanAction.UpdateUserHints(it))
             }
         }
-        handleAction(HangmanAction.StartGame)
     }
 
     override fun HangmanState.reduce(event: HangmanEvent): HangmanState {
@@ -78,7 +80,7 @@ class HangmanGameViewModel(
 
             is HangmanEvent.StartGame -> HangmanState.Playing.Input(
                 event.word,
-                hintsCount = hintsCount
+                hintsCount = event.hintsCount
             )
 
             is HangmanEvent.UpdateHints -> when (this) {
@@ -124,10 +126,10 @@ class HangmanGameViewModel(
             is HangmanAction.HintReward -> useHint(state, action.amount)
             HangmanAction.UpdateWord -> HangmanEvent.UpdateWord(nextRandomWord())
             HangmanAction.ShowDescription -> HangmanEvent.UpdateDescription
-            HangmanAction.StartGame -> HangmanEvent.StartGame(nextRandomWord())
+            HangmanAction.StartGame -> HangmanEvent.StartGame(nextRandomWord(), getUserHintsCountUseCase().first())
             HangmanAction.ReviveClicked -> HangmanEvent.ReviveLifeClicked
             HangmanAction.ReviveGranted -> HangmanEvent.ReviveLifeGranted
-            HangmanAction.UseHint -> useHint(state, getUserHintsCountUseCase(Unit).first())
+            HangmanAction.UseHint -> useHint(state, getUserHintsCountUseCase().first())
         }
     }
 
@@ -150,8 +152,8 @@ class HangmanGameViewModel(
         ) {
             return HangmanEvent.CannotUseHints
         }
-        useUserHintsCountUseCase(Unit)
-        val newUserHintsCount = getUserHintsCountUseCase(Unit).first()
+        useUserHintsCountUseCase()
+        val newUserHintsCount = getUserHintsCountUseCase().first()
 
         val letter = (wordSet xor guessedLetters.letters).random()
         val gameStatusEvent = checkGameStatus(state, letter, state.word)
@@ -177,7 +179,7 @@ class HangmanGameViewModel(
             return HangmanEvent.WrongLetterGuessed(letter = letter)
         }
 
-        val newUserHintsCount = getUserHintsCountUseCase(Unit).first()
+        val newUserHintsCount = getUserHintsCountUseCase().first()
 
         return HangmanEvent.RightLetterGuessed(letter, newUserHintsCount)
     }

@@ -64,6 +64,7 @@ fun GameBoard(
             Box(
                 Modifier.fillMaxWidth()
                     .background(MaterialTheme.colorScheme.surface)
+                    .navigationBarsPadding()
             ) {
                 val adMob = LocalAdsManager.current
 

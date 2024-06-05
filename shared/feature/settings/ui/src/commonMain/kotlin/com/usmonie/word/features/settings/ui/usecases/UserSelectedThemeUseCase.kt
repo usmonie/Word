@@ -1,6 +1,7 @@
 package com.usmonie.word.features.settings.ui.usecases
 
 import com.usmonie.core.domain.usecases.FlowUseCase
+import com.usmonie.core.domain.usecases.invoke
 import com.usmonie.core.kit.design.themes.WordThemes
 import com.usmonie.core.kit.design.themes.typographies.ModernChic
 import com.usmonie.core.kit.design.themes.typographies.WordTypography
@@ -19,8 +20,8 @@ internal class UserSelectedThemeUseCaseImpl(
 ) : UserSelectedThemeUseCase {
 
     override fun invoke(input: Unit): Flow<UserSelectedTheme> {
-        return currentThemeUseCase(Unit)
-            .combine(subscriptionStatusUseCase(Unit)) { selectedTheme, subscriptionStatus ->
+        return currentThemeUseCase()
+            .combine(subscriptionStatusUseCase()) { selectedTheme, subscriptionStatus ->
                 val theme = WordThemes.valueOf(selectedTheme.colorsName ?: "RICH_MAROON")
                 val typography = WordTypography.valueOf(selectedTheme.fonts ?: "Modern Chic")
 

@@ -4,8 +4,8 @@ import androidx.compose.runtime.Immutable
 import com.usmonie.compass.viewmodel.StateViewModel
 import com.usmonie.core.domain.usecases.invoke
 import com.usmonie.word.core.analytics.Analytics
-import com.usmonie.word.features.qutoes.domain.usecases.GetNextPhraseUseCase
 import com.usmonie.word.features.games.ui.enigma.EnigmaState.Companion.MIN_LIVES_COUNT
+import com.usmonie.word.features.qutoes.domain.usecases.GetNextPhraseUseCase
 import com.usmonie.word.features.settings.domain.usecase.AddUserHintsCountUseCase
 import com.usmonie.word.features.settings.domain.usecase.GetUserHintsCountUseCase
 import com.usmonie.word.features.settings.domain.usecase.UseUserHintsCountUseCase
@@ -175,7 +175,7 @@ class EnigmaGameViewModel(
             if (state.value is EnigmaState.Game.HintSelection) {
                 val newPhrase =
                     findLetter(action.cellPositionInWord, action.wordPosition, state.value.phrase)
-                val currentHintsCount = getUserHintsCountUseCase(Unit).first()
+                val currentHintsCount = getUserHintsCountUseCase().first()
                 EnigmaEvent.UpdateCurrentPhrase(newPhrase, currentHintsCount)
             } else {
                 EnigmaEvent.UpdateSelectedCell(
@@ -186,8 +186,8 @@ class EnigmaGameViewModel(
         }
 
         EnigmaAction.NextPhrase -> {
-            val phrase = getNextPhraseUseCase(Unit)
-            val hintsCount = getUserHintsCountUseCase(Unit).first()
+            val phrase = getNextPhraseUseCase()
+            val hintsCount = getUserHintsCountUseCase().first()
             EnigmaEvent.NextPhrase(encryptPhrase(phrase, "Joe Liberman"), hintsCount)
         }
 
@@ -195,19 +195,18 @@ class EnigmaGameViewModel(
         EnigmaAction.ReviveGranted -> EnigmaEvent.ReviveGranted
         EnigmaAction.UseHint -> {
             val state = state.value
-            useUserHintsCountUseCase()
             if (state.hintsCount > 0) EnigmaEvent.UseHint else EnigmaEvent.NoHints
         }
 
         EnigmaAction.HintGranted -> {
             addUserHintsCountUseCase(1)
-            val updatedHintsCount = getUserHintsCountUseCase(Unit).first()
+            val updatedHintsCount = getUserHintsCountUseCase().first()
             EnigmaEvent.UpdateHints(updatedHintsCount)
         }
 
         is EnigmaAction.AddHints -> {
             addUserHintsCountUseCase(action.count)
-            val updatedHintsCount = getUserHintsCountUseCase(Unit).first()
+            val updatedHintsCount = getUserHintsCountUseCase().first()
             EnigmaEvent.UpdateHints(updatedHintsCount)
         }
 
@@ -288,7 +287,7 @@ class EnigmaGameViewModel(
         val newPhrase = phrase.encryptedPhrase.toMutableList().apply { set(wordPosition, newWord) }
         encryptedPositionsCount--
         if (encryptedPositionsCount < phrase.encryptedPositionsCount) {
-            useUserHintsCountUseCase(Unit)
+            useUserHintsCountUseCase()
         }
         return EnigmaEncryptedPhrase(
             newPhrase,

@@ -4,6 +4,7 @@ import com.usmonie.compass.viewmodel.ContentState
 import com.usmonie.compass.viewmodel.StateViewModel
 import com.usmonie.compass.viewmodel.updateData
 import com.usmonie.core.domain.tools.fastMap
+import com.usmonie.core.domain.usecases.invoke
 import com.usmonie.word.features.dictionary.domain.usecases.GetAllFavouritesUseCase
 import com.usmonie.word.features.dictionary.domain.usecases.UpdateFavouriteUseCase
 import com.usmonie.word.features.dictionary.ui.models.WordCombinedUi
@@ -19,7 +20,7 @@ internal class FavoritesViewModel(
 
     init {
         viewModelScope.launchSafe {
-            val words = getFavoritesUseCase(Unit).fastMap { it.toUi() }
+            val words = getFavoritesUseCase().fastMap { it.toUi() }
             handleAction(FavoritesAction.LoadedWords(words))
         }
     }

@@ -1,6 +1,7 @@
 package com.usmonie.word.features.settings.ui
 
 import com.usmonie.compass.viewmodel.StateViewModel
+import com.usmonie.core.domain.usecases.invoke
 import com.usmonie.core.kit.design.themes.WordThemes
 import com.usmonie.core.kit.design.themes.typographies.ModernChic
 import com.usmonie.core.kit.design.themes.typographies.WordTypography
@@ -26,12 +27,12 @@ internal class SettingsViewModel(
 
     init {
         viewModelScope.launchSafe {
-            userSelectedThemeUseCase(Unit).collect {
+            userSelectedThemeUseCase().collect {
                 handleAction(SettingsAction.UpdateCurrentTheme(it))
             }
         }
         viewModelScope.launchSafe {
-            subscriptionStatusUseCase(Unit).collect {
+            subscriptionStatusUseCase().collect {
                 handleAction(SettingsAction.UpdateSubscriptionStatus(it))
             }
         }

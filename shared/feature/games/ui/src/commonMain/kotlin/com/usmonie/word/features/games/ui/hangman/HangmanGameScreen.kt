@@ -3,21 +3,15 @@ package com.usmonie.word.features.games.ui.hangman
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -30,20 +24,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.hapticfeedback.HapticFeedbackType
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.usmonie.compass.core.LocalRouteManager
 import com.usmonie.compass.core.ui.ScreenId
 import com.usmonie.compass.viewmodel.StateScreen
-import com.usmonie.core.domain.tools.fastForEach
 import com.usmonie.word.features.ads.ui.LocalAdsManager
 import com.usmonie.word.features.dictionary.ui.models.WordCombinedUi
 import com.usmonie.word.features.games.ui.hangman.HangmanGameScreenFactory.Companion.ID
 import com.usmonie.word.features.games.ui.kit.GameBoard
 import com.usmonie.word.features.games.ui.kit.HangmanGameWon
+import com.usmonie.word.features.games.ui.kit.Keyboard
 import com.usmonie.word.features.games.ui.kit.LivesAmount
 import com.usmonie.word.features.games.ui.kit.ReviveLifeDialog
 import com.usmonie.word.features.games.ui.kit.UseHintButton
@@ -146,8 +137,8 @@ internal class HangmanGameScreen(
 
             AnimatedVisibility(
                 effect is HangmanEffect.StartGame ||
-                        effect is HangmanEffect.RestartGame ||
-                        effect is HangmanEffect.ShowInterstitialAd
+                    effect is HangmanEffect.RestartGame ||
+                    effect is HangmanEffect.ShowInterstitialAd
             ) { adMob.Interstitial() }
         }
     }
@@ -289,51 +280,4 @@ fun WordDisplay(gameState: HangmanState, modifier: Modifier = Modifier) {
         },
         textAlign = TextAlign.Center
     )
-}
-
-@OptIn(ExperimentalLayoutApi::class)
-@Composable
-fun Keyboard(onLetterClick: (Char) -> Unit, guessedLetters: GuessedLetters, modifier: Modifier) {
-    FlowRow(
-        modifier.padding(vertical = 8.dp, horizontal = 8.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
-        verticalArrangement = Arrangement.SpaceEvenly,
-    ) {
-        val density = LocalDensity.current
-        val size by remember(density) { derivedStateOf { 128.dp / density.density } }
-        val letterModifier = Modifier.size(size)
-
-        alphabet.fastForEach { letter ->
-            val wasGuessed = remember(
-                guessedLetters,
-                letter
-            ) { letter.lowercaseChar() in guessedLetters.letters }
-            KeyboardButton(onLetterClick, letter, letterModifier, wasGuessed)
-        }
-    }
-}
-
-@Composable
-private fun KeyboardButton(
-    onLetterClick: (Char) -> Unit,
-    letter: Char,
-    modifier: Modifier,
-    wasGuessed: Boolean
-) {
-    val hapticFeedback = LocalHapticFeedback.current
-    FilledTonalButton(
-        onClick = {
-            hapticFeedback.performHapticFeedback(HapticFeedbackType.TextHandleMove)
-            onLetterClick(letter)
-        },
-        enabled = !wasGuessed,
-        modifier = modifier,
-        contentPadding = PaddingValues(horizontal = 0.dp, vertical = 0.dp)
-    ) {
-        Text(
-            letter.toString(),
-            style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.border(1.dp, MaterialTheme.colorScheme.primary)
-        )
-    }
 }
