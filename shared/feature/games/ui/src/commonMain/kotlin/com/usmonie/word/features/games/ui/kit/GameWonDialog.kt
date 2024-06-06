@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.usmonie.word.features.dictionary.ui.models.WordCombinedUi
-import com.usmonie.word.features.quotes.ui.di.QuoteCard
+import com.usmonie.word.features.quotes.kit.di.QuoteCard
 import org.jetbrains.compose.resources.stringResource
 import word.shared.feature.games.ui.generated.resources.Res
 import word.shared.feature.games.ui.generated.resources.games_enigma_won_title

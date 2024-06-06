@@ -1,11 +1,11 @@
 package com.usmonie.word.features.dictionary.data.usecases
 
+import com.usmonie.core.domain.tools.fastMap
 import com.usmonie.word.features.dictionary.data.db.room.models.SearchHistoryDb
 import com.usmonie.word.features.dictionary.data.db.room.models.WordFavorite
 import com.usmonie.word.features.dictionary.data.repository.RealmWordsRepositoryImpl
 import com.usmonie.word.features.dictionary.data.repository.RoomWordsRepositoryImpl
 import com.usmonie.word.features.dictionary.domain.usecases.MoveToNewDatabaseUseCase
-import wtf.word.core.domain.tools.fastMap
 
 internal class MoveToNewDatabaseUseCaseImpl(
     private val realmWordsRepository: RealmWordsRepositoryImpl,

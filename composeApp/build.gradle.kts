@@ -56,6 +56,7 @@ kotlin {
             implementation(projects.shared.feature.subscriptions.domain)
             implementation(projects.shared.feature.subscriptions.ui)
             implementation(projects.shared.feature.quotes.data)
+            implementation(projects.shared.feature.quotes.domain)
             implementation(projects.shared.feature.quotes.ui)
         }
     }
@@ -74,6 +75,8 @@ android {
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 30
         versionName = "2.0-beta01"
+        resourceConfigurations.addAll(listOf("en"))
+//        androidResources.generateLocaleConfig = true
     }
     packaging {
         resources {

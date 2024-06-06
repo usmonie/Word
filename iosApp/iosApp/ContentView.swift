@@ -16,8 +16,8 @@ struct ComposeView: UIViewControllerRepresentable {
             showRewardedLifeInterstitialAd: {_,_ in },
             showRewardedHintInterstitialAd: {_,_ in },
             showRewardedNewGameInterstitialAd: {_,_ in },
-            getAdMobState: {
-                UiAdMobState(
+            getAdsManagerState: {
+                UiAdsManagerState(
                     isInterstitialReady: false,
                     isRewardLifeReady: false,
                     isRewardHintReady: false,

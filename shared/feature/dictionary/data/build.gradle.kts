@@ -7,7 +7,7 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.room)
     alias(libs.plugins.realm)
-    kotlin("plugin.serialization") version "2.0.0"
+    kotlin("plugin.serialization") version "1.7.0"
 }
 
 android.namespace = "com.usmonie.word.features.dictionary.data"
@@ -48,6 +48,7 @@ kotlin {
         implementation(libs.ktor.client.darwin)
     }
 }
+
 dependencies {
     kspAndroid(libs.room.compiler)
     kspIosX64(libs.room.compiler)

@@ -3,13 +3,13 @@ package com.usmonie.word.features.details.ui.word
 import androidx.compose.runtime.Immutable
 import com.usmonie.compass.viewmodel.StateViewModel
 import com.usmonie.word.features.dictionary.domain.usecases.CheckIsFavoriteUseCase
-import com.usmonie.word.features.dictionary.domain.usecases.UpdateFavouriteUseCase
+import com.usmonie.word.features.dictionary.domain.usecases.UpdateFavouriteWordUseCase
 import com.usmonie.word.features.dictionary.ui.models.WordCombinedUi
 import com.usmonie.word.features.dictionary.ui.models.WordUi
 
 @Immutable
 internal class WordDetailsViewModel(
-    private val favoriteUseCase: UpdateFavouriteUseCase,
+    private val favoriteUseCase: UpdateFavouriteWordUseCase,
     private val checkIsFavoriteUseCase: CheckIsFavoriteUseCase,
     private val wordCombined: WordCombinedUi
 ) : StateViewModel<WordDetailsState, WordDetailsAction, WordDetailsEvent, WordDetailsEffect>(
@@ -31,7 +31,7 @@ internal class WordDetailsViewModel(
 
             is WordDetailsAction.OnFavoriteWord -> {
                 favoriteUseCase(
-                    UpdateFavouriteUseCase.Param(
+                    UpdateFavouriteWordUseCase.Param(
                         action.word.word,
                         action.word.isFavorite
                     )

@@ -10,7 +10,6 @@
 		058557BB273AAA24004C7B11 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 058557BA273AAA24004C7B11 /* Assets.xcassets */; };
 		058557D9273AAEEB004C7B11 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 058557D8273AAEEB004C7B11 /* Preview Assets.xcassets */; };
 		2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2152FB032600AC8F00CF470E /* iOSApp.swift */; };
-		3EFBA910B52EEFAFBD896403 /* Pods_iosApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A3A058BC466FCB35DCED427E /* Pods_iosApp.framework */; };
 		7555FF83242A565900829871 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7555FF82242A565900829871 /* ContentView.swift */; };
 		DA19086A2BE6CCE5003D1F16 /* lato_bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DA19084B2BE6CCE5003D1F16 /* lato_bold.ttf */; };
 		DA19086B2BE6CCE5003D1F16 /* lato_medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DA19084C2BE6CCE5003D1F16 /* lato_medium.ttf */; };
@@ -105,7 +104,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				DA44E3D52C0E480C007051D5 /* YandexMobileAdsPackage in Frameworks */,
-				3EFBA910B52EEFAFBD896403 /* Pods_iosApp.framework in Frameworks */,
 				DA44E3DF2C0E4887007051D5 /* FirebaseInAppMessagingSwift-Beta in Frameworks */,
 				DA44E3D82C0E4828007051D5 /* AmplitudeSwift in Frameworks */,
 				DA44E3DD2C0E4887007051D5 /* FirebaseCrashlytics in Frameworks */,

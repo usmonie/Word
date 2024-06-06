@@ -6,12 +6,12 @@ import com.usmonie.compass.core.ui.Screen
 import com.usmonie.compass.core.ui.ScreenFactory
 import com.usmonie.compass.core.ui.ScreenId
 import com.usmonie.word.features.dictionary.domain.usecases.CheckIsFavoriteUseCase
-import com.usmonie.word.features.dictionary.domain.usecases.UpdateFavouriteUseCase
+import com.usmonie.word.features.dictionary.domain.usecases.UpdateFavouriteWordUseCase
 import com.usmonie.word.features.dictionary.ui.models.WordCombinedUi
 import com.usmonie.word.features.subscriptions.ui.notification.SubscriptionViewModel
 
 class WordDetailsScreenFactory(
-    private val favoriteUseCase: UpdateFavouriteUseCase,
+    private val favoriteUseCase: UpdateFavouriteWordUseCase,
     private val checkIsFavoriteUseCase: CheckIsFavoriteUseCase,
     private val subscriptionViewModel: SubscriptionViewModel
 ) : ScreenFactory {

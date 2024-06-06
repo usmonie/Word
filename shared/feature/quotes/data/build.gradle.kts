@@ -6,7 +6,7 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.room)
     id(libs.plugins.usmonie.multiplatform.domain.get().pluginId)
-    kotlin("plugin.serialization") version "2.0.0"
+    kotlin("plugin.serialization") version "1.7.0"
 }
 
 kotlin {
@@ -26,6 +26,7 @@ kotlin {
 
         implementation(libs.room.runtime)
         implementation(libs.sqlite.bundled)
+        implementation(libs.sqlite)
 
         implementation(libs.realm.base)
         implementation(libs.realm.sync)
@@ -34,6 +35,8 @@ kotlin {
         api(projects.shared.core.tools)
 
         api(projects.shared.feature.quotes.domain)
+
+        implementation("com.squareup.okio:okio:3.9.0")
     }
 
     androidDependencies {
@@ -48,14 +51,17 @@ kotlin {
 
 android {
     namespace = "com.usmonie.word.features.quotes.data"
+    sourceSets["main"].apply {
+        assets.srcDirs("src/commonMain/resources")
+    }
 }
 
 dependencies {
+    kspCommonMainMetadata(libs.room.compiler)
     kspAndroid(libs.room.compiler)
     kspIosX64(libs.room.compiler)
     kspIosArm64(libs.room.compiler)
     kspIosSimulatorArm64(libs.room.compiler)
-    kspCommonMainMetadata(libs.room.compiler)
 }
 
 room {

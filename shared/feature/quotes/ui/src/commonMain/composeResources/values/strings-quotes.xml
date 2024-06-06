@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--Quotes-->
+    <string name="quotes_title">[Q]uotes</string>
+    <string name="quotes_reference_title">[R]eference</string>
+</resources>

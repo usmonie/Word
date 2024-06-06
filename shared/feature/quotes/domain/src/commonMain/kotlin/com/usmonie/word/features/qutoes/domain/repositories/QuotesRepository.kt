@@ -13,4 +13,12 @@ interface QuotesRepository {
     suspend fun getQuotesByCategory(category: String): List<Quote>
 
     suspend fun getQuotesCount(): Long
+
+    suspend fun updateQuote(quote: Quote)
+
+    suspend fun favorite(quote: Quote)
+
+    suspend fun unfavorite(quote: Quote)
+
+    suspend fun getFavorites(): List<Quote>
 }

@@ -12,12 +12,14 @@ import com.usmonie.compass.viewmodel.ScreenState
 import com.usmonie.compass.viewmodel.updateData
 import com.usmonie.core.domain.tools.fastMap
 import com.usmonie.word.features.dashboard.ui.models.SubscriptionSaleStateUi
-import com.usmonie.word.features.subscriptions.ui.notification.SubscriptionAdState
 import com.usmonie.word.features.dictionary.ui.models.WordCombinedUi
+import com.usmonie.word.features.qutoes.domain.models.Quote
 import com.usmonie.word.features.subscription.domain.models.SubscriptionStatus
+import com.usmonie.word.features.subscriptions.ui.notification.SubscriptionAdState
 
 @Immutable
 internal data class DashboardState(
+    val randomQuote: Quote,
     val subscriptionSaleState: SubscriptionSaleStateUi? = null,
     val showSubscriptionAd: Boolean = true,
     val subscriptionStatus: SubscriptionStatus = SubscriptionStatus.None,
@@ -36,6 +38,7 @@ internal data class DashboardState(
         randomWord = randomWord,
         foundWords = foundWords,
         recentSearch = recentSearch,
+        randomQuote = randomQuote
     )
 }
 
@@ -49,10 +52,12 @@ internal sealed class DashboardAction : ScreenAction {
     data object OnBackToMain : DashboardAction()
     data object OnLoadData : DashboardAction()
     data object OnNextRandomWord : DashboardAction()
+    data object OnNextRandomQuote : DashboardAction()
 
     data class OnOpenWord(val wordCombined: WordCombinedUi) : DashboardAction()
     data class OnOpenSearchWord(val wordCombined: WordCombinedUi) : DashboardAction()
     data class OnFavoriteWord(val wordCombined: WordCombinedUi) : DashboardAction()
+    data class OnFavoriteQuote(val quote: Quote) : DashboardAction()
     data class OnInputQuery(val query: TextFieldValue) : DashboardAction()
     data class OnQueryFieldFocusChange(val focused: Boolean) : DashboardAction()
 
@@ -67,7 +72,8 @@ internal sealed class DashboardEvent : ScreenEvent {
         ),
         val randomWord: ContentState<WordCombinedUi>,
         val foundWords: ContentState<List<WordCombinedUi>>,
-        val subscriptionStatus: SubscriptionStatus
+        val subscriptionStatus: SubscriptionStatus,
+        val randomQuote: Quote
     ) : DashboardEvent()
 
     data class OnMenuItemClicked(val menuItem: DashboardMenuItem) : DashboardEvent()
@@ -87,13 +93,21 @@ internal sealed class DashboardEffect : ScreenEffect {
     data class OpenWord(val word: WordCombinedUi) : DashboardEffect()
 }
 
-internal fun DashboardState.toContentEvent(): DashboardEvent.Content {
+internal fun DashboardState.toContentEvent(
+    recentSearch: List<WordCombinedUi> = this.recentSearch,
+    wordOfTheDay: ContentState<WordCombinedUi> = this.wordOfTheDay,
+    randomWord: ContentState<WordCombinedUi> = this.randomWord,
+    foundWords: ContentState<List<WordCombinedUi>> = this.foundWords,
+    subscriptionStatus: SubscriptionStatus = this.subscriptionStatus,
+    randomQuote: Quote = this.randomQuote
+): DashboardEvent.Content {
     return DashboardEvent.Content(
         recentSearch,
         wordOfTheDay,
         randomWord,
         foundWords,
-        subscriptionStatus
+        subscriptionStatus,
+        randomQuote
     )
 }
 
@@ -103,7 +117,8 @@ internal fun DashboardState.toContentEventWithUpdatedWord(word: WordCombinedUi):
         wordOfTheDay.fastUpdate(word),
         randomWord.fastUpdate(word),
         foundWords.fastUpdateList(word),
-        subscriptionStatus
+        subscriptionStatus,
+        randomQuote
     )
 }
 

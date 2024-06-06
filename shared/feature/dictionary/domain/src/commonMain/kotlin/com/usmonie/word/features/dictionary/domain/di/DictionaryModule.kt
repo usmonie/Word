@@ -14,8 +14,8 @@ import com.usmonie.word.features.dictionary.domain.usecases.GetWordOfTheDayUseCa
 import com.usmonie.word.features.dictionary.domain.usecases.GetWordOfTheDayUseCaseImpl
 import com.usmonie.word.features.dictionary.domain.usecases.SearchWordsUseCase
 import com.usmonie.word.features.dictionary.domain.usecases.SearchWordsUseCaseImpl
-import com.usmonie.word.features.dictionary.domain.usecases.UpdateFavouriteUseCase
-import com.usmonie.word.features.dictionary.domain.usecases.UpdateFavouriteUseCaseImpl
+import com.usmonie.word.features.dictionary.domain.usecases.UpdateFavouriteWordUseCase
+import com.usmonie.word.features.dictionary.domain.usecases.UpdateFavouriteWordUseCaseImpl
 import com.usmonie.word.features.dictionary.domain.usecases.UpdateSearchHistory
 import com.usmonie.word.features.dictionary.domain.usecases.UpdateSearchHistoryImpl
 import org.koin.dsl.module
@@ -27,7 +27,7 @@ val dictionaryDomainUseCase = module {
     factory<GetAllFavouritesUseCase> { GetAllFavouritesUseCaseImpl(get()) }
     factory<GetRandomWordUseCase> { GetRandomWordUseCaseImpl(get()) }
     factory<GetWordOfTheDayUseCase> { GetWordOfTheDayUseCaseImpl(get()) }
-    factory<UpdateFavouriteUseCase> { UpdateFavouriteUseCaseImpl(get()) }
+    factory<UpdateFavouriteWordUseCase> { UpdateFavouriteWordUseCaseImpl(get()) }
     factory<SearchWordsUseCase> { SearchWordsUseCaseImpl(get()) }
     factory<UpdateSearchHistory> { UpdateSearchHistoryImpl(get()) }
 }

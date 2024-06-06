@@ -6,13 +6,13 @@ import com.usmonie.compass.viewmodel.updateData
 import com.usmonie.core.domain.tools.fastMap
 import com.usmonie.core.domain.usecases.invoke
 import com.usmonie.word.features.dictionary.domain.usecases.GetAllFavouritesUseCase
-import com.usmonie.word.features.dictionary.domain.usecases.UpdateFavouriteUseCase
+import com.usmonie.word.features.dictionary.domain.usecases.UpdateFavouriteWordUseCase
 import com.usmonie.word.features.dictionary.ui.models.WordCombinedUi
 import com.usmonie.word.features.dictionary.ui.models.toUi
 
 internal class FavoritesViewModel(
     private val getFavoritesUseCase: GetAllFavouritesUseCase,
-    private val updateFavouriteUseCase: UpdateFavouriteUseCase
+    private val updateFavouriteWordUseCase: UpdateFavouriteWordUseCase
 ) :
     StateViewModel<FavoritesState, FavoritesAction, FavoritesEvent, FavoritesEffect>(
         FavoritesState(ContentState.Loading())
@@ -47,8 +47,8 @@ internal class FavoritesViewModel(
     override suspend fun processAction(action: FavoritesAction): FavoritesEvent {
         return when (action) {
             is FavoritesAction.FavoriteWord -> {
-                updateFavouriteUseCase(
-                    UpdateFavouriteUseCase.Param(
+                updateFavouriteWordUseCase(
+                    UpdateFavouriteWordUseCase.Param(
                         action.wordCombined.word,
                         action.wordCombined.isFavorite
                     )

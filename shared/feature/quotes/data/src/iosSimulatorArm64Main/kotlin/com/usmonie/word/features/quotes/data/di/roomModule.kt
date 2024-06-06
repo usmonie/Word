@@ -2,6 +2,7 @@ package com.usmonie.word.features.quotes.data.di
 
 import androidx.room.Room
 import com.usmonie.word.features.quotes.data.QuotesDatabase
+import com.usmonie.word.features.quotes.data.instantiateImpl
 import org.koin.core.module.Module
 import org.koin.dsl.module
 import platform.Foundation.NSHomeDirectory

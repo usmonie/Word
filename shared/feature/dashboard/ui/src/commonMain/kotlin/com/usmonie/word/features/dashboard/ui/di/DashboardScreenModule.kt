@@ -14,8 +14,7 @@ val dashboardUiModule = module {
             get(),
             get(),
             openWord,
-            openMenuItem,
-            get()
+            openMenuItem
         )
     }
 }

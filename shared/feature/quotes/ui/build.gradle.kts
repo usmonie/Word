@@ -30,14 +30,12 @@ commonDependencies {
     implementation(projects.shared.core.tools)
 
     implementation(projects.shared.feature.ads.ui)
-    implementation(projects.shared.feature.dictionary.domain)
-    implementation(projects.shared.feature.dictionary.ui)
 
     implementation(projects.shared.feature.subscriptions.domain)
     implementation(projects.shared.feature.subscriptions.ui)
 
-    implementation(projects.shared.feature.settings.domain)
-    implementation(projects.shared.feature.settings.ui)
+    implementation(projects.shared.feature.quotes.domain)
+    implementation(projects.shared.feature.quotes.kit)
 
     implementation(libs.compose.material3.jetbrains)
     implementation(compose.dependencies.materialIconsExtended)
@@ -51,21 +49,6 @@ kotlin {
         iosArm64(),
         iosSimulatorArm64()
     )
-}
-
-android {
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
-    namespace = "com.usmonie.word.features.quotesui"
-
-    sourceSets["main"].resources.srcDirs("src/commonMain/resources")
-
-    defaultConfig {
-        minSdk = libs.versions.android.minSdk.get().toInt()
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
 }
 
 composeCompiler {

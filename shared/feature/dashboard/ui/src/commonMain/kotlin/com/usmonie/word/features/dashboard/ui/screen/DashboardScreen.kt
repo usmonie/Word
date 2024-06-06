@@ -36,6 +36,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import com.usmonie.compass.core.ui.ScreenId
 import com.usmonie.compass.viewmodel.ContentState
@@ -49,6 +50,7 @@ import com.usmonie.word.features.dictionary.ui.WordCardLarge
 import com.usmonie.word.features.dictionary.ui.WordCardSmall
 import com.usmonie.word.features.dictionary.ui.WordOfTheDayState
 import com.usmonie.word.features.dictionary.ui.models.WordCombinedUi
+import com.usmonie.word.features.quotes.kit.di.QuoteCard
 import com.usmonie.word.features.subscription.domain.models.SubscriptionStatus
 import com.usmonie.word.features.subscriptions.ui.notification.SubscriptionPage
 import com.usmonie.word.features.subscriptions.ui.notification.SubscriptionScreenState
@@ -105,20 +107,12 @@ internal class DashboardScreen(
                 null
             },
             getShowBackButton = { state.searchFieldState.searchFieldValue.text.isNotEmpty() },
-            onBackClicked = viewModel::backToMain,
+            onBackClicked = viewModel::onBack,
             hasSearchFieldFocus = { state.searchFieldState.hasFocus },
             updateSearchFieldFocus = viewModel::queryFieldFocusChanged,
         ) { insets ->
             val newInsets = remember(insets, state.searchFieldState) {
-                insets.add(
-                    top =16.dp /*if (state.searchFieldState.hasFocus &&
-                        state.searchFieldState.searchFieldValue.text.isBlank()
-                    ) {
-                        16.dp
-                    } else {
-                        0.dp
-                    },*/
-                )
+                insets.add(top = 16.dp)
             }
 
             LazyColumn(
@@ -164,6 +158,15 @@ internal class DashboardScreen(
                 SearchHistoryState(state, saleSubscriptionExpanded)
             }
         }
+
+        item {
+            QuoteCard(
+                AnnotatedString(state.randomQuote.text),
+                state.randomQuote.author,
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
+            )
+        }
+
 
         item(
             key = DashboardMenuItem.FAVORITES,

@@ -1,4 +1,3 @@
-package com.usmonie.word.features.dictionary.data.di
 
 import androidx.room.Room
 import com.usmonie.word.features.dictionary.data.db.room.DictionaryDatabase

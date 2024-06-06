@@ -8,6 +8,7 @@ import androidx.room.PrimaryKey
 data class QuoteDb(
     val text: String,
     val author: String,
+    val favorite: Boolean
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0L
