@@ -6,6 +6,7 @@ import com.usmonie.compass.viewmodel.ScreenEffect
 import com.usmonie.compass.viewmodel.ScreenEvent
 import com.usmonie.compass.viewmodel.ScreenState
 import com.usmonie.word.features.games.ui.hangman.GuessedLetters
+import com.usmonie.word.features.qutoes.domain.models.Quote
 
 sealed class EnigmaState(
     open val phrase: EnigmaEncryptedPhrase,
@@ -19,7 +20,7 @@ sealed class EnigmaState(
 
     @Immutable
     class Loading : EnigmaState(
-        EnigmaEncryptedPhrase(listOf(), "", "", 0, mapOf()),
+        EnigmaEncryptedPhrase(listOf(), Quote("", "", "", emptyList(), false, false), 0, mapOf()),
         MAX_LIVES_COUNT,
         hintsCount = 0,
         guessedLetters = GuessedLetters(setOf())

@@ -1,7 +1,7 @@
 package com.usmonie.word.features.games.ui.di
 
-import com.usmonie.word.features.dictionary.domain.di.dictionaryDomainUseCase
-import com.usmonie.word.features.dictionary.domain.di.gamesDomainUseCase
+import com.usmonie.word.features.games.domain.di.dictionaryDomainUseCase
+import com.usmonie.word.features.games.domain.gamesDomainUseCase
 import com.usmonie.word.features.games.ui.GamesScreenFactory
 import com.usmonie.word.features.games.ui.enigma.EnigmaGameScreenFactory
 import com.usmonie.word.features.games.ui.enigma.EnigmaGameViewModel

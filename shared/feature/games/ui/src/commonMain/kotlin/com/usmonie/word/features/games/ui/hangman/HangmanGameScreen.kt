@@ -30,7 +30,7 @@ import com.usmonie.compass.core.LocalRouteManager
 import com.usmonie.compass.core.ui.ScreenId
 import com.usmonie.compass.viewmodel.StateScreen
 import com.usmonie.word.features.ads.ui.LocalAdsManager
-import com.usmonie.word.features.dictionary.ui.models.WordCombinedUi
+import com.usmonie.word.features.games.ui.models.WordCombinedUi
 import com.usmonie.word.features.games.ui.hangman.HangmanGameScreenFactory.Companion.ID
 import com.usmonie.word.features.games.ui.kit.GameBoard
 import com.usmonie.word.features.games.ui.kit.HangmanGameWon

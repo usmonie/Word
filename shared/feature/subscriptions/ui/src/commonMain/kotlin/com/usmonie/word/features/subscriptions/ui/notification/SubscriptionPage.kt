@@ -7,7 +7,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import com.usmonie.word.features.dictionary.ui.modifier
+import com.usmonie.word.features.games.ui.modifier
 
 @Composable
 fun SubscriptionPage(viewModel: SubscriptionViewModel) {

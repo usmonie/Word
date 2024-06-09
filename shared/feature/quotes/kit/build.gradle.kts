@@ -15,6 +15,7 @@ kotlin {
 
 commonDependencies {
     implementation(projects.shared.core.kit)
+    implementation(projects.shared.feature.quotes.domain)
 }
 
 kotlin {

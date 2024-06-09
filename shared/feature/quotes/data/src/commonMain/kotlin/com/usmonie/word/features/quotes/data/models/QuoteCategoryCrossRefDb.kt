@@ -5,9 +5,9 @@ import androidx.room.Entity
 import androidx.room.Junction
 import androidx.room.Relation
 
-@Entity(primaryKeys = ["id", "category"])
+@Entity(primaryKeys = ["primaryKey", "category"])
 data class QuoteCategoryCrossRefDb(
-    val id: Long,
+    val primaryKey: String,
     val category: String
 )
 
@@ -15,7 +15,7 @@ class QuoteWithCategories(
     @Embedded
     val quote: QuoteDb,
     @Relation(
-        parentColumn = "id",
+        parentColumn = "primaryKey",
         entityColumn = "category",
         associateBy = Junction(QuoteCategoryCrossRefDb::class)
     )
@@ -26,7 +26,7 @@ class CategoryWithQuotes(
     @Embedded
     val category: Category,
     @Relation(
-        parentColumn = "id",
+        parentColumn = "primaryKey",
         entityColumn = "category",
         associateBy = Junction(QuoteCategoryCrossRefDb::class)
     )

@@ -18,7 +18,7 @@ import com.usmonie.word.features.qutoes.domain.models.Quote
 @Dao
 internal abstract class QuotesDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract suspend fun insert(quote: QuoteDb): Long
+    abstract suspend fun insert(quote: QuoteDb)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract suspend fun insert(quotes: List<QuoteDb>)
@@ -35,27 +35,32 @@ internal abstract class QuotesDao {
     @Transaction
     open suspend fun insertQuotes(quotes: List<Quote>) {
         quotes.fastForEach { quote ->
-            val quoteId = insert(QuoteDb(quote.text, quote.author, quote.favorite))
+            val quoteDb = QuoteDb(quote.text, quote.author, quote.favorite, false)
+            insert(quoteDb)
             quote.categories.fastForEach {
                 val category = Category(it)
                 insertCategory(category)
-                insertQuoteReference(QuoteCategoryCrossRefDb(quoteId, it))
+                insertQuoteReference(QuoteCategoryCrossRefDb(quoteDb.primaryKey, it))
             }
         }
     }
 
     @Transaction
     open suspend fun insertQuote(quote: Quote) {
-        val quoteId = insert(QuoteDb(quote.text, quote.author, quote.favorite))
+        val quoteDb = QuoteDb(quote.text, quote.author, quote.favorite, false)
+        insert(quoteDb)
         quote.categories.fastForEach {
             val category = Category(it)
             insertCategory(category)
-            insertQuoteReference(QuoteCategoryCrossRefDb(quoteId, it))
+            insertQuoteReference(QuoteCategoryCrossRefDb(primaryKey = quoteDb.primaryKey, it))
         }
     }
 
-    @Query("SELECT * FROM quotes ORDER BY RANDOM() LIMIT 1")
-    abstract suspend fun randomQuote(): QuoteWithCategories
+    @Query("SELECT * FROM quotes LIMIT 1 OFFSET :offset")
+    abstract suspend fun randomQuote(offset: Int): QuoteWithCategories
+
+    @Query("SELECT * FROM quotes WHERE wasPlayed = false LIMIT 1 OFFSET :offset")
+    abstract suspend fun randomQuoteWasntPlayed(offset: Int): QuoteWithCategories
 
     @Transaction
     @Query("SELECT * FROM quotes WHERE author = :author")
@@ -71,10 +76,20 @@ internal abstract class QuotesDao {
     @Query(
         """
             SELECT * FROM quotes 
-            INNER JOIN favorite_quotes_table ON quotes.id = favorite_quotes_table.quoteId
+            INNER JOIN favorite_quotes_table ON quotes.primaryKey = favorite_quotes_table.quotePrimaryKey
         """
     )
     abstract suspend fun getFavorites(): List<QuoteWithCategories>
+
+    @Transaction
+    @Query(
+        """
+            SELECT * FROM quotes 
+            INNER JOIN favorite_quotes_table ON quotes.primaryKey = favorite_quotes_table.quotePrimaryKey
+            ORDER BY date DESC
+        """
+    )
+    abstract suspend fun getFavoritesByCategories(): List<QuoteWithCategories>
 
     @Query("SELECT COUNT(text) FROM quotes")
     abstract suspend fun getRowCount(): Long

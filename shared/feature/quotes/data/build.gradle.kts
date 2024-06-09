@@ -6,7 +6,7 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.room)
     id(libs.plugins.usmonie.multiplatform.domain.get().pluginId)
-    kotlin("plugin.serialization") version "1.7.0"
+    kotlin("plugin.serialization") version "2.0.0"
 }
 
 kotlin {
@@ -31,12 +31,18 @@ kotlin {
         implementation(libs.realm.base)
         implementation(libs.realm.sync)
 
+        implementation(libs.kotlinx.io.core)
+        implementation(libs.kotlinx.io.bytestring)
+
         api(projects.shared.core.domain)
         api(projects.shared.core.tools)
 
         api(projects.shared.feature.quotes.domain)
+        api(projects.shared.feature.games.domain)
 
-        implementation("com.squareup.okio:okio:3.9.0")
+        api(libs.datastore)
+        api(libs.datastore.core)
+        api(libs.datastore.preferences)
     }
 
     androidDependencies {
@@ -52,7 +58,7 @@ kotlin {
 android {
     namespace = "com.usmonie.word.features.quotes.data"
     sourceSets["main"].apply {
-        assets.srcDirs("src/commonMain/resources")
+        assets.srcDirs("src/androidMain/resources")
     }
 }
 

@@ -1,5 +1,5 @@
 package com.usmonie.word.features.qutoes.domain.usecases
 
-import com.usmonie.core.domain.usecases.CoroutineUseCase
+import com.usmonie.core.domain.usecases.FlowUseCase
 
-interface InitiateQuotesUseCase : CoroutineUseCase<Unit, Unit>
+interface InitiateQuotesUseCase : FlowUseCase<Unit, Boolean>

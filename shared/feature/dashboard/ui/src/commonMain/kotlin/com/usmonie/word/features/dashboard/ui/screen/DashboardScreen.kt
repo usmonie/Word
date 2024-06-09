@@ -34,9 +34,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import com.usmonie.compass.core.ui.ScreenId
 import com.usmonie.compass.viewmodel.ContentState
@@ -45,16 +45,17 @@ import com.usmonie.core.kit.composables.base.buttons.TextButton
 import com.usmonie.core.kit.composables.word.HeaderWordScaffold
 import com.usmonie.core.kit.tools.add
 import com.usmonie.word.features.ads.ui.LocalAdsManager
-import com.usmonie.word.features.dictionary.ui.RandomWordExpandedState
-import com.usmonie.word.features.dictionary.ui.WordCardLarge
-import com.usmonie.word.features.dictionary.ui.WordCardSmall
-import com.usmonie.word.features.dictionary.ui.WordOfTheDayState
-import com.usmonie.word.features.dictionary.ui.models.WordCombinedUi
-import com.usmonie.word.features.quotes.kit.di.QuoteCard
+import com.usmonie.word.features.games.ui.RandomWordExpandedState
+import com.usmonie.word.features.games.ui.WordCardLarge
+import com.usmonie.word.features.games.ui.WordCardSmall
+import com.usmonie.word.features.games.ui.WordOfTheDayState
+import com.usmonie.word.features.games.ui.models.WordCombinedUi
+import com.usmonie.word.features.quotes.kit.di.QuoteLargeCard
 import com.usmonie.word.features.subscription.domain.models.SubscriptionStatus
 import com.usmonie.word.features.subscriptions.ui.notification.SubscriptionPage
 import com.usmonie.word.features.subscriptions.ui.notification.SubscriptionScreenState
 import com.usmonie.word.features.subscriptions.ui.notification.SubscriptionViewModel
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import word.shared.feature.dashboard.ui.generated.resources.Res
 import word.shared.feature.dashboard.ui.generated.resources.dashboard_search_history_title
@@ -83,8 +84,14 @@ internal class DashboardScreen(
         val subscriptionAdState by subscriptionsViewModel.state.collectAsState()
         val searchPlaceholder = stringResource(Res.string.search_title)
 
-        DashboardEffect(onOpenWord, openDashboardMenuItem, viewModel)
+        val coroutineScope = rememberCoroutineScope()
         val lazyListState = rememberLazyListState()
+        DashboardEffect(
+            { coroutineScope.launch { lazyListState.scrollToItem(0) } },
+            onOpenWord,
+            openDashboardMenuItem,
+            viewModel
+        )
 
         HeaderWordScaffold(
             query = { state.searchFieldState.searchFieldValue },
@@ -129,10 +136,7 @@ internal class DashboardScreen(
 
                     is ContentState.Success -> {
                         if (state.searchFieldState.searchFieldValue.text.isBlank()) {
-                            defaultState(
-                                state,
-                                false,
-                            )
+                            defaultState(state, false)
                         } else {
                             items(foundWordState.data) {
                                 WordCardLarge(
@@ -159,12 +163,15 @@ internal class DashboardScreen(
             }
         }
 
-        item {
-            QuoteCard(
-                AnnotatedString(state.randomQuote.text),
-                state.randomQuote.author,
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
-            )
+        if (state.randomQuote != null) {
+            item {
+                QuoteLargeCard(
+                    state.randomQuote,
+                    viewModel::favoriteQuote,
+                    viewModel::nextRandomQuote,
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+                )
+            }
         }
 
 
@@ -298,6 +305,7 @@ internal class DashboardScreen(
 
 @Composable
 internal fun DashboardEffect(
+    onInit: () -> Unit,
     onOpenWord: (wordCombined: WordCombinedUi) -> Unit,
     openDashboardMenuItem: (DashboardMenuItem) -> Unit,
     viewModel: DashboardViewModel
@@ -307,6 +315,7 @@ internal fun DashboardEffect(
         when (val e = effect) {
             is DashboardEffect.OnMenuItemClicked -> openDashboardMenuItem(e.menuItem)
             is DashboardEffect.OpenWord -> onOpenWord(e.word)
+            is DashboardEffect.Init -> onInit()
             null -> Unit
         }
     }

@@ -7,17 +7,18 @@ import com.usmonie.compass.viewmodel.ContentState
 import com.usmonie.compass.viewmodel.StateViewModel
 import com.usmonie.core.domain.tools.fastMap
 import com.usmonie.core.domain.usecases.invoke
-import com.usmonie.word.features.dictionary.domain.usecases.GetRandomWordUseCase
-import com.usmonie.word.features.dictionary.domain.usecases.GetSearchHistoryUseCase
-import com.usmonie.word.features.dictionary.domain.usecases.GetWordOfTheDayUseCase
-import com.usmonie.word.features.dictionary.domain.usecases.MoveToNewDatabaseUseCase
-import com.usmonie.word.features.dictionary.domain.usecases.SearchWordsUseCase
-import com.usmonie.word.features.dictionary.domain.usecases.UpdateFavouriteWordUseCase
-import com.usmonie.word.features.dictionary.domain.usecases.UpdateSearchHistory
-import com.usmonie.word.features.dictionary.ui.models.WordCombinedUi
-import com.usmonie.word.features.dictionary.ui.models.toUi
+import com.usmonie.word.features.games.domain.usecases.GetRandomWordUseCase
+import com.usmonie.word.features.games.domain.usecases.GetSearchHistoryUseCase
+import com.usmonie.word.features.games.domain.usecases.GetWordOfTheDayUseCase
+import com.usmonie.word.features.games.domain.usecases.MoveToNewDatabaseUseCase
+import com.usmonie.word.features.games.domain.usecases.SearchWordsUseCase
+import com.usmonie.word.features.games.domain.usecases.UpdateFavouriteWordUseCase
+import com.usmonie.word.features.games.domain.usecases.UpdateSearchHistory
+import com.usmonie.word.features.games.ui.models.WordCombinedUi
+import com.usmonie.word.features.games.ui.models.toUi
 import com.usmonie.word.features.qutoes.domain.models.Quote
 import com.usmonie.word.features.qutoes.domain.usecases.GetRandomQuoteUseCase
+import com.usmonie.word.features.qutoes.domain.usecases.InitiateQuotesUseCase
 import com.usmonie.word.features.qutoes.domain.usecases.UpdateFavoriteQuoteUseCase
 import com.usmonie.word.features.subscription.domain.models.SubscriptionStatus
 import kotlinx.coroutines.Dispatchers
@@ -39,18 +40,24 @@ internal class DashboardViewModel(
     private val updateFavouriteWordUseCase: UpdateFavouriteWordUseCase,
     private val moveToNewDatabaseUseCase: MoveToNewDatabaseUseCase,
     private val getRandomQuoteUseCase: GetRandomQuoteUseCase,
-    private val updateFavouriteQuoteUseCase: UpdateFavoriteQuoteUseCase
+    private val updateFavouriteQuoteUseCase: UpdateFavoriteQuoteUseCase,
+    private val initiateQuotesUseCase: InitiateQuotesUseCase
 //    private val analytics: Analytics
 ) : StateViewModel<DashboardState, DashboardAction, DashboardEvent, DashboardEffect>(
-    DashboardState(
-        Quote(-1, "", "", emptyList(), false)
-    )
+    DashboardState()
 ) {
 
     private var searchJob: Job = Job()
 
     init {
-        tryAgain()
+        init()
+        viewModelScope.launchSafe {
+            initiateQuotesUseCase().collect { initiated ->
+                if (initiated && state.value.randomQuote == null) {
+                    handleAction(DashboardAction.OnNextRandomQuote)
+                }
+            }
+        }
         viewModelScope.launchSafe {
             moveToNewDatabaseUseCase()
         }
@@ -60,6 +67,7 @@ internal class DashboardViewModel(
         DashboardEvent.BackToMain -> copy(searchFieldState = SearchFieldState())
         DashboardEvent.ContentLoading -> copy(randomWord = ContentState.Loading())
         is DashboardEvent.Content -> event.toState()
+        is DashboardEvent.Init -> event.toState()
 
         is DashboardEvent.InputQuery -> copy(
             searchFieldState = searchFieldState.copy(searchFieldValue = event.query)
@@ -100,15 +108,10 @@ internal class DashboardViewModel(
             }
 
             is DashboardAction.OnInputQuery -> search(action.query)
-
             is DashboardAction.OnMenuItemClicked -> DashboardEvent.OnMenuItemClicked(action.menuItem)
-
             is DashboardAction.OnOpenWord -> DashboardEvent.OpenWord(action.wordCombined)
-
             is DashboardAction.OnFavoriteWord -> updateFavourite(action.wordCombined, state.value)
-
             is DashboardAction.OnQueryFieldFocusChange -> DashboardEvent.QueryFocusChanged(action.focused)
-
             is DashboardAction.OnOpenSearchWord -> {
                 updateSearchHistory(UpdateSearchHistory.Param(action.wordCombined.word))
                 DashboardEvent.OpenWord(action.wordCombined)
@@ -119,7 +122,12 @@ internal class DashboardViewModel(
                 state.value.toContentEvent(randomQuote = action.quote.copy(favorite = !action.quote.favorite))
             }
             DashboardAction.OnNextRandomQuote -> {
-                state.value.toContentEvent(randomQuote = getRandomQuoteUseCase())
+                state.value.toContentEvent(randomQuote = getRandomQuote())
+            }
+
+            DashboardAction.Init -> {
+                loadData(true)
+                DashboardEvent.ContentLoading
             }
         }
     }
@@ -128,11 +136,12 @@ internal class DashboardViewModel(
         return when (event) {
             is DashboardEvent.OnMenuItemClicked -> DashboardEffect.OnMenuItemClicked(event.menuItem)
             is DashboardEvent.OpenWord -> DashboardEffect.OpenWord(event.word)
+            is DashboardEvent.Init -> DashboardEffect.Init()
             else -> null
         }
     }
 
-    private suspend fun loadData() {
+    private suspend fun loadData(initial: Boolean = false) {
         viewModelScope.launch(Dispatchers.IO) {
             val searchHistory = searchHistoryUseCase(
                 GetSearchHistoryUseCase.Param(
@@ -143,16 +152,34 @@ internal class DashboardViewModel(
 
             val randomWord = newRandomWord()
 
+            val quote = getRandomQuote()
             handleState(
-                DashboardEvent.Content(
-                    searchHistory,
-                    randomWord = randomWord,
-                    foundWords = state.value.foundWords,
-                    subscriptionStatus = state.value.subscriptionStatus,
-                    randomQuote = getRandomQuoteUseCase()
-                )
+                if (initial) {
+                    DashboardEvent.Init(
+                        searchHistory,
+                        randomWord = randomWord,
+                        foundWords = state.value.foundWords,
+                        subscriptionStatus = state.value.subscriptionStatus,
+                        randomQuote = quote
+                    )
+                } else {
+                    DashboardEvent.Content(
+                        searchHistory,
+                        randomWord = randomWord,
+                        foundWords = state.value.foundWords,
+                        subscriptionStatus = state.value.subscriptionStatus,
+                        randomQuote = quote
+                    )
+                }
             )
         }
+    }
+
+    private suspend fun DashboardViewModel.getRandomQuote() = try {
+        getRandomQuoteUseCase()
+    } catch (e: Exception) {
+        e.printStackTrace()
+        null
     }
 
     private suspend fun newRandomWord(): ContentState<WordCombinedUi> {
@@ -175,7 +202,6 @@ internal class DashboardViewModel(
         }
         searchJob.cancel()
         if (query.text.isBlank()) {
-//            updateData()
             return DashboardEvent.InputQuery(query)
         }
 
@@ -245,6 +271,7 @@ internal fun DashboardViewModel.openSearchWord(wordCombined: WordCombinedUi) =
 internal fun DashboardViewModel.favoriteWord(wordCombined: WordCombinedUi) =
     handleAction(DashboardAction.OnFavoriteWord(wordCombined))
 
+internal fun DashboardViewModel.init() = handleAction(DashboardAction.Init)
 internal fun DashboardViewModel.tryAgain() = handleAction(DashboardAction.OnLoadData)
 internal fun DashboardViewModel.nextRandomWord() = handleAction(DashboardAction.OnNextRandomWord)
 

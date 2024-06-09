@@ -31,6 +31,7 @@ fun Keyboard(onLetterClick: (Char) -> Unit, guessedLetters: GuessedLetters, modi
         modifier.padding(vertical = 8.dp, horizontal = 8.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
         verticalArrangement = Arrangement.SpaceEvenly,
+        maxItemsInEachRow = 10
     ) {
         val density = LocalDensity.current
         val size by remember(density) { derivedStateOf { 128.dp / density.density } }

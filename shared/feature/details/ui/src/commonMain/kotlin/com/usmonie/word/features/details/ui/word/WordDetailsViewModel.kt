@@ -2,10 +2,10 @@ package com.usmonie.word.features.details.ui.word
 
 import androidx.compose.runtime.Immutable
 import com.usmonie.compass.viewmodel.StateViewModel
-import com.usmonie.word.features.dictionary.domain.usecases.CheckIsFavoriteUseCase
-import com.usmonie.word.features.dictionary.domain.usecases.UpdateFavouriteWordUseCase
-import com.usmonie.word.features.dictionary.ui.models.WordCombinedUi
-import com.usmonie.word.features.dictionary.ui.models.WordUi
+import com.usmonie.word.features.games.domain.usecases.CheckIsFavoriteUseCase
+import com.usmonie.word.features.games.domain.usecases.UpdateFavouriteWordUseCase
+import com.usmonie.word.features.games.ui.models.WordCombinedUi
+import com.usmonie.word.features.games.ui.models.WordUi
 
 @Immutable
 internal class WordDetailsViewModel(

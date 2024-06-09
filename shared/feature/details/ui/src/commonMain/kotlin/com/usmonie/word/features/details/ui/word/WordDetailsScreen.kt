@@ -31,7 +31,7 @@ import com.usmonie.word.features.ads.ui.LocalAdsManager
 import com.usmonie.word.features.details.ui.mobile.WordDetailsContent
 import com.usmonie.word.features.details.ui.pos.PosDetailsScreenFactory
 import com.usmonie.word.features.details.ui.word.WordDetailsScreenFactory.Companion.ID
-import com.usmonie.word.features.dictionary.ui.IconFavoriteButton
+import com.usmonie.word.features.games.ui.IconFavoriteButton
 import com.usmonie.word.features.subscriptions.ui.notification.SubscriptionPage
 import com.usmonie.word.features.subscriptions.ui.notification.SubscriptionScreenState
 import com.usmonie.word.features.subscriptions.ui.notification.SubscriptionViewModel

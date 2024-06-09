@@ -28,9 +28,9 @@ import androidx.compose.ui.unit.dp
 import com.usmonie.core.kit.tools.add
 import com.usmonie.word.features.details.ui.word.WordDetailsViewModel
 import com.usmonie.word.features.details.ui.word.openPos
-import com.usmonie.word.features.dictionary.ui.Pronunciations
-import com.usmonie.word.features.dictionary.ui.Word
-import com.usmonie.word.features.dictionary.ui.WordDetailed
+import com.usmonie.word.features.games.ui.Pronunciations
+import com.usmonie.word.features.games.ui.Word
+import com.usmonie.word.features.games.ui.WordDetailed
 
 private const val ETYMOLOGY_MAX_LINES = 2
 

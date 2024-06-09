@@ -14,9 +14,9 @@ import com.usmonie.word.features.dashboard.ui.screen.DashboardScreenFactory
 import com.usmonie.word.features.details.ui.di.wordDetailsUiModule
 import com.usmonie.word.features.details.ui.pos.PosDetailsScreenFactory
 import com.usmonie.word.features.details.ui.word.WordDetailsScreenFactory
-import com.usmonie.word.features.dictionary.data.di.dictionaryDataModule
-import com.usmonie.word.features.dictionary.domain.di.dictionaryDomainUseCase
-import com.usmonie.word.features.dictionary.ui.models.WordCombinedUi
+import com.usmonie.word.features.games.data.di.dictionaryDataModule
+import com.usmonie.word.features.games.domain.di.dictionaryDomainUseCase
+import com.usmonie.word.features.games.ui.models.WordCombinedUi
 import com.usmonie.word.features.favorites.ui.FavoritesScreenFactory
 import com.usmonie.word.features.favorites.ui.di.favoritesUiModule
 import com.usmonie.word.features.games.ui.GamesScreenFactory

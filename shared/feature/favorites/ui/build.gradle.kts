@@ -33,6 +33,9 @@ commonDependencies {
     implementation(projects.shared.feature.dictionary.domain)
     implementation(projects.shared.feature.dictionary.ui)
 
+    implementation(projects.shared.feature.quotes.domain)
+    implementation(projects.shared.feature.quotes.kit)
+
     implementation(projects.shared.feature.subscriptions.domain)
     implementation(projects.shared.feature.subscriptions.ui)
 

@@ -6,7 +6,7 @@ import com.usmonie.compass.core.ui.Screen
 import com.usmonie.compass.core.ui.ScreenFactory
 import com.usmonie.compass.core.ui.ScreenId
 import com.usmonie.word.features.subscriptions.ui.notification.SubscriptionViewModel
-import com.usmonie.word.features.dictionary.ui.models.WordUi
+import com.usmonie.word.features.games.ui.models.WordUi
 import com.usmonie.word.features.subscription.domain.usecase.SubscribeUseCase
 import com.usmonie.word.features.subscription.domain.usecase.SubscriptionStatusUseCase
 

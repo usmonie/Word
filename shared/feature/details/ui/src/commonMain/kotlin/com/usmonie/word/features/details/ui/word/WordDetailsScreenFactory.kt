@@ -5,9 +5,9 @@ import com.usmonie.compass.core.Extra
 import com.usmonie.compass.core.ui.Screen
 import com.usmonie.compass.core.ui.ScreenFactory
 import com.usmonie.compass.core.ui.ScreenId
-import com.usmonie.word.features.dictionary.domain.usecases.CheckIsFavoriteUseCase
-import com.usmonie.word.features.dictionary.domain.usecases.UpdateFavouriteWordUseCase
-import com.usmonie.word.features.dictionary.ui.models.WordCombinedUi
+import com.usmonie.word.features.games.domain.usecases.CheckIsFavoriteUseCase
+import com.usmonie.word.features.games.domain.usecases.UpdateFavouriteWordUseCase
+import com.usmonie.word.features.games.ui.models.WordCombinedUi
 import com.usmonie.word.features.subscriptions.ui.notification.SubscriptionViewModel
 
 class WordDetailsScreenFactory(

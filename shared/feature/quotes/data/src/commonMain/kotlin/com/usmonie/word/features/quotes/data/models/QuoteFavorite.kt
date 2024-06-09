@@ -5,12 +5,11 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.Relation
 import kotlinx.datetime.Clock
-
 @Entity(tableName = "favorite_quotes_table")
 internal data class QuoteFavorite(
     @PrimaryKey
-    val quoteId: Long,
-    val date: Long = Clock.System.now().epochSeconds
+    val quotePrimaryKey: String,
+    val date: Long = Clock.System.now().toEpochMilliseconds()
 )
 
 internal data class FavoriteQuotes(
@@ -18,14 +17,14 @@ internal data class FavoriteQuotes(
     val quoteFavorite: QuoteFavorite,
 
     @Relation(
-        parentColumn = "quoteId",
-        entityColumn = "id"
+        parentColumn = "quotePrimaryKey",
+        entityColumn = "primaryKey"
     )
     val quote: QuoteDb,
 
     @Relation(
-        parentColumn = "quoteId",
-        entityColumn = "id"
+        parentColumn = "quotePrimaryKey",
+        entityColumn = "primaryKey"
     )
     val categories: List<QuoteCategoryCrossRefDb>
 )

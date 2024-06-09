@@ -6,7 +6,7 @@ import com.usmonie.word.features.qutoes.domain.repositories.QuotesRepository
 
 interface GetRandomQuoteUseCase : CoroutineUseCase<Unit, Quote>
 
-internal class GetRandomQuoteUseCaseImpl(private val quotesRepository: QuotesRepository): GetRandomQuoteUseCase {
+internal class GetRandomQuoteUseCaseImpl(private val quotesRepository: QuotesRepository) : GetRandomQuoteUseCase {
     override suspend fun invoke(input: Unit): Quote {
         return quotesRepository.getRandomQuote()
     }

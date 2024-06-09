@@ -4,8 +4,8 @@ import androidx.compose.runtime.Immutable
 import com.usmonie.compass.viewmodel.StateViewModel
 import com.usmonie.core.domain.usecases.invoke
 import com.usmonie.word.core.analytics.Analytics
+import com.usmonie.word.features.games.domain.usecases.GetEnigmaQuoteUseCase
 import com.usmonie.word.features.games.ui.enigma.EnigmaState.Companion.MIN_LIVES_COUNT
-import com.usmonie.word.features.qutoes.domain.usecases.GetNextPhraseUseCase
 import com.usmonie.word.features.settings.domain.usecase.AddUserHintsCountUseCase
 import com.usmonie.word.features.settings.domain.usecase.GetUserHintsCountUseCase
 import com.usmonie.word.features.settings.domain.usecase.UseUserHintsCountUseCase
@@ -19,7 +19,7 @@ import kotlin.time.Duration.Companion.minutes
 @Immutable
 class EnigmaGameViewModel(
     private val analytics: Analytics,
-    private val getNextPhraseUseCase: GetNextPhraseUseCase,
+    private val getNextPhraseUseCase: GetEnigmaQuoteUseCase,
     private val getUserHintsCountUseCase: GetUserHintsCountUseCase,
     private val useUserHintsCountUseCase: UseUserHintsCountUseCase,
     private val addUserHintsCountUseCase: AddUserHintsCountUseCase
@@ -167,9 +167,7 @@ class EnigmaGameViewModel(
 
     override suspend fun processAction(action: EnigmaAction) = when (action) {
         is EnigmaAction.UpdateUserHints -> EnigmaEvent.UpdateHints(action.userHintsCount)
-        is EnigmaAction.InputLetter -> {
-            inputLetter(action)
-        }
+        is EnigmaAction.InputLetter -> inputLetter(action)
 
         is EnigmaAction.CellSelected -> {
             if (state.value is EnigmaState.Game.HintSelection) {
@@ -186,9 +184,9 @@ class EnigmaGameViewModel(
         }
 
         EnigmaAction.NextPhrase -> {
-            val phrase = getNextPhraseUseCase()
+            val phrase = getNextPhraseUseCase(GetEnigmaQuoteUseCase.Param())
             val hintsCount = getUserHintsCountUseCase().first()
-            EnigmaEvent.NextPhrase(encryptPhrase(phrase, "Joe Liberman"), hintsCount)
+            EnigmaEvent.NextPhrase(phrase.map(), hintsCount)
         }
 
         EnigmaAction.ReviveClicked -> EnigmaEvent.ReviveClicked
@@ -291,8 +289,7 @@ class EnigmaGameViewModel(
         }
         return EnigmaEncryptedPhrase(
             newPhrase,
-            phrase.phrase,
-            phrase.author,
+            phrase.quote,
             encryptedPositionsCount,
             charsCount
         )

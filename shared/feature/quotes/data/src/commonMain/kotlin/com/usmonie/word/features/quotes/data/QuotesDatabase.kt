@@ -9,7 +9,7 @@ import com.usmonie.word.features.quotes.data.models.QuoteFavorite
 
 @Database(
     entities = [QuoteDb::class, Category::class, QuoteCategoryCrossRefDb::class, QuoteFavorite::class],
-    version = 5
+    version = 11
 )
 internal abstract class QuotesDatabase : RoomDatabase() {
     abstract fun quotesDao(): QuotesDao

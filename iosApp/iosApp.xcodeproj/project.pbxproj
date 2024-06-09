@@ -41,15 +41,16 @@
 		DA1908852BE6CCE5003D1F16 /* sourceserif_bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DA1908662BE6CCE5003D1F16 /* sourceserif_bold.ttf */; };
 		DA1908862BE6CCE5003D1F16 /* sourceserif_light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DA1908672BE6CCE5003D1F16 /* sourceserif_light.ttf */; };
 		DA1908872BE6CCE5003D1F16 /* sourceserif_regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DA1908682BE6CCE5003D1F16 /* sourceserif_regular.ttf */; };
-		DA44E3D22C0E47FE007051D5 /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = DA44E3D12C0E47FE007051D5 /* GoogleMobileAds */; };
-		DA44E3D52C0E480C007051D5 /* YandexMobileAdsPackage in Frameworks */ = {isa = PBXBuildFile; productRef = DA44E3D42C0E480C007051D5 /* YandexMobileAdsPackage */; };
-		DA44E3D82C0E4828007051D5 /* AmplitudeSwift in Frameworks */ = {isa = PBXBuildFile; productRef = DA44E3D72C0E4828007051D5 /* AmplitudeSwift */; };
-		DA44E3DB2C0E4887007051D5 /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = DA44E3DA2C0E4887007051D5 /* FirebaseAnalyticsSwift */; };
-		DA44E3DD2C0E4887007051D5 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = DA44E3DC2C0E4887007051D5 /* FirebaseCrashlytics */; };
-		DA44E3DF2C0E4887007051D5 /* FirebaseInAppMessagingSwift-Beta in Frameworks */ = {isa = PBXBuildFile; productRef = DA44E3DE2C0E4887007051D5 /* FirebaseInAppMessagingSwift-Beta */; };
+		DA228C232C14A676007791BC /* quotes.csv in Resources */ = {isa = PBXBuildFile; fileRef = DA228C222C14A676007791BC /* quotes.csv */; };
 		DAA7B6C72C0B46F300D038BA /* Analytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA7B6C62C0B46F300D038BA /* Analytics.swift */; };
 		DAA7B6C92C0B4EFF00D038BA /* SwiftView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA7B6C82C0B4EFF00D038BA /* SwiftView.swift */; };
 		DAA7B6CB2C0B4F5700D038BA /* AdBannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAA7B6CA2C0B4F5700D038BA /* AdBannerView.swift */; };
+		DAE5C5772C139C89002BF082 /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = DAE5C5762C139C89002BF082 /* FirebaseAnalyticsSwift */; };
+		DAE5C5792C139C89002BF082 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = DAE5C5782C139C89002BF082 /* FirebaseCrashlytics */; };
+		DAE5C57B2C139C89002BF082 /* FirebaseInAppMessagingSwift-Beta in Frameworks */ = {isa = PBXBuildFile; productRef = DAE5C57A2C139C89002BF082 /* FirebaseInAppMessagingSwift-Beta */; };
+		DAE5C57E2C139CA5002BF082 /* AmplitudeSwift in Frameworks */ = {isa = PBXBuildFile; productRef = DAE5C57D2C139CA5002BF082 /* AmplitudeSwift */; };
+		DAE5C5812C139D08002BF082 /* YandexMobileAdsPackage in Frameworks */ = {isa = PBXBuildFile; productRef = DAE5C5802C139D08002BF082 /* YandexMobileAdsPackage */; };
+		DAE5C5842C139D16002BF082 /* GoogleMobileAds in Frameworks */ = {isa = PBXBuildFile; productRef = DAE5C5832C139D16002BF082 /* GoogleMobileAds */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -60,7 +61,6 @@
 		7555FF7B242A565900829871 /* Word.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Word.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7555FF82242A565900829871 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		7555FF8C242A565B00829871 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		A3A058BC466FCB35DCED427E /* Pods_iosApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iosApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB3632DC29227652001CCB65 /* Config.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		C33F53EF9253C0722416992F /* Pods-iosApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iosApp.debug.xcconfig"; path = "Target Support Files/Pods-iosApp/Pods-iosApp.debug.xcconfig"; sourceTree = "<group>"; };
 		DA19084B2BE6CCE5003D1F16 /* lato_bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = lato_bold.ttf; sourceTree = "<group>"; };
@@ -93,6 +93,7 @@
 		DA1908662BE6CCE5003D1F16 /* sourceserif_bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = sourceserif_bold.ttf; sourceTree = "<group>"; };
 		DA1908672BE6CCE5003D1F16 /* sourceserif_light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = sourceserif_light.ttf; sourceTree = "<group>"; };
 		DA1908682BE6CCE5003D1F16 /* sourceserif_regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = sourceserif_regular.ttf; sourceTree = "<group>"; };
+		DA228C222C14A676007791BC /* quotes.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = quotes.csv; path = ../../shared/feature/quotes/data/src/commonMain/resources/quotes.csv; sourceTree = "<group>"; };
 		DAA7B6C62C0B46F300D038BA /* Analytics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Analytics.swift; sourceTree = "<group>"; };
 		DAA7B6C82C0B4EFF00D038BA /* SwiftView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftView.swift; sourceTree = "<group>"; };
 		DAA7B6CA2C0B4F5700D038BA /* AdBannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdBannerView.swift; sourceTree = "<group>"; };
@@ -103,12 +104,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DA44E3D52C0E480C007051D5 /* YandexMobileAdsPackage in Frameworks */,
-				DA44E3DF2C0E4887007051D5 /* FirebaseInAppMessagingSwift-Beta in Frameworks */,
-				DA44E3D82C0E4828007051D5 /* AmplitudeSwift in Frameworks */,
-				DA44E3DD2C0E4887007051D5 /* FirebaseCrashlytics in Frameworks */,
-				DA44E3D22C0E47FE007051D5 /* GoogleMobileAds in Frameworks */,
-				DA44E3DB2C0E4887007051D5 /* FirebaseAnalyticsSwift in Frameworks */,
+				DAE5C5842C139D16002BF082 /* GoogleMobileAds in Frameworks */,
+				DAE5C57E2C139CA5002BF082 /* AmplitudeSwift in Frameworks */,
+				DAE5C5772C139C89002BF082 /* FirebaseAnalyticsSwift in Frameworks */,
+				DAE5C5792C139C89002BF082 /* FirebaseCrashlytics in Frameworks */,
+				DAE5C57B2C139C89002BF082 /* FirebaseInAppMessagingSwift-Beta in Frameworks */,
+				DAE5C5812C139D08002BF082 /* YandexMobileAdsPackage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -123,21 +124,12 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
-		42799AB246E5F90AF97AA0EF /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				A3A058BC466FCB35DCED427E /* Pods_iosApp.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 		7555FF72242A565900829871 = {
 			isa = PBXGroup;
 			children = (
 				AB1DB47929225F7C00F7AF9C /* Configuration */,
 				7555FF7D242A565900829871 /* iosApp */,
 				7555FF7C242A565900829871 /* Products */,
-				42799AB246E5F90AF97AA0EF /* Frameworks */,
 				B021BE99BC256D36C393C65D /* Pods */,
 			);
 			sourceTree = "<group>";
@@ -153,6 +145,7 @@
 		7555FF7D242A565900829871 /* iosApp */ = {
 			isa = PBXGroup;
 			children = (
+				DA228C222C14A676007791BC /* quotes.csv */,
 				DA1908692BE6CCE5003D1F16 /* font */,
 				058557BA273AAA24004C7B11 /* Assets.xcassets */,
 				7555FF82242A565900829871 /* ContentView.swift */,
@@ -239,12 +232,12 @@
 			);
 			name = iosApp;
 			packageProductDependencies = (
-				DA44E3D12C0E47FE007051D5 /* GoogleMobileAds */,
-				DA44E3D42C0E480C007051D5 /* YandexMobileAdsPackage */,
-				DA44E3D72C0E4828007051D5 /* AmplitudeSwift */,
-				DA44E3DA2C0E4887007051D5 /* FirebaseAnalyticsSwift */,
-				DA44E3DC2C0E4887007051D5 /* FirebaseCrashlytics */,
-				DA44E3DE2C0E4887007051D5 /* FirebaseInAppMessagingSwift-Beta */,
+				DAE5C5762C139C89002BF082 /* FirebaseAnalyticsSwift */,
+				DAE5C5782C139C89002BF082 /* FirebaseCrashlytics */,
+				DAE5C57A2C139C89002BF082 /* FirebaseInAppMessagingSwift-Beta */,
+				DAE5C57D2C139CA5002BF082 /* AmplitudeSwift */,
+				DAE5C5802C139D08002BF082 /* YandexMobileAdsPackage */,
+				DAE5C5832C139D16002BF082 /* GoogleMobileAds */,
 			);
 			productName = iosApp;
 			productReference = 7555FF7B242A565900829871 /* Word.app */;
@@ -275,10 +268,10 @@
 			);
 			mainGroup = 7555FF72242A565900829871;
 			packageReferences = (
-				DA44E3D02C0E47FE007051D5 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
-				DA44E3D32C0E480C007051D5 /* XCRemoteSwiftPackageReference "yandex-ads-sdk-ios" */,
-				DA44E3D62C0E4828007051D5 /* XCRemoteSwiftPackageReference "Amplitude-Swift" */,
-				DA44E3D92C0E4887007051D5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				DAE5C5752C139C89002BF082 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				DAE5C57C2C139CA5002BF082 /* XCRemoteSwiftPackageReference "Amplitude-Swift" */,
+				DAE5C57F2C139D08002BF082 /* XCRemoteSwiftPackageReference "yandex-ads-sdk-ios" */,
+				DAE5C5822C139D16002BF082 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */,
 			);
 			productRefGroup = 7555FF7C242A565900829871 /* Products */;
 			projectDirPath = "";
@@ -312,6 +305,7 @@
 				DA1908832BE6CCE5003D1F16 /* sourcesans_regular.ttf in Resources */,
 				DA1908772BE6CCE5003D1F16 /* opensans_regular.ttf in Resources */,
 				DA19086B2BE6CCE5003D1F16 /* lato_medium.ttf in Resources */,
+				DA228C232C14A676007791BC /* quotes.csv in Resources */,
 				DA1908722BE6CCE5003D1F16 /* notoserif_light.ttf in Resources */,
 				DA1908792BE6CCE5003D1F16 /* raleway_bold.ttf in Resources */,
 				DA1908702BE6CCE5003D1F16 /* notoserif_black.ttf in Resources */,
@@ -606,31 +600,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		DA44E3D02C0E47FE007051D5 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/googleads/swift-package-manager-google-mobile-ads.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 11.5.0;
-			};
-		};
-		DA44E3D32C0E480C007051D5 /* XCRemoteSwiftPackageReference "yandex-ads-sdk-ios" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/yandexmobile/yandex-ads-sdk-ios";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 7.0.2;
-			};
-		};
-		DA44E3D62C0E4828007051D5 /* XCRemoteSwiftPackageReference "Amplitude-Swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/amplitude/Amplitude-Swift";
-			requirement = {
-				branch = main;
-				kind = branch;
-			};
-		};
-		DA44E3D92C0E4887007051D5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+		DAE5C5752C139C89002BF082 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
 			requirement = {
@@ -638,38 +608,62 @@
 				minimumVersion = 10.27.0;
 			};
 		};
+		DAE5C57C2C139CA5002BF082 /* XCRemoteSwiftPackageReference "Amplitude-Swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/amplitude/Amplitude-Swift";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+		DAE5C57F2C139D08002BF082 /* XCRemoteSwiftPackageReference "yandex-ads-sdk-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/yandexmobile/yandex-ads-sdk-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.1.0;
+			};
+		};
+		DAE5C5822C139D16002BF082 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/googleads/swift-package-manager-google-mobile-ads.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.5.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		DA44E3D12C0E47FE007051D5 /* GoogleMobileAds */ = {
+		DAE5C5762C139C89002BF082 /* FirebaseAnalyticsSwift */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = DA44E3D02C0E47FE007051D5 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */;
-			productName = GoogleMobileAds;
-		};
-		DA44E3D42C0E480C007051D5 /* YandexMobileAdsPackage */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = DA44E3D32C0E480C007051D5 /* XCRemoteSwiftPackageReference "yandex-ads-sdk-ios" */;
-			productName = YandexMobileAdsPackage;
-		};
-		DA44E3D72C0E4828007051D5 /* AmplitudeSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = DA44E3D62C0E4828007051D5 /* XCRemoteSwiftPackageReference "Amplitude-Swift" */;
-			productName = AmplitudeSwift;
-		};
-		DA44E3DA2C0E4887007051D5 /* FirebaseAnalyticsSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = DA44E3D92C0E4887007051D5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			package = DAE5C5752C139C89002BF082 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAnalyticsSwift;
 		};
-		DA44E3DC2C0E4887007051D5 /* FirebaseCrashlytics */ = {
+		DAE5C5782C139C89002BF082 /* FirebaseCrashlytics */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = DA44E3D92C0E4887007051D5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			package = DAE5C5752C139C89002BF082 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseCrashlytics;
 		};
-		DA44E3DE2C0E4887007051D5 /* FirebaseInAppMessagingSwift-Beta */ = {
+		DAE5C57A2C139C89002BF082 /* FirebaseInAppMessagingSwift-Beta */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = DA44E3D92C0E4887007051D5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			package = DAE5C5752C139C89002BF082 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = "FirebaseInAppMessagingSwift-Beta";
+		};
+		DAE5C57D2C139CA5002BF082 /* AmplitudeSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DAE5C57C2C139CA5002BF082 /* XCRemoteSwiftPackageReference "Amplitude-Swift" */;
+			productName = AmplitudeSwift;
+		};
+		DAE5C5802C139D08002BF082 /* YandexMobileAdsPackage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DAE5C57F2C139D08002BF082 /* XCRemoteSwiftPackageReference "yandex-ads-sdk-ios" */;
+			productName = YandexMobileAdsPackage;
+		};
+		DAE5C5832C139D16002BF082 /* GoogleMobileAds */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DAE5C5822C139D16002BF082 /* XCRemoteSwiftPackageReference "swift-package-manager-google-mobile-ads" */;
+			productName = GoogleMobileAds;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

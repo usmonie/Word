@@ -7,12 +7,12 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "quotes", indices = [Index(value = ["author"])])
 data class QuoteDb(
     val text: String,
-    val author: String,
-    val favorite: Boolean
-) {
-    @PrimaryKey(autoGenerate = true)
-    var id: Long = 0L
-}
+    val author: String?,
+    val favorite: Boolean,
+    val wasPlayed: Boolean,
+    @PrimaryKey
+    val primaryKey: String = (text.hashCode() + author.hashCode()).toString()
+)
 
 @Entity(tableName = "categories")
 data class Category(

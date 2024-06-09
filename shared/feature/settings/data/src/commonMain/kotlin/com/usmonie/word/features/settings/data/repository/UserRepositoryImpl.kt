@@ -43,11 +43,7 @@ class UserRepositoryImpl(
 
     override suspend fun useHints(hintsCount: Int) {
         dataStore.edit {
-            println("useHints $hintsCount")
-
             val currentHints = it[CURRENT_USER_HINTS_COUNT_KEY]
-            println("useHints currentHints $currentHints")
-
             if (currentHints != null && currentHints >= hintsCount) {
                 it[CURRENT_USER_HINTS_COUNT_KEY] = currentHints - hintsCount
             }

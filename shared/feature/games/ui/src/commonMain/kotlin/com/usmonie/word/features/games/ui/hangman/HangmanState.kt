@@ -5,7 +5,7 @@ import com.usmonie.compass.viewmodel.ScreenAction
 import com.usmonie.compass.viewmodel.ScreenEffect
 import com.usmonie.compass.viewmodel.ScreenEvent
 import com.usmonie.compass.viewmodel.ScreenState
-import com.usmonie.word.features.dictionary.ui.models.WordCombinedUi
+import com.usmonie.word.features.games.ui.models.WordCombinedUi
 
 @Immutable
 sealed class HangmanState : ScreenState {

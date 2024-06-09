@@ -4,9 +4,9 @@ import androidx.compose.runtime.Immutable
 import com.usmonie.compass.viewmodel.StateViewModel
 import com.usmonie.core.domain.tools.xor
 import com.usmonie.core.domain.usecases.invoke
-import com.usmonie.word.features.dictionary.domain.usecases.GetRandomWordUseCase
-import com.usmonie.word.features.dictionary.ui.models.WordCombinedUi
-import com.usmonie.word.features.dictionary.ui.models.toUi
+import com.usmonie.word.features.games.domain.usecases.GetRandomWordUseCase
+import com.usmonie.word.features.games.ui.models.WordCombinedUi
+import com.usmonie.word.features.games.ui.models.toUi
 import com.usmonie.word.features.settings.domain.usecase.AddUserHintsCountUseCase
 import com.usmonie.word.features.settings.domain.usecase.GetUserHintsCountUseCase
 import com.usmonie.word.features.settings.domain.usecase.UseUserHintsCountUseCase

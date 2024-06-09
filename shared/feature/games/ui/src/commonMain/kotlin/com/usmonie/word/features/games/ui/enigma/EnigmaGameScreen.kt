@@ -186,8 +186,8 @@ internal class EnigmaGameScreen(
                 routerManager::popBackstack,
                 viewModel::onNextPhrase,
                 nextTitle = stringResource(Res.string.games_next_phrase),
-                state.phrase.phrase,
-                state.phrase.author
+                quote = state.phrase.quote,
+                onFavoriteQuote = {}
             )
         }
     }
@@ -236,7 +236,7 @@ internal class EnigmaGameScreen(
             verticalArrangement = Arrangement.spacedBy(12.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterHorizontally)
         ) {
-            key(phrase.phrase) {
+            key(phrase.quote.text) {
                 phrase.encryptedPhrase.fastForEachIndexed { index, word ->
                     key(index) {
                         Word(word, getCurrentSelectedPosition, isEnabled, hintSelectionState, index)

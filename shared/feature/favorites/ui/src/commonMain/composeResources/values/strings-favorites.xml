@@ -3,5 +3,11 @@
     <!--Favorites-->
     <string name="favorites_title">[F]avorites</string>
     <string name="favorites_empty_title">Favorites are empty</string>
-    <string name="favorites_empty_description">You can add favorite words from the search screen</string>
+
+    <string name="favorite_words_title">Words</string>
+    <string name="favorite_words_empty_description">You can add favorite words from the search screen</string>
+
+    <string name="favorite_quotes_title">Quotes</string>
+    <string name="favorite_quotes_empty_description">You can add favorite quotes from the search screen</string>
+
 </resources>

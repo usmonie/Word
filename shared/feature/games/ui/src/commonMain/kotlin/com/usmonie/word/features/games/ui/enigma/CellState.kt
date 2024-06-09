@@ -5,6 +5,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
 import com.usmonie.core.domain.tools.fastMap
+import com.usmonie.word.features.games.domain.usecases.GetEnigmaQuoteUseCase
+import com.usmonie.word.features.qutoes.domain.models.Quote
 
 @Immutable
 sealed class CellState {
@@ -44,6 +46,7 @@ data class Cell(
         } else {
             MaterialTheme.colorScheme.onBackground
         }
+
         CellState.Found -> MaterialTheme.colorScheme.onBackground
         is CellState.Incorrect -> MaterialTheme.colorScheme.error
     }
@@ -52,8 +55,7 @@ data class Cell(
 @Immutable
 data class EnigmaEncryptedPhrase(
     val encryptedPhrase: List<Word>,
-    val phrase: String,
-    val author: String,
+    val quote: Quote,
     val encryptedPositionsCount: Int,
     val charsCount: Map<Char, Int>
 )
@@ -63,7 +65,25 @@ data class Word(val cells: List<Cell>) {
     val size: Int = cells.size
 }
 
-fun encryptPhrase(phrase: String, author: String): EnigmaEncryptedPhrase {
+fun map(cell: GetEnigmaQuoteUseCase.Cell) = Cell(
+    cell.symbol,
+    cell.number,
+    when (cell.state) {
+        GetEnigmaQuoteUseCase.CellState.Empty -> CellState.Empty
+        GetEnigmaQuoteUseCase.CellState.Found -> CellState.Found
+    }
+)
+
+fun map(word: GetEnigmaQuoteUseCase.Word) = Word(cells = word.cells.fastMap { map(it) })
+
+fun GetEnigmaQuoteUseCase.EnigmaEncryptedPhrase.map() = EnigmaEncryptedPhrase(
+    encryptedPhrase = encryptedPhrase.fastMap { map(it) },
+    quote = quote,
+    encryptedPositionsCount = encryptedPositionsCount,
+    charsCount = charsCount
+)
+
+fun encryptPhrase(phrase: Quote): EnigmaEncryptedPhrase {
     var encryptedPositionsCount = 0
     val alphabet = ALPHABET
         .asSequence()
@@ -71,7 +91,7 @@ fun encryptPhrase(phrase: String, author: String): EnigmaEncryptedPhrase {
         .mapIndexed { index, c -> c to index }
         .associateBy({ it.first }, { it.second })
 
-    val chars = phrase.toList()
+    val chars = phrase.text.toList()
     val charsShuffled = chars.asSequence()
         .shuffled()
         .distinct()
@@ -84,6 +104,7 @@ fun encryptPhrase(phrase: String, author: String): EnigmaEncryptedPhrase {
     val randomCharSecond = charsShuffled[1].uppercaseChar()
     val randomCharThird = charsShuffled[2].uppercaseChar()
     val encryptedPhrase = phrase
+        .text
         .split(" ")
         .fastMap {
             val cells = it.toList().fastMap { char ->
@@ -117,7 +138,6 @@ fun encryptPhrase(phrase: String, author: String): EnigmaEncryptedPhrase {
     return EnigmaEncryptedPhrase(
         encryptedPhrase,
         phrase,
-        author,
         encryptedPositionsCount,
         charsCount
     )
