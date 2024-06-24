@@ -27,6 +27,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
@@ -40,11 +41,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.usmonie.compass.core.LocalRouteManager
 import com.usmonie.compass.viewmodel.StateScreen
 import com.usmonie.core.domain.tools.fastForEachIndexed
+import com.usmonie.core.tools.ui.ShakeConfig
 import com.usmonie.core.tools.ui.ShakeController
 import com.usmonie.core.tools.ui.rememberShakeController
 import com.usmonie.core.tools.ui.shake
@@ -81,27 +85,45 @@ internal class EnigmaGameScreen(
             }
         }
 
+        val shakeController = rememberShakeController()
+        EnigmaGameEffect(shakeController, viewModel)
         EnigmaGameBoard(
             { state.lives },
             { state.maxLives },
             { state.hintsCount },
             subscriptionViewModel
         ) { insets ->
-            val shakeController = rememberShakeController()
-
             EnigmaGameContent(
                 { state.phrase },
                 { state.currentSelectedCellPosition },
                 { cellState ->
                     state is EnigmaState.Game &&
-                        cellState != CellState.Correct &&
-                        cellState != CellState.Found
+                            cellState != CellState.Correct &&
+                            cellState != CellState.Found
                 },
                 { state is EnigmaState.Game.HintSelection },
                 { state.guessedLetters },
                 shakeController,
                 insets
             )
+        }
+    }
+
+    @Composable
+    private fun EnigmaGameEffect(shakeController: ShakeController, viewModel: EnigmaGameViewModel) {
+        val effect by viewModel.effect.collectAsState(null)
+
+        val hapticFeedback = LocalHapticFeedback.current
+        LaunchedEffect(effect) {
+            when (effect) {
+                is EnigmaEffect.InputEffect.Incorrect -> {
+                    hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
+                    shakeController.shake(ShakeConfig(iterations = 3, translateX = 10f))
+                    hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
+                }
+
+                else -> Unit
+            }
         }
     }
 
@@ -122,10 +144,10 @@ internal class EnigmaGameScreen(
             Modifier
                 .fillMaxSize()
                 .padding(top = topInsets)
-                .shake(shakeController)
         ) {
             Column(
                 Modifier
+                    .shake(shakeController)
                     .weight(1f)
             ) {
                 Phrase(
@@ -233,14 +255,12 @@ internal class EnigmaGameScreen(
         val scrollState = rememberScrollState()
         FlowRow(
             modifier.verticalScroll(scrollState).padding(vertical = 52.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterHorizontally)
+            verticalArrangement = Arrangement.spacedBy(4.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally)
         ) {
-            key(phrase.quote.text) {
-                phrase.encryptedPhrase.fastForEachIndexed { index, word ->
-                    key(index) {
-                        Word(word, getCurrentSelectedPosition, isEnabled, hintSelectionState, index)
-                    }
+            phrase.encryptedPhrase.fastForEachIndexed { index, word ->
+                key(index) {
+                    Word(word, getCurrentSelectedPosition, isEnabled, hintSelectionState, index)
                 }
             }
         }
@@ -255,8 +275,7 @@ internal class EnigmaGameScreen(
         wordPosition: Int
     ) {
         Row(
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
-            verticalAlignment = Alignment.CenterVertically,
+//            horizontalArrangement = Arrangement.,
         ) {
             word.cells.fastForEachIndexed { position, cell ->
                 key(cell.symbol, position) {
@@ -296,7 +315,7 @@ internal class EnigmaGameScreen(
                 onClick = { viewModel.onCellSelected(position, wordPosition) }
             )
 
-            else -> Symbol(cell.symbol, Modifier.fillMaxHeight())
+            else -> Symbol(cell.symbol, Modifier.fillMaxHeight().alignByBaseline())
         }
     }
 
@@ -321,7 +340,7 @@ internal class EnigmaGameScreen(
             if (cell.state != CellState.Found) cell.number.toString() else "",
             interactionSource,
             onClick,
-            Modifier.graphicsLayer {
+            Modifier.alignByBaseline().graphicsLayer {
                 shadowElevation = if (isSelected) 8.dp.toPx() else 0f
             }
         )
@@ -396,9 +415,12 @@ internal class EnigmaGameScreen(
         Column(
             modifier = modifier.width(2.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Bottom,
         ) {
-            Text(text = symbol.toString(), style = MaterialTheme.typography.titleMedium)
+            Text(
+                text = symbol.toString(),
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.fillMaxHeight()
+            )
         }
     }
 }

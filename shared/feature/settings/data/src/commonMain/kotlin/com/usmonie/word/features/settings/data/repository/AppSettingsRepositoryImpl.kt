@@ -12,45 +12,47 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class AppSettingsRepositoryImpl(
-    private val datastore: DataStore<Preferences>,
+	private val datastore: DataStore<Preferences>,
 ) : AppSettingsRepository {
-    override val currentTheme: Flow<Theme>
-        get() = datastore.data.map {
-            Theme(
-                it[CURRENT_USER_THEME_COLORS_KEY],
-                it[CURRENT_USER_THEME_FONTS_KEY],
-                DarkThemeMode.valueOf(it[CURRENT_USER_THEME_DARK_MODE_KEY] ?: "AUTO")
-            )
-        }
+	override val currentTheme: Flow<Theme>
+		get() = datastore.data.map {
 
-    override suspend fun setCurrentTheme(theme: Theme) {
-        datastore.edit {
-            val colors = theme.colorsName
-            if (colors != null) it[CURRENT_USER_THEME_COLORS_KEY] = colors
+			Theme(
+				it[CURRENT_USER_THEME_COLORS_KEY],
+				it[CURRENT_USER_THEME_FONTS_KEY],
+				DarkThemeMode.valueOf(it[CURRENT_USER_THEME_DARK_MODE_KEY] ?: "AUTO")
+			)
+		}
 
-            val fonts = theme.fonts
-            if (fonts != null) {
-                it[CURRENT_USER_THEME_FONTS_KEY] to fonts
-            }
-            it[CURRENT_USER_THEME_DARK_MODE_KEY] = theme.darkThemeMode.name
-        }
-    }
+	override suspend fun setCurrentTheme(theme: Theme) {
+		datastore.edit {
+			val colors = theme.colorsName
+			if (colors != null) it[CURRENT_USER_THEME_COLORS_KEY] = colors
 
-    override suspend fun setOnboardingShowed(wasShowed: Boolean) {
-        datastore.edit {
-            it[WAS_ONBOARDING_SHOWED] = wasShowed
-        }
-    }
+			val fonts = theme.fonts
+			if (fonts != null) {
+				it[CURRENT_USER_THEME_FONTS_KEY] = fonts
+			}
+			it[CURRENT_USER_THEME_DARK_MODE_KEY] = theme.darkThemeMode.name
+			println(it[CURRENT_USER_THEME_FONTS_KEY])
+		}
+	}
 
-    override val wasOnboardingShowed: Flow<Boolean>
-        get() = datastore.data.map { it[WAS_ONBOARDING_SHOWED] ?: false }
+	override suspend fun setOnboardingShowed(wasShowed: Boolean) {
+		datastore.edit {
+			it[WAS_ONBOARDING_SHOWED] = wasShowed
+		}
+	}
 
-    companion object {
-        private val CURRENT_USER_THEME_COLORS_KEY =
-            stringPreferencesKey("CURRENT_USER_THEME_COLORS")
-        private val CURRENT_USER_THEME_FONTS_KEY = stringPreferencesKey("CURRENT_USER_THEME_FONTS")
-        private val CURRENT_USER_THEME_DARK_MODE_KEY = stringPreferencesKey("CURRENT_USER_THEME_DARK_MODE")
+	override val wasOnboardingShowed: Flow<Boolean>
+		get() = datastore.data.map { it[WAS_ONBOARDING_SHOWED] ?: false }
 
-        private val WAS_ONBOARDING_SHOWED = booleanPreferencesKey("WAS_ONBOARDING_SHOWED")
-    }
+	companion object {
+		private val CURRENT_USER_THEME_COLORS_KEY =
+			stringPreferencesKey("CURRENT_USER_THEME_COLORS")
+		private val CURRENT_USER_THEME_FONTS_KEY = stringPreferencesKey("CURRENT_USER_THEME_FONTS")
+		private val CURRENT_USER_THEME_DARK_MODE_KEY = stringPreferencesKey("CURRENT_USER_THEME_DARK_MODE")
+
+		private val WAS_ONBOARDING_SHOWED = booleanPreferencesKey("WAS_ONBOARDING_SHOWED")
+	}
 }

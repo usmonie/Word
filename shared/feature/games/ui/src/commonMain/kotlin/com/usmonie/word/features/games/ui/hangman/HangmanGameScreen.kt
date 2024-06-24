@@ -2,6 +2,11 @@ package com.usmonie.word.features.games.ui.hangman
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,13 +29,18 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.usmonie.compass.core.LocalRouteManager
 import com.usmonie.compass.core.ui.ScreenId
 import com.usmonie.compass.viewmodel.StateScreen
+import com.usmonie.core.tools.ui.ShakeConfig
+import com.usmonie.core.tools.ui.ShakeController
+import com.usmonie.core.tools.ui.rememberShakeController
+import com.usmonie.core.tools.ui.shake
 import com.usmonie.word.features.ads.ui.LocalAdsManager
-import com.usmonie.word.features.games.ui.models.WordCombinedUi
 import com.usmonie.word.features.games.ui.hangman.HangmanGameScreenFactory.Companion.ID
 import com.usmonie.word.features.games.ui.kit.GameBoard
 import com.usmonie.word.features.games.ui.kit.HangmanGameWon
@@ -38,6 +48,7 @@ import com.usmonie.word.features.games.ui.kit.Keyboard
 import com.usmonie.word.features.games.ui.kit.LivesAmount
 import com.usmonie.word.features.games.ui.kit.ReviveLifeDialog
 import com.usmonie.word.features.games.ui.kit.UseHintButton
+import com.usmonie.word.features.games.ui.models.WordCombinedUi
 import com.usmonie.word.features.subscriptions.ui.notification.SubscriptionScreenAction
 import com.usmonie.word.features.subscriptions.ui.notification.SubscriptionViewModel
 import org.jetbrains.compose.resources.stringResource
@@ -64,10 +75,11 @@ internal class HangmanGameScreen(
     override fun Content() {
         val routeManager = LocalRouteManager.current
 
+        val shakeController = rememberShakeController()
         val state by viewModel.state.collectAsState()
         val effect by viewModel.effect.collectAsState(null)
 
-        HangmanEffect(onOpenWord, effect)
+        HangmanEffect(onOpenWord, effect, shakeController)
         DisposableEffect(Unit) {
             subscriptionViewModel.handleAction(SubscriptionScreenAction.Minify)
             onDispose {
@@ -100,11 +112,17 @@ internal class HangmanGameScreen(
             }
         ) { insets ->
             val adMob = LocalAdsManager.current
-            AnimatedContent(state is HangmanState.Loading) { isLoading ->
+            AnimatedContent(state is HangmanState.Loading, transitionSpec = {
+                (
+                    fadeIn(animationSpec = tween(220, delayMillis = 90)) +
+                        scaleIn(initialScale = 0.92f, animationSpec = tween(220, delayMillis = 90))
+                    )
+                    .togetherWith(fadeOut(animationSpec = tween(90)))
+            }) { isLoading ->
                 if (isLoading) {
                     LoadingProgress(insets)
                 } else {
-                    PlayBoard(state, viewModel, insets)
+                    PlayBoard(state, viewModel, insets, shakeController)
                 }
             }
 
@@ -161,9 +179,11 @@ private fun PlayBoard(
     state: HangmanState,
     hangmanGameViewModel: HangmanGameViewModel,
     insets: PaddingValues,
+    shakeController: ShakeController,
 ) {
     Column(
         modifier = Modifier
+            .shake(shakeController)
             .fillMaxSize()
             .padding(top = insets.calculateTopPadding()),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -244,10 +264,21 @@ private fun HintButton(
 }
 
 @Composable
-private fun HangmanEffect(onOpenWord: (WordCombinedUi) -> Unit, effect: HangmanEffect?) {
+private fun HangmanEffect(
+    onOpenWord: (WordCombinedUi) -> Unit,
+    effect: HangmanEffect?,
+    shakeController: ShakeController
+) {
+    val hapticFeedback = LocalHapticFeedback.current
     LaunchedEffect(effect) {
         when (effect) {
             is HangmanEffect.OpenWord -> onOpenWord(effect.word)
+
+            is HangmanEffect.Wrong -> {
+                hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
+                shakeController.shake(ShakeConfig(iterations = 3, translateX = 10f))
+                hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
+            }
 
             else -> Unit
         }

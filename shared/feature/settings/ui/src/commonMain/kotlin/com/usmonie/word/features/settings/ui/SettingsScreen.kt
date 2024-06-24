@@ -54,165 +54,165 @@ import word.shared.feature.settings.ui.generated.resources.settings_themes_title
 import word.shared.feature.settings.ui.generated.resources.settings_title
 
 internal class SettingsScreen(
-    viewModel: SettingsViewModel,
-    private val subscriptionsViewModel: SubscriptionViewModel,
+	viewModel: SettingsViewModel,
+	private val subscriptionsViewModel: SubscriptionViewModel,
 ) : StateScreen<SettingsState, SettingsAction, SettingsEvent, SettingsEffect, SettingsViewModel>(
-    viewModel
+	viewModel
 ) {
-    override val id: ScreenId = SettingsScreenFactory.ID
+	override val id: ScreenId = SettingsScreenFactory.ID
 
-    @OptIn(ExperimentalMaterial3Api::class)
-    @Composable
-    override fun Content() {
-        val routeManager = LocalRouteManager.current
-        val favoritesPlaceholder = stringResource(Res.string.settings_title)
-        val state by viewModel.state.collectAsState()
-        val subscriptionsState by subscriptionsViewModel.state.collectAsState()
+	@OptIn(ExperimentalMaterial3Api::class)
+	@Composable
+	override fun Content() {
+		val routeManager = LocalRouteManager.current
+		val favoritesPlaceholder = stringResource(Res.string.settings_title)
+		val state by viewModel.state.collectAsState()
+		val subscriptionsState by subscriptionsViewModel.state.collectAsState()
 
-        val themes = remember {
-            WordThemes.entries
-        }
+		val themes = remember {
+			WordThemes.entries
+		}
 
-        val darkThemeModes = remember {
-            DarkThemeMode.entries
-        }
+		val darkThemeModes = remember {
+			DarkThemeMode.entries
+		}
 
-        val typographies = remember {
-            listOf(ModernChic, Friendly, TimelessElegant)
-        }
+		val typographies = remember {
+			listOf(ModernChic, Friendly, TimelessElegant)
+		}
 
-        HeaderWordScaffold(
-            placeholder = { favoritesPlaceholder },
-            onBackClicked = routeManager::popBackstack,
-            header = if (subscriptionsState is SubscriptionScreenState.Empty) {
-                null
-            } else {
-                { SubscriptionPage(subscriptionsViewModel) }
-            },
-            bottomAdBanner = {
-                Box(
-                    Modifier.fillMaxWidth()
-                        .background(MaterialTheme.colorScheme.surface)
-                ) {
-                    val adMob = LocalAdsManager.current
+		HeaderWordScaffold(
+			placeholder = { favoritesPlaceholder },
+			onBackClicked = routeManager::popBackstack,
+			header = if (subscriptionsState is SubscriptionScreenState.Empty) {
+				null
+			} else {
+				{ SubscriptionPage(subscriptionsViewModel) }
+			},
+			bottomAdBanner = {
+				Box(
+					Modifier.fillMaxWidth()
+						.background(MaterialTheme.colorScheme.surface)
+				) {
+					val adMob = LocalAdsManager.current
 
-                    adMob.Banner(
-                        Modifier.fillMaxWidth()
-                            .navigationBarsPadding()
-                    )
-                }
-            }
-        ) { insets ->
-            val newInsets = remember(insets) { insets.add(top = 16.dp, bottom = 80.dp) }
+					adMob.Banner(
+						Modifier.fillMaxWidth()
+							.navigationBarsPadding()
+					)
+				}
+			}
+		) { insets ->
+			val newInsets = remember(insets) { insets.add(top = 16.dp, bottom = 80.dp) }
 
-            LazyColumn(contentPadding = newInsets, verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                item {
-                    Text(
-                        stringResource(Res.string.settings_themes_daylight_title),
-                        style = MaterialTheme.typography.labelMedium,
-                        modifier = Modifier.padding(horizontal = 32.dp)
-                    )
-                }
+			LazyColumn(contentPadding = newInsets, verticalArrangement = Arrangement.spacedBy(16.dp)) {
+				item {
+					Text(
+						stringResource(Res.string.settings_themes_daylight_title),
+						style = MaterialTheme.typography.labelMedium,
+						modifier = Modifier.padding(horizontal = 32.dp)
+					)
+				}
 
-                items(darkThemeModes) { mode ->
-                    SettingsSubscriptionItem(
-                        onClick = { viewModel.onDarkModeChanged(mode) },
-                        title = stringResource(
-                            when (mode) {
-                                DarkThemeMode.AUTO -> Res.string.settings_themes_daylight_auto_title
-                                DarkThemeMode.ALWAYS -> Res.string.settings_themes_daylight_always
-                                DarkThemeMode.NEVER -> Res.string.settings_themes_daylight_never
-                            }
-                        ),
-                        selected = mode == state.darkThemeMode,
-                        isEnabled = true,
-                        modifier = Modifier.fillParentMaxWidth()
-                    )
-                }
+				items(darkThemeModes) { mode ->
+					SettingsSubscriptionItem(
+						onClick = { viewModel.onDarkModeChanged(mode) },
+						title = stringResource(
+							when (mode) {
+								DarkThemeMode.AUTO -> Res.string.settings_themes_daylight_auto_title
+								DarkThemeMode.ALWAYS -> Res.string.settings_themes_daylight_always
+								DarkThemeMode.NEVER -> Res.string.settings_themes_daylight_never
+							}
+						),
+						selected = mode == state.darkThemeMode,
+						isEnabled = true,
+						modifier = Modifier.fillParentMaxWidth()
+					)
+				}
 
-                item {
-                    Text(
-                        stringResource(Res.string.settings_themes_title),
-                        style = MaterialTheme.typography.labelMedium,
-                        modifier = Modifier.padding(horizontal = 32.dp)
-                    )
-                }
+				item {
+					Text(
+						stringResource(Res.string.settings_themes_title),
+						style = MaterialTheme.typography.labelMedium,
+						modifier = Modifier.padding(horizontal = 32.dp)
+					)
+				}
 
-                items(themes) { theme ->
-                    SettingsSubscriptionItem(
-                        onClick = { viewModel.onThemeChanged(theme) },
-                        title = theme.title,
-                        selected = theme == state.currentTheme,
-                        isEnabled = !theme.paid || state.subscriptionStatus is SubscriptionStatus.Purchased,
-                        modifier = Modifier.fillParentMaxWidth()
-                    )
-                }
+				items(themes) { theme ->
+					SettingsSubscriptionItem(
+						onClick = { viewModel.onThemeChanged(theme) },
+						title = theme.title,
+						selected = theme == state.currentTheme,
+						isEnabled = !theme.paid || state.subscriptionStatus is SubscriptionStatus.Purchased,
+						modifier = Modifier.fillParentMaxWidth()
+					)
+				}
 
-                item {
-                    Text(
-                        stringResource(Res.string.settings_fonts_title),
-                        style = MaterialTheme.typography.labelMedium,
-                        modifier = Modifier.padding(horizontal = 32.dp)
-                    )
-                }
+				item {
+					Text(
+						stringResource(Res.string.settings_fonts_title),
+						style = MaterialTheme.typography.labelMedium,
+						modifier = Modifier.padding(horizontal = 32.dp)
+					)
+				}
 
-                items(typographies) { typography ->
-                    SettingsSubscriptionItem(
-                        onClick = { viewModel.onTypographyChanged(typography) },
-                        title = typography.name,
-                        selected = typography == state.currentTypography,
-                        isEnabled = typography is ModernChic ||
-                            state.subscriptionStatus is SubscriptionStatus.Purchased,
-                        modifier = Modifier.fillParentMaxWidth()
-                    )
-                }
-            }
-        }
-    }
+				items(typographies) { typography ->
+					SettingsSubscriptionItem(
+						onClick = { viewModel.onTypographyChanged(typography) },
+						title = typography.name,
+						selected = typography == state.currentTypography,
+						isEnabled = true || typography is ModernChic ||
+							state.subscriptionStatus is SubscriptionStatus.Purchased,
+						modifier = Modifier.fillParentMaxWidth()
+					)
+				}
+			}
+		}
+	}
 }
 
 @Composable
 internal fun SettingsSubscriptionItem(
-    onClick: () -> Unit,
-    title: String,
-    selected: Boolean,
-    isEnabled: Boolean,
-    modifier: Modifier = Modifier
+	onClick: () -> Unit,
+	title: String,
+	selected: Boolean,
+	isEnabled: Boolean,
+	modifier: Modifier = Modifier
 ) {
-    Surface(
-        onClick,
-        modifier = modifier,
-        color = Color.Transparent,
-        enabled = !selected && isEnabled
-    ) {
-        Row(
-            Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            RadioButton(
-                selected,
-                onClick,
-                colors = RadioButtonDefaults.colors(
-                    selectedColor = MaterialTheme.colorScheme.primary,
-                    unselectedColor = MaterialTheme.colorScheme.primary,
-                    disabledSelectedColor = MaterialTheme.colorScheme.primary,
-                    disabledUnselectedColor = MaterialTheme.colorScheme.primary,
-                ),
-                modifier = Modifier.padding(start = 24.dp),
-                enabled = isEnabled
-            )
-            Text(
-                title,
-                style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.padding().weight(1f)
-            )
-            if (!isEnabled) {
-                Icon(
-                    Icons.Rounded.WorkspacePremium,
-                    contentDescription = "$title only with subscription"
-                )
-                Spacer(Modifier.width(24.dp))
-            }
-        }
-    }
+	Surface(
+		onClick,
+		modifier = modifier,
+		color = Color.Transparent,
+		enabled = !selected && isEnabled
+	) {
+		Row(
+			Modifier.fillMaxWidth(),
+			verticalAlignment = Alignment.CenterVertically
+		) {
+			RadioButton(
+				selected,
+				onClick,
+				colors = RadioButtonDefaults.colors(
+					selectedColor = MaterialTheme.colorScheme.primary,
+					unselectedColor = MaterialTheme.colorScheme.primary,
+					disabledSelectedColor = MaterialTheme.colorScheme.primary,
+					disabledUnselectedColor = MaterialTheme.colorScheme.primary,
+				),
+				modifier = Modifier.padding(start = 24.dp),
+				enabled = isEnabled
+			)
+			Text(
+				title,
+				style = MaterialTheme.typography.titleLarge,
+				modifier = Modifier.padding().weight(1f)
+			)
+			if (!isEnabled) {
+				Icon(
+					Icons.Rounded.WorkspacePremium,
+					contentDescription = "$title only with subscription"
+				)
+				Spacer(Modifier.width(24.dp))
+			}
+		}
+	}
 }

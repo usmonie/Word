@@ -217,7 +217,7 @@ class EnigmaGameViewModel(
         is EnigmaEvent.Lost -> EnigmaEffect.ShowMiddleGameAd()
         is EnigmaEvent.NextPhrase -> EnigmaEffect.ShowMiddleGameAd()
         is EnigmaEvent.ReviveClicked -> EnigmaEffect.ShowRewardedLifeAd()
-        is EnigmaEvent.NoHints -> EnigmaEffect.ShowRewardedLifeAd()
+        is EnigmaEvent.NoHints -> EnigmaEffect.ShowRewardedHintAd()
         is EnigmaEvent.Correct -> {
             if (event.phrase.encryptedPositionsCount < 1) {
                 handleAction(EnigmaAction.Won)

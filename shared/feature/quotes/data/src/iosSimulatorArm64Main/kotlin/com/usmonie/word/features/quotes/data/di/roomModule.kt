@@ -10,15 +10,23 @@ import org.koin.dsl.module
 import platform.Foundation.NSHomeDirectory
 
 internal actual val roomModule: Module = module {
-    single(named(QuotesDatabase::class.toString())) {
-        val dbFilePath = NSHomeDirectory() + "/quotes.db"
-        Room.databaseBuilder<QuotesDatabase>(
-            name = dbFilePath,
-            factory = { QuotesDatabase::class.instantiateImpl() }
-        )
-    }
+	single(named(QuotesDatabase::class.toString())) {
+		val documentDirectory: NSURL? = NSFileManager.defaultManager.URLForDirectory(
+			directory = NSDocumentDirectory,
+			inDomain = NSUserDomainMask,
+			appropriateForURL = null,
+			create = false,
+			error = null,
+		)
 
-    factory<QuotesSourceFactory> {
-        QuotesSourceFactory()
-    }
+		val dbFilePath = documentDirectory?.path!! + "/quotes.db"
+		Room.databaseBuilder<QuotesDatabase>(
+			name = dbFilePath,
+			factory = { QuotesDatabase::class.instantiateImpl() }
+		)
+	}
+
+	factory<QuotesSourceFactory> {
+		QuotesSourceFactory()
+	}
 }

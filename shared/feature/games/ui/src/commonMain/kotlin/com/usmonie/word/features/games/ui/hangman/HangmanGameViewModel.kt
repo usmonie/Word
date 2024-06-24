@@ -136,6 +136,7 @@ class HangmanGameViewModel(
     override suspend fun handleEvent(event: HangmanEvent) = when (event) {
         is HangmanEvent.Won -> HangmanEffect.Won()
         is HangmanEvent.Lost -> HangmanEffect.Lost()
+        is HangmanEvent.WrongLetterGuessed -> HangmanEffect.Wrong()
         is HangmanEvent.UpdateWord -> HangmanEffect.RestartGame()
         is HangmanEvent.OpenWord -> HangmanEffect.OpenWord(event.word)
         is HangmanEvent.StartGame -> HangmanEffect.StartGame()
@@ -147,9 +148,7 @@ class HangmanGameViewModel(
     private suspend fun useHint(state: HangmanState, userHintsCount: Int): HangmanEvent {
         val guessedLetters = state.guessedLetters
         val wordSet = state.word.word.toSet()
-        if (userHintsCount < 1 &&
-            guessedLetters.letters.size < wordSet.size
-        ) {
+        if (userHintsCount < 1 && guessedLetters.letters.size < wordSet.size) {
             return HangmanEvent.CannotUseHints
         }
         useUserHintsCountUseCase()
@@ -202,9 +201,8 @@ class HangmanGameViewModel(
         return null
     }
 
-    private suspend fun nextRandomWord() = randomWordUseCase(
-        GetRandomWordUseCase.Param(10)
-    ).toUi()
+    private suspend fun nextRandomWord() =
+        randomWordUseCase(GetRandomWordUseCase.Param(10)).toUi()
 }
 
 fun HangmanGameViewModel.onLetterGuessed(letter: Char) =

@@ -4,9 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Badge
 import androidx.compose.material3.Button
@@ -36,7 +34,7 @@ fun ReviveLifeDialog(
     reviveTitle: String = stringResource(Res.string.games_lost_revive_title),
     nextTitle: String
 ) {
-    Box(modifier = Modifier.padding(24.dp)) {
+    Box(modifier = Modifier.padding(16.dp)) {
         Dialog(
             onDismissRequest = onDismissRequest,
             properties = DialogProperties(
@@ -46,24 +44,23 @@ fun ReviveLifeDialog(
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterVertically),
+                verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
                 modifier = Modifier.fillMaxWidth()
                     .background(
                         MaterialTheme.colorScheme.surfaceContainer,
                         MaterialTheme.shapes.extraLarge
                     )
             ) {
-                Spacer(Modifier.height(24.dp))
                 Text(
                     text = title,
-                    style = MaterialTheme.typography.headlineSmall,
+                    style = MaterialTheme.typography.titleLarge,
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp)
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp).padding(top = 24.dp)
                 )
 
                 Button(
                     onAddLifeClick,
-                    Modifier.padding(horizontal = 24.dp),
+                    Modifier.padding(horizontal = 16.dp),
                     enabled = isReviveAvailable()
                 ) {
                     Box {
@@ -73,7 +70,7 @@ fun ReviveLifeDialog(
                             style = MaterialTheme.typography.titleMedium,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(horizontal = 24.dp, vertical = 4.dp)
+                                .padding(horizontal = 16.dp, vertical = 4.dp)
                         )
 
                         Badge(Modifier.align(Alignment.CenterEnd)) {
@@ -87,15 +84,14 @@ fun ReviveLifeDialog(
                     }
                 }
 
-                OutlinedButton(onNextPhraseClick, Modifier.padding(horizontal = 24.dp)) {
+                OutlinedButton(onNextPhraseClick, Modifier.padding(horizontal = 16.dp).padding(bottom = 24.dp)) {
                     Text(
                         text = nextTitle,
                         textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.titleMedium,
-                        modifier = Modifier.weight(1f).padding(horizontal = 24.dp, vertical = 4.dp)
+                        modifier = Modifier.weight(1f).padding(horizontal = 16.dp, vertical = 4.dp)
                     )
                 }
-                Spacer(Modifier.height(24.dp))
             }
         }
     }

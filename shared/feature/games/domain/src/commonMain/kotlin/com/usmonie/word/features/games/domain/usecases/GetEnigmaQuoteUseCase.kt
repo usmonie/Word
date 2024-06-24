@@ -8,6 +8,7 @@ import com.usmonie.word.features.qutoes.domain.repositories.QuotesRepository
 import kotlinx.coroutines.flow.first
 import kotlin.math.max
 import kotlin.math.min
+import kotlin.math.roundToInt
 import kotlin.random.Random
 
 interface GetEnigmaQuoteUseCase : CoroutineUseCase<GetEnigmaQuoteUseCase.Param, GetEnigmaQuoteUseCase.EnigmaEncryptedPhrase> {
@@ -37,7 +38,10 @@ interface GetEnigmaQuoteUseCase : CoroutineUseCase<GetEnigmaQuoteUseCase.Param, 
     }
 }
 
-internal class GetEnigmaQuoteUseCaseImpl(private val getEnigmaLevelUseCase: GetEnigmaLevelUseCase, private val quotesRepository: QuotesRepository) : GetEnigmaQuoteUseCase {
+internal class GetEnigmaQuoteUseCaseImpl(
+    private val getEnigmaLevelUseCase: GetEnigmaLevelUseCase,
+    private val quotesRepository: QuotesRepository
+) : GetEnigmaQuoteUseCase {
     override suspend fun invoke(input: GetEnigmaQuoteUseCase.Param): GetEnigmaQuoteUseCase.EnigmaEncryptedPhrase {
         val level = getEnigmaLevelUseCase().first()
         val quote = quotesRepository.getRandomWasntPlayedQuote()
@@ -55,13 +59,14 @@ internal class GetEnigmaQuoteUseCaseImpl(private val getEnigmaLevelUseCase: GetE
         val percentage = min((max(userLevel.toDouble(), 10.0)), 100.0) / 100.0
         val letters = quote.text.filter { it.isLetter() }.toMutableList().shuffled()
 
-        val hiddenLetters = (percentage * letters.size).toInt()
+        val hiddenLetters = max((percentage * letters.size).roundToInt(), 3)
 
         val hiddenIndices = mutableSetOf<Int>()
         while (hiddenIndices.size < hiddenLetters) {
             val index = Random.nextInt(letters.size)
             hiddenIndices.add(index)
         }
+        println("ENIGMAGAME: $hiddenIndices, $hiddenLetters")
 
         var symbolIndex = 0
         val charsCount = mutableMapOf<Char, Int>()

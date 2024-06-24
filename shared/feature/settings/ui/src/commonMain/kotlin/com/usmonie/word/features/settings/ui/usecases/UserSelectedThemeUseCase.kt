@@ -15,31 +15,32 @@ import kotlinx.coroutines.flow.combine
 interface UserSelectedThemeUseCase : FlowUseCase<Unit, UserSelectedTheme>
 
 internal class UserSelectedThemeUseCaseImpl(
-    private val currentThemeUseCase: CurrentThemeUseCase,
-    private val subscriptionStatusUseCase: SubscriptionStatusUseCase
+	private val currentThemeUseCase: CurrentThemeUseCase,
+	private val subscriptionStatusUseCase: SubscriptionStatusUseCase
 ) : UserSelectedThemeUseCase {
 
-    override fun invoke(input: Unit): Flow<UserSelectedTheme> {
-        return currentThemeUseCase()
-            .combine(subscriptionStatusUseCase()) { selectedTheme, subscriptionStatus ->
-                val theme = WordThemes.valueOf(selectedTheme.colorsName ?: "RICH_MAROON")
-                val typography = WordTypography.valueOf(selectedTheme.fonts ?: "Modern Chic")
-
-                UserSelectedTheme(
-                    if (theme.paid && subscriptionStatus !is SubscriptionStatus.Purchased) {
-                        WordThemes.DEEP_INDIGO
-                    } else {
-                        theme
-                    },
-                    if (typography !is ModernChic &&
-                        subscriptionStatus !is SubscriptionStatus.Purchased
-                    ) {
-                        ModernChic
-                    } else {
-                        typography
-                    },
-                    selectedTheme.darkThemeMode
-                )
-            }
-    }
+	override fun invoke(input: Unit): Flow<UserSelectedTheme> {
+		val subscriptionFlow = subscriptionStatusUseCase()
+		val currentThemeFlow = currentThemeUseCase()
+		return currentThemeFlow
+			.combine(subscriptionFlow) { selectedTheme, subscriptionStatus ->
+				val theme = WordThemes.valueOf(selectedTheme.colorsName ?: "DEEP_INDIGO")
+				val typography = WordTypography.valueOf(selectedTheme.fonts ?: "Modern Chic")
+				UserSelectedTheme(
+					if (theme.paid && subscriptionStatus !is SubscriptionStatus.Purchased) {
+						WordThemes.DEEP_INDIGO
+					} else {
+						theme
+					},
+					if (typography !is ModernChic &&
+						subscriptionStatus !is SubscriptionStatus.Purchased
+					) {
+						ModernChic
+					} else {
+						typography
+					},
+					selectedTheme.darkThemeMode
+				)
+			}
+	}
 }

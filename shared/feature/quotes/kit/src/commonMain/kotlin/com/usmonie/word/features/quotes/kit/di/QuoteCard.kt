@@ -1,5 +1,6 @@
 package com.usmonie.word.features.quotes.kit.di
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -18,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.usmonie.core.kit.composables.base.buttons.TextButton
@@ -28,14 +30,14 @@ private const val QUOTE_STARS = "“”"
 
 @Composable
 fun QuoteCard(
-    quote: Quote,
-    onFavoriteClicked: (Quote) -> Unit,
-    modifier: Modifier = Modifier
+	quote: Quote,
+	onFavoriteClicked: (Quote) -> Unit,
+	modifier: Modifier = Modifier
 ) {
-    OutlinedCard(
-        modifier = modifier
-    ) {
-        Column(Modifier.fillMaxWidth().padding(16.dp)) {
+	OutlinedCard(
+		modifier = modifier
+	) {
+		Column(Modifier.fillMaxWidth().padding(16.dp)) {
 //            Text(
 //                text = QUOTE_STARS,
 //                modifier = Modifier.fillMaxWidth(),
@@ -43,236 +45,236 @@ fun QuoteCard(
 //                style = MaterialTheme.typography.labelSmall,
 //            )
 
-            SelectionContainer {
-                AutoSizeText(
-                    text = "“${quote.text}”",
-                    style = MaterialTheme.typography.bodyMedium,
-                    textAlign = TextAlign.Center,
-                    maxLines = 6,
-                    modifier = Modifier.fillMaxWidth().padding()
-                )
-            }
+			SelectionContainer {
+				AutoSizeText(
+					text = "“${quote.text}”",
+					style = MaterialTheme.typography.bodyMedium.copy(textAlign = TextAlign.Center),
+					textAlign = TextAlign.Center,
+					maxLines = 6,
+					modifier = Modifier.fillMaxWidth().padding()
+				)
+			}
 
-            val author = quote.author
-            if (author != null) {
-                Spacer(Modifier.height(4.dp))
-                SelectionContainer {
-                    Text(
-                        text = author,
-                        style = MaterialTheme.typography.bodySmall,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.fillMaxWidth().padding(start = 16.dp)
-                    )
-                }
-            } else {
-                Text(
-                    text = QUOTE_STARS,
-                    modifier = Modifier.fillMaxWidth(),
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.primary
-                )
-            }
+			val author = quote.author
+			if (author != null) {
+				Spacer(Modifier.height(4.dp))
+				SelectionContainer {
+					Text(
+						text = author,
+						style = MaterialTheme.typography.bodySmall,
+						textAlign = TextAlign.Center,
+						modifier = Modifier.fillMaxWidth().padding(start = 16.dp)
+					)
+				}
+			} else {
+				Text(
+					text = QUOTE_STARS,
+					modifier = Modifier.fillMaxWidth(),
+					textAlign = TextAlign.Center,
+					style = MaterialTheme.typography.labelSmall,
+					color = MaterialTheme.colorScheme.primary
+				)
+			}
 
-            Row(
-                Modifier.fillMaxWidth().padding(horizontal = 16.dp),
-                horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally)
-            ) {
-                FavoriteButton(quote, onFavoriteClicked)
-            }
-        }
-    }
+			Row(
+				Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+				horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally)
+			) {
+				FavoriteButton(quote, onFavoriteClicked)
+			}
+		}
+	}
 }
 
 @Composable
 fun QuoteLargeCard(
-    quote: Quote,
-    onFavoriteClicked: (Quote) -> Unit,
-    onNextClicked: () -> Unit,
-    modifier: Modifier = Modifier
+	quote: Quote,
+	onFavoriteClicked: (Quote) -> Unit,
+	onNextClicked: () -> Unit,
+	modifier: Modifier = Modifier
 ) {
-    OutlinedCard(
-        modifier = modifier
-    ) {
-        Column(Modifier.fillMaxWidth().padding(16.dp)) {
-            Text(
-                text = QUOTE_STARS,
-                modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.titleLarge,
-            )
+	OutlinedCard(
+		modifier = modifier
+	) {
+		Column(Modifier.fillMaxWidth().padding(16.dp)) {
+			Text(
+				text = QUOTE_STARS,
+				modifier = Modifier.fillMaxWidth(),
+				textAlign = TextAlign.Center,
+				style = MaterialTheme.typography.titleLarge,
+			)
 
-            SelectionContainer {
-                AutoSizeText(
-                    text = quote.text.trim(),
-                    minTextSize = MaterialTheme.typography.bodySmall.fontSize,
-                    maxLines = 6,
-                    style = MaterialTheme.typography.headlineSmall,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth().padding()
-                )
-            }
+			SelectionContainer {
+				AutoSizeText(
+					text = quote.text.trim(),
+					minTextSize = MaterialTheme.typography.bodySmall.fontSize,
+					maxLines = 6,
+					style = MaterialTheme.typography.headlineSmall,
+					textAlign = TextAlign.Center,
+					modifier = Modifier.fillMaxWidth()
+				)
+			}
 
-            val author = quote.author
-            if (author != null) {
-                Spacer(Modifier.height(4.dp))
-                SelectionContainer {
-                    Text(
-                        text = author,
-                        style = MaterialTheme.typography.bodySmall,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.fillMaxWidth().padding(start = 16.dp)
-                    )
-                }
-            } else {
-                Text(
-                    text = QUOTE_STARS,
-                    modifier = Modifier.fillMaxWidth(),
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.primary
-                )
-            }
+			val author = quote.author
+			if (author != null) {
+				Spacer(Modifier.height(4.dp))
+				SelectionContainer {
+					Text(
+						text = author,
+						style = MaterialTheme.typography.bodyLarge,
+						textAlign = TextAlign.Center,
+						modifier = Modifier.fillMaxWidth().padding(start = 16.dp)
+					)
+				}
+			} else {
+				Text(
+					text = QUOTE_STARS,
+					modifier = Modifier.fillMaxWidth(),
+					textAlign = TextAlign.Center,
+					style = MaterialTheme.typography.labelSmall,
+					color = MaterialTheme.colorScheme.primary
+				)
+			}
 
-            Row(
-                Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally)
-            ) {
-                FavoriteButton(quote, onFavoriteClicked)
-                NextButton(onNextClicked)
-            }
-        }
-    }
+			Row(
+				Modifier.fillMaxWidth(),
+				horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally)
+			) {
+				FavoriteButton(quote, onFavoriteClicked)
+				NextButton(onNextClicked)
+			}
+		}
+	}
 }
 
 @Composable
 fun QuoteLargeCard(
-    quote: Quote,
-    onFavoriteClicked: (Quote) -> Unit,
-    modifier: Modifier = Modifier
+	quote: Quote,
+	onFavoriteClicked: (Quote) -> Unit,
+	modifier: Modifier = Modifier
 ) {
-    OutlinedCard(
-        modifier = modifier
-    ) {
-        Column(Modifier.fillMaxWidth().padding(16.dp)) {
-            Text(
-                text = QUOTE_STARS,
-                modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.titleLarge,
-            )
+	OutlinedCard(
+		modifier = modifier
+	) {
+		Column(Modifier.fillMaxWidth().padding(16.dp)) {
+			Text(
+				text = QUOTE_STARS,
+				modifier = Modifier.fillMaxWidth(),
+				textAlign = TextAlign.Center,
+				style = MaterialTheme.typography.titleLarge,
+			)
 
-            SelectionContainer {
-                AutoSizeText(
-                    text = quote.text.trim(),
-                    minTextSize = MaterialTheme.typography.bodySmall.fontSize,
-                    maxLines = 6,
-                    style = MaterialTheme.typography.headlineSmall,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth().padding()
-                )
-            }
+			SelectionContainer {
+				AutoSizeText(
+					text = quote.text.trim(),
+					minTextSize = MaterialTheme.typography.bodySmall.fontSize,
+					maxLines = 6,
+					style = MaterialTheme.typography.headlineSmall.copy(textAlign = TextAlign.Center),
+					textAlign = TextAlign.Center,
+					modifier = Modifier.fillMaxWidth().padding()
+				)
+			}
 
-            val author = quote.author
-            if (author != null) {
-                Spacer(Modifier.height(4.dp))
-                SelectionContainer {
-                    Text(
-                        text = author,
-                        style = MaterialTheme.typography.bodySmall,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.fillMaxWidth().padding(start = 16.dp)
-                    )
-                }
-            } else {
-                Text(
-                    text = QUOTE_STARS,
-                    modifier = Modifier.fillMaxWidth(),
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.primary
-                )
-            }
+			val author = quote.author
+			if (author != null) {
+				Spacer(Modifier.height(4.dp))
+				SelectionContainer {
+					Text(
+						text = author,
+						style = MaterialTheme.typography.bodySmall,
+						textAlign = TextAlign.Center,
+						modifier = Modifier.fillMaxWidth().padding(start = 16.dp)
+					)
+				}
+			} else {
+				Text(
+					text = QUOTE_STARS,
+					modifier = Modifier.fillMaxWidth(),
+					textAlign = TextAlign.Center,
+					style = MaterialTheme.typography.labelSmall,
+					color = MaterialTheme.colorScheme.primary
+				)
+			}
 
-            Row(
-                Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally)
-            ) {
-                FavoriteButton(quote, onFavoriteClicked)
-            }
-        }
-    }
+			Row(
+				Modifier.fillMaxWidth(),
+				horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally)
+			) {
+				FavoriteButton(quote, onFavoriteClicked)
+			}
+		}
+	}
 }
 
 @Composable
 fun QuoteCardExpand(title: String, onClick: () -> Unit, modifier: Modifier = Modifier) {
-    Card(
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
-        modifier = modifier,
-        onClick = onClick
-    ) {
-        Column(Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text(
-                text = QUOTE_STARS,
-                modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.primary
-            )
+	Card(
+		colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+		modifier = modifier,
+		onClick = onClick
+	) {
+		Column(Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+			Text(
+				text = QUOTE_STARS,
+				modifier = Modifier.fillMaxWidth(),
+				textAlign = TextAlign.Center,
+				style = MaterialTheme.typography.labelSmall,
+				color = MaterialTheme.colorScheme.primary
+			)
 
-            Text(
-                text = title,
-                style = MaterialTheme.typography.titleMedium,
-                textAlign = TextAlign.Center,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.fillMaxWidth()
-            )
-        }
-    }
+			Text(
+				text = title,
+				style = MaterialTheme.typography.titleMedium,
+				textAlign = TextAlign.Center,
+				color = MaterialTheme.colorScheme.onSurfaceVariant,
+				modifier = Modifier.fillMaxWidth()
+			)
+		}
+	}
 }
 
 @Composable
 fun QuoteCardCollapse(title: String, onClick: () -> Unit, modifier: Modifier = Modifier) {
-    Card(
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
-        modifier = modifier,
-        onClick = onClick
-    ) {
-        Column(Modifier.fillMaxSize().padding(16.dp)) {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.titleMedium,
-                textAlign = TextAlign.Center,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.fillMaxWidth()
-            )
-        }
-    }
+	Card(
+		colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+		modifier = modifier,
+		onClick = onClick
+	) {
+		Column(Modifier.fillMaxSize().padding(16.dp)) {
+			Text(
+				text = title,
+				style = MaterialTheme.typography.titleMedium,
+				textAlign = TextAlign.Center,
+				color = MaterialTheme.colorScheme.onSurfaceVariant,
+				modifier = Modifier.fillMaxWidth()
+			)
+		}
+	}
 }
 
 @Composable
 fun FavoriteButton(
-    quote: Quote,
-    onClick: (Quote) -> Unit,
-    modifier: Modifier = Modifier
+	quote: Quote,
+	onClick: (Quote) -> Unit,
+	modifier: Modifier = Modifier
 ) {
-    TextButton(
-        if (quote.favorite) "Unfavorite" else "Favorite",
-        { onClick(quote) },
-        modifier,
-        contentPadding = PaddingValues(0.dp)
-    )
+	TextButton(
+		if (quote.favorite) "Unfavorite" else "Favorite",
+		{ onClick(quote) },
+		modifier,
+		contentPadding = PaddingValues(0.dp)
+	)
 }
 
 @Composable
 fun NextButton(
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
+	onClick: () -> Unit,
+	modifier: Modifier = Modifier
 ) {
-    TextButton(
-        "Next quote",
-        onClick,
-        modifier,
-        contentPadding = PaddingValues(0.dp)
-    )
+	TextButton(
+		"Next quote",
+		onClick,
+		modifier,
+		contentPadding = PaddingValues(0.dp)
+	)
 }

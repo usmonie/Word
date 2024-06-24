@@ -17,52 +17,54 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
 internal class SubscriptionRepositoryImpl(
-    private val billing: Billing,
-    private val dataStore: DataStore<Preferences>
+	private val billing: Billing,
+	private val dataStore: DataStore<Preferences>
 ) : SubscriptionRepository {
-    override fun getSubscriptionState(): Flow<SubscriptionStatus> = callbackFlow {
-        val callback: (SubscriptionStatus) -> Unit = {
-            trySend(it)
-        }
-        billing.subscribeSubscriptionState(callback)
+	override fun getSubscriptionState(): Flow<SubscriptionStatus> = callbackFlow {
+		val callback: (SubscriptionStatus) -> Unit = {
+			trySend(it)
+		}
 
-        awaitClose {
-            billing.unsubscribeSubscriptionState(callback)
-        }
-    }
+		callback(SubscriptionStatus.Purchased(null))
+		billing.subscribeSubscriptionState(callback)
 
-    override suspend fun getSubscriptions(): List<Subscription> {
-        return billing.getSubscriptions()
-    }
+		awaitClose {
+			billing.unsubscribeSubscriptionState(callback)
+		}
+	}
 
-    override suspend fun subscribe(subscription: Subscription) {
-        billing.subscribe(subscription)
-    }
+	override suspend fun getSubscriptions(): List<Subscription> {
+		return billing.getSubscriptions()
+	}
 
-    override suspend fun getStartedSaleTime(): Flow<Sale> {
-        dataStore.edit {
-            if (it[SubscriptionPreferences.SUBSCRIPTION_SALE_STARTED] == null) {
-                it[SubscriptionPreferences.SUBSCRIPTION_SALE_STARTED] =
-                    Clock.System.now().epochSeconds
-                it[SubscriptionPreferences.SUBSCRIPTION_SALE_DURATION] = 24
-            }
-        }
+	override suspend fun subscribe(subscription: Subscription) {
+		billing.subscribe(subscription)
+	}
 
-        return dataStore.data
-            .map {
-                val startedTime = it[SubscriptionPreferences.SUBSCRIPTION_SALE_STARTED]
-                    ?: Clock.System.now().epochSeconds
+	override suspend fun getStartedSaleTime(): Flow<Sale> {
+		dataStore.edit {
+			if (it[SubscriptionPreferences.SUBSCRIPTION_SALE_STARTED] == null) {
+				it[SubscriptionPreferences.SUBSCRIPTION_SALE_STARTED] =
+					Clock.System.now().epochSeconds
+				it[SubscriptionPreferences.SUBSCRIPTION_SALE_DURATION] = 24
+			}
+		}
 
-                val time = Instant.fromEpochMilliseconds(startedTime)
-                    .toLocalDateTime(TimeZone.currentSystemDefault())
+		return dataStore.data
+			.map {
+				val startedTime = it[SubscriptionPreferences.SUBSCRIPTION_SALE_STARTED]
+					?: Clock.System.now().epochSeconds
 
-                Sale(time, it[SubscriptionPreferences.SUBSCRIPTION_SALE_DURATION] ?: 24)
-            }
-    }
+				val time = Instant.fromEpochMilliseconds(startedTime)
+					.toLocalDateTime(TimeZone.currentSystemDefault())
 
-    override suspend fun setStartedSaleTime(time: Long) {
-        dataStore.updateData {
-            it
-        }
-    }
+				Sale(time, it[SubscriptionPreferences.SUBSCRIPTION_SALE_DURATION] ?: 24)
+			}
+	}
+
+	override suspend fun setStartedSaleTime(time: Long) {
+		dataStore.updateData {
+			it
+		}
+	}
 }

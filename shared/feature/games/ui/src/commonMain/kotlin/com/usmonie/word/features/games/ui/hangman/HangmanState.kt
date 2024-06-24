@@ -99,6 +99,7 @@ sealed class HangmanEvent : ScreenEvent {
 sealed class HangmanEffect : ScreenEffect {
     class Won : HangmanEffect()
     class Lost : HangmanEffect()
+    class Wrong : HangmanEffect()
     class RestartGame : HangmanEffect()
     class ShowInterstitialAd : HangmanEffect()
     class ShowRewardedLifeAd : HangmanEffect()

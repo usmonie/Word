@@ -13,13 +13,14 @@ import kotlinx.coroutines.withContext
 import kotlinx.io.Source
 import kotlinx.io.readLine
 
-internal const val QUOTES_COUNT = 494187L
+internal const val QUOTES_COUNT = 404866L
 
 internal class ImportQuotesUseCaseImpl(
     private val quotesSource: QuotesSourceFactory,
     private val quotesRepository: QuotesRepository
 ) : InitiateQuotesUseCase {
 
+    private val regex = "[\\x00-\\xFF]+".toRegex()
     override fun invoke(input: Unit): Flow<Boolean> = flow {
         val quotesAlreadyInserted = quotesRepository.getQuotesCount()
 
@@ -44,14 +45,19 @@ internal class ImportQuotesUseCaseImpl(
             var number = 0
             val items = ArrayList<Quote>(10_000)
             while (line != null) {
-                number++
                 val parts = line.split("|").fastMap { it.trim() }
                 if (parts.size >= 3) {
                     val quoteText = parts[0].removeSurrounding("|")
-                    val author = parts[1].removeSurrounding("|")
-                    val categories = parts[2].removeSurrounding("|").split(", ").fastMap { it.trim() }
-                    val quote = Quote("", quoteText, author, categories, false, false)
-                    items.add(quote)
+                    if (regex.matches(quoteText)) {
+                        number++
+
+                        val author = parts[1].removeSurrounding("|")
+                        val categories = parts[2].removeSurrounding("|").split(", ").fastMap { it.trim() }
+                        val quote = Quote("", quoteText, author, categories, false, wasPlayed = false)
+                        items.add(quote)
+                    } else {
+                        println("excluded quote")
+                    }
                 }
                 line = source.readLine()
                 if (items.count() > 9999) {
@@ -62,7 +68,7 @@ internal class ImportQuotesUseCaseImpl(
             }
 
             quotesRepository.putAll(items)
-            println("QUOTES ALL IMPORTED")
+            println("QUOTES ALL IMPORTED $number")
 
             emit(true)
         } catch (e: Exception) {

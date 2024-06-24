@@ -2,6 +2,8 @@ package com.usmonie.core.kit.composables.base.text
 
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.BoxWithConstraintsScope
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
@@ -93,53 +95,53 @@ import kotlin.math.min
  */
 @Composable
 fun AutoSizeText(
-    text: String,
-    modifier: Modifier = Modifier,
-    color: Color = Color.Unspecified,
-    suggestedFontSizes: ImmutableWrapper<List<TextUnit>> = emptyList<TextUnit>().toImmutableWrapper(),
-    suggestedFontSizesStatus: SuggestedFontSizesStatus = suggestedFontSizes.rememberSuggestedFontSizesStatus,
-    stepGranularityTextSize: TextUnit = TextUnit.Unspecified,
-    style: TextStyle = LocalTextStyle.current,
-    minTextSize: TextUnit = TextUnit.Unspecified,
-    maxTextSize: TextUnit = style.fontSize,
-    fontStyle: FontStyle? = null,
-    fontWeight: FontWeight? = null,
-    fontFamily: FontFamily? = null,
-    letterSpacing: TextUnit = TextUnit.Unspecified,
-    textDecoration: TextDecoration? = null,
-    alignment: Alignment = Alignment.TopStart,
-    overflow: TextOverflow = TextOverflow.Clip,
-    softWrap: Boolean = true,
-    maxLines: Int = Int.MAX_VALUE,
-    minLines: Int = 1,
-    textAlign: TextAlign = TextAlign.Start,
-    onTextLayout: (TextLayoutResult) -> Unit = {},
-    lineSpacingRatio: Float = style.lineHeight.value / style.fontSize.value,
+	text: String,
+	modifier: Modifier = Modifier,
+	color: Color = Color.Unspecified,
+	suggestedFontSizes: ImmutableWrapper<List<TextUnit>> = emptyList<TextUnit>().toImmutableWrapper(),
+	suggestedFontSizesStatus: SuggestedFontSizesStatus = suggestedFontSizes.rememberSuggestedFontSizesStatus,
+	stepGranularityTextSize: TextUnit = TextUnit.Unspecified,
+	style: TextStyle = LocalTextStyle.current,
+	minTextSize: TextUnit = TextUnit.Unspecified,
+	maxTextSize: TextUnit = style.fontSize,
+	fontStyle: FontStyle? = null,
+	fontWeight: FontWeight? = null,
+	fontFamily: FontFamily? = null,
+	letterSpacing: TextUnit = TextUnit.Unspecified,
+	textDecoration: TextDecoration? = null,
+	alignment: Alignment = Alignment.TopStart,
+	overflow: TextOverflow = TextOverflow.Clip,
+	softWrap: Boolean = true,
+	maxLines: Int = Int.MAX_VALUE,
+	minLines: Int = 1,
+	textAlign: TextAlign = TextAlign.Start,
+	onTextLayout: (TextLayoutResult) -> Unit = {},
+	lineSpacingRatio: Float = style.lineHeight.value / style.fontSize.value,
 ) {
-    AutoSizeText(
-        text = AnnotatedString(text),
-        modifier = modifier,
-        color = color,
-        suggestedFontSizes = suggestedFontSizes,
-        suggestedFontSizesStatus = suggestedFontSizesStatus,
-        stepGranularityTextSize = stepGranularityTextSize,
-        minTextSize = minTextSize,
-        maxTextSize = maxTextSize,
-        fontStyle = fontStyle,
-        fontWeight = fontWeight,
-        fontFamily = fontFamily,
-        letterSpacing = letterSpacing,
-        textDecoration = textDecoration,
-        alignment = alignment,
-        overflow = overflow,
-        softWrap = softWrap,
-        maxLines = maxLines,
-        minLines = minLines,
-        textAlign = textAlign,
-        onTextLayout = onTextLayout,
-        style = style,
-        lineSpacingRatio = lineSpacingRatio,
-    )
+	AutoSizeText(
+		text = AnnotatedString(text),
+		modifier = modifier,
+		color = color,
+		suggestedFontSizes = suggestedFontSizes,
+		suggestedFontSizesStatus = suggestedFontSizesStatus,
+		stepGranularityTextSize = stepGranularityTextSize,
+		minTextSize = minTextSize,
+		maxTextSize = maxTextSize,
+		fontStyle = fontStyle,
+		fontWeight = fontWeight,
+		fontFamily = fontFamily,
+		letterSpacing = letterSpacing,
+		textDecoration = textDecoration,
+		alignment = alignment,
+		overflow = overflow,
+		softWrap = softWrap,
+		maxLines = maxLines,
+		minLines = minLines,
+		textAlign = textAlign,
+		onTextLayout = onTextLayout,
+		style = style,
+		lineSpacingRatio = lineSpacingRatio,
+	)
 }
 
 /**
@@ -155,220 +157,221 @@ fun AutoSizeText(
  */
 @Composable
 fun AutoSizeText(
-    text: AnnotatedString,
-    modifier: Modifier = Modifier,
-    color: Color = Color.Unspecified,
-    suggestedFontSizes: ImmutableWrapper<List<TextUnit>> = emptyList<TextUnit>().toImmutableWrapper(),
-    suggestedFontSizesStatus: SuggestedFontSizesStatus = suggestedFontSizes.rememberSuggestedFontSizesStatus,
-    stepGranularityTextSize: TextUnit = TextUnit.Unspecified,
-    style: TextStyle = LocalTextStyle.current,
-    minTextSize: TextUnit = TextUnit.Unspecified,
-    maxTextSize: TextUnit = style.fontSize,
-    fontStyle: FontStyle? = null,
-    fontWeight: FontWeight? = null,
-    fontFamily: FontFamily? = null,
-    letterSpacing: TextUnit = TextUnit.Unspecified,
-    textDecoration: TextDecoration? = null,
-    alignment: Alignment = Alignment.TopStart,
-    overflow: TextOverflow = TextOverflow.Clip,
-    softWrap: Boolean = true,
-    maxLines: Int = Int.MAX_VALUE,
-    minLines: Int = 1,
-    textAlign: TextAlign = TextAlign.Start,
-    inlineContent: ImmutableWrapper<Map<String, InlineTextContent>> = mapOf<String, InlineTextContent>().toImmutableWrapper(),
-    onTextLayout: (TextLayoutResult) -> Unit = {},
-    lineSpacingRatio: Float = style.lineHeight.value / style.fontSize.value,
+	text: AnnotatedString,
+	modifier: Modifier = Modifier,
+	color: Color = Color.Unspecified,
+	suggestedFontSizes: ImmutableWrapper<List<TextUnit>> = emptyList<TextUnit>().toImmutableWrapper(),
+	suggestedFontSizesStatus: SuggestedFontSizesStatus = suggestedFontSizes.rememberSuggestedFontSizesStatus,
+	stepGranularityTextSize: TextUnit = TextUnit.Unspecified,
+	style: TextStyle = LocalTextStyle.current,
+	minTextSize: TextUnit = TextUnit.Unspecified,
+	maxTextSize: TextUnit = style.fontSize,
+	fontStyle: FontStyle? = null,
+	fontWeight: FontWeight? = null,
+	fontFamily: FontFamily? = null,
+	letterSpacing: TextUnit = TextUnit.Unspecified,
+	textDecoration: TextDecoration? = null,
+	alignment: Alignment = Alignment.TopStart,
+	overflow: TextOverflow = TextOverflow.Clip,
+	softWrap: Boolean = true,
+	maxLines: Int = Int.MAX_VALUE,
+	minLines: Int = 1,
+	textAlign: TextAlign = TextAlign.Start,
+	inlineContent: ImmutableWrapper<Map<String, InlineTextContent>> = mapOf<String, InlineTextContent>().toImmutableWrapper(),
+	onTextLayout: (TextLayoutResult) -> Unit = {},
+	lineSpacingRatio: Float = style.lineHeight.value / style.fontSize.value,
 ) {
-    // Change font scale to 1F
-    CompositionLocalProvider(
-        LocalDensity provides Density(density = LocalDensity.current.density, fontScale = 1F)
-    ) {
-        BoxWithConstraints(
-            modifier = modifier,
-            contentAlignment = alignment,
-        ) {
-            val combinedTextStyle = LocalTextStyle.current + style.copy(
-                color = color.takeIf { it.isSpecified } ?: style.color,
-                fontStyle = fontStyle ?: style.fontStyle,
-                fontWeight = fontWeight ?: style.fontWeight,
-                fontFamily = fontFamily ?: style.fontFamily,
-                letterSpacing = letterSpacing.takeIf { it.isSpecified } ?: style.letterSpacing,
-                textDecoration = textDecoration ?: style.textDecoration,
-                textAlign = when (alignment) {
-                    Alignment.TopStart, Alignment.CenterStart, Alignment.BottomStart -> TextAlign.Start
-                    Alignment.TopCenter, Alignment.Center, Alignment.BottomCenter -> TextAlign.Center
-                    Alignment.TopEnd, Alignment.CenterEnd, Alignment.BottomEnd -> TextAlign.End
-                    else -> TextAlign.Unspecified
-                },
-            )
+	// Change font scale to 1F
+	CompositionLocalProvider(
+		LocalDensity provides Density(density = LocalDensity.current.density, fontScale = 1F)
+	) {
+		BoxWithConstraints(
+			modifier = modifier,
+			contentAlignment = alignment,
+		) {
+			val combinedTextStyle = LocalTextStyle.current + style.copy(
+				color = color.takeIf { it.isSpecified } ?: style.color,
+				fontStyle = fontStyle ?: style.fontStyle,
+				fontWeight = fontWeight ?: style.fontWeight,
+				fontFamily = fontFamily ?: style.fontFamily,
+				letterSpacing = letterSpacing.takeIf { it.isSpecified } ?: style.letterSpacing,
+				textDecoration = textDecoration ?: style.textDecoration,
+				textAlign = when (alignment) {
+					Alignment.TopStart, Alignment.CenterStart, Alignment.BottomStart -> TextAlign.Start
+					Alignment.TopCenter, Alignment.Center, Alignment.BottomCenter -> TextAlign.Center
+					Alignment.TopEnd, Alignment.CenterEnd, Alignment.BottomEnd -> TextAlign.End
+					else -> TextAlign.Unspecified
+				},
+			)
 
-            val layoutDirection = LocalLayoutDirection.current
-            val density = LocalDensity.current
-            val fontFamilyResolver = LocalFontFamilyResolver.current
-            val textMeasurer = rememberTextMeasurer()
-            val coercedLineSpacingRatio = lineSpacingRatio.takeIf { it.isFinite() && it >= 1 } ?: 1F
-            val shouldMoveBackward: (TextUnit) -> Boolean = {
-                shouldShrink(
-                    text = text,
-                    textStyle = combinedTextStyle.copy(
-                        fontSize = it,
-                        lineHeight = it * coercedLineSpacingRatio,
-                    ),
-                    maxLines = maxLines,
-                    layoutDirection = layoutDirection,
-                    softWrap = softWrap,
-                    density = density,
-                    fontFamilyResolver = fontFamilyResolver,
-                    textMeasurer = textMeasurer,
-                )
-            }
+			val layoutDirection = LocalLayoutDirection.current
+			val density = LocalDensity.current
+			val fontFamilyResolver = LocalFontFamilyResolver.current
+			val textMeasurer = rememberTextMeasurer()
+			val coercedLineSpacingRatio = lineSpacingRatio.takeIf { it.isFinite() && it >= 1 } ?: 1F
+			val shouldMoveBackward: (TextUnit) -> Boolean = {
+				shouldShrink(
+					text = text,
+					textStyle = combinedTextStyle.copy(
+						fontSize = it,
+						lineHeight = it * coercedLineSpacingRatio,
+					),
+					maxLines = maxLines,
+					layoutDirection = layoutDirection,
+					softWrap = softWrap,
+					density = density,
+					fontFamilyResolver = fontFamilyResolver,
+					textMeasurer = textMeasurer,
+				)
+			}
 
-            val electedFontSize = kotlin.run {
-                if (suggestedFontSizesStatus == SuggestedFontSizesStatus.VALID) {
-                    suggestedFontSizes.value
-                } else {
-                    remember(key1 = suggestedFontSizes) {
-                        suggestedFontSizes.value
-                            .fastFilter { it.isSp }
-                            .takeIf { it.isNotEmpty() }
-                            ?.sortedBy { it.value }
-                    }
-                }
-            }
-                ?.findElectedValue(shouldMoveBackward = shouldMoveBackward)
-                ?: rememberCandidateFontSizesIntProgress(
-                    density = density,
-                    dpSize = DpSize(maxWidth, maxHeight),
-                    maxTextSize = maxTextSize,
-                    minTextSize = minTextSize,
-                    stepGranularityTextSize = stepGranularityTextSize,
-                ).findElectedValue(
-                    transform = { density.toSp(it) },
-                    shouldMoveBackward = shouldMoveBackward,
-                )
+			val electedFontSize = kotlin.run {
+				if (suggestedFontSizesStatus == SuggestedFontSizesStatus.VALID) {
+					suggestedFontSizes.value
+				} else {
+					remember(key1 = suggestedFontSizes) {
+						suggestedFontSizes.value
+							.fastFilter { it.isSp }
+							.takeIf { it.isNotEmpty() }
+							?.sortedBy { it.value }
+					}
+				}
+			}
+				?.findElectedValue(shouldMoveBackward = shouldMoveBackward)
+				?: rememberCandidateFontSizesIntProgress(
+					density = density,
+					dpSize = DpSize(maxWidth, maxHeight),
+					maxTextSize = maxTextSize,
+					minTextSize = minTextSize,
+					stepGranularityTextSize = stepGranularityTextSize,
+				).findElectedValue(
+					transform = { density.toSp(it) },
+					shouldMoveBackward = shouldMoveBackward,
+				)
 
-            Text(
-                text = text,
-                overflow = overflow,
-                softWrap = softWrap,
-                maxLines = maxLines,
-                textAlign = textAlign,
-                minLines = minLines,
-                inlineContent = inlineContent.value,
-                onTextLayout = onTextLayout,
-                style = combinedTextStyle.copy(
-                    fontSize = electedFontSize,
-                    lineHeight = electedFontSize * coercedLineSpacingRatio,
-                ),
-            )
-        }
-    }
+			Text(
+				text = text,
+				overflow = overflow,
+				softWrap = softWrap,
+				maxLines = maxLines,
+				textAlign = textAlign,
+				minLines = minLines,
+				inlineContent = inlineContent.value,
+				onTextLayout = onTextLayout,
+				style = combinedTextStyle.copy(
+					fontSize = electedFontSize,
+					lineHeight = electedFontSize * coercedLineSpacingRatio,
+				),
+				modifier = Modifier.fillMaxWidth()
+			)
+		}
+	}
 }
 
 @Suppress("LongParameterList")
 private fun BoxWithConstraintsScope.shouldShrink(
-    text: AnnotatedString,
-    textStyle: TextStyle,
-    maxLines: Int,
-    layoutDirection: LayoutDirection,
-    softWrap: Boolean,
-    density: Density,
-    fontFamilyResolver: FontFamily.Resolver,
-    textMeasurer: TextMeasurer,
+	text: AnnotatedString,
+	textStyle: TextStyle,
+	maxLines: Int,
+	layoutDirection: LayoutDirection,
+	softWrap: Boolean,
+	density: Density,
+	fontFamilyResolver: FontFamily.Resolver,
+	textMeasurer: TextMeasurer,
 ) = textMeasurer.measure(
-    text = text,
-    style = textStyle,
-    overflow = TextOverflow.Clip,
-    softWrap = softWrap,
-    maxLines = maxLines,
-    constraints = constraints,
-    layoutDirection = layoutDirection,
-    density = density,
-    fontFamilyResolver = fontFamilyResolver,
+	text = text,
+	style = textStyle,
+	overflow = TextOverflow.Clip,
+	softWrap = softWrap,
+	maxLines = maxLines,
+	constraints = constraints,
+	layoutDirection = layoutDirection,
+	density = density,
+	fontFamilyResolver = fontFamilyResolver,
 ).hasVisualOverflow
 
 @Composable
 private fun rememberCandidateFontSizesIntProgress(
-    density: Density,
-    dpSize: DpSize,
-    minTextSize: TextUnit = TextUnit.Unspecified,
-    maxTextSize: TextUnit = TextUnit.Unspecified,
-    stepGranularityTextSize: TextUnit = TextUnit.Unspecified,
+	density: Density,
+	dpSize: DpSize,
+	minTextSize: TextUnit = TextUnit.Unspecified,
+	maxTextSize: TextUnit = TextUnit.Unspecified,
+	stepGranularityTextSize: TextUnit = TextUnit.Unspecified,
 ): IntProgression {
-    val max = remember(key1 = maxTextSize, key2 = dpSize, key3 = density) {
-        val intSize = density.toIntSize(dpSize)
-        min(intSize.width, intSize.height).let { max ->
-            maxTextSize
-                .takeIf { it.isSp }
-                ?.let { density.roundToPx(it) }
-                ?.coerceIn(range = 0..max)
-                ?: max
-        }
-    }
+	val max = remember(key1 = maxTextSize, key2 = dpSize, key3 = density) {
+		val intSize = density.toIntSize(dpSize)
+		min(intSize.width, intSize.height).let { max ->
+			maxTextSize
+				.takeIf { it.isSp }
+				?.let { density.roundToPx(it) }
+				?.coerceIn(range = 0..max)
+				?: max
+		}
+	}
 
-    val min = remember(key1 = minTextSize, key2 = max, key3 = density) {
-        minTextSize
-            .takeIf { it.isSp }
-            ?.let { density.roundToPx(it) }
-            ?.coerceIn(range = 0..max)
-            ?: 0
-    }
+	val min = remember(key1 = minTextSize, key2 = max, key3 = density) {
+		minTextSize
+			.takeIf { it.isSp }
+			?.let { density.roundToPx(it) }
+			?.coerceIn(range = 0..max)
+			?: 0
+	}
 
-    val step = remember(
-        stepGranularityTextSize,
-        min,
-        max,
-        density,
-    ) {
-        stepGranularityTextSize
-            .takeIf { it.isSp }
-            ?.let { density.roundToPx(it) }
-            ?.coerceIn(minimumValue = 1, maximumValue = max - min)
-            ?: 1
-    }
+	val step = remember(
+		stepGranularityTextSize,
+		min,
+		max,
+		density,
+	) {
+		stepGranularityTextSize
+			.takeIf { it.isSp }
+			?.let { density.roundToPx(it) }
+			?.coerceIn(minimumValue = 1, maximumValue = max - min)
+			?: 1
+	}
 
-    return remember(key1 = min, key2 = max, key3 = step) {
-        min..max step step
-    }
+	return remember(key1 = min, key2 = max, key3 = step) {
+		min..max step step
+	}
 }
 
 // This function works by using a binary search algorithm
 fun <E> List<E>.findElectedValue(shouldMoveBackward: (E) -> Boolean) = run {
-    indices.findElectedValue(
-        transform = { this[it] },
-        shouldMoveBackward = shouldMoveBackward,
-    )
+	indices.findElectedValue(
+		transform = { this[it] },
+		shouldMoveBackward = shouldMoveBackward,
+	)
 }
 
 // This function works by using a binary search algorithm
 private fun <E> IntProgression.findElectedValue(
-    transform: (Int) -> E,
-    shouldMoveBackward: (E) -> Boolean,
+	transform: (Int) -> E,
+	shouldMoveBackward: (E) -> Boolean,
 ) = run {
-    var low = first / step
-    var high = last / step
-    while (low <= high) {
-        val mid = low + (high - low) / 2
-        if (shouldMoveBackward(transform(mid * step))) {
-            high = mid - 1
-        } else {
-            low = mid + 1
-        }
-    }
-    transform((high * step).coerceAtLeast(minimumValue = first * step))
+	var low = first / step
+	var high = last / step
+	while (low <= high) {
+		val mid = low + (high - low) / 2
+		if (shouldMoveBackward(transform(mid * step))) {
+			high = mid - 1
+		} else {
+			low = mid + 1
+		}
+	}
+	transform((high * step).coerceAtLeast(minimumValue = first * step))
 }
 
 enum class SuggestedFontSizesStatus {
-    VALID, INVALID, UNKNOWN;
+	VALID, INVALID, UNKNOWN;
 
-    companion object {
-        val List<TextUnit>.suggestedFontSizesStatus
-            get() = if (isNotEmpty() && all { it.isSp } && sortedBy { it.value } == this) {
-                VALID
-            } else {
-                INVALID
-            }
-        val ImmutableWrapper<List<TextUnit>>.rememberSuggestedFontSizesStatus
-            @Composable get() = remember(key1 = this) { value.suggestedFontSizesStatus }
-    }
+	companion object {
+		val List<TextUnit>.suggestedFontSizesStatus
+			get() = if (isNotEmpty() && all { it.isSp } && sortedBy { it.value } == this) {
+				VALID
+			} else {
+				INVALID
+			}
+		val ImmutableWrapper<List<TextUnit>>.rememberSuggestedFontSizesStatus
+			@Composable get() = remember(key1 = this) { value.suggestedFontSizesStatus }
+	}
 }
