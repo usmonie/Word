@@ -42,12 +42,7 @@ import com.usmonie.core.tools.ui.rememberShakeController
 import com.usmonie.core.tools.ui.shake
 import com.usmonie.word.features.ads.ui.LocalAdsManager
 import com.usmonie.word.features.games.ui.hangman.HangmanGameScreenFactory.Companion.ID
-import com.usmonie.word.features.games.ui.kit.GameBoard
-import com.usmonie.word.features.games.ui.kit.HangmanGameWon
-import com.usmonie.word.features.games.ui.kit.Keyboard
-import com.usmonie.word.features.games.ui.kit.LivesAmount
-import com.usmonie.word.features.games.ui.kit.ReviveLifeDialog
-import com.usmonie.word.features.games.ui.kit.UseHintButton
+import com.usmonie.word.features.games.ui.kit.*
 import com.usmonie.word.features.games.ui.models.WordCombinedUi
 import com.usmonie.word.features.subscriptions.ui.notification.SubscriptionScreenAction
 import com.usmonie.word.features.subscriptions.ui.notification.SubscriptionViewModel
@@ -190,7 +185,7 @@ private fun PlayBoard(
     ) {
         HangmanImage(
             state.maxLives - state.lives,
-            Modifier.fillMaxWidth().weight(1f).padding(vertical = 24.dp)
+            Modifier.fillMaxWidth().weight(2f).padding(vertical = 24.dp)
         )
         WordDisplay(state)
 
@@ -221,7 +216,7 @@ private fun PlayBoard(
             contentKey = { hangmanState -> hangmanState::class::simpleName }
         ) { hangmanState ->
             if (hangmanState is HangmanState.Playing.Input) {
-                Keyboard(
+                QwertyKeyboard(
                     hangmanGameViewModel::onLetterGuessed,
                     hangmanState.guessedLetters,
                     Modifier.fillMaxSize().background(MaterialTheme.colorScheme.surface),

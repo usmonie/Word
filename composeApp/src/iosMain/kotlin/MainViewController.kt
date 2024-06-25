@@ -1,4 +1,3 @@
-
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.ui.Modifier
@@ -19,57 +18,57 @@ import platform.UIKit.UIViewController
 @OptIn(ExperimentalForeignApi::class)
 @Suppress("LongParameterList", "FunctionNaming")
 fun MainViewController(
-    analytics: Analytics,
-    bannerAd: () -> UIView,
-    showInterstitialAd: () -> Unit,
-    showRewardedLifeInterstitialAd: (onAddDismissed: () -> Unit, onRewardGranted: (Int) -> Unit) -> Unit,
-    showRewardedHintInterstitialAd: (onAddDismissed: () -> Unit, onRewardGranted: (Int) -> Unit) -> Unit,
-    showRewardedNewGameInterstitialAd: (onAddDismissed: () -> Unit, onRewardGranted: (Int) -> Unit) -> Unit,
-    getAdsManagerState: () -> AdsManagerState
+	analytics: Analytics,
+	bannerAd: () -> UIView,
+	showInterstitialAd: () -> Unit,
+	showRewardedLifeInterstitialAd: (onAddDismissed: () -> Unit, onRewardGranted: (Int) -> Unit) -> Unit,
+	showRewardedHintInterstitialAd: (onAddDismissed: () -> Unit, onRewardGranted: (Int) -> Unit) -> Unit,
+	showRewardedNewGameInterstitialAd: (onAddDismissed: () -> Unit, onRewardGranted: (Int) -> Unit) -> Unit,
+	getAdsManagerState: () -> AdsManagerState
 ): UIViewController {
-    startKoin {
-        modules(
-            appModule,
-            module {
-                single { analytics }
-                single {
-                    AdsManager(
-                        {
-                            UIKitView(
-                                factory = bannerAd,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(56.dp)
-                            )
-                        },
-                        { onAddMissed, onRewardGranted ->
-                            showRewardedLifeInterstitialAd(
-                                onAddMissed,
-                                onRewardGranted
-                            )
-                        },
-                        { onAddMissed, onRewardGranted ->
-                            showRewardedHintInterstitialAd(
-                                onAddMissed,
-                                onRewardGranted
-                            )
-                        },
-                        { onAddMissed, onRewardGranted ->
-                            showRewardedNewGameInterstitialAd(
-                                onAddMissed,
-                                onRewardGranted
-                            )
-                        },
-                        { showInterstitialAd() },
-                        get(),
-                        getAdsManagerState
-                    )
-                }
-            }
-        )
-    }
+	startKoin {
+		modules(
+			appModule,
+			module {
+				single { analytics }
+				single {
+					AdsManager(
+						{
+							UIKitView(
+								factory = bannerAd,
+								modifier = Modifier
+									.fillMaxWidth()
+									.height(56.dp)
+							)
+						},
+						{ onAddMissed, onRewardGranted ->
+							showRewardedLifeInterstitialAd(
+								onAddMissed,
+								onRewardGranted
+							)
+						},
+						{ onAddMissed, onRewardGranted ->
+							showRewardedHintInterstitialAd(
+								onAddMissed,
+								onRewardGranted
+							)
+						},
+						{ onAddMissed, onRewardGranted ->
+							showRewardedNewGameInterstitialAd(
+								onAddMissed,
+								onRewardGranted
+							)
+						},
+						{ showInterstitialAd() },
+						get(),
+						getAdsManagerState
+					)
+				}
+			}
+		)
+	}
 
-    return ComposeUIViewController {
-        App()
-    }
+	return ComposeUIViewController {
+		App()
+	}
 }

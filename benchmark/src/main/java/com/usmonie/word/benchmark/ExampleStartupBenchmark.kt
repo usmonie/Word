@@ -22,18 +22,18 @@ import org.junit.runner.RunWith
  */
 @RunWith(AndroidJUnit4::class)
 class ExampleStartupBenchmark {
-    @get:Rule
-    val benchmarkRule = MacrobenchmarkRule()
+	@get:Rule
+	val benchmarkRule = MacrobenchmarkRule()
 
-    @Test
-    fun startup() = benchmarkRule.measureRepeated(
-        packageName = "com.usmonie.word",
-        metrics = listOf(StartupTimingMetric()),
-        iterations = 1,
-        startupMode = StartupMode.COLD
-    ) {
-        pressHome()
-        startActivityAndWait()
+	@Test
+	fun startup() = benchmarkRule.measureRepeated(
+		packageName = "com.usmonie.word",
+		metrics = listOf(StartupTimingMetric()),
+		iterations = 1,
+		startupMode = StartupMode.COLD
+	) {
+		pressHome()
+		startActivityAndWait()
 
-    }
+	}
 }

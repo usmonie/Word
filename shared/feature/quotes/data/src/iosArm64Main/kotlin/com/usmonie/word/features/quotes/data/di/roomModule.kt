@@ -9,30 +9,29 @@ import org.koin.core.module.Module
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import platform.Foundation.NSURL
-import platform.Foundation.NSHomeDirectory
 import platform.Foundation.NSFileManager
 import platform.Foundation.NSDocumentDirectory
 import platform.Foundation.NSUserDomainMask
 
 @OptIn(ExperimentalForeignApi::class)
 internal actual val roomModule: Module = module {
-    single(named(QuotesDatabase::class.toString())) {
-        val documentDirectory: NSURL? = NSFileManager.defaultManager.URLForDirectory(
-            directory = NSDocumentDirectory,
-            inDomain = NSUserDomainMask,
-            appropriateForURL = null,
-            create = false,
-            error = null,
-        )
+	single(named(QuotesDatabase::class.toString())) {
+		val documentDirectory: NSURL? = NSFileManager.defaultManager.URLForDirectory(
+			directory = NSDocumentDirectory,
+			inDomain = NSUserDomainMask,
+			appropriateForURL = null,
+			create = false,
+			error = null,
+		)
 
-        val dbFilePath = documentDirectory?.path!! + "/quotes.db"
-        Room.databaseBuilder<QuotesDatabase>(
-            name = dbFilePath,
-            factory = { QuotesDatabase::class.instantiateImpl() }
-        )
-    }
+		val dbFilePath = documentDirectory?.path!! + "/quotes.db"
+		Room.databaseBuilder<QuotesDatabase>(
+			name = dbFilePath,
+			factory = { QuotesDatabase::class.instantiateImpl() }
+		)
+	}
 
-    factory<QuotesSourceFactory> {
-        QuotesSourceFactory()
-    }
+	factory<QuotesSourceFactory> {
+		QuotesSourceFactory()
+	}
 }

@@ -30,101 +30,92 @@ import word.shared.feature.games.ui.generated.resources.games_hangman_won_title
 
 @Composable
 fun GameWonDialog(
-    onDismissRequest: () -> Unit,
-    onNextPhraseClick: () -> Unit,
-    nextTitle: String,
-    wonTitle: @Composable ColumnScope.() -> Unit,
+	onDismissRequest: () -> Unit,
+	onNextPhraseClick: () -> Unit,
+	nextTitle: String,
+	wonTitle: @Composable ColumnScope.() -> Unit,
 ) {
-    val dialogProperties = remember {
-        DialogProperties(
-            dismissOnBackPress = true,
-            dismissOnClickOutside = true
-        )
-    }
-    Box(modifier = Modifier.padding(24.dp)) {
-        Dialog(
-            onDismissRequest = onDismissRequest,
-            properties = dialogProperties,
-        ) {
-            Column(verticalArrangement = Arrangement.spacedBy(24.dp)) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterVertically),
-                    modifier = Modifier.fillMaxWidth()
-                        .background(
-                            MaterialTheme.colorScheme.surfaceContainer,
-                            MaterialTheme.shapes.extraLarge
-                        )
-                ) {
-                    Spacer(Modifier.height(24.dp))
-                    wonTitle()
+	val dialogProperties = remember {
+		DialogProperties(
+			dismissOnBackPress = true,
+			dismissOnClickOutside = true
+		)
+	}
+	Dialog(
+		onDismissRequest = onDismissRequest,
+		properties = dialogProperties,
+	) {
+		Column(
+			horizontalAlignment = Alignment.CenterHorizontally,
+			verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterVertically),
+			modifier = Modifier.fillMaxWidth()
+				.background(
+					MaterialTheme.colorScheme.surfaceContainer,
+					MaterialTheme.shapes.extraLarge
+				)
+				.padding(16.dp)
+		) {
+			wonTitle()
 
-                    OutlinedButton(onNextPhraseClick, Modifier.padding(horizontal = 24.dp)) {
-                        Text(
-                            text = nextTitle,
-                            textAlign = TextAlign.Center,
-                            style = MaterialTheme.typography.titleMedium,
-                            modifier = Modifier.weight(1f)
-                                .padding(horizontal = 24.dp, vertical = 4.dp)
-                        )
-                    }
-                    Spacer(Modifier.height(24.dp))
-                }
-            }
-        }
-    }
+			OutlinedButton(onNextPhraseClick, Modifier.padding(horizontal = 16.dp)) {
+				Text(
+					text = nextTitle,
+					textAlign = TextAlign.Center,
+					style = MaterialTheme.typography.titleMedium,
+					modifier = Modifier.weight(1f)
+						.padding(horizontal = 16.dp, vertical = 4.dp)
+				)
+			}
+		}
+	}
 }
 
 @Composable
 fun EnigmaGameWon(
-    onDismissRequest: () -> Unit,
-    onNextPhraseClick: () -> Unit,
-    onFavoriteQuote: (Quote) -> Unit,
-    nextTitle: String,
-    quote: Quote
+	onDismissRequest: () -> Unit,
+	onNextPhraseClick: () -> Unit,
+	onFavoriteQuote: (Quote) -> Unit,
+	nextTitle: String,
+	quote: Quote
 ) {
-    GameWonDialog(onDismissRequest, onNextPhraseClick, nextTitle) {
-        Text(
-            stringResource(Res.string.games_enigma_won_title),
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.headlineSmall,
-            color = MaterialTheme.colorScheme.onSurface,
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp)
-        )
+	GameWonDialog(onDismissRequest, onNextPhraseClick, nextTitle) {
+		Text(
+			stringResource(Res.string.games_enigma_won_title),
+			textAlign = TextAlign.Center,
+			style = MaterialTheme.typography.headlineSmall.copy(fontSize = MaterialTheme.typography.titleLarge.fontSize),
+			color = MaterialTheme.colorScheme.onSurface,
+			modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
+		)
 
-        Spacer(Modifier.height(4.dp))
-
-        QuoteCard(
-            quote,
-            onFavoriteQuote,
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp),
-        )
-
-        Spacer(Modifier.height(4.dp))
-    }
+		QuoteCard(
+			quote,
+			onFavoriteQuote,
+			modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+		)
+	}
 }
 
 @Composable
 fun HangmanGameWon(
-    onDismissRequest: () -> Unit,
-    onNextPhraseClick: () -> Unit,
-    nextTitle: String,
-    word: WordCombinedUi,
+	onDismissRequest: () -> Unit,
+	onNextPhraseClick: () -> Unit,
+	nextTitle: String,
+	word: WordCombinedUi,
 ) {
-    GameWonDialog(onDismissRequest, onNextPhraseClick, nextTitle) {
-        Text(
-            stringResource(Res.string.games_hangman_won_title),
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.titleLarge,
-            color = MaterialTheme.colorScheme.onSurface,
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp)
-        )
-        Text(
-            word.word,
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.displayMedium,
-            color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp)
-        )
-    }
+	GameWonDialog(onDismissRequest, onNextPhraseClick, nextTitle) {
+		Text(
+			stringResource(Res.string.games_hangman_won_title),
+			textAlign = TextAlign.Center,
+			style = MaterialTheme.typography.headlineSmall.copy(fontSize = MaterialTheme.typography.titleLarge.fontSize),
+			color = MaterialTheme.colorScheme.onSurface,
+			modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
+		)
+		Text(
+			word.word,
+			textAlign = TextAlign.Center,
+			style = MaterialTheme.typography.displayMedium,
+			color = MaterialTheme.colorScheme.primary,
+			modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
+		)
+	}
 }

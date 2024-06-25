@@ -93,6 +93,10 @@ internal class DashboardScreen(
 			viewModel
 		)
 
+		LaunchedEffect(state.randomQuote) {
+			coroutineScope.launch { lazyListState.animateScrollToItem(0) }
+		}
+
 		HeaderWordScaffold(
 			query = { state.searchFieldState.searchFieldValue },
 			onQueryChanged = viewModel::inputQuery,

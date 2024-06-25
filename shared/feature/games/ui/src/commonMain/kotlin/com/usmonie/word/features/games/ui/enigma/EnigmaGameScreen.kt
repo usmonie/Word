@@ -1,11 +1,9 @@
 package com.usmonie.word.features.games.ui.enigma
 
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.*
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.LocalIndication
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
@@ -22,8 +20,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -39,7 +35,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.graphics.BlurEffect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -50,7 +48,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.usmonie.compass.core.LocalRouteManager
 import com.usmonie.compass.viewmodel.StateScreen
-import com.usmonie.core.domain.tools.fastForEachIndexed
 import com.usmonie.core.tools.ui.ShakeConfig
 import com.usmonie.core.tools.ui.ShakeController
 import com.usmonie.core.tools.ui.rememberShakeController
@@ -58,12 +55,7 @@ import com.usmonie.core.tools.ui.shake
 import com.usmonie.word.features.ads.ui.LocalAdsManager
 import com.usmonie.word.features.games.ui.enigma.EnigmaGameScreenFactory.Companion.ID
 import com.usmonie.word.features.games.ui.hangman.GuessedLetters
-import com.usmonie.word.features.games.ui.kit.EnigmaGameWon
-import com.usmonie.word.features.games.ui.kit.GameBoard
-import com.usmonie.word.features.games.ui.kit.Keyboard
-import com.usmonie.word.features.games.ui.kit.LivesAmount
-import com.usmonie.word.features.games.ui.kit.ReviveLifeDialog
-import com.usmonie.word.features.games.ui.kit.UseHintButton
+import com.usmonie.word.features.games.ui.kit.*
 import com.usmonie.word.features.subscriptions.ui.notification.SubscriptionScreenAction
 import com.usmonie.word.features.subscriptions.ui.notification.SubscriptionViewModel
 import org.jetbrains.compose.resources.stringResource
@@ -96,19 +88,32 @@ internal class EnigmaGameScreen(
 			{ state.hintsCount },
 			subscriptionViewModel
 		) { insets ->
-			EnigmaGameContent(
-				{ state.phrase },
-				{ state.currentSelectedCellPosition },
-				{ cellState ->
-					state is EnigmaState.Game &&
-						cellState != CellState.Correct &&
-						cellState != CellState.Found
-				},
-				{ state is EnigmaState.Game.HintSelection },
-				{ state.guessedLetters },
-				shakeController,
-				insets
-			)
+			AnimatedContent(state.phrase.encryptedPhrase.isNotEmpty()) {
+				if (it) {
+					EnigmaGameContent(
+						{ state.phrase },
+						{ state.currentSelectedCellPosition },
+						{ cellState ->
+							state is EnigmaState.Game &&
+								cellState != CellState.Correct &&
+								cellState != CellState.Found
+						},
+						{ state is EnigmaState.Game.HintSelection },
+						{ state.guessedLetters },
+						shakeController,
+						{ state !is EnigmaState.Game },
+						insets,
+					)
+				} else {
+					Box(
+						contentAlignment = Alignment.Center,
+						modifier = Modifier.fillMaxSize()
+							.padding(insets)
+					) {
+						CircularProgressIndicator(Modifier.size(32.dp))
+					}
+				}
+			}
 		}
 	}
 
@@ -138,6 +143,7 @@ internal class EnigmaGameScreen(
 		hintSelectionState: () -> Boolean,
 		guessedLetters: () -> GuessedLetters,
 		shakeController: ShakeController,
+		isBlurred: () -> Boolean,
 		insets: PaddingValues
 	) {
 		GameStatusState()
@@ -147,6 +153,13 @@ internal class EnigmaGameScreen(
 			Modifier
 				.fillMaxSize()
 				.padding(top = topInsets)
+				.graphicsLayer { renderEffect = if (isBlurred()) BlurEffect(10f, 10f) else null }
+				.drawWithContent {
+					drawContent()
+					if (isBlurred()) {
+						drawRect(color = Color.Black.copy(alpha = 0.4f))
+					}
+				}
 		) {
 			Column(
 				Modifier
@@ -159,12 +172,12 @@ internal class EnigmaGameScreen(
 					isEnabled,
 					hintSelectionState,
 					Modifier
-						.weight(1.5f)
+						.weight(2f)
 						.fillMaxWidth()
 						.padding(horizontal = 32.dp)
 				)
 
-				Keyboard(
+				QwertyKeyboard(
 					viewModel::onLetterInput,
 					guessedLetters(),
 					Modifier
@@ -255,23 +268,16 @@ internal class EnigmaGameScreen(
 		hintSelectionState: () -> Boolean,
 		modifier: Modifier
 	) {
-		AnimatedContent(phrase.encryptedPhrase.isNotEmpty(), modifier = modifier) {
-			if (it) {
-				val scrollState = rememberScrollState()
-				FlowRow(
-					modifier.verticalScroll(scrollState).padding(vertical = 52.dp),
-					verticalArrangement = Arrangement.spacedBy(4.dp),
-					horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally)
-				) {
-					phrase.encryptedPhrase.fastForEachIndexed { index, word ->
-						key(index) {
-							Word(word, getCurrentSelectedPosition, isEnabled, hintSelectionState, index)
-						}
-					}
-				}
-			} else {
-				Box(contentAlignment = Alignment.Center) {
-					CircularProgressIndicator(Modifier.size(32.dp))
+		val scrollState = rememberScrollState()
+
+		FlowRow(
+			modifier.verticalScroll(scrollState).padding(vertical = 52.dp),
+			verticalArrangement = Arrangement.spacedBy(8.dp),
+			horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterHorizontally)
+		) {
+			phrase.encryptedPhrase.forEachIndexed { index, word ->
+				key(index) {
+					Word(word, getCurrentSelectedPosition, isEnabled, hintSelectionState, index)
 				}
 			}
 		}
@@ -283,10 +289,10 @@ internal class EnigmaGameScreen(
 		getCurrentSelectedPosition: () -> Pair<Int, Int>?,
 		isEnabled: (CellState) -> Boolean,
 		hintSelectionState: () -> Boolean,
-		wordPosition: Int
+		wordPosition: Int,
 	) {
 		Row {
-			word.cells.fastForEachIndexed { position, cell ->
+			word.cells.forEachIndexed { position, cell ->
 				key(cell.symbol, position) {
 					CellItem(
 						cell,
@@ -319,22 +325,25 @@ internal class EnigmaGameScreen(
 
 					word == wordPosition && cellPosition == position
 				},
-				enabled = isEnabled,
 				hintSelectionState = hintSelectionState,
-				onClick = { viewModel.onCellSelected(position, wordPosition) }
+				onClick = { viewModel.onCellSelected(position, wordPosition) },
+				enabled = isEnabled,
+				modifier = Modifier.alignByBaseline()
 			)
 
-			else -> Symbol(cell.symbol, Modifier.fillMaxHeight().alignByBaseline())
+			else -> Symbol(cell.symbol, Modifier.alignByBaseline())
+
 		}
 	}
 
 	@Composable
-	private fun RowScope.GuessedLetter(
+	private fun GuessedLetter(
 		cell: Cell,
 		getIsSelected: () -> Boolean,
 		hintSelectionState: () -> Boolean,
 		onClick: () -> Unit,
-		enabled: (CellState) -> Boolean
+		enabled: (CellState) -> Boolean,
+		modifier: Modifier = Modifier
 	) {
 		val interactionSource = remember { MutableInteractionSource() }
 
@@ -349,7 +358,7 @@ internal class EnigmaGameScreen(
 			if (cell.state != CellState.Found) cell.number.toString() else "",
 			interactionSource,
 			onClick,
-			Modifier.alignByBaseline().graphicsLayer {
+			modifier.graphicsLayer {
 				shadowElevation = if (isSelected) 8.dp.toPx() else 0f
 			}
 		)
@@ -390,14 +399,21 @@ internal class EnigmaGameScreen(
 		) {
 			val pressed by interactionSource.collectIsPressedAsState()
 			val dividerScale by animateFloatAsState(if (pressed) 0.7f else 1f)
+			AnimatedContent(
+				targetState = letterColor,
+				transitionSpec = {
+					(fadeIn(animationSpec = tween(300))) togetherWith fadeOut(animationSpec = tween(300))
 
-			Text(
-				text = letter,
-				style = MaterialTheme.typography.bodyLarge,
-				modifier = Modifier.padding(top = 4.dp),
-				color = letterColor,
-				textAlign = TextAlign.Center
-			)
+				}
+			) { targetLetter ->
+				Text(
+					text = letter,
+					style = MaterialTheme.typography.headlineSmall,
+					modifier = Modifier.padding(top = 4.dp),
+					color = targetLetter,
+					textAlign = TextAlign.Center
+				)
+			}
 
 			HorizontalDivider(
 				Modifier

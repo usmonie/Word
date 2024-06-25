@@ -1,5 +1,6 @@
 package com.usmonie.word.features.games.domain.usecases
 
+import androidx.collection.*
 import com.usmonie.core.domain.usecases.CoroutineUseCase
 import com.usmonie.core.domain.usecases.invoke
 import com.usmonie.word.features.qutoes.domain.models.Quote
@@ -14,10 +15,11 @@ interface GetEnigmaQuoteUseCase :
 	class Param
 
 	data class EnigmaEncryptedPhrase(
-		val encryptedPhrase: List<Word>,
+		val encryptedPhrase: ObjectList<Word>,
+		val encryptedPositions: MutableObjectList<Pair<Int, Int>>,
 		val quote: Quote,
 		val encryptedPositionsCount: Int,
-		val charsCount: Map<Char, Int>
+		val charsCount: MutableScatterMap<Char, Int>
 	)
 
 	data class Word(val cells: List<Cell>) {
@@ -61,30 +63,37 @@ internal class GetEnigmaQuoteUseCaseImpl(
 			.toSet()
 			.sorted()
 
-		val charsCount = mutableMapOf<Char, Int>()
+		val charsCount = MutableScatterMap<Char, Int>()
 		var symbolIndex = 0
 
-		val encryptedPhrase = quote.text.split(" ").map { word ->
-			val cells = word.mapIndexed { index, char ->
-				val charUppercase = char.uppercaseChar()
-				charsCount[charUppercase] = charsCount.getOrElse(charUppercase) { 0 } + 1
-				val alphabetIndex = alphabet[charUppercase]?.plus(1) ?: -1
-				GetEnigmaQuoteUseCase.Cell(
-					char,
-					alphabetIndex,
-					if (char.isLetter() && index in hiddenIndices) {
-						GetEnigmaQuoteUseCase.CellState.Empty
-					} else {
-						symbolIndex++
-						GetEnigmaQuoteUseCase.CellState.Found
-					}
-				)
+		val encryptedPhrase = mutableObjectListOf<GetEnigmaQuoteUseCase.Word>()
+		val encryptedPositions = mutableObjectListOf<Pair<Int, Int>>()
+		encryptedPhrase.addAll(
+			quote.text.split(" ").mapIndexed { wordIndex, word ->
+				val cells = word.mapIndexed { index, char ->
+					val charUppercase = char.uppercaseChar()
+					charsCount[charUppercase] = charsCount.getOrElse(charUppercase) { 0 } + 1
+					val alphabetIndex = alphabet[charUppercase]?.plus(1) ?: -1
+
+					GetEnigmaQuoteUseCase.Cell(
+						char,
+						alphabetIndex,
+						if (char.isLetter() && index in hiddenIndices) {
+							encryptedPositions.add(wordIndex to index)
+							GetEnigmaQuoteUseCase.CellState.Empty
+						} else {
+							symbolIndex++
+							GetEnigmaQuoteUseCase.CellState.Found
+						}
+					)
+				}
+				GetEnigmaQuoteUseCase.Word(cells)
 			}
-			GetEnigmaQuoteUseCase.Word(cells)
-		}
+		)
 
 		return GetEnigmaQuoteUseCase.EnigmaEncryptedPhrase(
 			encryptedPhrase,
+			encryptedPositions,
 			quote,
 			hiddenLetters,
 			charsCount

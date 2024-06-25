@@ -22,26 +22,26 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun UseHintButton(onClick: () -> Unit, hintsCount: Int) {
-    Box {
-        val interactionSource = remember { MutableInteractionSource() }
-        IconButton(onClick, interactionSource = interactionSource) {
-            val pressed by interactionSource.collectIsPressedAsState()
-            val size by animateDpAsState(if (pressed) 20.dp else 24.dp)
-            Icon(
-                Icons.Rounded.Lightbulb,
-                contentDescription = "Use hint",
-                modifier = Modifier.size(size)
-            )
-        }
-        if (hintsCount > 0) {
-            Badge(modifier = Modifier.align(Alignment.TopEnd)) {
-                val count by animateIntAsState(hintsCount)
-                Text(
-                    text = if (count > 99) "99" else count.toString(),
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.onPrimary,
-                )
-            }
-        }
-    }
+	Box {
+		val interactionSource = remember { MutableInteractionSource() }
+		IconButton(onClick, interactionSource = interactionSource) {
+			val pressed by interactionSource.collectIsPressedAsState()
+			val size by animateDpAsState(if (pressed) 20.dp else 24.dp)
+			Icon(
+				Icons.Rounded.Lightbulb,
+				contentDescription = "Use hint",
+				modifier = Modifier.size(size)
+			)
+		}
+		if (hintsCount > 0) {
+			Badge(modifier = Modifier.align(Alignment.TopEnd)) {
+				val count by animateIntAsState(hintsCount)
+				Text(
+					text = if (count > 99) "99" else count.toString(),
+					style = MaterialTheme.typography.labelMedium,
+					color = MaterialTheme.colorScheme.onPrimary,
+				)
+			}
+		}
+	}
 }

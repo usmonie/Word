@@ -1,146 +1,100 @@
 package com.usmonie.word.features.games.ui.enigma
 
+import androidx.collection.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.Stable
 import androidx.compose.ui.graphics.Color
 import com.usmonie.core.domain.tools.fastMap
 import com.usmonie.word.features.games.domain.usecases.GetEnigmaQuoteUseCase
 import com.usmonie.word.features.qutoes.domain.models.Quote
+import org.koin.core.time.measureDuration
 
 @Immutable
 sealed class CellState {
-    data object Empty : CellState()
-    data class Incorrect(val guessedLetter: Char) : CellState()
-    data object Correct : CellState()
-    data object Found : CellState()
+	data object Empty : CellState()
+	data class Incorrect(val guessedLetter: Char) : CellState()
+	data object Correct : CellState()
+	data object Found : CellState()
 }
 
-@Immutable
+@Stable
 data class Cell(
-    val symbol: Char,
-    val number: Int,
-    val state: CellState = CellState.Empty,
+	val symbol: Char,
+	val number: Int,
+	var state: CellState = CellState.Empty,
 ) {
-    val isLetter: Boolean = symbol.isLetter()
+	val isLetter: Boolean = symbol.isLetter()
 
-    val letter: String = when (state) {
-        CellState.Correct -> symbol.toString()
-        CellState.Found -> symbol.toString()
-        else -> ""
-    }
+	val letter: String
+		get() = when (state) {
+			CellState.Correct -> symbol.toString()
+			CellState.Found -> symbol.toString()
+			else -> ""
+		}
 
-    @Composable
-    fun backgroundColor(hintSelection: Boolean, isSelected: Boolean): Color = when (state) {
-        CellState.Empty -> if (hintSelection || isSelected) MaterialTheme.colorScheme.primary else Color.Transparent
-        else -> Color.Transparent
-    }
+	@Composable
+	fun backgroundColor(hintSelection: Boolean, isSelected: Boolean): Color = when (state) {
+		CellState.Empty -> if (hintSelection || isSelected) MaterialTheme.colorScheme.primary else Color.Transparent
+		else -> Color.Transparent
+	}
 
-    @Composable
-    fun textColor(hintSelection: Boolean, isSelected: Boolean): Color = when (state) {
-        CellState.Correct -> MaterialTheme.colorScheme.primary
-        CellState.Empty -> if (hintSelection) {
-            MaterialTheme.colorScheme.onBackground
-        } else if (isSelected) {
-            MaterialTheme.colorScheme.onPrimary
-        } else {
-            MaterialTheme.colorScheme.onBackground
-        }
+	@Composable
+	fun textColor(hintSelection: Boolean, isSelected: Boolean): Color = when (state) {
+		CellState.Correct -> MaterialTheme.colorScheme.primary
+		CellState.Empty -> if (hintSelection) {
+			MaterialTheme.colorScheme.onBackground
+		} else if (isSelected) {
+			MaterialTheme.colorScheme.onPrimary
+		} else {
+			MaterialTheme.colorScheme.onBackground
+		}
 
-        CellState.Found -> MaterialTheme.colorScheme.onBackground
-        is CellState.Incorrect -> MaterialTheme.colorScheme.error
-    }
+		CellState.Found -> MaterialTheme.colorScheme.onBackground
+		is CellState.Incorrect -> MaterialTheme.colorScheme.error
+	}
 }
 
 @Immutable
 data class EnigmaEncryptedPhrase(
-    val encryptedPhrase: List<Word>,
-    val quote: Quote,
-    val encryptedPositionsCount: Int,
-    val charsCount: Map<Char, Int>
+	val encryptedPhrase: MutableObjectList<Word>,
+	val encryptedPositions: MutableObjectList<Pair<Int, Int>>,
+	val quote: Quote,
+	val charsCount: MutableScatterMap<Char, Int>
 )
 
 @Immutable
-data class Word(val cells: List<Cell>) {
-    val size: Int = cells.size
+data class Word(val cells: MutableObjectList<Cell>) {
+	val size: Int = cells.size
 }
 
 fun map(cell: GetEnigmaQuoteUseCase.Cell) = Cell(
-    cell.symbol,
-    cell.number,
-    when (cell.state) {
-        GetEnigmaQuoteUseCase.CellState.Empty -> CellState.Empty
-        GetEnigmaQuoteUseCase.CellState.Found -> CellState.Found
-    }
+	cell.symbol,
+	cell.number,
+	when (cell.state) {
+		GetEnigmaQuoteUseCase.CellState.Empty -> CellState.Empty
+		GetEnigmaQuoteUseCase.CellState.Found -> CellState.Found
+	}
 )
 
-fun map(word: GetEnigmaQuoteUseCase.Word) = Word(cells = word.cells.fastMap { map(it) })
+fun map(word: GetEnigmaQuoteUseCase.Word): Word {
+	val newCells = mutableObjectListOf<Cell>()
+	newCells.addAll(word.cells.fastMap { map(it) })
 
-fun GetEnigmaQuoteUseCase.EnigmaEncryptedPhrase.map() = EnigmaEncryptedPhrase(
-    encryptedPhrase = encryptedPhrase.fastMap { map(it) },
-    quote = quote,
-    encryptedPositionsCount = encryptedPositionsCount,
-    charsCount = charsCount
-)
-
-fun encryptPhrase(phrase: Quote): EnigmaEncryptedPhrase {
-    var encryptedPositionsCount = 0
-    val alphabet = ALPHABET
-        .asSequence()
-        .shuffled()
-        .mapIndexed { index, c -> c to index }
-        .associateBy({ it.first }, { it.second })
-
-    val chars = phrase.text.toList()
-    val charsShuffled = chars.asSequence()
-        .shuffled()
-        .distinct()
-        .filter { char -> char.isLetter() }
-        .toList()
-
-    val charsCount = mutableMapOf<Char, Int>()
-
-    val randomCharFirst = charsShuffled.first().uppercaseChar()
-    val randomCharSecond = charsShuffled[1].uppercaseChar()
-    val randomCharThird = charsShuffled[2].uppercaseChar()
-    val encryptedPhrase = phrase
-        .text
-        .split(" ")
-        .fastMap {
-            val cells = it.toList().fastMap { char ->
-                val charUppercase = char.uppercaseChar()
-                val index = alphabet.getOrElse(charUppercase) { -1 }
-                charsCount[charUppercase] = charsCount.getOrElse(charUppercase) { 0 } + 1
-
-                val cell = Cell(
-                    char,
-                    index + 1,
-                    if (
-                        charUppercase == randomCharFirst ||
-                        charUppercase == randomCharSecond ||
-                        charUppercase == randomCharThird
-                    ) {
-                        CellState.Found
-                    } else {
-                        CellState.Empty
-                    }
-                )
-
-                if (cell.state == CellState.Empty && cell.isLetter) {
-                    encryptedPositionsCount++
-                }
-
-                cell
-            }
-            Word(cells)
-        }
-
-    return EnigmaEncryptedPhrase(
-        encryptedPhrase,
-        phrase,
-        encryptedPositionsCount,
-        charsCount
-    )
+	return Word(cells = newCells)
 }
 
-private const val ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+fun GetEnigmaQuoteUseCase.EnigmaEncryptedPhrase.map(): EnigmaEncryptedPhrase {
+	val newPhrase = mutableObjectListOf<Word>()
+	encryptedPhrase.forEach {
+		newPhrase.add(map(it))
+	}
+
+	return EnigmaEncryptedPhrase(
+		encryptedPhrase = newPhrase,
+		encryptedPositions = encryptedPositions,
+		quote = quote,
+		charsCount = charsCount
+	)
+}

@@ -11,18 +11,18 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
  * Configures base Kotlin options for JVM (non-Android) in a Gradle project.
  */
 internal fun Project.configureKotlinJvm() {
-    // Configure Kotlin source and target compatibility for JVM.
-    extensions.configure<JavaPluginExtension> {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
+	// Configure Kotlin source and target compatibility for JVM.
+	extensions.configure<JavaPluginExtension> {
+		sourceCompatibility = JavaVersion.VERSION_21
+		targetCompatibility = JavaVersion.VERSION_21
+	}
 }
 
 /**
  * Configures base Kotlin options in a Gradle project.
  */
 internal fun Project.configureKotlin() {
-    // Configure Kotlin options for all Kotlin compile tasks.
-    tasks.withType<KotlinCompile>().configureEach {
-    }
+	// Configure Kotlin options for all Kotlin compile tasks.
+	tasks.withType<KotlinCompile>().configureEach {
+	}
 }

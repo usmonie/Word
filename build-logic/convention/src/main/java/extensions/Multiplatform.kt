@@ -6,17 +6,17 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
  * Configures targets for a Kotlin Multiplatform project using the provided `KotlinMultiplatformExtension` extension.
  */
 internal fun KotlinMultiplatformExtension.configureTarget() {
-    // Configure Android target.
-    androidTarget()
+	// Configure Android target.
+	androidTarget()
 
-    // Configure iOS x64 target.
-    iosX64()
+	// Configure iOS x64 target.
+	iosX64()
 
-    // Configure iOS ARM64 target.
-    iosArm64()
+	// Configure iOS ARM64 target.
+	iosArm64()
 
-    // Configure iOS Simulator ARM64 target.
-    iosSimulatorArm64()
+	// Configure iOS Simulator ARM64 target.
+	iosSimulatorArm64()
 }
 
 /**
@@ -25,6 +25,6 @@ internal fun KotlinMultiplatformExtension.configureTarget() {
  */
 @Suppress("MagicNumber")
 internal fun KotlinMultiplatformExtension.configureJvmToolchain() {
-    // Configure JVM toolchain with the specified Java version.
-    jvmToolchain(17)
+	// Configure JVM toolchain with the specified Java version.
+	jvmToolchain(21)
 }
