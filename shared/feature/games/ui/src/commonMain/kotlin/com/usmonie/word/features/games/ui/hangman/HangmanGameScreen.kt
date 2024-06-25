@@ -121,7 +121,7 @@ internal class HangmanGameScreen(
                 }
             }
 
-            AnimatedVisibility(state is HangmanState.Won) {
+            if (state is HangmanState.Won) {
                 HangmanGameWon(
                     routeManager::popBackstack,
                     viewModel::onUpdatePressed,
