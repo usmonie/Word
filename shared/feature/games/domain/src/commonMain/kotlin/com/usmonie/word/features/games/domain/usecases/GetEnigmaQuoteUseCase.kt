@@ -59,6 +59,7 @@ internal class GetEnigmaQuoteUseCaseImpl(
 			.distinct()
 			.take(hiddenLetters)
 			.toSet()
+			.sorted()
 
 		val charsCount = mutableMapOf<Char, Int>()
 		var symbolIndex = 0
