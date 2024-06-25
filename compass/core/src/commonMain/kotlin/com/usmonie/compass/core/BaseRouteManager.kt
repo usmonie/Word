@@ -11,13 +11,12 @@ import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.LocalSaveableStateRegistry
 import androidx.compose.runtime.saveable.SaveableStateRegistry
+import androidx.compose.ui.util.fastLastOrNull
 import com.usmonie.compass.core.gesture.Gesture
 import com.usmonie.compass.core.gesture.ScreenGestureHandler
-import com.usmonie.compass.core.ui.DeepLinkScreenFactory
 import com.usmonie.compass.core.ui.Screen
 import com.usmonie.compass.core.ui.ScreenId
 import com.usmonie.compass.core.utils.Stack
-import com.usmonie.core.domain.tools.fastLastOrNull
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -25,18 +24,18 @@ import kotlinx.coroutines.flow.asStateFlow
 private const val SCREEN_WIDTH_PORTION_FOR_BACK_GESTURE = .20
 
 @Suppress("TooManyFunctions")
-internal class BaseRouteManager : RouteManager(), ScreenSaveableStateHolder {
-	private val graphsRegistered: MutableScatterMap<GraphId, NavigationGraph> =
+internal class BaseRouteManager : RouteManager, ScreenSaveableStateHolder {
+	private val graphsRegistered: MutableScatterMap<GraphId, NavigationGraphFactory> =
 		mutableScatterMapOf()
 	private val graphsBackstack: Stack<NavigationGraph> = Stack(mutableListOf())
 
 	private val currentGraph: NavigationGraph
 		get() = graphsBackstack.peek()
 
-	private val currentState by lazy { MutableStateFlow(RouteManagerState(currentGraph.lastScreen)) }
+	private val currentState by lazy { MutableStateFlow(RouteManagerState(currentGraph, currentGraph.lastScreen)) }
 	override val state: StateFlow<RouteManagerState> by lazy { currentState.asStateFlow() }
 
-	override val screensSavedStates: MutableMap<String, Map<String, List<Any?>>> = mutableMapOf()
+	private val screensSavedStates: MutableMap<String, Map<String, List<Any?>>> = mutableMapOf()
 
 	private val registryHolders = mutableMapOf<String, RegistryHolder>()
 	private var parentSaveableStateRegistry: SaveableStateRegistry? = null
@@ -60,17 +59,27 @@ internal class BaseRouteManager : RouteManager(), ScreenSaveableStateHolder {
 	private val canPop: Boolean
 		get() = currentGraph.canPop || graphsBackstack.size > 1
 
-	override fun registerGraph(graph: NavigationGraph) {
+	override fun registerGraph(graph: NavigationGraphFactory) {
 		graphsRegistered[graph.id] = graph
+	}
+
+	override fun navigateTo(graph: NavigationGraph) {
 		if (graphsBackstack.size == 0) {
 			graphsBackstack.add(graph)
 		}
 	}
 
-	override fun navigateTo(graphId: GraphId): Boolean {
+	override fun navigateTo(
+		graphId: GraphId,
+		storeInBackStack: Boolean,
+		params: ScatterMap<String, String>,
+		extras: Extra?
+	): Boolean {
 		val graph = graphsRegistered[graphId] ?: return false
 		if (!currentGraph.storeInBackstack) graphsBackstack.remove()
-		graphsBackstack.add(graph)
+		graphsBackstack.add(graph(params, extras, storeInBackStack))
+		currentState.value =
+			currentState.value.copy(currentGraph, currentScreen, previousScreen, RouteManagerState.Navigating.FORWARD)
 		return true
 	}
 
@@ -80,10 +89,11 @@ internal class BaseRouteManager : RouteManager(), ScreenSaveableStateHolder {
 
 	override fun navigateTo(
 		screenId: ScreenId,
+		storeInBackStack: Boolean,
 		params: ScatterMap<String, String>?,
 		extras: Extra?
 	): Boolean {
-		val followingScreen = currentGraph.findScreen(screenId, params, extras) ?: return false
+		val followingScreen = currentGraph.findScreen(screenId, storeInBackStack, params, extras) ?: return false
 		currentState.value = currentState.value.copy(
 			currentScreen = followingScreen,
 			previousScreen = currentScreen,
@@ -126,7 +136,7 @@ internal class BaseRouteManager : RouteManager(), ScreenSaveableStateHolder {
 		if (!canPop) return false
 
 		graphsBackstack.removeUntil {
-			val found = it.findScreen(screenId, null, null) != null && it.storeInBackstack
+			val found = it.containsScreenInBackStack(screenId) && it.storeInBackstack
 			found
 		}
 
@@ -140,19 +150,19 @@ internal class BaseRouteManager : RouteManager(), ScreenSaveableStateHolder {
 	}
 
 	override fun handleDeepLink(deepLink: String): Boolean {
-		val matchingScreenBuilder = graphsRegistered
-			.asMap()
-			.values
-			.asSequence()
-			.flatMap { it.screenFactories.asMap().values }
-			.filterIsInstance<DeepLinkScreenFactory>()
-			.firstOrNull { it.matches(deepLink) }
-
-		matchingScreenBuilder?.let {
-			val parameters = it.extractParameters(deepLink)
-			navigateTo(matchingScreenBuilder.id, parameters, null)
-			return true
-		}
+//		val matchingScreenBuilder = graphsRegistered
+//			.asMap()
+//			.values
+//			.asSequence()
+//			.flatMap { it.screenFactories.asMap().values }
+//			.filterIsInstance<DeepLinkScreenFactory>()
+//			.firstOrNull { it.matches(deepLink) }
+//
+//		matchingScreenBuilder?.let {
+//			val parameters = it.extractParameters(deepLink)
+//			navigateTo(matchingScreenBuilder.id, parameters, null)
+//			return true
+//		}
 		return false
 	}
 
@@ -190,6 +200,11 @@ internal class BaseRouteManager : RouteManager(), ScreenSaveableStateHolder {
 			)
 
 			DisposableEffect(Unit) {
+/*
+				Temporary disabled this check cause it throws error when
+				trying to gesture back during screen changing animation
+				
+ */
 //				require(key !in registryHolders) { "Key $key was used multiple times " }
 				screensSavedStates -= key
 				registryHolders[key] = registryHolder
@@ -222,7 +237,7 @@ internal class BaseRouteManager : RouteManager(), ScreenSaveableStateHolder {
 
 		state.draggingOffset.animateTo(gesture.screenWidth)
 		popBackstack()
-		currentState.value = RouteManagerState(currentScreen, previousScreen)
+		currentState.value = RouteManagerState(currentGraph, currentScreen, previousScreen)
 
 		return true
 	}
@@ -237,10 +252,10 @@ internal class BaseRouteManager : RouteManager(), ScreenSaveableStateHolder {
 		}
 	}
 
-	inner class RegistryHolder(val key: String) {
+	inner class RegistryHolder(private val key: String) {
 		var shouldSave = true
 		val registry: SaveableStateRegistry = SaveableStateRegistry(screensSavedStates[key]) {
-			parentSaveableStateRegistry?.canBeSaved(it) != false
+			parentSaveableStateRegistry?.canBeSaved(it) ?: true
 		}
 
 		fun saveTo(map: MutableMap<String, Map<String, List<Any?>>>) {
@@ -262,7 +277,7 @@ fun rememberRouteManager(rootGraph: NavigationGraph): RouteManager {
 }
 
 fun getRouteManager(rootGraph: NavigationGraph): RouteManager {
-	return BaseRouteManager().apply { registerGraph(rootGraph) }
+	return BaseRouteManager().apply { navigateTo(rootGraph) }
 }
 
 fun getRouteManager(): RouteManager {

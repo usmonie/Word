@@ -11,25 +11,25 @@ import com.usmonie.word.features.subscription.domain.usecase.SubscriptionStatusU
 import com.usmonie.word.features.subscriptions.ui.notification.SubscriptionViewModel
 
 class SettingsScreenFactory(
-    private val userSelectedThemeUseCase: UserSelectedThemeUseCase,
-    private val changeThemeUseCase: ChangeThemeUseCase,
-    private val subscriptionStatusUseCase: SubscriptionStatusUseCase,
-    private val subscriptionViewModel: SubscriptionViewModel
+	private val userSelectedThemeUseCase: UserSelectedThemeUseCase,
+	private val changeThemeUseCase: ChangeThemeUseCase,
+	private val subscriptionStatusUseCase: SubscriptionStatusUseCase,
+	private val subscriptionViewModel: SubscriptionViewModel
 ) : ScreenFactory {
-    override val id: ScreenId = ID
+	override val id: ScreenId = ID
 
-    override fun invoke(params: ScatterMap<String, String>?, extra: Extra?): Screen {
-        return SettingsScreen(
-            SettingsViewModel(
-                userSelectedThemeUseCase,
-                changeThemeUseCase,
-                subscriptionStatusUseCase
-            ),
-            subscriptionViewModel
-        )
-    }
+	override fun invoke(storeInBackStack: Boolean, params: ScatterMap<String, String>?, extra: Extra?): Screen {
+		return SettingsScreen(
+			SettingsViewModel(
+				userSelectedThemeUseCase,
+				changeThemeUseCase,
+				subscriptionStatusUseCase
+			),
+			subscriptionViewModel
+		)
+	}
 
-    companion object {
-        val ID = ScreenId("SettingsScreen")
-    }
+	companion object {
+		val ID = ScreenId("SettingsScreen")
+	}
 }

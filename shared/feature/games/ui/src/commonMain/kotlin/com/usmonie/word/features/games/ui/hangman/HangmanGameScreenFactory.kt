@@ -9,17 +9,17 @@ import com.usmonie.word.features.games.ui.models.WordCombinedUi
 import com.usmonie.word.features.subscriptions.ui.notification.SubscriptionViewModel
 
 class HangmanGameScreenFactory(
-    private val onOpenWord: (WordCombinedUi) -> Unit,
-    private val hangmanGameViewModel: () -> HangmanGameViewModel,
-    private val subscriptionViewModel: SubscriptionViewModel
+	private val onOpenWord: (WordCombinedUi) -> Unit,
+	private val hangmanGameViewModel: () -> HangmanGameViewModel,
+	private val subscriptionViewModel: SubscriptionViewModel
 ) : ScreenFactory {
-    override val id: ScreenId = ID
+	override val id: ScreenId = ID
 
-    override fun invoke(params: ScatterMap<String, String>?, extra: Extra?): Screen {
-        return HangmanGameScreen(hangmanGameViewModel(), onOpenWord, subscriptionViewModel)
-    }
+	override fun invoke(storeInBackStack: Boolean, params: ScatterMap<String, String>?, extra: Extra?): Screen {
+		return HangmanGameScreen(hangmanGameViewModel(), onOpenWord, subscriptionViewModel)
+	}
 
-    companion object {
-        val ID = ScreenId("HangmanGamesScreen")
-    }
+	companion object {
+		val ID = ScreenId("HangmanGamesScreen")
+	}
 }

@@ -9,51 +9,54 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import com.usmonie.compass.core.gesture.ScreenGestureHandler
 import com.usmonie.compass.core.randomUUID
+import kotlin.math.roundToInt
 
 @Immutable
 abstract class Screen(val storeInBackStack: Boolean = true) {
 
-    open val enterTransition: (AnimatedContentTransitionScope<Screen>.() -> EnterTransition) = {
-        slideIntoContainer(
-            AnimatedContentTransitionScope.SlideDirection.Left,
-            spring(stiffness = Spring.StiffnessMediumLow),
-            initialOffset = { 400 }
-        )
-    }
+	open val enterTransition: (AnimatedContentTransitionScope<Screen>.() -> EnterTransition) = {
+		slideIntoContainer(
+			AnimatedContentTransitionScope.SlideDirection.Left,
+			spring(stiffness = Spring.StiffnessMediumLow),
+			initialOffset = { (it * .8).roundToInt() }
+		)
+	}
 
-    open val exitTransition: (AnimatedContentTransitionScope<Screen>.() -> ExitTransition) = {
-        slideOutOfContainer(
-            AnimatedContentTransitionScope.SlideDirection.Right,
-            spring(stiffness = Spring.StiffnessMediumLow),
-            targetOffset = { -200 }
-        )
-    }
+	open val exitTransition: (AnimatedContentTransitionScope<Screen>.() -> ExitTransition) = {
+		slideOutOfContainer(
+			AnimatedContentTransitionScope.SlideDirection.Right,
+			spring(stiffness = Spring.StiffnessMediumLow),
+			targetOffset = { -200 }
+		)
+	}
 
-    open val popEnterTransition: (AnimatedContentTransitionScope<Screen>.() -> EnterTransition) = {
-        slideIntoContainer(
-            AnimatedContentTransitionScope.SlideDirection.Right,
-            spring(stiffness = Spring.StiffnessMediumLow),
-            initialOffset = { -200 }
-        )
-    }
+	open val popEnterTransition: (AnimatedContentTransitionScope<Screen>.() -> EnterTransition) = {
+		slideIntoContainer(
+			AnimatedContentTransitionScope.SlideDirection.Right,
+			spring(stiffness = Spring.StiffnessMediumLow),
+			initialOffset = { -200 }
+		)
+	}
 
-    open val popExitTransition: (AnimatedContentTransitionScope<Screen>.() -> ExitTransition) = {
-        slideOutOfContainer(
-            AnimatedContentTransitionScope.SlideDirection.Right,
-            spring(stiffness = Spring.StiffnessMediumLow),
-            targetOffset = { 400 },
-        )
-    }
+	open val popExitTransition: (AnimatedContentTransitionScope<Screen>.() -> ExitTransition) = {
+		slideOutOfContainer(
+			AnimatedContentTransitionScope.SlideDirection.Right,
+			spring(stiffness = Spring.StiffnessMediumLow),
+			targetOffset = { (it * .8).roundToInt() },
+		)
+	}
 
-    open val screenGestureHandler: ScreenGestureHandler = ScreenGestureHandler.NoHandling
+	open val screenGestureHandler: ScreenGestureHandler = ScreenGestureHandler.NoHandling
 
-    abstract val id: ScreenId
+	open val storeBuilderInference: Boolean = true
 
-    internal val uuid = randomUUID()
+	abstract val id: ScreenId
 
-    @Composable
-    abstract fun Content()
+	internal val uuid = randomUUID()
 
-    open fun onCleared() {}
+	@Composable
+	abstract fun Content()
+
+	open fun onCleared() {}
 }
 

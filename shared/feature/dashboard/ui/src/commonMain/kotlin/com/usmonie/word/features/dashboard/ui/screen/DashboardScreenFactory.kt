@@ -10,23 +10,23 @@ import com.usmonie.word.features.subscriptions.ui.notification.SubscriptionViewM
 
 @Suppress("LongParameterList")
 class DashboardScreenFactory internal constructor(
-    private val dashboardViewModel: DashboardViewModel,
-    private val subscriptionViewModel: SubscriptionViewModel,
-    private val openWord: (WordCombinedUi) -> Unit,
-    private val openDashboardMenuItem: (DashboardMenuItem) -> Unit
+	private val dashboardViewModel: DashboardViewModel,
+	private val subscriptionViewModel: SubscriptionViewModel,
+	private val openWord: (WordCombinedUi) -> Unit,
+	private val openDashboardMenuItem: (DashboardMenuItem) -> Unit
 ) : ScreenFactory {
-    override val id: ScreenId = ID
+	override val id: ScreenId = ID
 
-    override fun invoke(params: ScatterMap<String, String>?, extra: Extra?): Screen {
-        return DashboardScreen(
-            dashboardViewModel,
-            subscriptionViewModel,
-            openWord,
-            openDashboardMenuItem
-        )
-    }
+	override fun invoke(storeInBackStack: Boolean, params: ScatterMap<String, String>?, extra: Extra?): Screen {
+		return DashboardScreen(
+			dashboardViewModel,
+			subscriptionViewModel,
+			openWord,
+			openDashboardMenuItem
+		)
+	}
 
-    companion object {
-        val ID = ScreenId("DashboardScreen")
-    }
+	companion object {
+		val ID = ScreenId("DashboardScreen")
+	}
 }

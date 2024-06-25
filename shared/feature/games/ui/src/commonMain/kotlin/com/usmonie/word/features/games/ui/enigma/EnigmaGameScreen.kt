@@ -1,5 +1,6 @@
 package com.usmonie.word.features.games.ui.enigma
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.LocalIndication
@@ -19,9 +20,11 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -158,7 +161,7 @@ internal class EnigmaGameScreen(
 					Modifier
 						.weight(1.5f)
 						.fillMaxWidth()
-						.padding(horizontal = 48.dp)
+						.padding(horizontal = 32.dp)
 				)
 
 				Keyboard(
@@ -252,15 +255,23 @@ internal class EnigmaGameScreen(
 		hintSelectionState: () -> Boolean,
 		modifier: Modifier
 	) {
-		val scrollState = rememberScrollState()
-		FlowRow(
-			modifier.verticalScroll(scrollState).padding(vertical = 52.dp),
-			verticalArrangement = Arrangement.spacedBy(4.dp),
-			horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally)
-		) {
-			phrase.encryptedPhrase.fastForEachIndexed { index, word ->
-				key(index) {
-					Word(word, getCurrentSelectedPosition, isEnabled, hintSelectionState, index)
+		AnimatedContent(phrase.encryptedPhrase.isNotEmpty(), modifier = modifier) {
+			if (it) {
+				val scrollState = rememberScrollState()
+				FlowRow(
+					modifier.verticalScroll(scrollState).padding(vertical = 52.dp),
+					verticalArrangement = Arrangement.spacedBy(4.dp),
+					horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally)
+				) {
+					phrase.encryptedPhrase.fastForEachIndexed { index, word ->
+						key(index) {
+							Word(word, getCurrentSelectedPosition, isEnabled, hintSelectionState, index)
+						}
+					}
+				}
+			} else {
+				Box(contentAlignment = Alignment.Center) {
+					CircularProgressIndicator(Modifier.size(32.dp))
 				}
 			}
 		}
@@ -274,9 +285,7 @@ internal class EnigmaGameScreen(
 		hintSelectionState: () -> Boolean,
 		wordPosition: Int
 	) {
-		Row(
-//            horizontalArrangement = Arrangement.,
-		) {
+		Row {
 			word.cells.fastForEachIndexed { position, cell ->
 				key(cell.symbol, position) {
 					CellItem(

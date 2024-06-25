@@ -11,27 +11,27 @@ import com.usmonie.word.features.games.ui.models.WordCombinedUi
 import com.usmonie.word.features.subscriptions.ui.notification.SubscriptionViewModel
 
 class WordDetailsScreenFactory(
-    private val favoriteUseCase: UpdateFavouriteWordUseCase,
-    private val checkIsFavoriteUseCase: CheckIsFavoriteUseCase,
-    private val subscriptionViewModel: SubscriptionViewModel
+	private val favoriteUseCase: UpdateFavouriteWordUseCase,
+	private val checkIsFavoriteUseCase: CheckIsFavoriteUseCase,
+	private val subscriptionViewModel: SubscriptionViewModel
 ) : ScreenFactory {
-    override val id: ScreenId = ID
+	override val id: ScreenId = ID
 
-    override fun invoke(params: ScatterMap<String, String>?, extra: Extra?): Screen {
-        require(extra is WordDetailsExtra)
-        return WordDetailsScreen(
-            WordDetailsViewModel(
-                favoriteUseCase,
-                checkIsFavoriteUseCase,
-                extra.wordCombined
-            ),
-            subscriptionViewModel
-        )
-    }
+	override fun invoke(storeInBackStack: Boolean, params: ScatterMap<String, String>?, extra: Extra?): Screen {
+		require(extra is WordDetailsExtra)
+		return WordDetailsScreen(
+			WordDetailsViewModel(
+				favoriteUseCase,
+				checkIsFavoriteUseCase,
+				extra.wordCombined
+			),
+			subscriptionViewModel
+		)
+	}
 
-    companion object {
-        val ID = ScreenId("WordDetailsScreen")
-    }
+	companion object {
+		val ID = ScreenId("WordDetailsScreen")
+	}
 
-    data class WordDetailsExtra(val wordCombined: WordCombinedUi) : Extra
+	data class WordDetailsExtra(val wordCombined: WordCombinedUi) : Extra
 }

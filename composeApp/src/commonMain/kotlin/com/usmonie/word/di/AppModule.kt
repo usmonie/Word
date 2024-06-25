@@ -36,80 +36,80 @@ import org.koin.dsl.module
 val mainGraphId = GraphId("MainGraph")
 
 val appModule = module {
-    includes(
-        dashboardUiModule,
-        dictionaryDataModule,
-        dictionaryDomainUseCase,
-        favoritesUiModule,
-        gamesUiModule,
-        subscriptionDataModule,
-        subscriptionsUiModule,
-        settingsDataModule,
-        settingsUiModule,
-        wordDetailsUiModule,
-        quotesDataModule,
-        quotesDomainModule
-    )
+	includes(
+		dashboardUiModule,
+		dictionaryDataModule,
+		dictionaryDomainUseCase,
+		favoritesUiModule,
+		gamesUiModule,
+		subscriptionDataModule,
+		subscriptionsUiModule,
+		settingsDataModule,
+		settingsUiModule,
+		wordDetailsUiModule,
+		quotesDataModule,
+		quotesDomainModule
+	)
 
-    single { if (isRelease) AppConfig.Release else AppConfig.Debug }
+	single { if (isRelease) AppConfig.Release else AppConfig.Debug }
 
-    single { (routeManager: RouteManager) ->
-        val openWord: (WordCombinedUi) -> Unit = {
-            routeManager.navigateTo(
-                WordDetailsScreenFactory.ID,
-                extras = WordDetailsScreenFactory.WordDetailsExtra(it)
-            )
-        }
+	single { (routeManager: RouteManager) ->
+		val openWord: (WordCombinedUi) -> Unit = {
+			routeManager.navigateTo(
+				WordDetailsScreenFactory.ID,
+				extras = WordDetailsScreenFactory.WordDetailsExtra(it)
+			)
+		}
 
-        openWord
-    }
+		openWord
+	}
 
-    factory {
-        val routeManager = getRouteManager()
+	factory {
+		val routeManager = getRouteManager()
 
-        val openMenuItems: (DashboardMenuItem) -> Unit = {
-            routeManager.navigateTo(
-                when (it) {
-                    FAVORITES -> FavoritesScreenFactory.ID
-                    SETTINGS -> SettingsScreenFactory.ID
-                    GAMES -> GamesScreenFactory.ID
-                }
-            )
-        }
+		val openMenuItems: (DashboardMenuItem) -> Unit = {
+			routeManager.navigateTo(
+				when (it) {
+					FAVORITES -> FavoritesScreenFactory.ID
+					SETTINGS -> SettingsScreenFactory.ID
+					GAMES -> GamesScreenFactory.ID
+				}
+			)
+		}
 
-        val dashboardFactory: DashboardScreenFactory =
-            get { parametersOf(get<((WordCombinedUi) -> Unit)> { parametersOf(routeManager) }, openMenuItems) }
-        val favoritesFactory: FavoritesScreenFactory =
-            get { parametersOf(get<((WordCombinedUi) -> Unit)> { parametersOf(routeManager) }) }
-        val hangmanFactory: HangmanGameScreenFactory =
-            get { parametersOf(get<((WordCombinedUi) -> Unit)> { parametersOf(routeManager) }) }
+		val dashboardFactory: DashboardScreenFactory =
+			get { parametersOf(get<((WordCombinedUi) -> Unit)> { parametersOf(routeManager) }, openMenuItems) }
+		val favoritesFactory: FavoritesScreenFactory =
+			get { parametersOf(get<((WordCombinedUi) -> Unit)> { parametersOf(routeManager) }) }
+		val hangmanFactory: HangmanGameScreenFactory =
+			get { parametersOf(get<((WordCombinedUi) -> Unit)> { parametersOf(routeManager) }) }
 
-        routeManager.registerGraph(
-            mainGraph(dashboardFactory, get(), favoritesFactory, get(), get(), hangmanFactory, get(), get())
-        )
+		routeManager.navigateTo(
+			mainGraph(dashboardFactory, get(), favoritesFactory, get(), get(), hangmanFactory, get(), get())
+		)
 
-        routeManager
-    }
+		routeManager
+	}
 }
 
 @Suppress("LongParameterList")
 fun mainGraph(
-    dashboardScreenFactory: DashboardScreenFactory,
-    detailsScreenFactory: WordDetailsScreenFactory,
-    favoritesScreenFactory: FavoritesScreenFactory,
-    gamesScreenFactory: GamesScreenFactory,
-    enigmaGameScreenFactory: EnigmaGameScreenFactory,
-    hangmanGameScreenFactory: HangmanGameScreenFactory,
-    posDetailsScreenFactory: PosDetailsScreenFactory,
-    settingsScreenFactory: SettingsScreenFactory,
+	dashboardScreenFactory: DashboardScreenFactory,
+	detailsScreenFactory: WordDetailsScreenFactory,
+	favoritesScreenFactory: FavoritesScreenFactory,
+	gamesScreenFactory: GamesScreenFactory,
+	enigmaGameScreenFactory: EnigmaGameScreenFactory,
+	hangmanGameScreenFactory: HangmanGameScreenFactory,
+	posDetailsScreenFactory: PosDetailsScreenFactory,
+	settingsScreenFactory: SettingsScreenFactory,
 ) = NavigationGraph(mainGraphId, dashboardScreenFactory).apply {
-    register(detailsScreenFactory)
-    register(favoritesScreenFactory)
-    register(gamesScreenFactory)
-    register(enigmaGameScreenFactory)
-    register(hangmanGameScreenFactory)
-    register(posDetailsScreenFactory)
-    register(settingsScreenFactory)
+	register(detailsScreenFactory)
+	register(favoritesScreenFactory)
+	register(gamesScreenFactory)
+	register(enigmaGameScreenFactory)
+	register(hangmanGameScreenFactory)
+	register(posDetailsScreenFactory)
+	register(settingsScreenFactory)
 }
 
 expect val isRelease: Boolean

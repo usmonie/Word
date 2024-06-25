@@ -31,3 +31,5 @@ fun PointerInputChange.toGesture(screenWidth: Int): Gesture {
         screenWidth = screenWidth.toFloat()
     )
 }
+
+expect val isGestureSupported: Boolean

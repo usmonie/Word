@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.usmonie.compass.core.LocalRouteManager
 import com.usmonie.compass.core.RouteManager
+import com.usmonie.compass.core.gesture.isGestureSupported
 
 @Composable
 fun Root(
@@ -31,7 +32,7 @@ fun Root(
     CompositionLocalProvider(LocalRouteManager provides routeManager) {
         BackGestureHandler(
             saveableState,
-            isGestureNavigationEnabled,
+            isGestureNavigationEnabled && isGestureSupported,
             routeManager,
         ) {
             val state by routeManager.state.collectAsState()

@@ -11,25 +11,25 @@ import com.usmonie.word.features.subscription.domain.usecase.SubscribeUseCase
 import com.usmonie.word.features.subscription.domain.usecase.SubscriptionStatusUseCase
 
 class PosDetailsScreenFactory(
-    private val subscribeUseCase: SubscribeUseCase,
-    private val subscriptionStatusUseCase: SubscriptionStatusUseCase
+	private val subscribeUseCase: SubscribeUseCase,
+	private val subscriptionStatusUseCase: SubscriptionStatusUseCase
 ) : ScreenFactory {
-    override val id: ScreenId = ID
-    override fun invoke(params: ScatterMap<String, String>?, extra: Extra?): Screen {
-        require(extra is ScreenExtra)
+	override val id: ScreenId = ID
+	override fun invoke(storeInBackStack: Boolean, params: ScatterMap<String, String>?, extra: Extra?): Screen {
+		require(extra is ScreenExtra)
 
-        return PosDetailsScreen(
-            PosDetailsViewModel(extra.word),
-            SubscriptionViewModel(
-                subscribeUseCase,
-                subscriptionStatusUseCase
-            )
-        )
-    }
+		return PosDetailsScreen(
+			PosDetailsViewModel(extra.word),
+			SubscriptionViewModel(
+				subscribeUseCase,
+				subscriptionStatusUseCase
+			)
+		)
+	}
 
-    companion object {
-        val ID = ScreenId("PosDetailedScreen")
-    }
+	companion object {
+		val ID = ScreenId("PosDetailedScreen")
+	}
 
-    data class ScreenExtra(val word: WordUi) : Extra
+	data class ScreenExtra(val word: WordUi) : Extra
 }

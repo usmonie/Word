@@ -12,22 +12,22 @@ import com.usmonie.word.features.subscriptions.ui.notification.SubscriptionViewM
 
 
 class FavoriteWordsScreenFactory(
-    private val getFavoritesUseCase: GetAllFavouritesUseCase,
-    private val updateFavouriteWordUseCase: UpdateFavouriteWordUseCase,
-    private val subscriptionViewModel: SubscriptionViewModel,
-    private val openWord: (WordCombinedUi) -> Unit
+	private val getFavoritesUseCase: GetAllFavouritesUseCase,
+	private val updateFavouriteWordUseCase: UpdateFavouriteWordUseCase,
+	private val subscriptionViewModel: SubscriptionViewModel,
+	private val openWord: (WordCombinedUi) -> Unit
 ) : ScreenFactory {
-    override val id: ScreenId = ID
+	override val id: ScreenId = ID
 
-    override fun invoke(params: ScatterMap<String, String>?, extra: Extra?): Screen {
-        return FavoriteWordsScreen(
-            FavoriteWordsViewModel(getFavoritesUseCase, updateFavouriteWordUseCase),
-            subscriptionViewModel,
-            openWord
-        )
-    }
+	override fun invoke(storeInBackStack: Boolean, params: ScatterMap<String, String>?, extra: Extra?): Screen {
+		return FavoriteWordsScreen(
+			FavoriteWordsViewModel(getFavoritesUseCase, updateFavouriteWordUseCase),
+			subscriptionViewModel,
+			openWord
+		)
+	}
 
-    companion object {
-        val ID = ScreenId("FavoritesScreen")
-    }
+	companion object {
+		val ID = ScreenId("FavoritesScreen")
+	}
 }
