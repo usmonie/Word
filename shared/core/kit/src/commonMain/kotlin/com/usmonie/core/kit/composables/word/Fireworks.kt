@@ -1,189 +1,281 @@
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.util.fastAll
 import androidx.compose.ui.util.fastForEach
-import kotlinx.coroutines.delay
+import androidx.compose.ui.util.fastForEachIndexed
+import com.usmonie.core.kit.tools.getScreenSize
+import kotlinx.coroutines.*
+import kotlinx.datetime.Clock
 import kotlin.math.*
 import kotlin.random.Random
 
-@Composable
-fun Fireworks(modifier: Modifier = Modifier) {
-	val rockets = remember { mutableStateListOf<Rocket>() }
-	val colors = listOf(Color.Red, Color.Green, Color.Blue, Color.Yellow, Color.Magenta, Color.Cyan)
+data class Particle(
+	var position: Offset,
+	var velocity: Offset,
+	var color: Color,
+	var size: Float,
+	var alpha: Float = 1f,
+	var rotationAngle: Float = 0f,
+	var shouldRotate: Boolean = false,
+	var trail: MutableList<Offset> = mutableListOf(),
+	var isSmoke: Boolean = false,
+	var isLaunchTrail: Boolean = false
+)
 
-	LaunchedEffect(Unit) {
-		while (true) {
-			if (rockets.size < 25) {
-				rockets.add(
-					Rocket(
-						startX = Random.nextFloat(),
-						startY = 1f,
-						targetX = Random.nextFloat(),
-						targetY = Random.nextFloat() * 0.6f + 0.1f,
-						color = colors.random(),
-						launchSide = LaunchSide.entries.toTypedArray().random()
-					)
-				)
-				delay(120)
-			}
-		}
+class ParticlePool(private val poolSize: Int) {
+	private val particles = MutableList(poolSize) { createParticle() }
+	private var currentIndex = 0
+
+	fun getParticle(): Particle {
+		val particle = particles[currentIndex]
+		currentIndex = (currentIndex + 1) % poolSize
+		return particle.apply { reset() }
 	}
 
-	Canvas(modifier = modifier.fillMaxSize()) {
-		rockets.fastForEach { rocket ->
-			drawRocket(rocket)
-		}
-	}
+	private fun createParticle() = Particle(Offset.Zero, Offset.Zero, Color.White, 0f)
 
-	LaunchedEffect(Unit) {
-		while (true) {
-			delay(12) // примерно 60 FPS
-			rockets.removeAll { it.update() == null }
-			rockets.fastForEach { it.update() }
-		}
+	private fun Particle.reset() {
+		position = Offset.Zero
+		velocity = Offset.Zero
+		color = Color.White
+		size = 0f
+		alpha = 1f
+		rotationAngle = 0f
+		shouldRotate = false
+		trail.clear()
+		isSmoke = false
 	}
 }
 
-enum class LaunchSide { LEFT, BOTTOM, RIGHT }
-
-class Rocket(
-	val startX: Float,
-	val startY: Float,
-	val targetX: Float,
-	val targetY: Float,
-	val color: Color,
-	val launchSide: LaunchSide
+class Firework(
+	private val initialPosition: Offset,
+	private val explosionPosition: Offset,
+	private val particleCount: Int,
+	private val fireworkType: FireworkType,
+	private val particlePool: ParticlePool
 ) {
-	var progress: Float = 0f
-	var state: RocketState = RocketState.FLYING
-	var explosionProgress: Float = 0f
-	var velocity: Float = Random.nextFloat() * 0.02f + 0.01f
-	private val gravity: Float = 0.0001f
+	var particles = mutableListOf<Particle>()
+	var hasExploded = false
+	var explosionTime = 0L
+	var explosionCount = 0
+	private val maxExplosions = 3
 
-	fun update(): Rocket? {
-		return when (state) {
-			RocketState.FLYING -> {
-				progress += velocity
-				velocity -= gravity
-				if (progress >= 1f || velocity <= 0) {
-					state = RocketState.EXPLODING
+	val wasEnded: Boolean
+		get() = explosionCount >= maxExplosions && particles.fastAll { it.alpha <= 0.1f }
+
+	init {
+		particles.add(
+			particlePool.getParticle()
+				.apply {
+					position = initialPosition
+					velocity = calculateLaunchVelocity()
+					color = Color.White
+					size = 5f
 				}
-				this
-			}
+		)
+	}
 
-			RocketState.EXPLODING -> {
-				explosionProgress += 0.05f
-				if (explosionProgress >= 1f) {
-					state = RocketState.FADING
-				}
-				this
+	fun update(currentTime: Long) {
+		if (!hasExploded) {
+			val launchParticle = particles[0]
+			launchParticle.position += launchParticle.velocity
+			if (launchParticle.position.y <= explosionPosition.y) {
+				explode(currentTime)
 			}
-
-			RocketState.FADING -> {
-				explosionProgress -= 0.01f
-				if (explosionProgress <= 0f) null else this
+		} else {
+			updateParticles(currentTime)
+			if (currentTime - explosionTime > 1000 && explosionCount < maxExplosions) {
+				explode(currentTime)
 			}
 		}
 	}
 
-	fun currentPosition(): Pair<Float, Float> {
-		val t = progress
-		return when (launchSide) {
-			LaunchSide.BOTTOM -> {
-				val x = startX + (targetX - startX) * t
-				val y = startY + (targetY - startY) * t - sin(PI * t).toFloat() * 0.2f + 0.5f * gravity * t * t
-				x to y
+	private fun explode(currentTime: Long) {
+		hasExploded = true
+		explosionTime = currentTime
+		explosionCount++
+		particles.clear()
+		for (i in 0 until particleCount) {
+			particles.add(createExplosionParticle())
+		}
+		// Add smoke particles
+//		for (i in 0 until particleCount / 2) {
+//			particles.add(createSmokeParticle())
+//		}
+	}
+
+	private fun updateParticles(currentTime: Long) {
+		particles.fastForEach { particle ->
+			// Update trail
+			particle.trail.add(particle.position)
+			if (particle.trail.size > 10) particle.trail.removeAt(0)
+
+			// Apply gravity
+			particle.velocity += Offset(0f, if (particle.isSmoke) 0.5f else 9.8f * 0.016f)
+
+			// Apply velocity decay
+			particle.velocity *= if (particle.isSmoke) 0.98f else 0.95f
+
+			// Update position
+			particle.position += particle.velocity
+
+			// Decrease brightness
+			particle.alpha *= if (particle.isSmoke) 0.97f else 0.95f
+
+			// Apply rotation
+			if (particle.shouldRotate) {
+				particle.rotationAngle += 45f * 0.016f // 45 degrees per second
+			}
+		}
+
+		particles.removeAll { it.alpha < 0.1f }
+	}
+
+	private fun calculateLaunchVelocity(): Offset {
+		val dx = explosionPosition.x - initialPosition.x
+		val dy = explosionPosition.y - initialPosition.y
+		val time = sqrt(2 * abs(dy) / 9.8f)
+		return Offset(dx / time, -sqrt(2 * 9.8f * abs(dy)))
+	}
+
+	private fun createExplosionParticle(): Particle {
+		val angle = Random.nextFloat() * 2 * PI.toFloat()
+		val speed = Random.nextFloat() * 5f + 2f
+		return particlePool.getParticle().apply {
+			position = explosionPosition
+			velocity = Offset(cos(angle) * speed, sin(angle) * speed)
+			color = getRandomColor()
+			size = Random.nextFloat() * 9f + 1f
+			shouldRotate = Random.nextFloat() < 0.3f
+		}
+	}
+
+	private fun createSmokeParticle(): Particle {
+		val angle = Random.nextFloat() * 2 * PI.toFloat()
+		val speed = Random.nextFloat() * 2f + 0.5f
+		return particlePool.getParticle().apply {
+			position = explosionPosition
+			velocity = Offset(cos(angle) * speed, sin(angle) * speed - 2f)
+			color = Color.Gray
+			size = Random.nextFloat() * 15f + 5f
+			alpha = 0.7f
+			isSmoke = true
+		}
+	}
+
+	private fun getRandomColor(): Color {
+		return when (fireworkType) {
+			FireworkType.CHRYSANTHEMUM -> Color(Random.nextInt(256), Random.nextInt(256), 0)
+			FireworkType.PALM -> Color(0, Random.nextInt(256), 0)
+			FireworkType.FOUNTAIN -> Color(Random.nextInt(256), 0, Random.nextInt(256))
+			FireworkType.WILLOW -> Color(Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
+			FireworkType.PEONY -> Color(Random.nextInt(256), 0, 0)
+		}
+	}
+
+	fun draw(drawScope: DrawScope) {
+		particles.fastForEach { particle ->
+			// Draw trail
+			particle.trail.fastForEachIndexed { index, trailPosition ->
+				val trailAlpha = particle.alpha * (index.toFloat() / particle.trail.size)
+				drawScope.drawCircle(
+					color = particle.color,
+					radius = particle.size * 0.5f,
+					center = trailPosition,
+					alpha = trailAlpha
+				)
 			}
 
-			LaunchSide.LEFT -> {
-				val x = -0.2f + (targetX + 0.2f) * t
-				val y = 1f + (targetY - 1f) * t - sin(PI * t).toFloat() * 0.2f + 0.5f * gravity * t * t
-				x to y
+			// Draw particle
+			drawScope.drawCircle(
+				color = particle.color,
+				radius = particle.size,
+				center = particle.position,
+				alpha = particle.alpha
+			)
+
+			// Draw glow
+			drawScope.drawCircle(
+				color = particle.color,
+				radius = particle.size + 3f,
+				center = particle.position,
+				alpha = particle.alpha * 0.3f
+			)
+		}
+	}
+}
+
+enum class FireworkType {
+	CHRYSANTHEMUM, PALM, FOUNTAIN, WILLOW, PEONY
+}
+
+@Composable
+fun FireworksSimulation(fireworksCount: Int = Int.MAX_VALUE) {
+	val fireworks = remember { mutableStateListOf<Firework>() }
+	var frameCount by remember { mutableStateOf(0L) }
+	val particlePool = remember { ParticlePool(10000) }
+
+	val size = getScreenSize()
+	val width = with(LocalDensity.current) { size.first.toPx() }
+	val height = with(LocalDensity.current) { size.second.toPx() }
+
+	LaunchedEffect(Unit) {
+		while (true) {
+			if (fireworks.size < fireworksCount) {
+				launchFirework(fireworks, width, height, particlePool)
+			}
+			delay(120)
+		}
+	}
+
+	LaunchedEffect(Unit) {
+		while (true) {
+			delay(12) // Targeting approximately 60 FPS
+			val currentTime = Clock.System.now().epochSeconds
+
+			fireworks.fastForEach { it.update(currentTime) }
+			fireworks.removeAll { it.wasEnded }
+
+			// Realistic timing for automatic firework launches
+			if (Random.nextFloat() < 0.05f && fireworks.size < 10) {
+				launchFirework(fireworks, width, height, particlePool)
 			}
 
-			LaunchSide.RIGHT -> {
-				val x = 1.2f + (targetX - 1.2f) * t
-				val y = 1f + (targetY - 1f) * t - sin(PI * t).toFloat() * 0.2f + 0.5f * gravity * t * t
-				x to y
+			frameCount++  // Increment frame count to force recomposition
+		}
+	}
+
+	Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+		Canvas(modifier = Modifier.fillMaxSize()) {
+			fireworks.fastForEach {
+				frameCount
+				it.draw(this)
 			}
 		}
 	}
 }
 
-enum class RocketState { FLYING, EXPLODING, FADING }
-
-fun DrawScope.drawRocket(rocket: Rocket) {
-	when (rocket.state) {
-		RocketState.FLYING -> {
-			val (currentX, currentY) = rocket.currentPosition()
-			val path = Path()
-			path.moveTo(currentX * size.width, currentY * size.height)
-
-			// Рисуем хвост ракеты
-			for (i in 1..10) {
-				val t = rocket.progress - i * 0.02f
-				if (t < 0) break
-				val (x, y) = when (rocket.launchSide) {
-					LaunchSide.BOTTOM -> {
-						val x = rocket.startX + (rocket.targetX - rocket.startX) * t
-						val y =
-							rocket.startY + (rocket.targetY - rocket.startY) * t - sin(PI * t).toFloat() * 0.2f + 0.5f * 0.0001f * t * t
-						x to y
-					}
-
-					LaunchSide.LEFT -> {
-						val x = -0.2f + (rocket.targetX + 0.2f) * t
-						val y = 1f + (rocket.targetY - 1f) * t - sin(PI * t).toFloat() * 0.2f + 0.5f * 0.0001f * t * t
-						x to y
-					}
-
-					LaunchSide.RIGHT -> {
-						val x = 1.2f + (rocket.targetX - 1.2f) * t
-						val y = 1f + (rocket.targetY - 1f) * t - sin(PI * t).toFloat() * 0.2f + 0.5f * 0.0001f * t * t
-						x to y
-					}
-				}
-				path.lineTo(x * size.width, y * size.height)
-			}
-
-			// Рисуем градиентный хвост
-			for (i in 0..10) {
-				val progress = i / 10f
-				val width = (1 - progress) * 6.dp.toPx()
-				val alpha = (1 - progress) * 0.5f
-				drawPath(
-					path = path,
-					color = rocket.color.copy(alpha = alpha.coerceIn(0f, 1f)),
-					style = androidx.compose.ui.graphics.drawscope.Stroke(width = width)
-				)
-			}
-
-			drawCircle(
-				color = rocket.color,
-				radius = 5.dp.toPx(),
-				center = Offset(currentX * size.width, currentY * size.height)
-			)
-		}
-
-		RocketState.EXPLODING, RocketState.FADING -> {
-			// Рисуем взрыв
-			val maxRadius = 52.dp.toPx()
-			val currentRadius = if (rocket.state == RocketState.EXPLODING) {
-				maxRadius * rocket.explosionProgress
-			} else {
-				maxRadius * (1 - rocket.explosionProgress)
-			}
-			drawCircle(
-				color = rocket.color.copy(alpha = (1 - rocket.explosionProgress).coerceIn(0f, 1f)),
-				radius = currentRadius,
-				center = Offset(rocket.targetX * size.width, rocket.targetY * size.height)
-			)
-		}
-	}
+private fun launchFirework(fireworks: MutableList<Firework>, width: Float, height: Float, particlePool: ParticlePool) {
+	fireworks.add(
+		Firework(
+			initialPosition = Offset(width * Random.nextFloat(), height),
+			explosionPosition = Offset(
+				width * Random.nextFloat(),
+				height * Random.nextFloat() * 0.6f
+			),
+			particleCount = 100,
+			fireworkType = FireworkType.entries.toTypedArray().random(),
+			particlePool = particlePool
+		)
+	)
 }

@@ -1,5 +1,6 @@
 package com.usmonie.word.features.games.ui.enigma
 
+import FireworksSimulation
 import androidx.compose.animation.*
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -210,6 +211,8 @@ internal class EnigmaGameScreen(
 		}
 
 		AnimatedVisibility(state is EnigmaState.Lost) {
+			FireworksSimulation()
+
 			ReviveLifeDialog(
 				routerManager::popBackstack,
 				viewModel::onAddLifeClick,
@@ -220,6 +223,7 @@ internal class EnigmaGameScreen(
 		}
 
 		if (state is EnigmaState.Won) {
+			FireworksSimulation()
 			EnigmaGameWon(
 				routerManager::popBackstack,
 				viewModel::onNextPhrase,
@@ -393,7 +397,7 @@ internal class EnigmaGameScreen(
 					enabled = enabled(),
 					onClick = onClick,
 				)
-				.width(20.dp),
+				.width(24.dp),
 			horizontalAlignment = Alignment.CenterHorizontally,
 			verticalArrangement = Arrangement.Center,
 		) {
