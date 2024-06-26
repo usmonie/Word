@@ -219,7 +219,7 @@ internal class EnigmaGameScreen(
 			)
 		}
 
-		AnimatedVisibility(state is EnigmaState.Won) {
+		if (state is EnigmaState.Won) {
 			EnigmaGameWon(
 				routerManager::popBackstack,
 				viewModel::onNextPhrase,
@@ -438,7 +438,7 @@ internal class EnigmaGameScreen(
 	@Composable
 	private fun Symbol(symbol: Char, modifier: Modifier) {
 		Column(
-			modifier = modifier.width(2.dp),
+			modifier = modifier.width(4.dp),
 			horizontalAlignment = Alignment.CenterHorizontally,
 		) {
 			Text(

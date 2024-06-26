@@ -55,8 +55,6 @@ internal class ImportQuotesUseCaseImpl(
                         val categories = parts[2].removeSurrounding("|").split(", ").fastMap { it.trim() }
                         val quote = Quote("", quoteText, author, categories, false, wasPlayed = false)
                         items.add(quote)
-                    } else {
-                        println("excluded quote")
                     }
                 }
                 line = source.readLine()

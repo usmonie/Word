@@ -1,36 +1,26 @@
 package com.usmonie.word.features.games.ui.kit
 
-
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.compose.ui.platform.LocalWindowInfo
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import com.usmonie.core.kit.tools.getScreenSize
 import com.usmonie.word.features.games.ui.hangman.GuessedLetters
 import com.usmonie.word.features.games.ui.hangman.qwerty
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun QwertyKeyboard(onLetterClick: (Char) -> Unit, guessedLetters: GuessedLetters, modifier: Modifier = Modifier) {
-
-	val configuration = LocalWindowInfo.current
-	val screenWidth = with(LocalDensity.current) {
-		configuration.containerSize.width.toDp()
-	}
+	val screenWidth = getScreenSize().first
 	val keyboardWidth = screenWidth - 6.dp
 
 	val rows = qwerty
