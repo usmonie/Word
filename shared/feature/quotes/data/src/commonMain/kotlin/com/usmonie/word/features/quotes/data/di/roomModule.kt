@@ -7,9 +7,9 @@ import com.usmonie.word.features.quotes.data.QuotesDatabase
 import com.usmonie.word.features.quotes.data.repositories.EnigmaRepositoryImpl
 import com.usmonie.word.features.quotes.data.repositories.QuotesRepositoryImpl
 import com.usmonie.word.features.quotes.data.usecases.ImportQuotesUseCaseImpl
-import com.usmonie.word.features.qutoes.domain.di.quotesDomainModule
-import com.usmonie.word.features.qutoes.domain.repositories.QuotesRepository
-import com.usmonie.word.features.qutoes.domain.usecases.InitiateQuotesUseCase
+import com.usmonie.word.features.quotes.domain.di.quotesDomainModule
+import com.usmonie.word.features.quotes.domain.repositories.QuotesRepository
+import com.usmonie.word.features.quotes.domain.usecases.InitiateQuotesUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import org.koin.core.module.Module

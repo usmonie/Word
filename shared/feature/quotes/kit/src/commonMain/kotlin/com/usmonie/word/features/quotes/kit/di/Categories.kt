@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.usmonie.word.features.qutoes.domain.models.Quote
+import com.usmonie.word.features.quotes.domain.models.Quote
 
 @Immutable
 data class Categories(val categories: List<String>)

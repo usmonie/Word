@@ -10,8 +10,8 @@ import com.usmonie.word.features.games.domain.usecases.UpdateFavouriteWordUseCas
 import com.usmonie.word.features.games.ui.models.WordCombinedUi
 import com.usmonie.word.features.favorites.ui.quotes.FavoriteQuotesViewModel
 import com.usmonie.word.features.favorites.ui.words.FavoriteWordsViewModel
-import com.usmonie.word.features.qutoes.domain.usecases.GetFavoriteQuotesUseCase
-import com.usmonie.word.features.qutoes.domain.usecases.UpdateFavoriteQuoteUseCase
+import com.usmonie.word.features.quotes.domain.usecases.GetFavoriteQuotesUseCase
+import com.usmonie.word.features.quotes.domain.usecases.UpdateFavoriteQuoteUseCase
 import com.usmonie.word.features.subscriptions.ui.notification.SubscriptionViewModel
 
 class FavoritesScreenFactory(

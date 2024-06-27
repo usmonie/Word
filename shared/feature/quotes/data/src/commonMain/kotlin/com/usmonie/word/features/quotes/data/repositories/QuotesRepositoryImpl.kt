@@ -7,9 +7,9 @@ import com.usmonie.word.features.quotes.data.models.QuoteDb
 import com.usmonie.word.features.quotes.data.models.QuoteFavorite
 import com.usmonie.word.features.quotes.data.models.QuoteWithCategories
 import com.usmonie.word.features.quotes.data.usecases.QUOTES_COUNT
-import com.usmonie.word.features.qutoes.domain.models.Quote
-import com.usmonie.word.features.qutoes.domain.models.QuoteCategories
-import com.usmonie.word.features.qutoes.domain.repositories.QuotesRepository
+import com.usmonie.word.features.quotes.domain.models.Quote
+import com.usmonie.word.features.quotes.domain.models.QuoteCategories
+import com.usmonie.word.features.quotes.domain.repositories.QuotesRepository
 import kotlin.random.Random
 
 @Suppress("TooManyFunctions")

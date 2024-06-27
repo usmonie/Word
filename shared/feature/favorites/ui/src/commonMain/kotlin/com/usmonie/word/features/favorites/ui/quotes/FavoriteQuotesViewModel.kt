@@ -6,9 +6,9 @@ import com.usmonie.core.domain.tools.fastMap
 import com.usmonie.core.domain.usecases.invoke
 import com.usmonie.word.features.quotes.kit.di.Categories
 import com.usmonie.word.features.quotes.kit.di.Quotes
-import com.usmonie.word.features.qutoes.domain.models.Quote
-import com.usmonie.word.features.qutoes.domain.usecases.GetFavoriteQuotesUseCase
-import com.usmonie.word.features.qutoes.domain.usecases.UpdateFavoriteQuoteUseCase
+import com.usmonie.word.features.quotes.domain.models.Quote
+import com.usmonie.word.features.quotes.domain.usecases.GetFavoriteQuotesUseCase
+import com.usmonie.word.features.quotes.domain.usecases.UpdateFavoriteQuoteUseCase
 
 @Immutable
 internal class FavoriteQuotesViewModel(

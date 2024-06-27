@@ -12,7 +12,7 @@ import com.usmonie.word.features.quotes.data.models.QuoteCategoryCrossRefDb
 import com.usmonie.word.features.quotes.data.models.QuoteDb
 import com.usmonie.word.features.quotes.data.models.QuoteFavorite
 import com.usmonie.word.features.quotes.data.models.QuoteWithCategories
-import com.usmonie.word.features.qutoes.domain.models.Quote
+import com.usmonie.word.features.quotes.domain.models.Quote
 
 @Suppress("TooManyFunctions")
 @Dao

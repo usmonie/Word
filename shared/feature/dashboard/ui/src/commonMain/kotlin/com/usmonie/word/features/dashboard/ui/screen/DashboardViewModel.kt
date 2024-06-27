@@ -16,10 +16,10 @@ import com.usmonie.word.features.games.domain.usecases.UpdateFavouriteWordUseCas
 import com.usmonie.word.features.games.domain.usecases.UpdateSearchHistory
 import com.usmonie.word.features.games.ui.models.WordCombinedUi
 import com.usmonie.word.features.games.ui.models.toUi
-import com.usmonie.word.features.qutoes.domain.models.Quote
-import com.usmonie.word.features.qutoes.domain.usecases.GetRandomQuoteUseCase
-import com.usmonie.word.features.qutoes.domain.usecases.InitiateQuotesUseCase
-import com.usmonie.word.features.qutoes.domain.usecases.UpdateFavoriteQuoteUseCase
+import com.usmonie.word.features.quotes.domain.models.Quote
+import com.usmonie.word.features.quotes.domain.usecases.GetRandomQuoteUseCase
+import com.usmonie.word.features.quotes.domain.usecases.InitiateQuotesUseCase
+import com.usmonie.word.features.quotes.domain.usecases.UpdateFavoriteQuoteUseCase
 import com.usmonie.word.features.subscription.domain.models.SubscriptionStatus
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO

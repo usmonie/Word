@@ -3,7 +3,6 @@ package com.usmonie.word.features.games.ui.enigma
 import FireworksSimulation
 import androidx.compose.animation.*
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.*
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
@@ -25,13 +24,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -59,6 +52,7 @@ import com.usmonie.word.features.games.ui.hangman.GuessedLetters
 import com.usmonie.word.features.games.ui.kit.*
 import com.usmonie.word.features.subscriptions.ui.notification.SubscriptionScreenAction
 import com.usmonie.word.features.subscriptions.ui.notification.SubscriptionViewModel
+import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.stringResource
 import word.shared.feature.games.ui.generated.resources.Res
 import word.shared.feature.games.ui.generated.resources.games_next_phrase
@@ -139,7 +133,7 @@ internal class EnigmaGameScreen(
 	@Composable
 	private fun EnigmaGameContent(
 		getPhrase: () -> EnigmaEncryptedPhrase,
-		getCurrentSelectedPosition: () -> Pair<Int, Int>?,
+		getCurrentSelectedPosition: () -> Triple<Int, Int, Int>?,
 		isEnabled: (CellState) -> Boolean,
 		hintSelectionState: () -> Boolean,
 		guessedLetters: () -> GuessedLetters,
@@ -211,8 +205,6 @@ internal class EnigmaGameScreen(
 		}
 
 		AnimatedVisibility(state is EnigmaState.Lost) {
-			FireworksSimulation()
-
 			ReviveLifeDialog(
 				routerManager::popBackstack,
 				viewModel::onAddLifeClick,
@@ -267,7 +259,7 @@ internal class EnigmaGameScreen(
 	@Composable
 	private fun Phrase(
 		phrase: EnigmaEncryptedPhrase,
-		getCurrentSelectedPosition: () -> Pair<Int, Int>?,
+		getCurrentSelectedPosition: () -> Triple<Int, Int, Int>?,
 		isEnabled: (CellState) -> Boolean,
 		hintSelectionState: () -> Boolean,
 		modifier: Modifier
@@ -290,7 +282,7 @@ internal class EnigmaGameScreen(
 	@Composable
 	private fun Word(
 		word: Word,
-		getCurrentSelectedPosition: () -> Pair<Int, Int>?,
+		getCurrentSelectedPosition: () -> Triple<Int, Int, Int>?,
 		isEnabled: (CellState) -> Boolean,
 		hintSelectionState: () -> Boolean,
 		wordPosition: Int,
@@ -314,7 +306,7 @@ internal class EnigmaGameScreen(
 	@Composable
 	private fun RowScope.CellItem(
 		cell: Cell,
-		getCurrentSelectedPosition: () -> Pair<Int, Int>?,
+		getCurrentSelectedPosition: () -> Triple<Int, Int, Int>?,
 		isEnabled: (CellState) -> Boolean,
 		hintSelectionState: () -> Boolean,
 		wordPosition: Int,
@@ -324,13 +316,14 @@ internal class EnigmaGameScreen(
 			cell.isLetter -> GuessedLetter(
 				cell,
 				{
-					val (word, cellPosition) = getCurrentSelectedPosition()
+					val (_, word, cellPosition) = getCurrentSelectedPosition()
 						?: return@GuessedLetter false
 
 					word == wordPosition && cellPosition == position
 				},
+				{ getCurrentSelectedPosition()?.first },
 				hintSelectionState = hintSelectionState,
-				onClick = { viewModel.onCellSelected(position, wordPosition) },
+				onClick = { viewModel.onCellSelected(cell.number, position, wordPosition) },
 				enabled = isEnabled,
 				modifier = Modifier.alignByBaseline()
 			)
@@ -344,6 +337,7 @@ internal class EnigmaGameScreen(
 	private fun GuessedLetter(
 		cell: Cell,
 		getIsSelected: () -> Boolean,
+		getSelectedIndex: () -> Int?,
 		hintSelectionState: () -> Boolean,
 		onClick: () -> Unit,
 		enabled: (CellState) -> Boolean,
@@ -353,12 +347,15 @@ internal class EnigmaGameScreen(
 
 		val hintSelection = hintSelectionState()
 		val isSelected = getIsSelected()
+		val highlighted = !getIsSelected() && getSelectedIndex() == cell.number
 		Letter(
 			cell.backgroundColor(hintSelection, isSelected),
+			MaterialTheme.colorScheme.secondaryContainer,
 			{ enabled(cell.state) },
 			hintSelectionState = hintSelectionState,
+			{ highlighted },
 			cell.letter,
-			cell.textColor(hintSelection, isSelected),
+			if (highlighted) MaterialTheme.colorScheme.onSurface else cell.textColor(hintSelection, isSelected),
 			if (cell.state != CellState.Found) cell.number.toString() else "",
 			interactionSource,
 			onClick,
@@ -371,8 +368,10 @@ internal class EnigmaGameScreen(
 	@Composable
 	fun Letter(
 		backgroundColor: Color,
+		hightlightedColor: Color,
 		enabled: () -> Boolean,
 		hintSelectionState: () -> Boolean,
+		highlight: () -> Boolean,
 		letter: String,
 		letterColor: Color,
 		cellNumber: String,
@@ -380,15 +379,25 @@ internal class EnigmaGameScreen(
 		onClick: () -> Unit,
 		modifier: Modifier = Modifier,
 	) {
+		val animatedBackgroundColor by animateColorAsState(backgroundColor)
 		val shape = MaterialTheme.shapes.small
 		Column(
 			modifier = modifier
+				.padding(2.dp)
 				.drawBehind {
 					drawRoundRect(
-						Color(backgroundColor.value),
+						animatedBackgroundColor,
 						cornerRadius = CornerRadius(6.dp.toPx()),
 						style = if (hintSelectionState()) Stroke(2.dp.toPx()) else Fill
 					)
+
+					if (highlight()) {
+						drawRoundRect(
+							hightlightedColor,
+							cornerRadius = CornerRadius(6.dp.toPx()),
+							style = Fill
+						)
+					}
 				}
 				.clip(shape)
 				.clickable(
@@ -403,18 +412,29 @@ internal class EnigmaGameScreen(
 		) {
 			val pressed by interactionSource.collectIsPressedAsState()
 			val dividerScale by animateFloatAsState(if (pressed) 0.7f else 1f)
-			AnimatedContent(
-				targetState = letterColor,
-				transitionSpec = {
-					(fadeIn(animationSpec = tween(300))) togetherWith fadeOut(animationSpec = tween(300))
+			var guessedAnimation by remember(cellNumber, letter) {
+				mutableStateOf(if (letter.isBlank()) false else true)
+			}
 
+			val letterScale by animateFloatAsState(if (guessedAnimation) 1.2f else 1f)
+
+			LaunchedEffect(guessedAnimation) {
+				if (guessedAnimation) {
+					delay(200)
+					guessedAnimation = false
 				}
-			) { targetLetter ->
+			}
+
+			Crossfade(targetState = letterColor) { color ->
 				Text(
 					text = letter,
-					style = MaterialTheme.typography.headlineSmall,
-					modifier = Modifier.padding(top = 4.dp),
-					color = targetLetter,
+					style = MaterialTheme.typography.headlineSmall.copy(fontSize = MaterialTheme.typography.titleMedium.fontSize),
+					modifier = Modifier.padding(top = 4.dp)
+						.graphicsLayer {
+							scaleX = letterScale
+							scaleY = letterScale
+						},
+					color = color,
 					textAlign = TextAlign.Center
 				)
 			}

@@ -24,7 +24,7 @@ import com.usmonie.word.features.games.ui.di.gamesUiModule
 import com.usmonie.word.features.games.ui.enigma.EnigmaGameScreenFactory
 import com.usmonie.word.features.games.ui.hangman.HangmanGameScreenFactory
 import com.usmonie.word.features.quotes.data.di.quotesDataModule
-import com.usmonie.word.features.qutoes.domain.di.quotesDomainModule
+import com.usmonie.word.features.quotes.domain.di.quotesDomainModule
 import com.usmonie.word.features.settings.data.di.settingsDataModule
 import com.usmonie.word.features.settings.ui.SettingsScreenFactory
 import com.usmonie.word.features.settings.ui.di.settingsUiModule

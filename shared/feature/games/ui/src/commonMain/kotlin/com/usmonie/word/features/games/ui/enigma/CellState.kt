@@ -7,9 +7,8 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.graphics.Color
 import com.usmonie.core.domain.tools.fastMap
-import com.usmonie.word.features.games.domain.usecases.GetEnigmaQuoteUseCase
-import com.usmonie.word.features.qutoes.domain.models.Quote
-import org.koin.core.time.measureDuration
+import com.usmonie.word.features.games.domain.usecases.GetCryptogramQuoteUseCase
+import com.usmonie.word.features.quotes.domain.models.Quote
 
 @Immutable
 sealed class CellState {
@@ -59,7 +58,7 @@ data class Cell(
 @Immutable
 data class EnigmaEncryptedPhrase(
 	val encryptedPhrase: MutableObjectList<Word>,
-	val encryptedPositions: MutableObjectList<Pair<Int, Int>>,
+	val encryptedPositions: MutableObjectList<Triple<Int, Int, Int>>,
 	val quote: Quote,
 	val charsCount: MutableScatterMap<Char, Int>
 )
@@ -69,23 +68,24 @@ data class Word(val cells: MutableObjectList<Cell>) {
 	val size: Int = cells.size
 }
 
-fun map(cell: GetEnigmaQuoteUseCase.Cell) = Cell(
+fun map(cell: GetCryptogramQuoteUseCase.Cell) = Cell(
 	cell.symbol,
 	cell.number,
 	when (cell.state) {
-		GetEnigmaQuoteUseCase.CellState.Empty -> CellState.Empty
-		GetEnigmaQuoteUseCase.CellState.Found -> CellState.Found
+		GetCryptogramQuoteUseCase.CellState.Empty -> CellState.Empty
+		GetCryptogramQuoteUseCase.CellState.Found -> CellState.Found
+		GetCryptogramQuoteUseCase.CellState.PartiallyGuessed -> CellState.Correct
 	}
 )
 
-fun map(word: GetEnigmaQuoteUseCase.Word): Word {
+fun map(word: GetCryptogramQuoteUseCase.Word): Word {
 	val newCells = mutableObjectListOf<Cell>()
 	newCells.addAll(word.cells.fastMap { map(it) })
 
 	return Word(cells = newCells)
 }
 
-fun GetEnigmaQuoteUseCase.EnigmaEncryptedPhrase.map(): EnigmaEncryptedPhrase {
+fun GetCryptogramQuoteUseCase.CryptogramEncryptedPhrase.map(): EnigmaEncryptedPhrase {
 	val newPhrase = mutableObjectListOf<Word>()
 	encryptedPhrase.forEach {
 		newPhrase.add(map(it))

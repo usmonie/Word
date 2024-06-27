@@ -1,7 +1,7 @@
-package com.usmonie.word.features.qutoes.domain.repositories
+package com.usmonie.word.features.quotes.domain.repositories
 
-import com.usmonie.word.features.qutoes.domain.models.Quote
-import com.usmonie.word.features.qutoes.domain.models.QuoteCategories
+import com.usmonie.word.features.quotes.domain.models.Quote
+import com.usmonie.word.features.quotes.domain.models.QuoteCategories
 
 interface QuotesRepository {
 

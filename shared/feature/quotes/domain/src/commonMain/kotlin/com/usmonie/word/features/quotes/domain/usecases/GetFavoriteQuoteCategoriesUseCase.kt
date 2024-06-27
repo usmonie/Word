@@ -1,8 +1,8 @@
-package com.usmonie.word.features.qutoes.domain.usecases
+package com.usmonie.word.features.quotes.domain.usecases
 
 import com.usmonie.core.domain.usecases.CoroutineUseCase
-import com.usmonie.word.features.qutoes.domain.models.QuoteCategories
-import com.usmonie.word.features.qutoes.domain.repositories.QuotesRepository
+import com.usmonie.word.features.quotes.domain.models.QuoteCategories
+import com.usmonie.word.features.quotes.domain.repositories.QuotesRepository
 
 interface GetFavoriteQuoteCategoriesUseCase : CoroutineUseCase<Unit, List<QuoteCategories>>
 

@@ -19,12 +19,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.usmonie.core.kit.composables.base.buttons.TextButton
 import com.usmonie.core.kit.composables.base.text.AutoSizeText
-import com.usmonie.word.features.qutoes.domain.models.Quote
+import com.usmonie.word.features.quotes.domain.models.Quote
 
 private const val QUOTE_STARS = "“”"
 
@@ -107,7 +106,7 @@ fun QuoteLargeCard(
 			SelectionContainer {
 				AutoSizeText(
 					text = quote.text.trim(),
-					minTextSize = MaterialTheme.typography.bodySmall.fontSize,
+					minTextSize = MaterialTheme.typography.bodyMedium.fontSize,
 					maxLines = 6,
 					style = MaterialTheme.typography.headlineSmall,
 					textAlign = TextAlign.Center,

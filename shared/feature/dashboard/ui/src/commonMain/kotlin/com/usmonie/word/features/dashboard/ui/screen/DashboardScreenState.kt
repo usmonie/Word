@@ -13,7 +13,7 @@ import com.usmonie.compass.viewmodel.updateData
 import com.usmonie.core.domain.tools.fastMap
 import com.usmonie.word.features.dashboard.ui.models.SubscriptionSaleStateUi
 import com.usmonie.word.features.games.ui.models.WordCombinedUi
-import com.usmonie.word.features.qutoes.domain.models.Quote
+import com.usmonie.word.features.quotes.domain.models.Quote
 import com.usmonie.word.features.subscription.domain.models.SubscriptionStatus
 import com.usmonie.word.features.subscriptions.ui.notification.SubscriptionAdState
 

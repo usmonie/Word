@@ -5,6 +5,9 @@ import com.usmonie.word.features.games.domain.gamesDomainUseCase
 import com.usmonie.word.features.games.ui.GamesScreenFactory
 import com.usmonie.word.features.games.ui.enigma.EnigmaGameScreenFactory
 import com.usmonie.word.features.games.ui.enigma.EnigmaGameViewModel
+import com.usmonie.word.features.games.ui.enigma.EnigmaStateManager
+import com.usmonie.word.features.games.ui.enigma.EnigmaActionProcessor
+import com.usmonie.word.features.games.ui.enigma.EnigmaEffectHandler
 import com.usmonie.word.features.games.ui.hangman.HangmanGameScreenFactory
 import com.usmonie.word.features.games.ui.hangman.HangmanGameViewModel
 import com.usmonie.word.features.settings.domain.di.settingsDomainModule
@@ -13,14 +16,18 @@ import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
 val gamesUiModule = module {
-    includes(settingsDomainModule, dictionaryDomainUseCase, gamesDomainUseCase)
+	includes(settingsDomainModule, dictionaryDomainUseCase, gamesDomainUseCase)
 
-    singleOf(::GamesScreenFactory)
-    single {
-        HangmanGameScreenFactory(get(), { get() }, get())
-    }
-    factoryOf(::HangmanGameViewModel)
+	singleOf(::GamesScreenFactory)
+	single {
+		HangmanGameScreenFactory(get(), { get() }, get())
+	}
+	factoryOf(::HangmanGameViewModel)
 
-    single { EnigmaGameScreenFactory({ get() }, get()) }
-    factoryOf(::EnigmaGameViewModel)
+	single { EnigmaGameScreenFactory({ get() }, get()) }
+	factoryOf(::EnigmaGameViewModel)
+
+	factoryOf(::EnigmaStateManager)
+	factoryOf(::EnigmaEffectHandler)
+	factoryOf(::EnigmaActionProcessor)
 }

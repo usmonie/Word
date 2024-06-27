@@ -49,18 +49,18 @@ fun ReviveLifeDialog(
 					MaterialTheme.colorScheme.surfaceContainer,
 					MaterialTheme.shapes.extraLarge
 				)
-                .padding(16.dp)
+				.padding(16.dp)
 		) {
 			Text(
 				text = title,
 				style = MaterialTheme.typography.titleLarge,
 				textAlign = TextAlign.Center,
-				modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
+				modifier = Modifier.fillMaxWidth()
 			)
 
 			Button(
 				onAddLifeClick,
-				Modifier.padding(horizontal = 16.dp),
+				Modifier,
 				enabled = isReviveAvailable()
 			) {
 				Box {
@@ -84,7 +84,7 @@ fun ReviveLifeDialog(
 				}
 			}
 
-			OutlinedButton(onNextPhraseClick, Modifier.padding(horizontal = 16.dp)) {
+			OutlinedButton(onNextPhraseClick, Modifier) {
 				Text(
 					text = nextTitle,
 					textAlign = TextAlign.Center,

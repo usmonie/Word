@@ -6,7 +6,7 @@ import com.usmonie.compass.viewmodel.ScreenEvent
 import com.usmonie.compass.viewmodel.ScreenState
 import com.usmonie.word.features.quotes.kit.di.Categories
 import com.usmonie.word.features.quotes.kit.di.Quotes
-import com.usmonie.word.features.qutoes.domain.models.Quote
+import com.usmonie.word.features.quotes.domain.models.Quote
 
 data class FavoriteQuotesScreenState(
     val categories: Categories,

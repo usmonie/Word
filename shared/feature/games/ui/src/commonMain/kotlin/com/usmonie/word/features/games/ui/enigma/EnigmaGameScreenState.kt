@@ -2,19 +2,18 @@ package com.usmonie.word.features.games.ui.enigma
 
 import androidx.collection.mutableObjectListOf
 import androidx.collection.mutableScatterMapOf
-import androidx.collection.objectListOf
 import androidx.compose.runtime.Immutable
 import com.usmonie.compass.viewmodel.ScreenAction
 import com.usmonie.compass.viewmodel.ScreenEffect
 import com.usmonie.compass.viewmodel.ScreenEvent
 import com.usmonie.compass.viewmodel.ScreenState
 import com.usmonie.word.features.games.ui.hangman.GuessedLetters
-import com.usmonie.word.features.qutoes.domain.models.Quote
+import com.usmonie.word.features.quotes.domain.models.Quote
 
 sealed class EnigmaState(
 	open val phrase: EnigmaEncryptedPhrase,
 	open val lives: Int,
-	open val currentSelectedCellPosition: Pair<Int, Int>? = null,
+	open val currentSelectedCellPosition: Triple<Int, Int, Int>? = null,
 	open val foundLetters: Set<Char> = setOf(),
 	open val hintsCount: Int,
 	open val guessedLetters: GuessedLetters
@@ -37,7 +36,7 @@ sealed class EnigmaState(
 	sealed class Game(
 		override val phrase: EnigmaEncryptedPhrase,
 		override val lives: Int,
-		override val currentSelectedCellPosition: Pair<Int, Int>? = null,
+		override val currentSelectedCellPosition: Triple<Int, Int, Int>? = null,
 		override val foundLetters: Set<Char> = setOf(),
 		override val hintsCount: Int,
 		override val guessedLetters: GuessedLetters
@@ -54,7 +53,7 @@ sealed class EnigmaState(
 		data class Playing(
 			override val phrase: EnigmaEncryptedPhrase,
 			override val lives: Int,
-			override val currentSelectedCellPosition: Pair<Int, Int>? = null,
+			override val currentSelectedCellPosition: Triple<Int, Int, Int>? = null,
 			override val foundLetters: Set<Char> = setOf(),
 			override val hintsCount: Int,
 			override val guessedLetters: GuessedLetters
@@ -112,6 +111,7 @@ sealed class EnigmaAction : ScreenAction {
 	) : EnigmaAction()
 
 	data class CellSelected(
+		val letterIndex: Int,
 		val cellPositionInWord: Int,
 		val wordPosition: Int
 	) : EnigmaAction()
@@ -130,10 +130,11 @@ sealed class EnigmaAction : ScreenAction {
 
 sealed class EnigmaEvent : ScreenEvent {
 	data object Won : EnigmaEvent()
-	data class Correct(val phrase: EnigmaEncryptedPhrase, val selectedPosition: Pair<Int, Int>?) : EnigmaEvent()
+	data class Correct(val phrase: EnigmaEncryptedPhrase, val selectedPosition: Triple<Int, Int, Int>?) : EnigmaEvent()
 	data object Incorrect : EnigmaEvent()
 	data object Lost : EnigmaEvent()
 	data class UpdateSelectedCell(
+		val index: Int,
 		val wordPosition: Int,
 		val cellPositionInWord: Int
 	) : EnigmaEvent()
