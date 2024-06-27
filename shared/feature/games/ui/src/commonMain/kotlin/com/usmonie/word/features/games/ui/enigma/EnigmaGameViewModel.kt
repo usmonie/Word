@@ -1,6 +1,9 @@
 package com.usmonie.word.features.games.ui.enigma
 
 import androidx.compose.runtime.Immutable
+import com.usmonie.compass.viewmodel.ActionProcessor
+import com.usmonie.compass.viewmodel.EffectHandler
+import com.usmonie.compass.viewmodel.StateManager
 import com.usmonie.compass.viewmodel.StateViewModel
 import com.usmonie.core.domain.usecases.invoke
 import com.usmonie.word.features.settings.domain.usecase.GetUserHintsCountUseCase
@@ -12,9 +15,9 @@ import kotlin.time.Duration.Companion.minutes
 
 @Immutable
 class EnigmaGameViewModel(
-	private val actionProcessor: EnigmaActionProcessor,
-	private val stateManager: EnigmaStateManager,
-	private val effectHandler: EnigmaEffectHandler,
+	private val actionProcessor: ActionProcessor<EnigmaAction, EnigmaState, EnigmaEvent>,
+	private val stateManager: StateManager<EnigmaEvent, EnigmaState>,
+	private val effectHandler: EffectHandler<EnigmaEvent, EnigmaEffect>,
 	private val getUserHintsCountUseCase: GetUserHintsCountUseCase,
 ) : StateViewModel<EnigmaState, EnigmaAction, EnigmaEvent, EnigmaEffect>(EnigmaState.Loading()) {
 
