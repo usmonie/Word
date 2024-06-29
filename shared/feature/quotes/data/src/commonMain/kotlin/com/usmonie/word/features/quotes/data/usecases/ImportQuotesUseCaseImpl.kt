@@ -4,79 +4,78 @@ import com.usmonie.core.domain.tools.fastMap
 import com.usmonie.word.features.quotes.domain.models.Quote
 import com.usmonie.word.features.quotes.domain.repositories.QuotesRepository
 import com.usmonie.word.features.quotes.domain.usecases.InitiateQuotesUseCase
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
-import kotlinx.io.Source
-import kotlinx.io.readLine
 
 internal const val QUOTES_COUNT = 404866L
+internal const val BATCH_SIZE = 10000
 
 internal class ImportQuotesUseCaseImpl(
 	private val quotesSource: QuotesSourceFactory,
 	private val quotesRepository: QuotesRepository
 ) : InitiateQuotesUseCase {
-
 	private val regex = "[\\x00-\\xFF]+".toRegex()
+
 	override fun invoke(input: Unit): Flow<Boolean> = flow {
 		val quotesAlreadyInserted = quotesRepository.getQuotesCount()
-
-		if (quotesRepository.getQuotesCount() >= QUOTES_COUNT) {
+		if (quotesAlreadyInserted >= QUOTES_COUNT) {
 			emit(false)
 		} else {
 			withContext(Dispatchers.IO) {
-				insertQuotes(quotesAlreadyInserted, quotesSource.getSource("quotes.csv"))
+				val result = insertQuotes(quotesAlreadyInserted, quotesSource.getSource("quotes.csv"))
+				emit(result)
 			}
 		}
 	}
 
-	private suspend fun FlowCollector<Boolean>.insertQuotes(quotesAlreadyInserted: Long, source: Source) {
-		try {
-			var line = source.readLine()
-			var i = 0
-			while (quotesAlreadyInserted > i) {
-				source.readLine()
-				i++
-			}
+	private suspend fun insertQuotes(quotesAlreadyInserted: Long, source: QuotesSource): Boolean {
+		return try {
+			var totalInserted = quotesAlreadyInserted
+			var linesProcessed = 0L
 
-			var number = 0
-			val items = ArrayList<Quote>(10_000)
-			while (line != null) {
-				val parts = line.split("|").fastMap { it.trim() }
-				if (parts.size >= 3) {
-					val quoteText = parts[0].removeSurrounding("|")
-					if (regex.matches(quoteText)) {
-						number++
-
-						val author = parts[1].removeSurrounding("|")
-						val categories = parts[2].removeSurrounding("|").split(", ").fastMap { it.trim() }
-						val quote = Quote("", quoteText, author, categories, false, wasPlayed = false)
-						items.add(quote)
+			source.useLines { lines ->
+				lines.drop(quotesAlreadyInserted.toInt())
+					.chunked(BATCH_SIZE)
+					.forEach { batch ->
+						val items = batch.mapNotNull { line -> processLine(line) }
+						quotesRepository.putAll(items)
+						totalInserted += items.size
+						linesProcessed += batch.size
+						println("INSERTED $totalInserted")
 					}
-				}
-				line = source.readLine()
-				if (items.count() > 9999) {
-
-					quotesRepository.putAll(items)
-					items.clear()
-				}
 			}
 
-			quotesRepository.putAll(items)
-			println("QUOTES ALL IMPORTED $number")
-
-			emit(true)
+			println("QUOTES ALL IMPORTED $totalInserted")
+			true
 		} catch (e: Exception) {
 			println("exception: $e")
 			e.printStackTrace()
-			emit(false)
+			false
 		}
+	}
+
+	private fun processLine(line: String): Quote? {
+		val parts = line.split("|").fastMap { it.trim() }
+		if (parts.size >= 3) {
+			val quoteText = parts[0].removeSurrounding("|")
+			if (regex.matches(quoteText)) {
+				val author = parts[1].removeSurrounding("|")
+				val categories = parts[2].removeSurrounding("|").split(", ").fastMap { it.trim() }
+				return Quote("", quoteText, author, categories, false, wasPlayed = false)
+			}
+		}
+		return null
 	}
 }
 
 expect class QuotesSourceFactory {
-	fun getSource(fileName: String): Source
+	fun getSource(fileName: String): QuotesSource
+}
+
+expect class QuotesSource {
+	suspend fun useLines(block: suspend (Sequence<String>) -> Unit)
 }

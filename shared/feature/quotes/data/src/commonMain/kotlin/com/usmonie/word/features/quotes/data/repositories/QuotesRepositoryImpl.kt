@@ -17,7 +17,7 @@ internal class QuotesRepositoryImpl(quotesDatabase: QuotesDatabase) : QuotesRepo
     private val quotesDao = quotesDatabase.quotesDao()
 
     override suspend fun putAll(quotes: List<Quote>) {
-        quotesDao.insertQuotes(quotes)
+        quotesDao.insertQuotesBatch(quotes)
     }
 
     override suspend fun getRandomQuote(): Quote {
