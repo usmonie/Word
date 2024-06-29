@@ -14,6 +14,7 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.usmonie.core.domain.tools.fastForEach
 import com.usmonie.core.domain.tools.fastForEachIndexed
 import com.usmonie.core.kit.tools.getScreenSize
 import com.usmonie.word.features.games.ui.hangman.GuessedLetters
@@ -41,10 +42,11 @@ fun QwertyKeyboard(onLetterClick: (Char) -> Unit, guessedLetters: GuessedLetters
 					Spacer(modifier = Modifier.width((index * 15).dp))
 				}
 
-				row.forEach { letter ->
+				row.fastForEach { letter ->
 					val wasGuessed = remember(guessedLetters, letter) {
 						letter.lowercaseChar() in guessedLetters.letters
 					}
+
 					KeyboardButton(
 						onLetterClick = onLetterClick,
 						letter = letter,
@@ -53,7 +55,7 @@ fun QwertyKeyboard(onLetterClick: (Char) -> Unit, guessedLetters: GuessedLetters
 					)
 				}
 
-				// Add right padding for the second and third rows
+//				Add right padding for the second and third rows
 				if (index > 0) {
 					Spacer(modifier = Modifier.width((index * 15).dp))
 				}
