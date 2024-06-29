@@ -9,7 +9,7 @@ import org.koin.dsl.module
 
 val gamesDomainUseCase = module {
     singleOf(::GetCryptogramQuoteUseCaseImpl) {
-        binds(listOf(GetCryptogramQuoteUseCase::class))
+        bind<GetCryptogramQuoteUseCase>()
     }
 
     singleOf(::UserProgressRepositoryImpl) {
