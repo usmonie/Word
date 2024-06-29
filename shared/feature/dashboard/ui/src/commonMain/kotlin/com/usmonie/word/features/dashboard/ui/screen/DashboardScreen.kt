@@ -53,13 +53,10 @@ import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 import word.shared.feature.dashboard.ui.generated.resources.Res
 import word.shared.feature.dashboard.ui.generated.resources.dashboard_search_history_title
-import word.shared.feature.dashboard.ui.generated.resources.favorites_subtitle
-import word.shared.feature.dashboard.ui.generated.resources.games_subtitle
 import word.shared.feature.dashboard.ui.generated.resources.network_connection_description
 import word.shared.feature.dashboard.ui.generated.resources.network_connection_error
 import word.shared.feature.dashboard.ui.generated.resources.network_connection_try_again
 import word.shared.feature.dashboard.ui.generated.resources.search_title
-import word.shared.feature.dashboard.ui.generated.resources.settings_subtitle
 
 internal class DashboardScreen(
 	viewModel: DashboardViewModel,
@@ -102,11 +99,7 @@ internal class DashboardScreen(
 			},
 			bottomAdBanner = if (state.subscriptionStatus is SubscriptionStatus.None) {
 				{
-					Box(Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.surface)) {
-						val adMob = LocalAdsManager.current
-
-						adMob.Banner(Modifier.fillMaxWidth().navigationBarsPadding())
-					}
+					AdBanner()
 				}
 			} else {
 				null
@@ -128,9 +121,7 @@ internal class DashboardScreen(
 				when (val foundWordState = state.foundWords) {
 					is ContentState.Error<*, *> -> defaultState(state, false)
 
-					is ContentState.Loading -> item {
-						LinearProgressIndicator(Modifier.fillParentMaxWidth().padding(32.dp))
-					}
+					is ContentState.Loading -> item { LoadingIndicator() }
 
 					is ContentState.Success -> {
 						if (state.searchFieldState.searchFieldValue.text.isBlank()) {
@@ -172,48 +163,33 @@ internal class DashboardScreen(
 			}
 		}
 
-
-		item(
-			key = DashboardMenuItem.FAVORITES,
-			contentType = DashboardMenuItem::class
-		) {
+		items(dashboardMenuItems, key = { it }) {
 			MenuItem(
-				viewModel::openFavorites,
-				stringResource(Res.string.favorites_subtitle),
-				menuItemModifier
-			)
-		}
-
-		item(key = DashboardMenuItem.GAMES, contentType = DashboardMenuItem::class) {
-			MenuItem(
-				viewModel::openGames,
-				stringResource(Res.string.games_subtitle),
-				menuItemModifier
-			)
-		}
-
-		item(key = DashboardMenuItem.SETTINGS, contentType = DashboardMenuItem::class) {
-			MenuItem(
-				viewModel::openSettings,
-				stringResource(Res.string.settings_subtitle),
-				menuItemModifier
+				onClick = { viewModel.handleAction(DashboardAction.OnMenuItemClicked(it)) },
+				title = stringResource(it.titleRes),
+				modifier = menuItemModifier
 			)
 		}
 
 		if (state.wordOfTheDay is ContentState.Error<*, *> &&
 			state.randomWord is ContentState.Error<*, *>
 		) {
-			item { NetworkConnectionError() }
+			item { NetworkConnectionError(viewModel::tryAgain) }
 		}
 
 		if (state.wordOfTheDay !is ContentState.Error<*, *>) {
 			item(key = "WordOfTheDay", contentType = "WordOfTheDay") {
-				WordOfTheDayState({ state.wordOfTheDay }, {}, {})
+				WordOfTheDayState({ state.wordOfTheDay }, viewModel::openWord, viewModel::favoriteWord)
 			}
 		}
 
 		item(key = "RandomWord", contentType = "RandomWord") {
-			RandomWordState(state)
+			RandomWordState(
+				state = state,
+				onOpenWord = viewModel::openWord,
+				onFavorite = viewModel::favoriteWord,
+				onNextRandomWord = viewModel::nextRandomWord
+			)
 		}
 	}
 
@@ -223,7 +199,7 @@ internal class DashboardScreen(
 		saleSubscriptionExpanded: Boolean
 	) {
 		AnimatedVisibility(
-			state.searchFieldState.hasFocus && state.searchFieldState.searchFieldValue.text.isBlank(),
+			visible = state.searchFieldState.hasFocus && state.searchFieldState.searchFieldValue.text.isBlank(),
 			enter = slideInVertically(spring(stiffness = Spring.StiffnessHigh)) { -it } + fadeIn(),
 			exit = slideOutVertically(spring(stiffness = Spring.StiffnessHigh)) { -it } + fadeOut(),
 			content = { RecentSearchHistory(state, saleSubscriptionExpanded) }
@@ -231,7 +207,12 @@ internal class DashboardScreen(
 	}
 
 	@Composable
-	private fun RandomWordState(state: DashboardState) {
+	private fun RandomWordState(
+		state: DashboardState,
+		onOpenWord: (WordCombinedUi) -> Unit,
+		onFavorite: (WordCombinedUi) -> Unit,
+		onNextRandomWord: () -> Unit
+	) {
 		AnimatedContent(
 			state.randomWord,
 			contentKey = { it.item?.word },
@@ -243,17 +224,17 @@ internal class DashboardScreen(
 			}
 		) {
 			RandomWordExpandedState(
-				{ it },
-				viewModel::openWord,
-				viewModel::favoriteWord,
-				viewModel::nextRandomWord,
-				Modifier.padding(horizontal = 16.dp)
+				getWordCombinedState = { it },
+				onClick = onOpenWord,
+				onFavoriteClicked = onFavorite,
+				onNextClicked = onNextRandomWord,
+				modifier = Modifier.padding(horizontal = 16.dp)
 			)
 		}
 	}
 
 	@Composable
-	private fun NetworkConnectionError() {
+	private fun NetworkConnectionError(onTryAgain: () -> Unit) {
 		Column(
 			Modifier.padding(horizontal = 32.dp),
 			verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -269,7 +250,7 @@ internal class DashboardScreen(
 
 			TextButton(
 				stringResource(Res.string.network_connection_try_again),
-				viewModel::tryAgain,
+				onTryAgain,
 				contentPadding = PaddingValues(0.dp)
 			)
 		}
@@ -289,7 +270,7 @@ internal class DashboardScreen(
 				userScrollEnabled = !saleSubscriptionExpanded,
 				horizontalArrangement = Arrangement.spacedBy(16.dp)
 			) {
-				items(state.recentSearch) { historyWord ->
+				items(state.recentSearch, key = { it.word }) { historyWord ->
 					WordCardSmall(
 						viewModel::openWord,
 						historyWord,
@@ -308,13 +289,13 @@ internal fun DashboardEffect(
 	openDashboardMenuItem: (DashboardMenuItem) -> Unit,
 	viewModel: DashboardViewModel
 ) {
-	val effect by viewModel.effect.collectAsState(null)
-	LaunchedEffect(effect) {
-		when (val e = effect) {
-			is DashboardEffect.OnMenuItemClicked -> openDashboardMenuItem(e.menuItem)
-			is DashboardEffect.OpenWord -> onOpenWord(e.word)
-			is DashboardEffect.Init -> onInit()
-			null -> Unit
+	LaunchedEffect(Unit) {
+		viewModel.effect.collect { effect ->
+			when (effect) {
+				is DashboardEffect.OnMenuItemClicked -> openDashboardMenuItem(effect.menuItem)
+				is DashboardEffect.OpenWord -> onOpenWord(effect.word)
+				is DashboardEffect.Init -> onInit()
+			}
 		}
 	}
 }
@@ -340,3 +321,22 @@ fun MenuItem(onClick: () -> Unit, title: String, modifier: Modifier = Modifier) 
 		}
 	}
 }
+
+@Composable
+private fun AdBanner() {
+	Box(Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.surface)) {
+		val adMob = LocalAdsManager.current
+		adMob.Banner(Modifier.fillMaxWidth().navigationBarsPadding())
+	}
+}
+
+@Composable
+private fun LoadingIndicator() {
+	LinearProgressIndicator(Modifier.fillMaxWidth().padding(32.dp))
+}
+
+private val dashboardMenuItems = listOf(
+	DashboardMenuItem.FAVORITES,
+	DashboardMenuItem.GAMES,
+	DashboardMenuItem.SETTINGS
+)
