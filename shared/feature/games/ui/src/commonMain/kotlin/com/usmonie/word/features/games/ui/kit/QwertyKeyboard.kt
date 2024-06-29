@@ -14,6 +14,7 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.usmonie.core.domain.tools.fastForEachIndexed
 import com.usmonie.core.kit.tools.getScreenSize
 import com.usmonie.word.features.games.ui.hangman.GuessedLetters
 import com.usmonie.word.features.games.ui.hangman.qwerty
@@ -29,8 +30,8 @@ fun QwertyKeyboard(onLetterClick: (Char) -> Unit, guessedLetters: GuessedLetters
 		modifier = modifier.width(keyboardWidth).padding(horizontal = 3.dp, vertical = 8.dp),
 		verticalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterVertically)
 	) {
-		val buttonModifier = Modifier.size(width = (keyboardWidth - (8.dp * 9)) / 10, height = 54.dp)
-		rows.forEachIndexed { index, row ->
+		val buttonModifier = Modifier.size(width = (keyboardWidth - (8.dp * 9)) / 10, height = 48.dp)
+		rows.fastForEachIndexed { index, row ->
 			Row(
 				horizontalArrangement = Arrangement.spacedBy(6.dp, Alignment.CenterHorizontally),
 				modifier = Modifier.fillMaxWidth()
