@@ -9,19 +9,20 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 internal class EnigmaRepositoryImpl(
-    private val datastore: DataStore<Preferences>,
+	private val datastore: DataStore<Preferences>,
 ) : EnigmaRepository {
-    override fun getLevel(): Flow<Int> {
-        return datastore.data.map { it[intPreferencesKey(LEVEL_KEY)] ?: 1 }
-    }
+	override fun getLevel(): Flow<Int> {
+		return datastore.data.map { it[intPreferencesKey(LEVEL_KEY)] ?: 1 }
+	}
 
-    override suspend fun setLevel(level: Int) {
-        datastore.edit {
-            it[intPreferencesKey(LEVEL_KEY)] = level
-        }
-    }
+	override suspend fun setLevel(level: Int) {
+		datastore.edit {
+			it[intPreferencesKey(LEVEL_KEY)] = level
+		}
+	}
 
-    companion object {
-        private const val LEVEL_KEY = "level"
-    }
+
+	companion object {
+		private const val LEVEL_KEY = "level"
+	}
 }

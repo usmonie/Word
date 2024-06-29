@@ -3,22 +3,14 @@ package com.usmonie.word.features.games.domain.usecases
 import kotlinx.datetime.Clock
 import androidx.collection.*
 import com.usmonie.core.domain.usecases.CoroutineUseCase
+import com.usmonie.word.features.games.domain.models.DifficultyLevel
+import com.usmonie.word.features.games.domain.models.UserPerformanceMetrics
+import com.usmonie.word.features.games.domain.repositories.UserProgressRepository
+import com.usmonie.word.features.games.domain.repositories.UserProgressRepositoryImpl
 import com.usmonie.word.features.quotes.domain.models.Quote
 import com.usmonie.word.features.quotes.domain.repositories.QuotesRepository
 import kotlin.math.roundToInt
 import kotlin.random.Random
-
-enum class DifficultyLevel {
-	BEGINNER, EASY, NORMAL, CHALLENGING, HARD, EXPERT, MASTER
-}
-
-
-data class UserPerformanceMetrics(
-	val averageSolveTime: Long,
-	val averageHintsUsed: Double,
-	val successRate: Double,
-	val totalPuzzlesSolved: Int
-)
 
 interface GetCryptogramQuoteUseCase :
 	CoroutineUseCase<GetCryptogramQuoteUseCase.Param, GetCryptogramQuoteUseCase.CryptogramEncryptedPhrase> {
@@ -206,37 +198,5 @@ class ScoreCalculator {
 		val hintPenalty = hintsUsed * 10
 
 		return (baseScore * timeMultiplier - hintPenalty).toInt().coerceAtLeast(0)
-	}
-}
-
-interface UserProgressRepository {
-	suspend fun saveProgress(progress: UserProgress)
-	suspend fun getProgress(): UserProgress
-}
-
-internal class UserProgressRepositoryImpl : UserProgressRepository {
-	override suspend fun saveProgress(progress: UserProgress) {
-		TODO("Not yet implemented")
-	}
-
-	override suspend fun getProgress(): UserProgress {
-		return UserProgress(0, 0L, 0, 0, 0)
-	}
-}
-
-data class UserProgress(
-	val solvedPuzzles: Int,
-	val averageTime: Long,
-	val hintsUsed: Int,
-	val successfulAttempts: Int,
-	val totalAttempts: Int
-) {
-	fun toUserPerformanceMetrics(): UserPerformanceMetrics {
-		return UserPerformanceMetrics(
-			averageSolveTime = averageTime,
-			averageHintsUsed = hintsUsed.toDouble() / solvedPuzzles.coerceAtLeast(1),
-			successRate = successfulAttempts.toDouble() / totalAttempts.coerceAtLeast(1),
-			totalPuzzlesSolved = solvedPuzzles
-		)
 	}
 }

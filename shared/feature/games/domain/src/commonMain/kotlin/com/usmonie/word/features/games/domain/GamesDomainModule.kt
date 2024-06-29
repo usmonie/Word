@@ -1,7 +1,7 @@
 package com.usmonie.word.features.games.domain
 
+import com.usmonie.word.features.games.domain.repositories.*
 import com.usmonie.word.features.games.domain.usecases.*
-import com.usmonie.word.features.games.domain.usecases.GetEnigmaLevelUseCaseImpl
 import org.koin.core.module.dsl.bind
 import org.koin.core.module.dsl.binds
 import org.koin.core.module.dsl.singleOf
