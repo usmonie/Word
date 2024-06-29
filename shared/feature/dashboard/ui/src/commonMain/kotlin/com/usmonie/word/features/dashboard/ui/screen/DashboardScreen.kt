@@ -1,6 +1,5 @@
 package com.usmonie.word.features.dashboard.ui.screen
 
-import FireworksSimulation
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.AnimatedVisibility
@@ -32,7 +31,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.usmonie.compass.core.ui.ScreenId
 import com.usmonie.compass.viewmodel.ContentState
