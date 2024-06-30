@@ -1,96 +1,126 @@
 package com.usmonie.word.features.quotes.data
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
-import androidx.room.Transaction
-import com.usmonie.core.domain.tools.fastForEach
-import com.usmonie.word.features.quotes.data.models.Category
-import com.usmonie.word.features.quotes.data.models.QuoteCategoryCrossRefDb
-import com.usmonie.word.features.quotes.data.models.QuoteDb
-import com.usmonie.word.features.quotes.data.models.QuoteFavorite
-import com.usmonie.word.features.quotes.data.models.QuoteWithCategories
+import androidx.room.*
+import com.usmonie.word.features.quotes.data.models.*
 import com.usmonie.word.features.quotes.domain.models.Quote
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
+import kotlinx.coroutines.withContext
 
-@Suppress("TooManyFunctions")
 @Dao
 internal abstract class QuotesDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract suspend fun insert(quote: QuoteDb)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract suspend fun insert(quotes: List<QuoteDb>)
+	@Insert(onConflict = OnConflictStrategy.REPLACE)
+	abstract suspend fun insertQuotes(quotes: List<QuoteDb>)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract suspend fun insertCategory(category: Category)
+	@Insert(onConflict = OnConflictStrategy.IGNORE)
+	abstract suspend fun insertCategories(categories: List<Category>)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract suspend fun insertCategories(categories: List<Category>)
+	@Insert(onConflict = OnConflictStrategy.IGNORE)
+	abstract suspend fun insertQuoteCategoryReferences(references: List<QuoteCategoryCrossRefDb>)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract suspend fun insertQuoteReference(quotes: QuoteCategoryCrossRefDb)
+	@Transaction
+	open suspend fun insertQuotesBatch(quotes: List<Quote>) = withContext(Dispatchers.IO) {
+		val quoteDbList = ArrayList<QuoteDb>(quotes.size)
+		val categorySet = HashSet<Category>()
+		val referenceList = ArrayList<QuoteCategoryCrossRefDb>()
 
-    @Transaction
-    open suspend fun insertQuotes(quotes: List<Quote>) {
-        quotes.fastForEach { quote ->
-            val quoteDb = QuoteDb(quote.text, quote.author, quote.favorite, false)
-            insert(quoteDb)
-            quote.categories.fastForEach {
-                val category = Category(it)
-                insertCategory(category)
-                insertQuoteReference(QuoteCategoryCrossRefDb(quoteDb.primaryKey, it))
-            }
-        }
-    }
+		quotes.forEach { quote ->
+			val quoteDb = QuoteDb(quote.text, quote.author, quote.favorite, false)
+			quoteDbList.add(quoteDb)
+			quote.categories.forEach { categoryName ->
+				categorySet.add(Category(categoryName))
+				referenceList.add(QuoteCategoryCrossRefDb(quoteDb.primaryKey, categoryName))
+			}
+		}
 
-    @Transaction
-    open suspend fun insertQuote(quote: Quote) {
-        val quoteDb = QuoteDb(quote.text, quote.author, quote.favorite, false)
-        insert(quoteDb)
-        quote.categories.fastForEach {
-            val category = Category(it)
-            insertCategory(category)
-            insertQuoteReference(QuoteCategoryCrossRefDb(primaryKey = quoteDb.primaryKey, it))
-        }
-    }
+		insertQuotes(quoteDbList)
+		insertCategories(categorySet.toList())
+		insertQuoteCategoryReferences(referenceList)
+	}
 
-    @Query("SELECT * FROM quotes LIMIT 1 OFFSET :offset")
-    abstract suspend fun randomQuote(offset: Int): QuoteWithCategories
+	@Query("SELECT * FROM quotes WHERE wasPlayed = :wasPlayed ORDER BY RANDOM() LIMIT 1")
+	abstract suspend fun getRandomQuote(wasPlayed: Boolean = false): QuoteDb?
 
-    @Query("SELECT * FROM quotes WHERE wasPlayed = false LIMIT 1 OFFSET :offset")
-    abstract suspend fun randomQuoteWasntPlayed(offset: Int): QuoteWithCategories
+	@Transaction
+	open suspend fun getRandomQuoteWithCategories(wasPlayed: Boolean = false): QuoteWithCategories? {
+		val quote = getRandomQuote(wasPlayed) ?: return null
+		val categories = getCategoriesForQuote(quote.primaryKey)
+		return QuoteWithCategories(quote, categories)
+	}
 
-    @Transaction
-    @Query("SELECT * FROM quotes WHERE author = :author")
-    abstract suspend fun getQuotesByAuthor(author: String): List<QuoteWithCategories>
+	@Query("SELECT category FROM quote_category_cross_ref WHERE quotePrimaryKey = :quoteKey")
+	abstract suspend fun getCategoriesForQuote(quoteKey: String): List<Category>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract suspend fun favoriteQuote(item: QuoteFavorite)
+	@Query("UPDATE quotes SET wasPlayed = :wasPlayed WHERE primaryKey = :quoteKey")
+	abstract suspend fun updateQuotePlayedStatus(quoteKey: String, wasPlayed: Boolean)
 
-    @Delete
-    abstract suspend fun unfavoriteQuote(item: QuoteFavorite)
+	@Transaction
+	@Query("SELECT * FROM quotes WHERE author = :author")
+	abstract suspend fun getQuotesByAuthor(author: String): List<QuoteWithCategories>
 
-    @Transaction
-    @Query(
-        """
-            SELECT * FROM quotes 
-            INNER JOIN favorite_quotes_table ON quotes.primaryKey = favorite_quotes_table.quotePrimaryKey
-        """
-    )
-    abstract suspend fun getFavorites(): List<QuoteWithCategories>
+	@Insert(onConflict = OnConflictStrategy.REPLACE)
+	abstract suspend fun insertFavoriteQuote(item: QuoteFavorite)
 
-    @Transaction
-    @Query(
-        """
-            SELECT * FROM quotes 
-            INNER JOIN favorite_quotes_table ON quotes.primaryKey = favorite_quotes_table.quotePrimaryKey
-            ORDER BY date DESC
-        """
-    )
-    abstract suspend fun getFavoritesByCategories(): List<QuoteWithCategories>
+	@Query("DELETE FROM favorite_quotes WHERE quotePrimaryKey = :quoteKey")
+	abstract suspend fun deleteFavoriteQuote(quoteKey: String)
 
-    @Query("SELECT COUNT(text) FROM quotes")
-    abstract suspend fun getRowCount(): Long
+	@Transaction
+	@Query(
+		"""
+        SELECT favorite_quotes.*, quotes.*
+        FROM favorite_quotes
+        INNER JOIN quotes ON favorite_quotes.quotePrimaryKey = quotes.primaryKey
+        ORDER BY favorite_quotes.date DESC
+    """
+	)
+	@RewriteQueriesToDropUnusedColumns
+	abstract suspend fun getFavoriteQuotesWithDetails(): List<FavoriteQuoteWithDetails>
+
+	@Query("SELECT COUNT(*) FROM quotes")
+	abstract suspend fun getQuotesCount(): Long
+
+	@Query("SELECT * FROM quotes WHERE favorite = 1")
+	abstract suspend fun getFavoriteQuotes(): List<QuoteDb>
+
+	@Transaction
+	@Query(
+		"""
+        SELECT * FROM categories
+        WHERE category IN (
+            SELECT DISTINCT category FROM quote_category_cross_ref
+            INNER JOIN quotes ON quote_category_cross_ref.quotePrimaryKey = quotes.primaryKey
+            WHERE quotes.favorite = 1
+        )
+    """
+	)
+	abstract suspend fun getFavoriteCategoriesWithQuotes(): List<CategoryWithQuotes>
+
+	@Transaction
+	open suspend fun toggleFavoriteStatus(quoteKey: String, isFavorite: Boolean) {
+		if (isFavorite) {
+			insertFavoriteQuote(QuoteFavorite(quoteKey))
+		} else {
+			deleteFavoriteQuote(quoteKey)
+		}
+		updateQuoteFavoriteStatus(quoteKey, isFavorite)
+	}
+
+	@Query("UPDATE quotes SET favorite = :isFavorite WHERE primaryKey = :quoteKey")
+	abstract suspend fun updateQuoteFavoriteStatus(quoteKey: String, isFavorite: Boolean)
+
+	@Query("SELECT * FROM quotes WHERE text LIKE '%' || :query || '%' OR author LIKE '%' || :query || '%'")
+	abstract suspend fun searchQuotes(query: String): List<QuoteDb>
+
+	@Transaction
+	@Query(
+		"""
+        SELECT * FROM quotes
+        WHERE primaryKey IN (
+            SELECT DISTINCT quotePrimaryKey FROM quote_category_cross_ref
+            WHERE category = :category
+        )
+    """
+	)
+	abstract suspend fun getQuotesByCategory(category: String): List<QuoteWithCategories>
 }

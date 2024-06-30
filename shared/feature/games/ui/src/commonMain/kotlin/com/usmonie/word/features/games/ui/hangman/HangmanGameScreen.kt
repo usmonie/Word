@@ -9,14 +9,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -184,15 +177,15 @@ private fun PlayBoard(
 			.shake(shakeController)
 			.fillMaxSize()
 			.padding(top = insets.calculateTopPadding()),
-		horizontalAlignment = Alignment.CenterHorizontally
+		horizontalAlignment = Alignment.CenterHorizontally,
+		verticalArrangement = Arrangement.spacedBy(8.dp)
 	) {
 		HangmanImage(
 			state.maxLives - state.lives,
-			Modifier.fillMaxWidth().weight(2f).padding(vertical = 24.dp)
+			Modifier.fillMaxWidth().weight(1.5f).padding(vertical = 24.dp)
 		)
 		WordDisplay(state)
 
-		Spacer(Modifier.height(8.dp))
 		when (state) {
 			is HangmanState.Playing.Information -> HintButton(
 				hangmanGameViewModel::onShowHintPressed,
@@ -209,12 +202,12 @@ private fun PlayBoard(
 				stringResource(Res.string.games_show_details)
 			)
 		}
-		Spacer(Modifier.height(8.dp))
 
 		AnimatedContent(
 			state,
 			modifier = Modifier
 				.fillMaxWidth()
+				.wrapContentHeight()
 				.weight(1f),
 			contentKey = { hangmanState -> hangmanState::class::simpleName }
 		) { hangmanState ->
@@ -225,8 +218,7 @@ private fun PlayBoard(
 					Modifier.fillMaxSize().background(MaterialTheme.colorScheme.surface),
 				)
 			} else {
-				Column(Modifier.fillMaxWidth()) {
-					Spacer(Modifier.height(32.dp))
+				Column(Modifier.fillMaxWidth(), verticalArrangement = Arrangement.Center) {
 					val text = remember(hangmanState.word.wordEtymology.first()) {
 						hangmanState.word.wordEtymology.first().words.first().senses.first().gloss
 					}
@@ -237,7 +229,6 @@ private fun PlayBoard(
 						textAlign = TextAlign.Center,
 						style = MaterialTheme.typography.bodyLarge
 					)
-					Spacer(Modifier.height(32.dp))
 				}
 			}
 		}

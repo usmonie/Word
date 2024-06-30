@@ -2,12 +2,18 @@
   "formatVersion": 1,
   "database": {
     "version": 11,
-    "identityHash": "63a62f69000718eda161fa86dd79dfa8",
+    "identityHash": "a2ae8012c627722767a2a59a3ffeaed5",
     "entities": [
       {
         "tableName": "quotes",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`text` TEXT NOT NULL, `author` TEXT, `favorite` INTEGER NOT NULL, `wasPlayed` INTEGER NOT NULL, `primaryKey` TEXT NOT NULL, PRIMARY KEY(`primaryKey`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`primaryKey` TEXT NOT NULL, `text` TEXT NOT NULL, `author` TEXT, `favorite` INTEGER NOT NULL, `wasPlayed` INTEGER NOT NULL, PRIMARY KEY(`primaryKey`))",
         "fields": [
+          {
+            "fieldPath": "primaryKey",
+            "columnName": "primaryKey",
+            "affinity": "TEXT",
+            "notNull": true
+          },
           {
             "fieldPath": "text",
             "columnName": "text",
@@ -30,12 +36,6 @@
             "columnName": "wasPlayed",
             "affinity": "INTEGER",
             "notNull": true
-          },
-          {
-            "fieldPath": "primaryKey",
-            "columnName": "primaryKey",
-            "affinity": "TEXT",
-            "notNull": true
           }
         ],
         "primaryKey": {
@@ -53,6 +53,24 @@
             ],
             "orders": [],
             "createSql": "CREATE INDEX IF NOT EXISTS `index_quotes_author` ON `${TABLE_NAME}` (`author`)"
+          },
+          {
+            "name": "index_quotes_wasPlayed",
+            "unique": false,
+            "columnNames": [
+              "wasPlayed"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_quotes_wasPlayed` ON `${TABLE_NAME}` (`wasPlayed`)"
+          },
+          {
+            "name": "index_quotes_favorite",
+            "unique": false,
+            "columnNames": [
+              "favorite"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_quotes_favorite` ON `${TABLE_NAME}` (`favorite`)"
           }
         ]
       },
@@ -75,12 +93,12 @@
         }
       },
       {
-        "tableName": "QuoteCategoryCrossRefDb",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`primaryKey` TEXT NOT NULL, `category` TEXT NOT NULL, PRIMARY KEY(`primaryKey`, `category`))",
+        "tableName": "quote_category_cross_ref",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`quotePrimaryKey` TEXT NOT NULL, `category` TEXT NOT NULL, PRIMARY KEY(`quotePrimaryKey`, `category`))",
         "fields": [
           {
-            "fieldPath": "primaryKey",
-            "columnName": "primaryKey",
+            "fieldPath": "quotePrimaryKey",
+            "columnName": "quotePrimaryKey",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -94,13 +112,24 @@
         "primaryKey": {
           "autoGenerate": false,
           "columnNames": [
-            "primaryKey",
+            "quotePrimaryKey",
             "category"
           ]
-        }
+        },
+        "indices": [
+          {
+            "name": "index_quote_category_cross_ref_category",
+            "unique": false,
+            "columnNames": [
+              "category"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_quote_category_cross_ref_category` ON `${TABLE_NAME}` (`category`)"
+          }
+        ]
       },
       {
-        "tableName": "favorite_quotes_table",
+        "tableName": "favorite_quotes",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`quotePrimaryKey` TEXT NOT NULL, `date` INTEGER NOT NULL, PRIMARY KEY(`quotePrimaryKey`))",
         "fields": [
           {
@@ -121,12 +150,23 @@
           "columnNames": [
             "quotePrimaryKey"
           ]
-        }
+        },
+        "indices": [
+          {
+            "name": "index_favorite_quotes_date",
+            "unique": false,
+            "columnNames": [
+              "date"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_favorite_quotes_date` ON `${TABLE_NAME}` (`date`)"
+          }
+        ]
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '63a62f69000718eda161fa86dd79dfa8')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a2ae8012c627722767a2a59a3ffeaed5')"
     ]
   }
 }

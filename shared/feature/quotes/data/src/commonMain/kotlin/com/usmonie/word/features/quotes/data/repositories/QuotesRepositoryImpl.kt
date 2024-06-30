@@ -2,81 +2,93 @@ package com.usmonie.word.features.quotes.data.repositories
 
 import com.usmonie.core.domain.tools.fastMap
 import com.usmonie.word.features.quotes.data.QuotesDatabase
-import com.usmonie.word.features.quotes.data.models.CategoryWithQuotes
-import com.usmonie.word.features.quotes.data.models.QuoteDb
-import com.usmonie.word.features.quotes.data.models.QuoteFavorite
-import com.usmonie.word.features.quotes.data.models.QuoteWithCategories
-import com.usmonie.word.features.quotes.data.usecases.QUOTES_COUNT
+import com.usmonie.word.features.quotes.data.models.*
 import com.usmonie.word.features.quotes.domain.models.Quote
 import com.usmonie.word.features.quotes.domain.models.QuoteCategories
 import com.usmonie.word.features.quotes.domain.repositories.QuotesRepository
-import kotlin.random.Random
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
+import kotlinx.coroutines.withContext
 
-@Suppress("TooManyFunctions")
-internal class QuotesRepositoryImpl(quotesDatabase: QuotesDatabase) : QuotesRepository {
-    private val quotesDao = quotesDatabase.quotesDao()
+internal class QuotesRepositoryImpl(private val quotesDatabase: QuotesDatabase) : QuotesRepository {
+	private val quotesDao = quotesDatabase.quotesDao()
 
-    override suspend fun putAll(quotes: List<Quote>) {
-        quotesDao.insertQuotes(quotes)
-    }
+	override suspend fun putAll(quotes: List<Quote>) = withContext(Dispatchers.IO) {
+		quotesDao.insertQuotesBatch(quotes)
+	}
 
-    override suspend fun getRandomQuote(): Quote {
-        val offset = Random.nextInt(0, QUOTES_COUNT.toInt())
-        return quotesDao.randomQuote(offset).map()
-    }
+	override suspend fun getRandomQuote(): Quote = withContext(Dispatchers.IO) {
+		quotesDao.getRandomQuoteWithCategories(wasPlayed = false)?.map()
+			?: throw NoSuchElementException("No unplayed quotes found")
+	}
 
-    override suspend fun getRandomWasntPlayedQuote(): Quote {
-        val offset = Random.nextInt(0, QUOTES_COUNT.toInt())
-        return quotesDao.randomQuoteWasntPlayed(offset).map()
-    }
+	override suspend fun getRandomWasntPlayedQuote(): Quote {
+		return quotesDao.getRandomQuoteWithCategories(wasPlayed = false)?.map()
+			?: throw NoSuchElementException("No unplayed quotes found")
+	}
 
-    override suspend fun getQuotes(author: String): List<Quote> {
-        return quotesDao.getQuotesByAuthor(author).fastMap { it.map() }
-    }
+	override suspend fun getQuotes(author: String): List<Quote> = withContext(Dispatchers.IO) {
+		quotesDao.getQuotesByAuthor(author).fastMap { it.map() }
+	}
 
-    override suspend fun getQuotesByCategory(category: String): List<Quote> {
-        return quotesDao.getQuotesByAuthor(category).fastMap { it.map() }
-    }
+	override suspend fun getQuotesByCategory(category: String): List<Quote> = withContext(Dispatchers.IO) {
+		quotesDao.getQuotesByCategory(category).fastMap { it.map() }
+	}
 
-    override suspend fun getQuotesCount(): Long {
-        return quotesDao.getRowCount()
-    }
+	override suspend fun getQuotesCount(): Long = withContext(Dispatchers.IO) {
+		quotesDao.getQuotesCount()
+	}
 
-    override suspend fun updateQuote(quote: Quote) {
-        quotesDao.insertQuote(quote)
-    }
+	override suspend fun updateQuote(quote: Quote) = withContext(Dispatchers.IO) {
+		val quoteDb = QuoteDb(quote.text, quote.author, quote.favorite, quote.wasPlayed)
+		quotesDao.insertQuotes(listOf(quoteDb))
+	}
 
-    override suspend fun favorite(quote: Quote) {
-        val quoteDb = QuoteDb(quote.text, quote.author, quote.favorite, quote.wasPlayed, quote.id)
-        quotesDao.insert(quoteDb)
-        quotesDao.favoriteQuote(QuoteFavorite(quotePrimaryKey = quote.id))
-    }
+	override suspend fun favorite(quote: Quote) = withContext(Dispatchers.IO) {
+		quotesDao.toggleFavoriteStatus(quote.id, true)
+	}
 
-    override suspend fun unfavorite(quote: Quote) {
-        val quoteDb = QuoteDb(quote.text, quote.author, quote.favorite, quote.wasPlayed, quote.id)
-        quotesDao.insert(quoteDb)
-        quotesDao.unfavoriteQuote(QuoteFavorite(quotePrimaryKey = quote.id))
-    }
+	override suspend fun unfavorite(quote: Quote) = withContext(Dispatchers.IO) {
+		quotesDao.toggleFavoriteStatus(quote.id, false)
+	}
 
-    override suspend fun getFavorites(): List<Quote> {
-        return quotesDao.getFavorites().fastMap { println("FAV_QUOTES_${it.quote.favorite}"); it.map() }
-    }
+	override suspend fun getFavorites(): List<Quote> = withContext(Dispatchers.IO) {
+		quotesDao.getFavoriteQuotesWithDetails().fastMap { it.map() }
+	}
 
-    override suspend fun getFavoritesByCategories(): List<QuoteCategories> {
-        return emptyList() // quotesDao.getFavoritesByCategories().fastMap { it.map() }
-    }
+	override suspend fun getFavoritesByCategories(): List<QuoteCategories> = withContext(Dispatchers.IO) {
+		quotesDao.getFavoriteCategoriesWithQuotes().fastMap { it.map() }
+	}
 }
 
 fun QuoteWithCategories.map() = Quote(
-    quote.primaryKey,
-    quote.text,
-    quote.author,
-    categories.fastMap { it.category },
-    quote.favorite,
-    quote.wasPlayed
+	id = quote.primaryKey,
+	text = quote.text,
+	author = quote.author,
+	categories = categories.fastMap { it.category },
+	favorite = quote.favorite,
+	wasPlayed = quote.wasPlayed
+)
+
+fun FavoriteQuoteWithDetails.map() = Quote(
+	id = quote.primaryKey,
+	text = quote.text,
+	author = quote.author,
+	categories = categories.fastMap { it.category },
+	favorite = true,
+	wasPlayed = quote.wasPlayed
 )
 
 fun CategoryWithQuotes.map() = QuoteCategories(
-    category.category,
-    emptyList(),
+	category = category.category,
+	quotes = quotes.fastMap {
+		Quote(
+			id = it.primaryKey,
+			text = it.text,
+			author = it.author,
+			categories = emptyList(), // We don't have categories here, so we use an empty list
+			favorite = it.favorite,
+			wasPlayed = it.wasPlayed
+		)
+	}
 )
